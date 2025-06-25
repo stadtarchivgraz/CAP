@@ -1,0 +1,245 @@
+/**
+ * Log styles
+ */
+
+%notification-logs {
+
+	.log-item {
+		border: 1px solid #ececec;
+		border-radius: 3px;
+		box-shadow: 1px 1px 1px #f9f9f9;
+		margin-bottom: 1em;
+
+		.log-handle {
+			cursor: pointer;
+			overflow: auto;
+
+			.carrier-name {
+				background: #ececec;
+				display: inline-block;
+				font-weight: 600;
+				min-width: 120px;
+				padding: 10px;
+			}
+
+			.notification-title {
+				display: inline-block;
+				padding: 10px;
+			}
+
+			.source-label {
+				background: #ececec;
+				border-radius: 6px;
+				bottom: 2px;
+				font-size: 10px;
+				padding: 2px 6px;
+				position: relative;
+			}
+
+			.date {
+				display: inline-block;
+				float: right;
+				padding: 10px;
+
+				abbr {
+					text-decoration: none;
+				}
+
+			}
+
+			.indicator {
+				display: inline-block;
+				float: right;
+				padding: 8px 10px;
+			}
+
+			@media ( max-width: 768px ) {
+
+				.carrier-name {
+					background: none;
+					width: 100%;
+				}
+
+				.indicator {
+					display: none;
+				}
+
+			}
+
+		}
+
+		.log-body {
+			max-height: 0;
+			overflow: hidden;
+			overflow-y: scroll;
+			transition: max-height 0.3s;
+
+			.body-content {
+				border-top: 1px solid #ececec;
+				padding: 10px;
+			}
+
+		}
+
+		&.expanded {
+
+			.log-body {
+				max-height: 400px;
+			}
+
+		}
+
+	}
+
+}
+
+.notification-settings {
+
+	/* stylelint-disable */
+	.group-notification_log,
+	.group-error_log {
+		/* stylelint-enable */
+
+		.form-table {
+			table-layout: fixed;
+		}
+
+		th {
+			display: none;
+		}
+
+		td {
+			overflow-wrap: break-word;
+			padding: 15px 0;
+			word-wrap: break-word;
+
+			table {
+				margin-bottom: 1rem;
+
+				th {
+					display: table-cell;
+					padding: 12px 6px 12px 0;
+				}
+
+				td {
+					padding: 12px 6px 12px 0;
+
+					ul {
+						margin: 0;
+					}
+
+					pre {
+						margin: 0;
+					}
+
+				}
+
+				caption {
+					font-weight: 600;
+					text-align: left;
+				}
+
+			}
+
+		}
+
+	}
+
+	.error-logs {
+
+		@extend %notification-logs;
+
+		.log-handle {
+
+			.message {
+				background: #ececec;
+				display: inline-block;
+				float: left;
+				font-weight: 600;
+				min-width: 90px;
+				padding: 10px;
+			}
+
+			.component {
+				display: inline-block;
+				float: left;
+				padding: 10px;
+			}
+
+			.excerpt {
+				color: #ccc;
+				display: inline-block;
+				float: left;
+				max-width: 60%;
+				overflow: hidden;
+				padding: 10px;
+				text-overflow: ellipsis;
+				transition: opacity 0.3s;
+				white-space: nowrap;
+			}
+
+		}
+
+		.error-log .log-handle .message {
+			color: #f00;
+		}
+
+		.warning-log .log-handle .message {
+			color: #ff880a;
+		}
+
+		.log-item.expanded .excerpt {
+			opacity: 0;
+		}
+
+	}
+
+	.notification-logs {
+
+		@extend %notification-logs;
+
+	}
+
+	.log-pagination {
+		text-align: right;
+
+		a.page-numbers {
+			-webkit-appearance: none;
+			border: 1px solid #ececec;
+			border-radius: 3px;
+			box-sizing: border-box;
+			color: #555;
+			cursor: pointer;
+			display: inline-block;
+			font-size: 13px;
+			height: 28px;
+			line-height: 26px;
+			margin: 0;
+			padding: 0 10px 1px;
+			text-decoration: none;
+			vertical-align: top;
+			white-space: nowrap;
+
+			&:hover {
+				background: #ececec;
+			}
+
+		}
+
+		.dots,
+		.current {
+			line-height: 28px;
+			padding: 0 4px;
+		}
+
+		@media ( max-width: 600px ) {
+
+			.page-numbers:not(.prev):not(.next) {
+				display: none;
+			}
+
+		}
+
+	}
+
+}

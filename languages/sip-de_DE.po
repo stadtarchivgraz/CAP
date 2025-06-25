@@ -1,0 +1,1159 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SIP\n"
+"POT-Creation-Date: 2025-01-23 23:04+0100\n"
+"PO-Revision-Date: 2025-01-23 23:39+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.5\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: vendor\n"
+"X-Poedit-SearchPathExcluded-1: .git\n"
+"X-Poedit-SearchPathExcluded-2: assets\n"
+"X-Poedit-SearchPathExcluded-3: scss\n"
+
+#: admin/sip-meta.php:22 admin/sip-meta.php:65
+msgid "Custom Meta"
+msgstr "Benutzerdefinierte Felder"
+
+#: admin/sip-meta.php:29 admin/sip-meta.php:30
+#: template-parts/content-archival.php:90
+#: template-parts/content-archivals-list.php:36
+msgid "SIP"
+msgstr "SIP"
+
+#: admin/sip-meta.php:31 template-parts/content-archival.php:35
+msgid "Date/Time"
+msgstr "Datum/Uhrzeit"
+
+#: admin/sip-meta.php:32
+msgid "from"
+msgstr "von"
+
+#: admin/sip-meta.php:34
+msgid "to"
+msgstr "bis"
+
+#: admin/sip-meta.php:36
+msgid "Creation Place"
+msgstr "Schöpfungsort"
+
+#: admin/sip-meta.php:37 profileform.php:269
+msgid "Address"
+msgstr "Adresse"
+
+#: admin/sip-meta.php:38
+msgid "Latitude"
+msgstr "Breitengrad"
+
+#: admin/sip-meta.php:40
+msgid "Longitude"
+msgstr "Längengrad"
+
+#: admin/sip-meta.php:42
+msgid "Area"
+msgstr "Bereich"
+
+#: admin/sip-meta.php:43
+msgid "Media"
+msgstr "Medien"
+
+#: admin/sip-meta.php:44 template-parts/content-archival.php:33
+#: template-parts/content-sip-form.php:67
+msgid "Originator"
+msgstr "Urheber/in"
+
+#: admin/sip-meta.php:45 archival.php:220
+#: template-parts/content-archival.php:37
+msgid "Upload Purpose"
+msgstr "Upload-Zweck"
+
+#: admin/sip-meta.php:48 template-parts/content-archival.php:40
+msgid "Blocking Time"
+msgstr "Sperrzeit"
+
+#: admin/sip-meta.php:58
+msgid "Right Transfer"
+msgstr "Rechteübertragung"
+
+#: admin/sip-meta.php:72 create-xml.php:358
+#: template-parts/content-sip-form.php:209
+msgid "Note"
+msgstr "Anmerkung"
+
+#: admin/sip-meta.php:74 create-xml.php:347
+#: template-parts/content-archival.php:60
+#: template-parts/content-sip-form.php:203
+msgid "Numbering"
+msgstr "Nummerierung"
+
+#: admin/sip-meta.php:77
+msgid "Meta Fields"
+msgstr "Metafelder"
+
+#: admin/sip-meta.php:81 template-parts/content-sip-form.php:200
+msgid "Archive information"
+msgstr "Archivinformationen"
+
+#: admin/sip-options.php:11
+msgid "Administrator"
+msgstr "Administrator/in"
+
+#: admin/sip-options.php:12
+msgid "Editor"
+msgstr "Redakteuer"
+
+#: admin/sip-options.php:13
+msgid "Author"
+msgstr "Autor/in"
+
+#: admin/sip-options.php:14
+msgid "Contributor"
+msgstr "Mitarbeiter/in"
+
+#: admin/sip-options.php:15
+msgid "Subscriber"
+msgstr "Teilnehmer/in"
+
+#: admin/sip-options.php:29
+msgid "Register Text"
+msgstr "Registrieren Text"
+
+#: admin/sip-options.php:30
+msgid "Update Profile Text"
+msgstr "Profil bearbeiten Text"
+
+#: admin/sip-options.php:31
+msgid "Privacy Policy Approval Text"
+msgstr "Datenschutz Hinweis Text"
+
+#: admin/sip-options.php:32
+msgid "SIP Folder deleted Text"
+msgstr "SIP Ordner gelöscht Text"
+
+#: admin/sip-options.php:35
+msgid "General options"
+msgstr "Allgemeine Optionen"
+
+#: admin/sip-options.php:37
+msgid "Application"
+msgstr "Anwendung"
+
+#: admin/sip-options.php:39
+msgid "Role"
+msgstr "Benutzerrolle"
+
+#: admin/sip-options.php:42
+msgid "Archival Upload Path"
+msgstr "Archiv-Upload-Pfad"
+
+#: admin/sip-options.php:44
+msgid "Max SIP Size in Byte"
+msgstr "Maximale SIP Größe in Byte"
+
+#: admin/sip-options.php:47
+msgid "Supported file MIME Types"
+msgstr "Unterstützte Dateitypen als MIME Types"
+
+#: admin/sip-options.php:55
+msgid "Virus Check with ClamAV"
+msgstr "Virenprüfung mit ClamAV"
+
+#: admin/sip-options.php:74
+msgid "Automatically delete uploaded files"
+msgstr "Hochgeladene Dateien automatisch löschen"
+
+#: admin/sip-options.php:75
+msgid "older than days"
+msgstr "älter als  x Tage"
+
+#: admin/sip-options.php:87
+msgid "Archival Status"
+msgstr "Archivalien Status"
+
+#: admin/sip-options.php:95
+msgid "Uploads"
+msgstr "Uploads"
+
+#: admin/sip-options.php:96
+msgid "Draft"
+msgstr "Entwurf"
+
+#: admin/sip-options.php:97
+msgid "Pending"
+msgstr "Ausstehend"
+
+#: admin/sip-options.php:98
+msgid "Published"
+msgstr "Öffentlich"
+
+#: admin/sip-options.php:102
+msgid "Map"
+msgstr "Karte"
+
+#: admin/sip-options.php:103
+msgid "Google API Key for reverse Geocoding"
+msgstr "Google API-Schlüssel für Reverse Geocoding"
+
+#: admin/sip-options.php:104
+msgid "Default Lat"
+msgstr "Voreinstellung Lat"
+
+#: admin/sip-options.php:107
+msgid "Default Lng"
+msgstr "Voreinstellung Lng"
+
+#: admin/sip-options.php:110
+msgid "Default zoom"
+msgstr "Voreinstellung Zoom"
+
+#: admin/sip-options.php:118
+msgid "Custom CSS"
+msgstr "Benutzerdefiniertes CSS"
+
+#: admin/sip-options.php:121
+msgid "Information Texts"
+msgstr "Informationstexte"
+
+#: admin/sip-options.php:127 admin/sip-options.php:130
+msgid "Name"
+msgstr "Name"
+
+#: admin/sip-options.php:136
+msgid "Upload Purpose Options"
+msgstr "Upload-Zweck Optionen"
+
+#: admin/sip-options.php:138
+msgid "Blocking Time Options"
+msgstr "Sperrzeit Optionen"
+
+#: admin/sip-options.php:140
+msgid "Blocking Time Upload Purpose"
+msgstr "Sperrzeit - Upload Zweck"
+
+#: admin/sip-options.php:141
+msgid "Blocking Time Calculate"
+msgstr "Sperrzeit Berechnung"
+
+#: admin/sip-options.php:142
+msgid "Right Transfer Text"
+msgstr "Rechteübertragung Text"
+
+#: admin/sip-options.php:144 admin/sip-options.php:146
+#: template-parts/content-sip-form.php:60
+msgid "Title"
+msgstr "Titel"
+
+#: admin/sip-options.php:149 admin/sip-options.php:155
+msgid "Type"
+msgstr "Typ"
+
+#: admin/sip-options.php:161 admin/sip-options.php:169
+msgid "Custom Meta Data"
+msgstr "Benutzerdefinierte Metadaten"
+
+#: admin/sip-options.php:165
+msgid "Form fields"
+msgstr "Formularfelder"
+
+#: admin/sip-options.php:167
+msgid "Users"
+msgstr "Benutzer"
+
+#: admin/sip-options.php:168
+msgid "Archival Users"
+msgstr "Archivbenutzer"
+
+#: admin/sip-options.php:179
+msgid "Term Options"
+msgstr "Optionen"
+
+#: admin/sip-options.php:182
+msgid "Institution Name abbreviation"
+msgstr "Abkürzung für den Namen der Institution"
+
+#: admin/sip-options.php:185
+msgid "SIP Referenz"
+msgstr "SIP Referenz"
+
+#: archival.php:11
+msgid "Archival Materials"
+msgstr "Archivmaterialien"
+
+#: archival.php:12 archival.php:44
+msgid "Archival"
+msgstr "Archivalie"
+
+#: archival.php:13
+msgid "Item Archives"
+msgstr "Archiv"
+
+#: archival.php:14
+msgid "Item Attributes"
+msgstr "Atribute"
+
+#: archival.php:15 archival.php:72 archival.php:118
+msgid "Parent Item:"
+msgstr "Elternelement:"
+
+#: archival.php:16 archival.php:116
+msgid "All Items"
+msgstr "Alle Einträge"
+
+#: archival.php:17 archival.php:74 archival.php:120
+msgid "Add New Item"
+msgstr "Eintrag hinzufügen"
+
+#: archival.php:18
+msgid "Add New"
+msgstr "Hinzufügen"
+
+#: archival.php:19
+msgid "New Item"
+msgstr "Neuer Eintrag"
+
+#: archival.php:20 archival.php:75 archival.php:121
+msgid "Edit Item"
+msgstr "Bearbeiten"
+
+#: archival.php:21 archival.php:76 archival.php:122
+msgid "Update Item"
+msgstr "Aktualisieren"
+
+#: archival.php:22 archival.php:77 archival.php:123
+msgid "View Item"
+msgstr "Ansehen"
+
+#: archival.php:23
+msgid "View Items"
+msgstr "Alle ansehen"
+
+#: archival.php:24
+msgid "Search Item"
+msgstr "Suche"
+
+#: archival.php:25
+msgid "Not found"
+msgstr "Nicht gefunden"
+
+#: archival.php:26
+msgid "Not found in Trash"
+msgstr "Nichts im Papierkorb gefunden"
+
+#: archival.php:27
+msgid "Featured Image"
+msgstr "Zugeordnetes Bild"
+
+#: archival.php:28
+msgid "Set featured image"
+msgstr "Bild zuordnen"
+
+#: archival.php:29
+msgid "Remove featured image"
+msgstr "Bild entfernen"
+
+#: archival.php:30
+msgid "Use as featured image"
+msgstr "Als zugeordnetes Bild verwenden"
+
+#: archival.php:31
+msgid "Insert into item"
+msgstr "Zum Eintrag hinuzufügen"
+
+#: archival.php:32
+msgid "Uploaded to this item"
+msgstr "Zu diesem Element hochgeladen"
+
+#: archival.php:33 archival.php:85 archival.php:131
+msgid "Items list"
+msgstr "Liste der Einträge"
+
+#: archival.php:34 archival.php:86 archival.php:132
+msgid "Items list navigation"
+msgstr "Navigation der Eintragsliste"
+
+#: archival.php:35
+msgid "Filter items list"
+msgstr "Liste filtern"
+
+#: archival.php:38
+msgid "archival"
+msgstr "archivalie"
+
+#: archival.php:45
+msgid "Post Type for archival materials in SIP Plugin"
+msgstr "Beitragstyp für Archivmaterialien im SIP-Plugin"
+
+#: archival.php:69 filterform.php:87 inc/sip-template-functions.php:46
+#: profileform.php:156 profileform.php:184
+msgid "Archive"
+msgstr "Archiv"
+
+#: archival.php:70
+msgid "All Archives"
+msgstr "Alle Archive"
+
+#: archival.php:71 archival.php:117
+msgid "Parent Item"
+msgstr "Elternelement"
+
+#: archival.php:73 archival.php:119
+msgid "New Item Name"
+msgstr "Neuer Eintrag"
+
+#: archival.php:78 archival.php:124
+msgid "Separate items with commas"
+msgstr "Einträge mit Komma trennen"
+
+#: archival.php:79 archival.php:125
+msgid "Add or remove items"
+msgstr "Einträge hinzufügen oder entfernen"
+
+#: archival.php:80 archival.php:126
+msgid "Choose from the most used"
+msgstr "Wähle aus den meistgenutzten"
+
+#: archival.php:81 archival.php:127
+msgid "Popular Items"
+msgstr "Beliebt"
+
+#: archival.php:82 archival.php:128
+msgid "Search Items"
+msgstr "Einträge suchen"
+
+#: archival.php:83 archival.php:129
+msgid "Not Found"
+msgstr "Nicht gefunden"
+
+#: archival.php:84 archival.php:130
+msgid "No items"
+msgstr "Keine Einträge"
+
+#: archival.php:89
+msgid "archive"
+msgstr "archiv"
+
+#: archival.php:115
+msgid "Archival Tag"
+msgstr "Archiv Schlagwort"
+
+#: archival.php:159 filterform.php:179 filterform.php:189
+#, php-format
+msgid "Show all %s"
+msgstr "Alle %s anzeigen"
+
+#: archival.php:178 filterform.php:129 filterform.php:153
+msgid "Show all"
+msgstr "Alle anzeigen"
+
+#: archival.php:219
+msgid "SIP-Folder"
+msgstr "SIP-Ordner"
+
+#: archival.php:221
+msgid "User"
+msgstr "Benutzer"
+
+#: archival.php:222
+msgid "Numeration"
+msgstr "Nummerierung"
+
+#: archival.php:251
+msgid "deleted"
+msgstr "gelöscht"
+
+#: filterform.php:93
+msgid "all"
+msgstr "alle"
+
+#: filterform.php:126 template-parts/content-sip-form.php:137
+msgid "Upload purpose"
+msgstr "Upload-Zweck"
+
+#: filterform.php:150
+msgid "Year"
+msgstr "Jahr"
+
+#: filterform.php:172 template-parts/content-archival.php:53
+#: template-parts/content-sip-form.php:128
+msgid "Tags"
+msgstr "Schlagwörter"
+
+#: filterform.php:206
+msgid "Search"
+msgstr "Suche"
+
+#: inc/sip-notifications.php:16
+msgid "Archive Editors"
+msgstr "Archiv-Editoren"
+
+#: profileform.php:27
+msgid "Your personal information has been successfully changed."
+msgstr "Ihre persönlichen Daten wurden erfolgreich geändert."
+
+#: profileform.php:34
+msgid "Enter your old password."
+msgstr "Geben Sie Ihr altes Passwort ein."
+
+#: profileform.php:36
+msgid "The old password is incorrect."
+msgstr "Das alte Passwort ist falsch."
+
+#: profileform.php:38
+msgid "The new password is to short."
+msgstr "Das neue Passwort ist zu kurz."
+
+#: profileform.php:40
+msgid "The repeat and the new password do not match."
+msgstr "Das Wiederholungs- und das neue Passwort stimmen nicht überein."
+
+#: profileform.php:48
+msgid "The password could not be changed. See error message in the form."
+msgstr ""
+"Das Passwort konnte nicht geändert werden. Siehe Fehlermeldung im Formular."
+
+#: profileform.php:55
+msgid "Your password was changed successfully. You have to log in again."
+msgstr ""
+"Ihr Kennwort wurde erfolgreich geändert. Sie müssen sich erneut anmelden."
+
+#: profileform.php:73
+msgid "Submissions"
+msgstr "Abgaben"
+
+#: profileform.php:74
+msgid "Drafts"
+msgstr "Entwürfe"
+
+#: profileform.php:75 profileform.php:215
+msgid "Personal account"
+msgstr "Persönliche Daten"
+
+#: profileform.php:146 template-parts/content-archival.php:89
+#: template-parts/content-archival.php:92
+#: template-parts/content-archival.php:96
+#: template-parts/content-archivals-list.php:33
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: profileform.php:147
+msgid "Are you sure? All files will be deleted."
+msgstr "Sind Sie sicher? Alle Dateien werden gelöscht."
+
+#: profileform.php:147
+msgid "Delete"
+msgstr "Löschen"
+
+#: profileform.php:159
+msgid "Log in"
+msgstr "Login"
+
+#: profileform.php:171
+msgid "Public name"
+msgstr "Öffentlicher Name"
+
+#: profileform.php:209
+msgid "This selection cannot be changed"
+msgstr "Diese Auswahl kann nicht geändert werden"
+
+#: profileform.php:219
+msgid "First name"
+msgstr "Vorname"
+
+#: profileform.php:231
+msgid "Surname"
+msgstr "Nachname"
+
+#: profileform.php:243
+msgid "Email address"
+msgstr "E-Mail"
+
+#: profileform.php:255
+msgid "Date of birth"
+msgstr "Geburtstag"
+
+#: profileform.php:262
+msgid "You must be at least 18 years old"
+msgstr "Sie müssen mindestens 18 Jahre alt sein"
+
+#: profileform.php:274
+msgid "Street and Number"
+msgstr "Straße und Nummer"
+
+#: profileform.php:284
+msgid "ZIP Code"
+msgstr "PLZ"
+
+#: profileform.php:289
+msgid "City"
+msgstr "Ort"
+
+#: profileform.php:307
+msgid "Save"
+msgstr "Speichern"
+
+#: profileform.php:313 profileform.php:363
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: profileform.php:316
+msgid "Old"
+msgstr "Alt"
+
+#: profileform.php:328
+msgid "New"
+msgstr "Neu"
+
+#: profileform.php:336
+msgid "Strength of password"
+msgstr "Passwortstärke"
+
+#: profileform.php:337
+msgid ""
+"Tip: Your password should be at least twelve characters long. For a stronger "
+"password, use upper and lower case letters, numbers and special characters "
+"such as !’?$%^&)."
+msgstr ""
+"Tipp: Das Passwort sollte mindestens zwölf Zeichen lang sein. Für ein "
+"stärkeres Passwort verwende Groß- und Kleinbuchstaben, Zahlen und "
+"Sonderzeichen wie !“?$%^&)."
+
+#: profileform.php:344
+msgid "Repeat"
+msgstr "Wiederholen"
+
+#: sip.php:81
+msgid "SIP Archival"
+msgstr "SIP Archivalie"
+
+#: sip.php:82
+msgid "SIP Upload"
+msgstr "SIP Upload"
+
+#: sip.php:83
+msgid "SIP Profile"
+msgstr "SIP Profil"
+
+#: sip.php:84
+msgid "SIP Archive"
+msgstr "SIP Archiv"
+
+#: sip.php:211
+msgid "draft"
+msgstr "Entwurf"
+
+#: sip.php:212
+msgid "pending"
+msgstr "Ausstehend"
+
+#: sip.php:213
+msgid "publish"
+msgstr "Öffentlich"
+
+#: template-parts/content-archival.php:22
+#: template-parts/content-sip-form.php:113
+msgid "Location"
+msgstr "Ort"
+
+#: template-parts/content-archival.php:24
+#: template-parts/content-archival.php:34
+msgid "unknown"
+msgstr "unbekannt"
+
+#: template-parts/content-archival.php:58
+msgid "Archiv Information"
+msgstr "Archivinformationen"
+
+#: template-parts/content-archival.php:62
+msgid "Annotation"
+msgstr "Anmerkung"
+
+#: template-parts/content-archival.php:93
+msgid "Accept"
+msgstr "Akzeptieren"
+
+#: template-parts/content-archival.php:94
+msgid "Are you sure to decline? All files and data will be deleted."
+msgstr ""
+"Sind Sie sicher, dass Sie ablehnen? Alle Dateien und Daten werden gelöscht."
+
+#: template-parts/content-archival.php:94
+msgid "Decline"
+msgstr "Ablehnen"
+
+#: template-parts/content-archival.php:97
+msgid "Submit"
+msgstr "Senden"
+
+#: template-parts/content-archivals-list.php:30
+msgid "Preview"
+msgstr "Ansicht"
+
+#: template-parts/content-map.php:88
+msgid "Reset map"
+msgstr "Karte zurücksetzen"
+
+#: template-parts/content-sip-form.php:62
+msgid "Give your submission a descriptive title"
+msgstr "Geben Sie Ihrer Abgabe einen aussagekräftigen Titel"
+
+#: template-parts/content-sip-form.php:64
+msgid "Maximum 100 characters."
+msgstr "Maximal 100 Zeichen."
+
+#: template-parts/content-sip-form.php:71
+msgid ""
+"If you are not the originator (creator) of the uploaded file, please enter "
+"the name of the originator here"
+msgstr ""
+"Wenn Sie nicht der Autor (Ersteller) der hochgeladenen Datei sind, geben Sie "
+"hier bitte den Namen des Autors ein"
+
+#: template-parts/content-sip-form.php:74
+msgid "Description"
+msgstr "Beschreibung"
+
+#: template-parts/content-sip-form.php:76
+msgid ""
+"You can describe your file in detail here (e.g.: Why is it important for the "
+"archive? What does the file show? In what context was the file created? Is "
+"there any additional information?)"
+msgstr ""
+"Hier können Sie Ihre Datei ausführlich beschreiben (z.B.: Warum ist diese "
+"wichtig für das Archiv? Was zeigt die Datei? In welchem Kontext ist die "
+"Datei entstanden? Gibt es Zusatzinformationen?)"
+
+#: template-parts/content-sip-form.php:78
+msgid "Maximum 5000 characters."
+msgstr "Maximal 5000 Zeichen."
+
+#: template-parts/content-sip-form.php:81
+msgid "Date/time (for a precise time)"
+msgstr "Datum/Uhrzeit (Für einen genauen Zeitpunkt)"
+
+#: template-parts/content-sip-form.php:87
+msgid "Time period (for a longer period)"
+msgstr "Zeitraum (Für einen größeren Zeitraum)"
+
+#: template-parts/content-sip-form.php:91
+msgid "Hide timeline"
+msgstr "Zeitleiste ausblenden"
+
+#: template-parts/content-sip-form.php:116
+msgid "Hide map"
+msgstr "Karte ausblenden"
+
+#: template-parts/content-sip-form.php:119
+msgid "Map (select an exact location or area)"
+msgstr "Karte (Wählen Sie einen genauen Ort oder einen Bereich aus)"
+
+#: template-parts/content-sip-form.php:132
+msgid "Minimum 1 | Maximum 10"
+msgstr "Mindestens 1 | Maximal 10"
+
+#: template-parts/content-sip-form.php:152
+msgid "Blocking time"
+msgstr "Sperrzeit"
+
+#: template-parts/content-sip-form.php:239
+msgid "Save and preview"
+msgstr "Speichern und Vorschau"
+
+#: uploadform.php:18
+msgid "Drag and drop the files here to upload"
+msgstr "Ziehen Sie die Dateien hier hin, um sie hochzuladen"
+
+#: uploadform.php:55 uploadform.php:84
+#, php-format
+msgid ""
+"The maximum size of %s for the SIP has been exceeded. Files need to be "
+"removed."
+msgstr ""
+"Die maximale Größe von %s für das SIP wurde überschritten. Dateien müssen "
+"entfernt werden."
+
+#: uploadform.php:69
+msgid "Virus detected on:"
+msgstr "Virus entdeckt auf:"
+
+#: uploadform.php:73
+msgid "Not supported file type:"
+msgstr "Nicht unterstützter Dateityp:"
+
+#: uploadform.php:77
+msgid "Further uploads are not possible. Files must be deleted first."
+msgstr ""
+"Weitere Uploads sind nicht möglich. Dateien müssen vorher gelöscht werden."
+
+#: uploadform.php:100
+msgid "Complete upload and insert metadata"
+msgstr "Hochladen beenden und einfügen von Metadaten"
+
+#~ msgid "Archive Role"
+#~ msgstr "Benutzerrolle Archivar"
+
+#~ msgid "Login"
+#~ msgstr "Login"
+
+#~ msgid "Nummeration"
+#~ msgstr "Nummerierung"
+
+#~ msgid "Show all Purposes"
+#~ msgstr "Alle Zwecke anzeigen"
+
+#~ msgid "Archival User Meta Fields"
+#~ msgstr "Archiv Benutzer Metafelder"
+
+#~ msgid "Display Name"
+#~ msgstr "Öffentlicher Name"
+
+#~ msgid "Personal data"
+#~ msgstr "Persönliche Daten"
+
+#~ msgid "Last name"
+#~ msgstr "Nachname"
+
+#~ msgid "Email"
+#~ msgstr "E-Mail"
+
+#~ msgid "Birthday"
+#~ msgstr "Geburtstag"
+
+#~ msgid "Password change"
+#~ msgstr "Passwort ändern"
+
+#~ msgid "View"
+#~ msgstr "Ansicht"
+
+#~ msgid "Clear map"
+#~ msgstr "Karte zurücksetzen"
+
+#~ msgid "Period"
+#~ msgstr "Zeitraum"
+
+#, fuzzy
+#~| msgid "Set featured image"
+#~ msgid "Select image"
+#~ msgstr "Bild zuordnen"
+
+#, fuzzy
+#~| msgid "Use as featured image"
+#~ msgid "Use selected image"
+#~ msgstr "Als zugeordnetes Bild verwenden"
+
+#, fuzzy
+#~| msgid "Update Item"
+#~ msgid "Update Now"
+#~ msgstr "Aktualisieren"
+
+#, fuzzy
+#~| msgid "Clear map"
+#~ msgid "Clear"
+#~ msgstr "Karte zurücksetzen"
+
+#, fuzzy
+#~| msgid "Login"
+#~ msgid "Log"
+#~ msgstr "Login"
+
+#, fuzzy
+#~| msgid "Annotation"
+#~ msgid "Notifications"
+#~ msgstr "Anmerkung"
+
+#, fuzzy
+#~| msgid "Application"
+#~ msgid "Duplicate"
+#~ msgstr "Anwendung"
+
+#, fuzzy
+#~| msgid "Not found in Trash"
+#~ msgid "No Notifications found in Trash"
+#~ msgstr "Nichts im Papierkorb gefunden"
+
+#, fuzzy
+#~| msgid "This selection cannot be changed."
+#~ msgid "Notification status couldn't be changed."
+#~ msgstr "Diese Auswahl kann nicht geändert werden."
+
+#, fuzzy
+#~| msgid "General Options"
+#~ msgid "General"
+#~ msgstr "Allgemeine Optionen"
+
+#, fuzzy
+#~| msgid "Annotation"
+#~ msgid "Uninstallation"
+#~ msgstr "Anmerkung"
+
+#, fuzzy
+#~| msgid "Address"
+#~ msgid "WordPress"
+#~ msgstr "Adresse"
+
+#, fuzzy
+#~| msgid "Update Item"
+#~ msgid "Updates"
+#~ msgstr "Aktualisieren"
+
+#, fuzzy
+#~| msgid "Email"
+#~ msgid "From Email"
+#~ msgstr "E-Mail"
+
+#, fuzzy
+#~| msgid "Numeration"
+#~ msgid "Integration"
+#~ msgstr "Nummerierung"
+
+#, fuzzy
+#~| msgid "New Item"
+#~ msgid "New user"
+#~ msgstr "Neuer Eintrag"
+
+#, fuzzy
+#~| msgid "Password change"
+#~ msgid "Password changed"
+#~ msgstr "Passwort ändern"
+
+#, fuzzy
+#~| msgid "Application"
+#~ msgid "Actions"
+#~ msgstr "Anwendung"
+
+#, fuzzy
+#~| msgid "Featured Image"
+#~ msgid "Features"
+#~ msgstr "Zugeordnetes Bild"
+
+#, fuzzy
+#~| msgid "Subscriber"
+#~ msgid "Subscribers (role)"
+#~ msgstr "Teilnehmer/in"
+
+#, fuzzy
+#~| msgid "Password change"
+#~ msgid "Password reset"
+#~ msgstr "Passwort ändern"
+
+#, fuzzy
+#~| msgid "Add New"
+#~ msgid "Add new"
+#~ msgstr "Hinzufügen"
+
+#, fuzzy, php-format
+#~| msgid "Author"
+#~ msgid "%s author"
+#~ msgstr "Autor/in"
+
+#, fuzzy
+#~| msgid "Date/Time"
+#~ msgid "Date"
+#~ msgstr "Datum/Uhrzeit"
+
+#, fuzzy
+#~| msgid "Date/Time"
+#~ msgid "Date and Time"
+#~ msgstr "Datum/Uhrzeit"
+
+#, fuzzy
+#~| msgid "Date/Time"
+#~ msgid "Time"
+#~ msgstr "Datum/Uhrzeit"
+
+#, fuzzy, php-format
+#~| msgid "Set featured image"
+#~ msgid "%s featured image id"
+#~ msgstr "Bild zuordnen"
+
+#, fuzzy, php-format
+#~| msgid "Set featured image"
+#~ msgid "%s featured image url"
+#~ msgstr "Bild zuordnen"
+
+#, fuzzy, php-format
+#~| msgid "Title"
+#~ msgid "%s title"
+#~ msgstr "Titel"
+
+#, fuzzy
+#~| msgid "Type"
+#~ msgid "Post Type"
+#~ msgstr "Typ"
+
+#, fuzzy
+#~| msgid "Description"
+#~ msgid "Term description"
+#~ msgstr "Beschreibung"
+
+#, fuzzy
+#~| msgid "Term Options"
+#~ msgid "Term link"
+#~ msgstr "Optionen"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "User bio"
+#~ msgstr "Benutzer"
+
+#, fuzzy
+#~| msgid "Display Name"
+#~ msgid "User display name"
+#~ msgstr "Ihr öffentlicher Name"
+
+#, fuzzy
+#~| msgid "First name"
+#~ msgid "User first name"
+#~ msgstr "Vorname"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "User ID"
+#~ msgstr "Benutzer"
+
+#, fuzzy
+#~| msgid "Last name"
+#~ msgid "User last name"
+#~ msgstr "Nachname"
+
+#, fuzzy
+#~| msgid "Numeration"
+#~ msgid "User action"
+#~ msgstr "Nummerierung"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "User role"
+#~ msgstr "Benutzer"
+
+#, fuzzy
+#~| msgid "Parent Item"
+#~ msgid "Parent comment"
+#~ msgstr "Elternelement"
+
+#, fuzzy
+#~| msgid "Parent Item"
+#~ msgid "Parent comment type"
+#~ msgstr "Elternelement"
+
+#, fuzzy
+#~| msgid "Media"
+#~ msgid "Media added"
+#~ msgstr "Medien"
+
+#, fuzzy
+#~| msgid "Last name"
+#~ msgid "Last editor"
+#~ msgstr "Nachname"
+
+#, fuzzy
+#~| msgid "Personal data"
+#~ msgid "Personal Data Erase Request"
+#~ msgstr "Persönliche Daten"
+
+#, fuzzy
+#~| msgid "Personal data"
+#~ msgid "Personal Data Erased"
+#~ msgstr "Persönliche Daten"
+
+#, fuzzy
+#~| msgid "Personal data"
+#~ msgid "Personal Data Exported"
+#~ msgstr "Persönliche Daten"
+
+#, fuzzy
+#~| msgid "Display Name"
+#~ msgid "Data owner display name"
+#~ msgstr "Ihr öffentlicher Name"
+
+#, fuzzy
+#~| msgid "Description"
+#~ msgid "Old theme description"
+#~ msgstr "Beschreibung"
+
+#, fuzzy
+#~| msgid "Description"
+#~ msgid "Theme description"
+#~ msgstr "Beschreibung"
+
+#, fuzzy
+#~| msgid "User"
+#~ msgid "User IP"
+#~ msgstr "Benutzer"
+
+#, fuzzy
+#~| msgid "Password change"
+#~ msgid "User password changed"
+#~ msgstr "Passwort ändern"
+
+#, fuzzy
+#~| msgid "Password change"
+#~ msgid "Password change date"
+#~ msgstr "Passwort ändern"
+
+#, fuzzy
+#~| msgid "New Item"
+#~ msgid "New role"
+#~ msgstr "Neuer Eintrag"
+
+#, fuzzy
+#~| msgid "Items list"
+#~ msgid "Updates list"
+#~ msgstr "Liste der Einträge"
+
+#, fuzzy
+#~| msgid "Administrator"
+#~ msgid "Admin avatar"
+#~ msgstr "Administrator/in"
+
+#, fuzzy
+#~| msgid "First name"
+#~ msgid "Trigger name"
+#~ msgstr "Vorname"
+
+#, fuzzy
+#~| msgid "Term Options"
+#~ msgid "Theme Options updated."
+#~ msgstr "Optionen"
+
+#, fuzzy
+#~| msgid "Meta Fields"
+#~ msgid "Fields"
+#~ msgstr "Metafelder"
+
+#, fuzzy
+#~| msgid "Not found"
+#~ msgid "No results found."
+#~ msgstr "Nicht gefunden"
+
+#, fuzzy
+#~| msgid "Featured Image"
+#~ msgid "Select Image"
+#~ msgstr "Zugeordnetes Bild"
+
+#, fuzzy
+#~| msgid "Featured Image"
+#~ msgid "Use Image"
+#~ msgstr "Zugeordnetes Bild"
+
+#, fuzzy
+#~| msgid "Term Options"
+#~ msgid "No options."
+#~ msgstr "Optionen"
+
+#, fuzzy
+#~| msgid "Address"
+#~ msgid "Add"
+#~ msgstr "Adresse"
+
+#, fuzzy, javascript-format
+#~| msgid "Add New"
+#~ msgid "Add %s"
+#~ msgstr "Hinzufügen"

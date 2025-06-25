@@ -1,0 +1,10 @@
+{
+    "require": {
+        "htmlburger/carbon-fields": "^3.6",
+        "enyo/dropzone": "^5.9",
+        "spatie/pdf-to-image": "^2.2",
+        "appwrite/php-clamav": "^2.0",
+        "james-heinrich/getid3": "^1.9",
+        "spipu/html2pdf": "^5.3"
+    }
+}

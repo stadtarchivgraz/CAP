@@ -1,0 +1,29 @@
+---
+version: '3.7'
+
+services:
+  freshclam:
+    image: appwrite/clamav:2.0.0
+    restart: unless-stopped
+    environment:
+      MODE: freshclam
+    volumes:
+      - conf:/etc/clamav
+      - data:/var/lib/clamav
+
+  clamav:
+    depends_on:
+      - freshclam
+    image: appwrite/clamav:2.0.0
+    restart: unless-stopped
+    environment:
+      MODE: clamd
+    volumes:
+      - conf:/etc/clamav
+      - data:/var/lib/clamav
+    ports:
+      - "3310:3310"
+
+volumes:
+  conf:
+  data:

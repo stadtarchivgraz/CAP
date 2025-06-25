@@ -1,0 +1,28 @@
+.date-range-control {
+  min-height: 6rem;
+  width: 80vw;
+  margin: 0 auto;
+  .noUi-value {
+    font-size: 80%;
+  }
+  .noUi-marker-horizontal.noUi-marker-large {
+    height: 12px;
+  }
+  @include desktop {
+    width: auto;
+    .noUi-value {
+      font-size: $body-font-size;
+    }
+    .noUi-marker-horizontal.noUi-marker-large {
+      height: 15px;
+    }
+  }
+}
+.input.help {
+  font-size: inherit;
+}
+.button, button {
+  &.delete, &.modal-close {
+    padding: 0;
+  }
+}
