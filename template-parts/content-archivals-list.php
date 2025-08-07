@@ -1,48 +1,70 @@
-<div class="container sip">
-	<ol class="pl-0 columns is-multiline">
-		<?php while ($archivals->have_posts()) : $archivals->the_post();
-			global $post;
-			?>
-			<li class="column is-6-tablet is-4-desktop">
-				<div class="card">
-                    <header class="card-header">
-                        <p class="card-header-title">
-                            <?php the_title(); ?>
-                        </p>
-	                    <?php if(current_user_can('edit_others_posts')) : ?>
-                            <span class="card-header-icon">
-                                <?php _e($post->post_status, 'sip'); ?>
-                            </span>
-                        <?php endif; ?>
-                    </header>
-					<div class="card-content">
-						<div class="content">
-							<p>
-								<?php
-								$excerpt_length = (int) _x( '30', 'excerpt_length' );
-								$excerpt_length = (int) apply_filters( 'excerpt_length', $excerpt_length );
-								echo wp_trim_words($post->post_content, $excerpt_length, '&hellip;');
-								?>
-							</p>
-						</div>
-                    </div>
-                    <div class="card-footer">
-                        <a class="card-footer-item" href="<?php the_permalink($post);?>"><?php _e('Preview', 'sip'); ?></a>
-                        <?php if($sip_folder = get_post_meta($post->ID, '_archival_sip_folder', true)) : ?>
-                            <?php if((current_user_can('edit_posts') && $post->post_status != 'publish') || current_user_can('edit_others_posts')) : ?>
-                                <a class="card-footer-item" href="<?php the_permalink($pages[0]); ?>?sipFolder=<?= $sip_folder; ?>"><?php _e('Edit', 'sip'); ?></a>
-                            <?php endif; ?>
-                            <?php if(current_user_can('edit_others_posts')) : ?>
-                                <a class="card-footer-item" href="<?= plugin_dir_url(__DIR__ ); ?>create-sip.php?sipFolder=<?= $sip_folder; ?>"><?php _e('SIP', 'sip'); ?></a>
-                            <?php endif; ?>
-                        <?php endif; ?>
+<?php
+$edit_archival_url = starg_get_the_edit_archival_page_url();
+
+// maybe start the creation of the sip-zip:
+$create_sip = apply_filters( 'starg/create_sip', null );
+if ( $create_sip instanceof Create_Sip ) {
+	$create_sip->display_notification();
+}
+?>
+
+<ol class="pb-0 columns is-multiline starg_archival_list">
+	<?php
+	// @var WP_Query $archivals declared in filterform.php or in profileform.php
+	while ($archivals->have_posts()) :
+		$archivals->the_post();
+		$archival_post_status = get_post_status();
+		$archival_post_url    = starg_get_the_archival_page_template_url( get_the_ID() );
+		?>
+		<li class="column is-6-tablet is-4-desktop">
+			<div class="card is-flex is-flex-direction-column" style="height: 100%;">
+				<header class="card-header">
+					<a class="card-header-title" href="<?php echo $archival_post_url; ?>">
+						<?php the_title(); ?>
+					</a>
+					<?php if (current_user_can('edit_others_posts')) : ?>
+						<a class="card-header-icon" href="<?php echo $archival_post_url; ?>">
+							<?php
+							// todo: actually u should not use variables in translation functions like this.
+							//       this only works because the needed values for the post_status are defined in the main file of the plugin.
+							?>
+							<?php esc_html_e($archival_post_status, 'sip'); ?>
+						</a>
+					<?php endif; ?>
+				</header>
+				<div class="card-content is-flex-grow-1">
+					<div class="content">
+						<p>
+							<?php
+							// todo: needs better context. We're setting the length of the excerpt with a translation function. This way every translator can set a different number of words to display in the excerpt.
+							$excerpt_length = (int) _x('30', 'excerpt_length', 'sip');
+							$excerpt_length = (int) apply_filters('excerpt_length', $excerpt_length);
+							echo wp_trim_words(get_the_content(), $excerpt_length, '&hellip;');
+							?>
+						</p>
 					</div>
 				</div>
-			</li>
-		<?php endwhile; ?>
-	</ol>
-    <?php
-    $GLOBALS['wp_query']->max_num_pages = $archivals->max_num_pages;
-    the_posts_pagination(array('class' => 'archival-pagination'));
-    ?>
-</div>
+				<div class="card-footer">
+					<a class="card-footer-item" href="<?php echo $archival_post_url; ?>"><?php esc_html_e('Preview', 'sip'); ?></a>
+					<?php if ($sip_folder = esc_attr( get_post_meta( get_the_ID(), '_archival_sip_folder', true ) ) ) : ?>
+						<?php if ( ( current_user_can('edit_posts') && 'publish' !== $archival_post_status) || current_user_can( 'edit_others_posts' ) ) : ?>
+							<a class="card-footer-item" href="<?php echo esc_url( add_query_arg( array( 'sipFolder' => $sip_folder, ), $edit_archival_url ) ); ?>">
+								<?php esc_html_e('Edit', 'sip'); ?>
+							</a>
+						<?php endif; ?>
+						<?php if (current_user_can('edit_others_posts')) : ?>
+							<?php // todo: maybe remove target="_blank"? ?>
+							<a class="card-footer-item" href="<?php echo ( isset( $create_sip->url_endpoint ) ) ? add_query_arg( array( $create_sip->url_endpoint => true, 'sipFolder' => $sip_folder ) ) : '#'; ?>"
+								target="_blank" title="<?php esc_attr_e('Create the SIP', 'sip'); ?>">
+								<?php esc_html_e('SIP', 'sip'); ?>
+							</a>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
+			</div>
+		</li>
+	<?php endwhile; ?>
+</ol>
+<?php
+$GLOBALS['wp_query']->max_num_pages = $archivals->max_num_pages;
+the_posts_pagination(array('class' => 'archival-pagination',));

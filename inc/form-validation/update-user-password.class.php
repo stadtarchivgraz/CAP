@@ -1,0 +1,80 @@
+<?php
+if (! defined('WPINC')) { die; }
+
+require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/form-validation.class.php' );
+class Starg_Update_User_Password extends Form_Validation {
+	public string $nonce_action = 'starg_update_user_password_nonce_action';
+	public string $nonce_key    = 'starg_update_user_password_nonce';
+	public string $form_name    = 'starg_update_user_password_form';
+
+	/**
+	 * Processes the operations needed to update a users password.
+	 * The form gets validated and the users input gets sanitized...kinda. it's passwords, we can't pull them through rough sanitizing functions.
+	 * A status message will be displayed weather the action was successful or not.
+	 *
+	 * @return bool|string true on success. false or additional information about the error on failure.
+	 */
+	public function maybe_process_update_user_password() {
+		$is_form_valid = $this->form_validation();
+		if ( ! $is_form_valid ) { return false; }
+
+		$user_input = $this->user_input_sanitization();
+		if ( ! $user_input ) { return false; }
+
+		$user = wp_get_current_user();
+		if ( $user->ID !== (int) $user_input['ID'] ) {
+			$this->set_error_message( __( 'We are facing problems updating your password. Please try again.', 'sip' ) );
+			$this->display_notification();
+			return false;
+		}
+
+		$password_error = false;
+		if ( ! isset($user_input['oldpassword']) || ! $user_input['oldpassword']) {
+			$password_error = esc_html__('Enter your old password.', 'sip');
+		} elseif (! wp_check_password($user_input['oldpassword'], $user->user_pass, $user->ID)) {
+			$password_error = esc_html__('The old password is incorrect.', 'sip');
+		} elseif (strlen($user_input['newpassword']) < 12) {
+			$password_error = esc_html__('The new password is to short.', 'sip');
+		} elseif ($user_input['newpassword'] !== $user_input['repeatpassword']) {
+			$password_error = esc_html__('The repeat and the new password do not match.', 'sip');
+		} else {
+			//wp_set_password( $user_input['newpassword'], (int) sanitize_key( $user_input['ID'] )); // forces relog!
+			// We do not want to kill the users session and force a new log in!
+
+			$user_updated = wp_update_user(array(
+				'ID'        => (int) $user_input['ID'],
+				'user_pass' => $user_input['newpassword'],
+			));
+
+			if ( is_wp_error( $user_updated ) ) {
+				error_log( $user_updated->get_error_message() );
+				return esc_html__( 'We are facing problems updating your password. Please try again.', 'sip' );
+			}
+		}
+
+		if ( $password_error ) {
+			$this->set_error_message( esc_html__( 'The password could not be changed. See error message in the form.', 'sip') );
+			$this->display_notification();
+			return $password_error;
+		}
+
+		$this->set_success_message( esc_html__( 'Your password was changed successfully. You may have to log in again.', 'sip' ) );
+		$this->display_notification();
+		return true;
+	}
+
+	/**
+	 * Describes which inputs we want to process in the form and against which sanitizing function we apply to them.
+	 * @return array
+	 */
+	protected function get_valid_input_names() : array {
+		return array(
+			'oldpassword'    => 'trim',
+			'newpassword'    => 'trim',
+			'repeatpassword' => 'trim',
+			'ID'             => 'sanitize_text_field',// todo: maybe change to user_id?
+			'password_save'  => '', // not needed! this is a submit-input.
+		);
+	}
+
+}

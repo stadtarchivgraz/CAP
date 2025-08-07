@@ -1,38 +1,38 @@
 <?php
 /**
- * The template for displaying all single posts
- *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
- *
- * @package WordPress
- * @subpackage Twenty_Twenty_One
- * @since Twenty Twenty-One 1.0
+ * Template to display the single post for the CPT archival.
  */
 
 get_header();
 
-/* Start the Loop */
-while ( have_posts() ) : the_post();
+while (have_posts()) : the_post();
 
-    include( dirname( __FILE__ ) . '/template-parts/content-archival.php' );
+	// only admin/editor should be able to view the single page for the archival records CPT.
+	if ( current_user_can( 'edit_others_pages' ) ) {
+		include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-archival.php' );
+	} else {
+		echo starg_get_notification_message( esc_html__('You are not allowed to view this page!', 'sip'), 'is-warning is-light' );
+	}
 
 
-    // If comments are open or there is at least one comment, load up the comment template.
-    if ( comments_open() || get_comments_number() ) {
-        comments_template();
-    }
+	// If comments are open or there is at least one comment, load up the comment template.
+	if (comments_open() || get_comments_number()) {
+		comments_template();
+	}
 
-    // Previous/next post navigation.
+	// Previous/next post navigation might be added later. But only for admin/editors!
+	if ( current_user_can('edit_others_pages') ) :
+		$sip_next_label     = esc_html__( 'Next archival >', 'sip' );
+		$sip_previous_label = esc_html__( '< Previous archival', 'sip' );
 
-    $sip_next_label     = esc_html__( 'Next archival >', 'sip' );
-    $sip_previous_label = esc_html__( '< Previous archival', 'sip' );
+		// the_post_navigation(
+		// 	array(
+		// 		'next_text' => '<span class="meta-nav">' . $sip_next_label . '</span> <span class="post-title">%title</span>',
+		// 		'prev_text' => '<span class="meta-nav">' . $sip_previous_label . '</span> <span class="post-title">%title</span>'
+		// 	)
+		// );
+	endif;
 
-    /*the_post_navigation(
-        array(
-            'next_text' => '<p class="meta-nav">' . $sip_next_label . '</p><p class="post-title">%title</p>',
-            'prev_text' => '<p class="meta-nav">' . $sip_previous_label . '</p><p class="post-title">%title</p>'
-        )
-    );*/
 endwhile; // End of the loop.
 
 get_footer();
