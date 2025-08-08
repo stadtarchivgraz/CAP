@@ -155,7 +155,7 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 	protected function get_valid_input_names() : array {
 		return array(
 			'archival_ID'             => 'sanitize_key',
-			'archival_title'          => 'sanitize_title',
+			'archival_title'          => 'sanitize_text_field',
 			'archival_description'    => 'sanitize_textarea_field',
 			'archival_originator'     => 'sanitize_text_field',
 			'archival_address'        => 'sanitize_textarea_field',
