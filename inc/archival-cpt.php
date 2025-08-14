@@ -8,43 +8,43 @@ function starg_custom_post_type_archival() : void {
 	// post-type //
 	///////////////
 	$post_type_labels = array(
-		'name'                  => _x( 'Archival materials', 'Post Type General Name', 'sip' ),
-		'singular_name'         => _x( 'Archival', 'Post Type Singular Name', 'sip' ),
-		'menu_name'             => __( 'Archival Materials', 'sip' ),
-		'name_admin_bar'        => __( 'Archival', 'sip' ),
-		'archives'              => __( 'Item Archives', 'sip' ),
-		'attributes'            => __( 'Item Attributes', 'sip' ),
-		'parent_item_colon'     => __( 'Parent Item:', 'sip' ),
-		'all_items'             => __( 'All Items', 'sip' ),
-		'add_new_item'          => __( 'Add New Item', 'sip' ),
-		'add_new'               => __( 'Add New', 'sip' ),
-		'new_item'              => __( 'New Item', 'sip' ),
-		'edit_item'             => __( 'Edit Item', 'sip' ),
-		'update_item'           => __( 'Update Item', 'sip' ),
-		'view_item'             => __( 'View Item', 'sip' ),
-		'view_items'            => __( 'View Items', 'sip' ),
-		'search_items'          => __( 'Search Item', 'sip' ),
-		'not_found'             => __( 'Not found', 'sip' ),
-		'not_found_in_trash'    => __( 'Not found in Trash', 'sip' ),
-		'featured_image'        => __( 'Featured Image', 'sip' ),
-		'set_featured_image'    => __( 'Set featured image', 'sip' ),
-		'remove_featured_image' => __( 'Remove featured image', 'sip' ),
-		'use_featured_image'    => __( 'Use as featured image', 'sip' ),
-		'insert_into_item'      => __( 'Insert into item', 'sip' ),
-		'uploaded_to_this_item' => __( 'Uploaded to this item', 'sip' ),
-		'items_list'            => __( 'Items list', 'sip' ),
-		'items_list_navigation' => __( 'Items list navigation', 'sip' ),
-		'filter_items_list'     => __( 'Filter items list', 'sip' ),
+		'name'                  => esc_html_x( 'Archival materials', 'Post Type General Name', 'sip' ),
+		'singular_name'         => esc_html_x( 'Archival', 'Post Type Singular Name', 'sip' ),
+		'menu_name'             => esc_html__( 'Archival Materials', 'sip' ),
+		'name_admin_bar'        => esc_html__( 'Archival', 'sip' ),
+		'archives'              => esc_html__( 'Item Archives', 'sip' ),
+		'attributes'            => esc_html__( 'Item Attributes', 'sip' ),
+		'parent_item_colon'     => esc_html__( 'Parent Item:', 'sip' ),
+		'all_items'             => esc_html__( 'All Items', 'sip' ),
+		'add_new_item'          => esc_html__( 'Add New Item', 'sip' ),
+		'add_new'               => esc_html__( 'Add New', 'sip' ),
+		'new_item'              => esc_html__( 'New Item', 'sip' ),
+		'edit_item'             => esc_html__( 'Edit Item', 'sip' ),
+		'update_item'           => esc_html__( 'Update Item', 'sip' ),
+		'view_item'             => esc_html__( 'View Item', 'sip' ),
+		'view_items'            => esc_html__( 'View Items', 'sip' ),
+		'search_items'          => esc_html__( 'Search Item', 'sip' ),
+		'not_found'             => esc_html__( 'Not found', 'sip' ),
+		'not_found_in_trash'    => esc_html__( 'Not found in Trash', 'sip' ),
+		'featured_image'        => esc_html__( 'Featured Image', 'sip' ),
+		'set_featured_image'    => esc_html__( 'Set featured image', 'sip' ),
+		'remove_featured_image' => esc_html__( 'Remove featured image', 'sip' ),
+		'use_featured_image'    => esc_html__( 'Use as featured image', 'sip' ),
+		'insert_into_item'      => esc_html__( 'Insert into item', 'sip' ),
+		'uploaded_to_this_item' => esc_html__( 'Uploaded to this item', 'sip' ),
+		'items_list'            => esc_html__( 'Items list', 'sip' ),
+		'items_list_navigation' => esc_html__( 'Items list navigation', 'sip' ),
+		'filter_items_list'     => esc_html__( 'Filter items list', 'sip' ),
 	);
 	$post_type_rewrite = array(
-		'slug'                  => __('archival', 'sip'),
+		'slug'                  => esc_attr__( 'archival', 'sip' ),
 		'with_front'            => true,
 		'pages'                 => true,
 		'feeds'                 => true,
 	);
 	$post_type_args = array(
-		'label'                 => __( 'Archival', 'sip' ),
-		'description'           => __( 'Post Type for archival materials in SIP Plugin', 'sip' ),
+		'label'                 => esc_html__( 'Archival', 'sip' ),
+		'description'           => esc_html__( 'Post Type for archival materials in the SIP Plugin', 'sip' ),
 		'labels'                => $post_type_labels,
 		'supports'              => array( 'title','editor','author', ),
 		'taxonomies'            => array( 'archival_tag','archive', ),
@@ -75,29 +75,29 @@ function starg_custom_post_type_archival() : void {
 	// custom-taxonomy //
 	/////////////////////
 	$archive_tax_labels = array(
-		'name'                       => _x( 'Archives', 'Taxonomy General Name', 'sip' ),
-		'singular_name'              => _x( 'Archive', 'Taxonomy Singular Name', 'sip' ),
-		'menu_name'                  => __( 'Archive', 'sip' ),
-		'all_items'                  => __( 'All Archives', 'sip' ),
-		'parent_item'                => __( 'Parent Item', 'sip' ),
-		'parent_item_colon'          => __( 'Parent Item:', 'sip' ),
-		'new_item_name'              => __( 'New Item Name', 'sip' ),
-		'add_new_item'               => __( 'Add New Item', 'sip' ),
-		'edit_item'                  => __( 'Edit Item', 'sip' ),
-		'update_item'                => __( 'Update Item', 'sip' ),
-		'view_item'                  => __( 'View Item', 'sip' ),
-		'separate_items_with_commas' => __( 'Separate items with commas', 'sip' ),
-		'add_or_remove_items'        => __( 'Add or remove items', 'sip' ),
-		'choose_from_most_used'      => __( 'Choose from the most used', 'sip' ),
-		'popular_items'              => __( 'Popular Items', 'sip' ),
-		'search_items'               => __( 'Search Items', 'sip' ),
-		'not_found'                  => __( 'Not Found', 'sip' ),
-		'no_terms'                   => __( 'No items', 'sip' ),
-		'items_list'                 => __( 'Items list', 'sip' ),
-		'items_list_navigation'      => __( 'Items list navigation', 'sip' ),
+		'name'                       => esc_html_x( 'Archives', 'Taxonomy General Name', 'sip' ),
+		'singular_name'              => esc_html_x( 'Archive', 'Taxonomy Singular Name', 'sip' ),
+		'menu_name'                  => esc_html__( 'Archive', 'sip' ),
+		'all_items'                  => esc_html__( 'All Archives', 'sip' ),
+		'parent_item'                => esc_html__( 'Parent Item', 'sip' ),
+		'parent_item_colon'          => esc_html__( 'Parent Item:', 'sip' ),
+		'new_item_name'              => esc_html__( 'New Item Name', 'sip' ),
+		'add_new_item'               => esc_html__( 'Add New Item', 'sip' ),
+		'edit_item'                  => esc_html__( 'Edit Item', 'sip' ),
+		'update_item'                => esc_html__( 'Update Item', 'sip' ),
+		'view_item'                  => esc_html__( 'View Item', 'sip' ),
+		'separate_items_with_commas' => esc_html__( 'Separate items with commas', 'sip' ),
+		'add_or_remove_items'        => esc_html__( 'Add or remove items', 'sip' ),
+		'choose_from_most_used'      => esc_html__( 'Choose from the most used', 'sip' ),
+		'popular_items'              => esc_html__( 'Popular Items', 'sip' ),
+		'search_items'               => esc_html__( 'Search Items', 'sip' ),
+		'not_found'                  => esc_html__( 'Not Found', 'sip' ),
+		'no_terms'                   => esc_html__( 'No items', 'sip' ),
+		'items_list'                 => esc_html__( 'Items list', 'sip' ),
+		'items_list_navigation'      => esc_html__( 'Items list navigation', 'sip' ),
 	);
 	$archive_tax_rewrite = array(
-		'slug'                       => __('archive', 'sip'),
+		'slug'                       => esc_attr__('archive', 'sip'),
 		'with_front'                 => true,
 		'hierarchical'               => false,
 	);
@@ -124,26 +124,26 @@ function starg_custom_post_type_archival() : void {
 	// custom-taxonomy //
 	/////////////////////
 	$archival_tax_labels = array(
-		'name'                       => _x( 'Archival Tags', 'Taxonomy General Name', 'sip' ),
-		'singular_name'              => _x( 'Archival Tag', 'Taxonomy Singular Name', 'sip' ),
-		'menu_name'                  => __( 'Archival Tag', 'sip' ),
-		'all_items'                  => __( 'All Items', 'sip' ),
-		'parent_item'                => __( 'Parent Item', 'sip' ),
-		'parent_item_colon'          => __( 'Parent Item:', 'sip' ),
-		'new_item_name'              => __( 'New Item Name', 'sip' ),
-		'add_new_item'               => __( 'Add New Item', 'sip' ),
-		'edit_item'                  => __( 'Edit Item', 'sip' ),
-		'update_item'                => __( 'Update Item', 'sip' ),
-		'view_item'                  => __( 'View Item', 'sip' ),
-		'separate_items_with_commas' => __( 'Separate items with commas', 'sip' ),
-		'add_or_remove_items'        => __( 'Add or remove items', 'sip' ),
-		'choose_from_most_used'      => __( 'Choose from the most used', 'sip' ),
-		'popular_items'              => __( 'Popular Items', 'sip' ),
-		'search_items'               => __( 'Search Items', 'sip' ),
-		'not_found'                  => __( 'Not Found', 'sip' ),
-		'no_terms'                   => __( 'No items', 'sip' ),
-		'items_list'                 => __( 'Items list', 'sip' ),
-		'items_list_navigation'      => __( 'Items list navigation', 'sip' ),
+		'name'                       => esc_html_x( 'Archival Tags', 'Taxonomy General Name', 'sip' ),
+		'singular_name'              => esc_html_x( 'Archival Tag', 'Taxonomy Singular Name', 'sip' ),
+		'menu_name'                  => esc_html__( 'Archival Tag', 'sip' ),
+		'all_items'                  => esc_html__( 'All Items', 'sip' ),
+		'parent_item'                => esc_html__( 'Parent Item', 'sip' ),
+		'parent_item_colon'          => esc_html__( 'Parent Item:', 'sip' ),
+		'new_item_name'              => esc_html__( 'New Item Name', 'sip' ),
+		'add_new_item'               => esc_html__( 'Add New Item', 'sip' ),
+		'edit_item'                  => esc_html__( 'Edit Item', 'sip' ),
+		'update_item'                => esc_html__( 'Update Item', 'sip' ),
+		'view_item'                  => esc_html__( 'View Item', 'sip' ),
+		'separate_items_with_commas' => esc_html__( 'Separate items with commas', 'sip' ),
+		'add_or_remove_items'        => esc_html__( 'Add or remove items', 'sip' ),
+		'choose_from_most_used'      => esc_html__( 'Choose from the most used', 'sip' ),
+		'popular_items'              => esc_html__( 'Popular Items', 'sip' ),
+		'search_items'               => esc_html__( 'Search Items', 'sip' ),
+		'not_found'                  => esc_html__( 'Not Found', 'sip' ),
+		'no_terms'                   => esc_html__( 'No items', 'sip' ),
+		'items_list'                 => esc_html__( 'Items list', 'sip' ),
+		'items_list_navigation'      => esc_html__( 'Items list navigation', 'sip' ),
 	);
 	$archival_tags_args = array(
 		'labels'                     => $archival_tax_labels,
@@ -178,7 +178,8 @@ function starg_filter_archival_by_taxonomy() : void {
 			$selected      = ( isset( $_GET[ $taxonomy ] ) ) ? sanitize_key( $_GET[ $taxonomy ] ) : '';
 			$info_taxonomy = get_taxonomy( $taxonomy );
 			wp_dropdown_categories( array(
-				'show_option_all' => sprintf( __( 'Show all %s', 'sip' ), $info_taxonomy->label ),
+				// translators: %s: Label of the taxonomy.
+				'show_option_all' => sprintf( esc_html__( 'Show all %s', 'sip' ), $info_taxonomy->label ),
 				'taxonomy'        => $taxonomy,
 				'name'            => $taxonomy,
 				'orderby'         => 'name',
@@ -260,10 +261,10 @@ function starg_archival_table_head( array $defaults = array() ) : array {
 
 	unset($defaults_temp['cb'],$defaults_temp['title']);
 
-	$defaults['sip_folder']  = __('SIP-Folder', 'sip');
-	$defaults['purpose']     = __('Upload Purpose', 'sip');
-	$defaults['user']        = __('User', 'sip');
-	$defaults['numeration']  = __('Numeration', 'sip');
+	$defaults['sip_folder']  = esc_html__('SIP-Folder', 'sip');
+	$defaults['purpose']     = esc_html__('Upload Purpose', 'sip');
+	$defaults['user']        = esc_html__('User', 'sip');
+	$defaults['numeration']  = esc_html__('Numeration', 'sip');
 
 	$defaults = array_merge( $defaults, $defaults_temp );
 	return $defaults;
@@ -285,7 +286,7 @@ add_filter( 'manage_archival_posts_columns', 'starg_archival_table_head' );
 function starg_archival_table_content( string $column_name, int $post_id ) : void {
 	if ( $column_name === 'sip_folder' ) {
 		$sip_folder = esc_attr( get_post_meta( $post_id, '_archival_sip_folder', true ) );
-		echo ( $sip_folder ) ? : __( 'deleted', 'sip' );
+		echo ( $sip_folder ) ? : esc_html__( 'deleted', 'sip' );
 	}
 
 	if ( $column_name === 'purpose' ) {
@@ -298,8 +299,8 @@ function starg_archival_table_content( string $column_name, int $post_id ) : voi
 	}
 
 	if ( $column_name === 'user' ) {
-		$author_id      = get_post_field( 'post_author', $post_id );
-		$display_name   = get_the_author_meta( 'display_name' , $author_id );
+		$author_id      = esc_attr( get_post_field( 'post_author', $post_id ) );
+		$display_name   = esc_html( get_the_author_meta( 'display_name' , $author_id ) );
 		$user_admin_url = add_query_arg( array(
 			'post_type' => 'archival',
 			'author'    => $author_id,

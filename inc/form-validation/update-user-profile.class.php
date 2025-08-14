@@ -38,7 +38,7 @@ class Starg_Update_User_Profile extends Form_Validation {
 
 		// todo: implement user_meta error handling!
 		if ( isset( $user_input[ 'user_archive' ] ) ) {
-		update_user_meta( (int) $user_input['ID'], 'user_archive', $user_input['user_archive'] );
+			update_user_meta( (int) $user_input['ID'], 'user_archive', $user_input['user_archive'] );
 		}
 
 		update_user_meta( (int) $user_input['ID'], 'user_address', $user_input['user_address'] );

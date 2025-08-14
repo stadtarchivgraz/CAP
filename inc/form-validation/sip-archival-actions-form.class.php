@@ -28,7 +28,7 @@ class Sip_Archival_Actions extends Form_Validation {
 		// if viewing an existing archival/sip.
 		$sip_folder = $user_input[ 'sipFolder' ];
 		if ( ! $sip_folder ) {
-			$this->set_error_message( esc_html__( 'No sip-folder provided.', 'sip' ) );
+			$this->set_error_message( esc_html__( 'No SIP folder provided.', 'sip' ) );
 			$this->display_notification();
 			return false;
 		}
@@ -38,7 +38,8 @@ class Sip_Archival_Actions extends Form_Validation {
 		$archival_id     = (int) $wpdb->get_var( $wpdb->prepare( $archival_id_sql, $sip_folder ) );
 		if ( ! $archival_id ) {
 			// translators: %s: identifier for an archival record.
-			$this->set_error_message( sprintf( esc_html__( 'No archival record found for the provided sip folder: %s. This entry can not be deleted.', 'sip' ), $sip_folder ) );
+			$this->set_error_message( sprintf( esc_html__( 'No archival record found for the provided SIP folder: %s. This entry can not be deleted.', 'sip' ), $sip_folder ) );
+			// translators: %s: identifier for an archival record.
 			$this->set_error_log_message( sprintf( 'Problems removing an archival record. Please check sip folder %s', $sip_folder ) );
 			$this->display_notification();
 			return false;
@@ -79,22 +80,25 @@ class Sip_Archival_Actions extends Form_Validation {
 	 * @param int $archival_id
 	 * @return bool
 	 */
-	private function _process_action_accept( int $archival_id ) : bool {
+	private function _process_action_accept( int $archival_post_id ) : bool {
 		$post_data = array(
-			'ID'          => $archival_id,
+			'ID'          => $archival_post_id,
 			'post_status' => 'publish',
 		);
-		$post_id = wp_update_post($post_data);
-		if ( is_wp_error($post_id)) {
-			$this->set_error_log_message( $post_id->get_error_message() );
-			$this->set_error_message(  sprintf( esc_attr__( 'The post with the ID %d could not be updated.', 'sip' ), $archival_id )  );
+		$maybe_new_archival_post_id = wp_update_post($post_data);
+		if ( is_wp_error($maybe_new_archival_post_id)) {
+			$this->set_error_log_message( $maybe_new_archival_post_id->get_error_message() );
+			// translators: %d: Post-ID of an archival record.
+			$this->set_error_message(  sprintf( esc_attr__( 'The post with the ID %d could not be updated.', 'sip' ), $archival_post_id )  );
 			return false;
 		}
 
-		$archivar_user_set = update_post_meta($post_id, '_archival_archivar_user_id', get_current_user_id());
+		$archivar_user_set = update_post_meta($maybe_new_archival_post_id, '_archival_archivar_user_id', get_current_user_id());
 		if ( ! $archivar_user_set ) {
-			$this->set_error_log_message( sprintf( esc_attr__( 'Archivar User-ID not set for archival record post %s', 'sip' ), $post_id ) );
-			$this->set_error_message( sprintf( esc_attr__( 'Archivar User-ID not set for archival record post %s', 'sip' ), $post_id ) );
+			// translators: %d: Post-ID of an archival record.
+			$this->set_error_log_message( sprintf( esc_attr__( 'Archivist user ID not set for archival record post: %d', 'sip' ), $maybe_new_archival_post_id ) );
+			// translators: %d: Post-ID of an archival record.
+			$this->set_error_message( sprintf( esc_attr__( 'Archivist user ID not set for archival record post: %d', 'sip' ), $maybe_new_archival_post_id ) );
 			return false;
 		}
 
@@ -108,22 +112,25 @@ class Sip_Archival_Actions extends Form_Validation {
 	 * @param int $archival_id
 	 * @return bool
 	 */
-	private function _process_action_decline( string $sip_folder, int $archival_id ) : bool {
-		$author_id  = get_post_field('post_author', $archival_id);
+	private function _process_action_decline( string $sip_folder, int $archival_post_id ) : bool {
+		$author_id  = get_post_field('post_author', $archival_post_id);
 		$sip_folder = esc_attr( carbon_get_theme_option('sip_upload_path') ) . $author_id . '/' . $sip_folder . '/';
 		if (is_dir($sip_folder)) {
 			$sip_deleted = starg_remove_SIP($sip_folder);
 			if ( ! $sip_deleted ) {
-				$this->set_error_log_message( sprintf( esc_attr__( 'The folder for the archival record with the ID %s was not deleted.', 'sip' ), $sip_folder ) );
-				$this->set_error_message( sprintf( esc_attr__( 'The folder for the archival record with the ID %s was not deleted.', 'sip' ), $sip_folder ) );
+				// translators: %s: ID/Name of the folder where the archival record (sip) is stored.
+				$this->set_error_log_message( sprintf( esc_attr__( 'Failed to delete the folder for archival record %s.', 'sip' ), $sip_folder ) );
+				// translators: %s: ID/Name of the folder where the archival record (sip) is stored.
+				$this->set_error_message( sprintf( esc_attr__( 'Failed to delete the folder for archival record %s.', 'sip' ), $sip_folder ) );
 				return false;
 			}
 		}
 
-		$post_deleted = wp_delete_post($archival_id, true);
+		$post_deleted_id = wp_delete_post($archival_post_id, true);
 
-		if ( ! $post_deleted ) {
-			$this->set_error_message( sprintf( esc_attr__( 'The archival record with the ID %d was not deleted.', 'sip' ), $archival_id ) );
+		if ( ! $post_deleted_id ) {
+			// translators: %d: Post-ID of the archival record.
+			$this->set_error_message( sprintf( esc_attr__( 'Failed to delete the archival record with the ID %d.', 'sip' ), $archival_post_id ) );
 			return false;
 		}
 
@@ -137,15 +144,16 @@ class Sip_Archival_Actions extends Form_Validation {
 	 * @param int $archival_id
 	 * @return bool
 	 */
-	private function _process_action_submit(int $archival_id): bool {
+	private function _process_action_submit(int $archival_post_id): bool {
 		$post_data = array(
-			'ID'          => $archival_id,
+			'ID'          => $archival_post_id,
 			'post_status' => 'pending',
 		);
-		$post_id   = wp_update_post($post_data);
-		if (is_wp_error($post_id)) {
-			$this->set_error_log_message($post_id->get_error_message());
-			$this->set_error_message( sprintf( esc_attr__( 'The post with the ID %d could not be updated.', 'sip' ), $archival_id ) );
+		$maybe_updated_post_id = wp_update_post($post_data);
+		if (is_wp_error($maybe_updated_post_id)) {
+			$this->set_error_log_message($maybe_updated_post_id->get_error_message());
+			// translators: %d: Post-ID of an archival record.
+			$this->set_error_message( sprintf( esc_attr__( 'The post with the ID %d could not be updated.', 'sip' ), $archival_post_id ) );
 			return false;
 		}
 

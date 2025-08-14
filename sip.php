@@ -1,9 +1,9 @@
 <?php
 /*
  Plugin Name: SIP
- Description: Plugin for creating Submission Information Packages (SIPs) from archival records. The archival records are provided by users. The archiver can choose if they want to create an SIP or reject it.
+ Description: Plugin for creating Submission Information Packages (SIPs) from archival records. The archival records are provided by users. The archivist can choose whether to create a SIP or reject it.
  Author: Stadtarchiv Graz, Guido Handrick
- Version: 3.0.0
+ Version: 3.0.1
  Author URI: http://guido-handrick.info
  Text Domain: sip
  Domain Path: /languages/
@@ -12,12 +12,13 @@
 
 if (! defined('WPINC')) { die; }
 
-define( 'STARG_SIP_PLUGIN_VERSION', '3.0.0' );
+define( 'STARG_SIP_PLUGIN_VERSION', '3.0.1' );
+define( 'STARG_SIP_PLUGIN_NAME',    'SIP' );
 define( 'STARG_SIP_PLUGIN_BASE_DIR', trailingslashit( dirname( __FILE__ ) ) );
 define( 'STARG_SIP_PLUGIN_BASE_URL', plugin_dir_url( __FILE__ ) );
 
 // Load CPT and Taxonomies.
-require_once( STARG_SIP_PLUGIN_BASE_DIR . "archival.php" );
+require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/archival-cpt.php" );
 
 /**
  * Activate the plugin.
@@ -51,7 +52,7 @@ register_deactivation_hook( __FILE__, 'starg_sip_deactivate' );
  * Load the translations for the plugin.
  */
 function starg_load_textdomain() {
-	load_plugin_textdomain( 'sip', FALSE, basename( STARG_SIP_PLUGIN_BASE_DIR ) . 'languages/' );
+	load_plugin_textdomain( 'sip', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
 add_action( 'init', 'starg_load_textdomain' );
 
@@ -176,28 +177,26 @@ function starg_load_additional_packages() {
 }
 add_action( 'after_setup_theme', 'starg_load_additional_packages' );
 
-
-require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/starg-template-handling.php' );
-Starg_Template_Handling::init();
-
-require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/starg-security-settings.php' );
-Starg_Security_Settings::init();
-
-require_once( STARG_SIP_PLUGIN_BASE_DIR . 'admin/starg-admin-notification.php' );
-Admin_Notification::init();
-
-require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/starg-services.php" );
-Starg_Services::init();
-
 // todo: maybe install the plugin https://wordpress.org/plugins/notification/ instead of including it as an asset in the plugin?
 require_once( STARG_SIP_PLUGIN_BASE_DIR . "assets/notification/load.php" );
+
+
+require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/template-handling.php' );
+Starg_Template_Handling::init();
+
+require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/security-settings.php' );
+Starg_Security_Settings::init();
+
+require_once( STARG_SIP_PLUGIN_BASE_DIR . 'admin/admin-notification.php' );
+Starg_Admin_Notification::init();
+
+require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/services.php" );
+Starg_Services::init();
 
 include( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-functions.php" );
 include( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-template-functions.php" );
 include( STARG_SIP_PLUGIN_BASE_DIR . "admin/sip-options.php" );
 include( STARG_SIP_PLUGIN_BASE_DIR . "admin/sip-meta.php" );
-include( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-notifications.php" );
-
 
 /**
  * Checks every day for archival resources (SIPs) to delete.
@@ -218,9 +217,9 @@ function starg_archival_delete_cron_job_function() {
 	if ( ! carbon_get_theme_option( 'sip_cron_delete' ) ) { return; }
 
 	global $wpdb;
-	$days          = carbon_get_theme_option( 'sip_cron_delete_days' );
-	$status        = carbon_get_theme_option( 'sip_cron_delete_status' );
-	$upload_folder = carbon_get_theme_option( 'sip_upload_path' );
+	$days          = (int) esc_attr( carbon_get_theme_option( 'sip_cron_delete_days' ) ); // type:number
+	$status        = carbon_get_theme_option( 'sip_cron_delete_status' ); // type:multiselect
+	$upload_folder = esc_attr( carbon_get_theme_option( 'sip_upload_path' ) ); // type:text
 	$sip_folders   = array();
 
 	if ( in_array( 'upload', $status ) ) {
@@ -247,14 +246,12 @@ function starg_archival_delete_cron_job_function() {
 	$archival_sips_sql = "SELECT ID, meta_value, post_author
 		FROM $wpdb->postmeta LEFT JOIN $wpdb->posts ON post_id = ID
 		WHERE meta_key = '_archival_sip_folder'
-			AND post_status IN ($status_str)
+			AND post_status IN (%s)
 			AND post_date <= %s";
 	$post_date_filter     = date( 'Y-m-d 23:59:59', strtotime( "-$days days" ) );
-	$archival_sip_folders = $wpdb->get_results( $wpdb->prepare( $archival_sips_sql, $post_date_filter ) );
+	$archival_sip_folders = $wpdb->get_results( $wpdb->prepare( $archival_sips_sql, $status_str, $post_date_filter ) );
 
-	if ( ! $archival_sip_folders ) {
-		return;
-	}
+	if ( ! $archival_sip_folders ) { return; }
 
 	foreach ( $archival_sip_folders as $archival_sip_folder ) {
 		$sip_folders[] = $upload_folder . $archival_sip_folder->post_author . '/' . $archival_sip_folder->meta_value . '/';

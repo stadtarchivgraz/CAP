@@ -21,7 +21,7 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 		$user_input = $this->user_input_sanitization();
 		if ( ! $user_input ) { return false; }
 
-		// if viewing an existing archival/sip.
+		// if viewing an existing archival record/sip.
 		$sip_folder = ( isset( $_GET['sipFolder'] ) ) ? sanitize_text_field( $_GET['sipFolder'] ) : '';
 
 		$current_locale = strtolower(get_locale());
@@ -133,14 +133,15 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 
 		// create the new post for the uploaded archival. if post was created, redirect to the archival page, else show error message.
 		$post_id = wp_insert_post( $post_data );
-		if ( is_wp_error( $post_id ) ) {
-			$this->set_error_message( sprintf( esc_html__( 'We have a problem creating/updating the post.', 'sip' ), $post_id ) );
+		if ( ! $post_id || is_wp_error( $post_id ) ) {
+			$this->set_error_message( esc_html__( 'We encountered a problem creating/updating your entry.', 'sip' ) );
 			$this->set_error_log_message( __FUNCTION__ . ': ' . $post_id->get_error_message() );
 			return false;
 		}
 
+		// todo: As we redirect the user to another page, this message will not be displayed. We might add a query arg to the redirect_url with this message.
 		// translators: %d: Post-ID.
-		$this->set_success_message(sprintf(esc_html__('Post %d successfully created/updated.', 'sip'), $post_id));
+		$this->set_success_message(sprintf(esc_html__('Entry %s successfully created/updated.', 'sip'), get_the_title( $post_id ) ));
 
 		// used to create the permalink for the edit page for SIP archival records.
 		$url = starg_get_the_archival_page_template_url( $post_id );
@@ -162,7 +163,7 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 			'archival_lat'            => 'sanitize_text_field',
 			'archival_lng'            => 'sanitize_text_field',
 			'archival_area'           => 'starg_sanitize_json',
-			'archival_tags'           => 'trim',
+			'archival_tags'           => 'trim',// todo: this is an array/json! We might change "trim" to "starg_sanitize_json"
 			'archival_upload_purpose' => 'sanitize_text_field',
 			'archival_blocking_time'  => 'sanitize_text_field',
 			'archival_right_transfer' => 'sanitize_text_field',

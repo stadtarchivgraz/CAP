@@ -21,9 +21,9 @@ while (have_posts()) : the_post();
 	}
 
 	// Previous/next post navigation might be added later. But only for admin/editors!
-	if ( current_user_can('edit_others_pages') ) :
-		$sip_next_label     = esc_html__( 'Next archival >', 'sip' );
-		$sip_previous_label = esc_html__( '< Previous archival', 'sip' );
+	// if ( current_user_can('edit_others_pages') ) :
+		// $sip_next_label     = esc_html__( 'Next archival >', 'sip' );
+		// $sip_previous_label = esc_html__( '< Previous archival', 'sip' );
 
 		// the_post_navigation(
 		// 	array(
@@ -31,7 +31,7 @@ while (have_posts()) : the_post();
 		// 		'prev_text' => '<span class="meta-nav">' . $sip_previous_label . '</span> <span class="post-title">%title</span>'
 		// 	)
 		// );
-	endif;
+	// endif;
 
 endwhile; // End of the loop.
 

@@ -44,13 +44,9 @@ $thumbnail_folder = $sip_folder . 'thumb/';
 try {
 	$it = new RecursiveTreeIterator(new RecursiveDirectoryIterator($upload_folder, RecursiveDirectoryIterator::SKIP_DOTS));
 } catch ( Exception $exception ) {
+	// translators: %1$s: ID/Name of the folder where the sip is stored. %2$d: User-ID.
+	echo starg_get_notification_message( sprintf( esc_html__( 'The folder "%1$s" for user "%2$d" is empty.', 'sip' ), $sip, $author_id ), 'is-warning is-light' );
 	error_log( $exception->getMessage() );
-	echo '<div class="container mb-5">';
-		echo '<div class="notification is-warning is-light">';
-			// echo '<button class="delete"></button>';
-			printf( esc_html__( 'The folder "%s" for user "%s" is empty.', 'sip' ), $sip, $author_id );
-			echo '</div>';
-		echo '</div>';
 	return;
 }
 

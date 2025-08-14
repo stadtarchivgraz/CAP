@@ -147,12 +147,12 @@ $current_tab = (get_query_var('tab')) ?: 'archivals';
 			<h3><?php esc_html_e('Archive', 'sip'); ?></h3>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
-					<label class="label"><?php esc_html_e('Log in', 'sip'); ?></label>
+					<label for="user-login" class="label"><?php esc_html_e('Log in', 'sip'); ?></label>
 				</div>
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input class="input is-static" type="text" value="<?php echo $user->user_login; ?>" aria-readonly="true" readonly>
+							<input id="user-login" class="input is-static" name="user_login_static" type="text" value="<?php echo $user->user_login; ?>" aria-readonly="true" readonly>
 						</p>
 					</div>
 				</div>
@@ -164,7 +164,8 @@ $current_tab = (get_query_var('tab')) ?: 'archivals';
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input class="input is-static" name="display_name" type="text" value="<?php echo $user->first_name; ?> <?php echo $user->last_name; ?>" aria-readonly="true" readonly>
+							<?php // translators: Format for full name of an user. %1$s: first name. %2$s: last name. ?>
+							<input id="display-name" class="input is-static" name="display_name" type="text" value="<?php echo ( $user->first_name && $user->last_name ) ? sprintf( esc_attr_x( '%1$s %2$s', 'Format for full name of an user. %1$s is first name, %2$s is last name. Rearrange if necessary.', 'sip' ), $user->first_name, $user->last_name ) : ''; ?>" aria-readonly="true" readonly placeholder="<?php esc_attr_e( 'Will be generated from your name', 'sip' ); ?>">
 						</p>
 					</div>
 				</div>
@@ -172,7 +173,7 @@ $current_tab = (get_query_var('tab')) ?: 'archivals';
 			<?php $user_archive = get_user_meta($user->ID, 'user_archive', true); ?>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
-					<label for="archive" class="label"><?php esc_html_e('Archive', 'sip'); ?></label>
+					<label for="archive" class="label"><?php esc_html_e('Archive', 'sip'); ?>*</label>
 				</div>
 				<div class="field-body">
 					<div class="field">
@@ -193,7 +194,7 @@ $current_tab = (get_query_var('tab')) ?: 'archivals';
 								wp_dropdown_categories($args);
 							else :
 								$archive = get_term($user_archive, 'archive'); ?>
-								<input class="input is-static" type="text" value="<?php echo $archive->name; ?>" aria-readonly="true" readonly>
+								<input id="archive" class="input is-static" name="static_user_archive" type="text" value="<?php echo $archive->name; ?>" aria-readonly="true" readonly>
 							<?php endif; ?>
 						</p>
 						<?php if (!$user_archive) : ?>
@@ -207,31 +208,31 @@ $current_tab = (get_query_var('tab')) ?: 'archivals';
 
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
-					<label for="first-name" class="label"><?php esc_html_e('First name', 'sip'); ?></label>
+					<label for="first-name" class="label"><?php esc_html_e('First name', 'sip'); ?>*</label>
 				</div>
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input id="first-name" name="first_name" class="input" type="text" value="<?php echo $user->first_name; ?>" required>
+							<input id="first-name" name="first_name" class="input" type="text" value="<?php echo $user->first_name; ?>" placeholder="<?php esc_html_e('First name', 'sip'); ?>" required>
 						</p>
 					</div>
 				</div>
 			</div>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
-					<label for="last-name" class="label"><?php esc_html_e('Surname', 'sip'); ?></label>
+					<label for="last-name" class="label"><?php esc_html_e('Surname', 'sip'); ?>*</label>
 				</div>
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input id="last-name" name="last_name" class="input" type="text" value="<?php echo $user->last_name; ?>" required>
+							<input id="last-name" name="last_name" class="input" type="text" value="<?php echo $user->last_name; ?>" placeholder="<?php esc_html_e('Surname', 'sip'); ?>" required>
 						</p>
 					</div>
 				</div>
 			</div>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
-					<label for="email" class="label"><?php esc_html_e('Email address', 'sip'); ?></label>
+					<label for="email" class="label"><?php esc_html_e('Email address', 'sip'); ?>*</label>
 				</div>
 				<div class="field-body">
 					<div class="field">
@@ -243,7 +244,7 @@ $current_tab = (get_query_var('tab')) ?: 'archivals';
 			</div>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
-					<label for="date-of-birth" class="label"><?php esc_html_e('Date of birth', 'sip'); ?></label>
+					<label for="date-of-birth" class="label"><?php esc_html_e('Date of birth', 'sip'); ?>*</label>
 				</div>
 				<div class="field-body">
 					<div class="field">
@@ -257,7 +258,7 @@ $current_tab = (get_query_var('tab')) ?: 'archivals';
 			<?php $user_address = get_user_meta($user->ID, 'user_address', true); ?>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
-					<label for="address" class="label"><?php esc_html_e('Address', 'sip'); ?></label>
+					<label for="address" class="label"><?php esc_html_e('Address', 'sip'); ?>*</label>
 				</div>
 				<div class="field-body">
 					<div class="field">
@@ -308,7 +309,7 @@ $current_tab = (get_query_var('tab')) ?: 'archivals';
 			<h3><?php esc_html_e('Change password', 'sip'); ?></h3>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
-					<label for="old-passwort" class="label"><?php esc_html_e('Old', 'sip'); ?></label>
+					<label for="old-password" class="label"><?php esc_html_e('Old', 'sip'); ?></label>
 				</div>
 				<div class="field-body">
 					<div class="field">

@@ -38,7 +38,7 @@ class Create_Sip_Pdf extends Form_Validation {
 
 		$sip_user_folder_id = $user_input[ 'sipFolder' ];
 		if ( ! $sip_user_folder_id ) {
-			$this->set_error_message( esc_attr__( 'No SIP-Folder provided.', 'sip' ) );
+			$this->set_error_message( esc_attr__( 'No SIP Folder provided.', 'sip' ) );
 			return false;
 		}
 
@@ -47,7 +47,7 @@ class Create_Sip_Pdf extends Form_Validation {
 	}
 
 	/**
-	 * @todo add docBlock
+	 * Starts the creation process of the PDF file for a specific archival record.
 	 * @return false|void
 	 */
 	private function create_pdf( string $sip_folder ) {
@@ -61,7 +61,8 @@ class Create_Sip_Pdf extends Form_Validation {
 		$archival_id = $wpdb->get_var($wpdb->prepare( $archival_id_sql, $sip_folder ));
 
 		if ( ! $archival_id ) {
-			$this->set_error_message( sprintf( esc_attr__( 'No archival record found with the SIP-ID: "%s"', 'sip' ), $archival_id ) );
+			// translators: %d: Post-ID of an archival record.
+			$this->set_error_message( sprintf( esc_attr__( 'No archival record found with SIP Post-ID: "%d"', 'sip' ), $archival_id ) );
 			return false;
 		}
 
@@ -207,7 +208,7 @@ class Create_Sip_Pdf extends Form_Validation {
 
 		if (current_user_can('edit_others_posts')) {
 			$htmlContent .= '
-					<h4>' . __('Archiv Information', 'sip') . '</h4>
+					<h4>' . __('Archive Information', 'sip') . '</h4>
 					<table border="0" cellpadding="0" cellspacing="5" width="100%">
 						<tr>
 							<th>' . __('Numbering', 'sip') . '</th>
@@ -237,7 +238,7 @@ class Create_Sip_Pdf extends Form_Validation {
 								</p>
 							</td>
 							<td style="width: 50%; text-align: left;">
-								<h4>' . __('Archivar', 'sip') . '</h4>
+								<h4>' . __('Archivist', 'sip') . '</h4>
 								<p>
 									' . $archivar->display_name . '
 								</p>

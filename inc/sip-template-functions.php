@@ -1,45 +1,22 @@
 <?php
+if (! defined('WPINC')) { die; }
+
 /**
- * Add additional content to some pages.
- * This added content might be a login form, an upload form, a profile form or some text.
- * This is totally unexpected and should not be solved this way!
- * @param string $content
+ * Adds additional Text above of the login form.
+ * The filter "login_form_top" only exists in the function @see wp_login_form() and therefore does not do anything on wp-login.php
+ * If one wants to add Text on top of wp-login.php one needs to use the filter login_message.
+ * @param string $content  Content to display. Default empty.
+ * @param array $args      Array of login form arguments.
  * @return string
- * @todo: remove!
  */
-function starg_add_sip_forms_to_content( string $content ) {
-	if ( ! is_page() ) { return $content; }
-
-	// if a user is not logged in we only display the login form.
-	if ( ! is_user_logged_in() ) {
-		return $content . '<div class="container sip">' . wp_login_form( array( 'echo' => false, 'form_id' => 'archival_loginform', ) ) . '</div>';
-	}
-
-	$current_locale   = strtolower( get_locale() );
-	$sip_archive_role = ( carbon_get_theme_option( 'sip_archive_role' ) ) ? carbon_get_theme_option( 'sip_archive_role' ) : 'edit_others_posts';
-	if ( is_page_template('sip-upload.php') ) {
-		if ( ! get_user_meta( get_current_user_id(), 'user_privacy_policy_approval', true ) ) {
-			return $content . '<div class="container sip">' . wpautop( get_option( '_sip_update_profile_text_' . $current_locale ) ) . '</div>';
-		} else {
-			return $content . starg_get_sip_form( 'uploadform.php' );
-		}
-	} elseif ( is_page_template('sip-profile.php') ) {
-		 return $content . starg_get_sip_form( 'profileform.php' );
-	} elseif ( is_page_template( 'sip-archive.php' ) && current_user_can( $sip_archive_role ) ) {
-		return $content . starg_get_sip_form( 'filterform.php' );
-	}
-	
-	return $content;
-}
-// add_filter( 'the_content', 'starg_add_sip_forms_to_content' );
-
 function starg_archival_loginform_top( $content, $args ) {
-	$current_locale = strtolower( get_locale() );
 	if ( $args['form_id'] !== 'archival_loginform' ) {
 		return $content;
 	}
 
-	return wpautop( wp_kses_post( get_option( '_sip_register_text_' . $current_locale ) ) );
+	$current_locale = strtolower( get_locale() );
+	$content_to_add = wpautop( wp_kses_post( get_option( '_sip_register_text_' . $current_locale ) ) );
+	return '<section class="notification is-info is-light content">' . $content_to_add . '</section>';
 }
 add_filter( 'login_form_top', 'starg_archival_loginform_top', 10, 2 );
 
@@ -62,7 +39,6 @@ add_filter( 'single_template', 'starg_load_archival_template' );
  * @param string|WP_User $user
  */
 function starg_add_sip_user_archive_field( $user ) {
-	// todo: add default for the users archive.
 	$user_archive = '';
 	if ( 'add-new-user' !== $user ) {
 		$user_archive = get_user_meta( $user->ID, 'user_archive', true );
@@ -100,6 +76,10 @@ add_action( 'show_user_profile', 'starg_add_sip_user_archive_field' );
 add_action( 'edit_user_profile', 'starg_add_sip_user_archive_field' );
 add_action( "user_new_form", "starg_add_sip_user_archive_field" );
 
+/**
+ * Save the users archive option as user meta.
+ * @deprecated this is solved by @see Starg_Update_User_Profile::maybe_process_update_user_profile
+ */
 function starg_save_sip_user_archive_field( $user_id ) {
 	if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST[ 'user_archive' ] ) ) {
 		return false;
@@ -107,8 +87,8 @@ function starg_save_sip_user_archive_field( $user_id ) {
 
 	update_user_meta( $user_id, 'user_archive', sanitize_text_field( $_POST[ 'user_archive' ] ) );
 }
-add_action( 'user_register', 'starg_save_sip_user_archive_field' );
-add_action( 'profile_update', 'starg_save_sip_user_archive_field' );
+//add_action( 'user_register', 'starg_save_sip_user_archive_field' );
+//add_action( 'profile_update', 'starg_save_sip_user_archive_field' );
 
 /**
  * Change the main query based on the current user.
@@ -146,6 +126,7 @@ add_filter( 'pre_get_posts', 'starg_sip_admin_archivals' );
 
 /**
  * Allow the upload for additional file types.
+ * SVG and XML files are allowed.
  * @param array $existing_mimes contains all the file types currently allowed for upload.
  */
 function starg_sip_upload_types( array $existing_mimes = array() ) {
@@ -183,28 +164,3 @@ add_action('pre_get_posts', function($query) {
 	}
 });
 */
-
-/**
- * Change the return value for the WP-Function "the_permalink" for the archival single page.
- * This is totally unexpected and should not be solved this way!
- * This function is not in use anymore!
- * @todo: remove!
- */
-function starg_adjust_the_permalink_for_archivals( $url, $post ) {
-	if ( ! $post || 'archival' !== $post->post_type ) {
-		return $url;
-	}
-
-	$pages = get_pages( array(
-		'meta_key'     => '_wp_page_template',
-		'meta_value'   => 'sip-archival.php',
-		'hierarchical' => 0,
-	) );
-	if ( ! $pages ) { return $url; }
-
-	$slug = ( $post->post_name ) ? $post->post_name : $post->ID;
-	$url  = get_the_permalink( $pages[0] ) . $slug;
-
-	return $url;
-}
-// add_filter( 'the_permalink', 'starg_adjust_the_permalink_for_archivals', 10, 2 );

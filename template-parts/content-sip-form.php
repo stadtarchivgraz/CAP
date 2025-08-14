@@ -6,10 +6,10 @@
 
 $user           = wp_get_current_user();
 $archival       = false; //get_post();
-$archival_from  = false;
-$archival_to    = false;
+$archival_from  = false; // start date/time period
+$archival_to    = false; // end date/time period
 $current_locale = strtolower(get_locale());
-$sip_folder     = (isset($_GET['sipFolder'])) ? sanitize_text_field($_GET['sipFolder']) : '';
+$sip_folder     = ( isset( $_GET['sipFolder'] ) && $_GET['sipFolder'] ) ? sanitize_text_field( $_GET['sipFolder'] ) : false;
 
 
 // if viewing an existing archival.
@@ -29,9 +29,10 @@ if ( $sip_folder ) {
 <article id="post-<?php the_ID(); ?>" <?php post_class('sip'); ?>>
 
 	<div class="container">
-		<header class="entry-header mb-6">
-			<?php the_title('<h2 class="entry-title title">', '</h2>'); ?>
-		</header><!-- .entry-header -->
+		<?php // todo: if we display the title within elementor (or any other pagebuilder) we don't need it in this template. ?>
+		<!-- <header class="entry-header mb-6"> -->
+			<?php // the_title('<h2 class="entry-title title">', '</h2>'); ?>
+		<!--</header>--><!-- .entry-header -->
 
 		<div class="entry-content content">
 			<?php
@@ -55,40 +56,40 @@ if ( $sip_folder ) {
 				<?php wp_nonce_field( 'starg_upload_archival_nonce_action', 'starg_upload_archival_nonce', false ); ?>
 
 				<div class="field">
-					<label for="archival-title" class="label is-large"><?php _e('Title', 'sip'); ?>*</label>
+					<label for="archival-title" class="label is-large"><?php esc_html_e('Title', 'sip'); ?>*</label>
 					<p class="control is-large">
-						<input id="archival-title" name="archival_title" class="input is-large count-character" type="text" placeholder="<?php _e('Give your submission a descriptive title', 'sip'); ?>" value="<?php echo ($archival) ? $archival->post_title : ''; ?>" maxlength="100" required>
+						<input id="archival-title" name="archival_title" class="input is-large count-character" type="text" placeholder="<?php esc_html_e('Give your submission a descriptive title', 'sip'); ?>" value="<?php echo ($archival) ? $archival->post_title : ''; ?>" maxlength="100" required>
 					</p>
-					<p id="archival-title_count" class="help"><span><?php echo ($archival) ? strlen($archival->post_title) : 0; ?></span> | <?php _e('Maximum 100 characters.', 'sip'); ?></p>
+					<p id="archival-title_count" class="help"><span><?php echo ($archival) ? strlen($archival->post_title) : 0; ?></span> | <?php esc_html_e('Maximum 100 characters.', 'sip'); ?></p>
 				</div>
 				<div class="field">
-					<label for="archival-originator" class="label"><?php _e('Originator', 'sip'); ?>*</label>
+					<label for="archival-originator" class="label"><?php esc_html_e('Originator', 'sip'); ?>*</label>
 					<p class="control">
 						<input id="archival-originator" name="archival_originator" class="input" type="text" value="<?php echo ($archival) ? $archival_originator : $user->display_name; ?>" required>
 					</p>
-					<p class="help"><?php _e('If you are not the originator (creator) of the uploaded file, please enter the name of the originator here', 'sip'); ?></p>
+					<p class="help"><?php esc_html_e('If you are not the originator (creator) of the uploaded file, please enter the name of the originator here', 'sip'); ?></p>
 				</div>
 				<div class="field">
-					<label for="archival-description" class="label"><?php _e('Description', 'sip'); ?>*</label>
+					<label for="archival-description" class="label"><?php esc_html_e('Description', 'sip'); ?>*</label>
 					<p class="control">
-						<textarea id="archival-description" name="archival_description" class="textarea count-character" rows="10" maxlength="5000" placeholder="<?php _e('You can describe your file in detail here (e.g.: Why is it important for the archive? What does the file show? In what context was the file created? Is there any additional information?)', 'sip'); ?>" required><?php echo ($archival) ? $archival->post_content : ''; ?></textarea>
+						<textarea id="archival-description" name="archival_description" class="textarea count-character" rows="10" maxlength="5000" placeholder="<?php esc_html_e('You can describe your file in detail here (e.g.: Why is it important for the archive? What does the file show? In what context was the file created? Is there any additional information?)', 'sip'); ?>" required><?php echo ($archival) ? wp_kses_post( $archival->post_content ) : ''; ?></textarea>
 					</p>
-					<p id="archival-description_count" class="help"><span><?php echo ($archival) ? strlen($archival->post_content) : 0; ?></span> | <?php _e('Maximum 5000 characters.', 'sip'); ?></p>
+					<p id="archival-description_count" class="help"><span><?php echo ($archival) ? strlen($archival->post_content) : 0; ?></span> | <?php esc_html_e('Maximum 5000 characters.', 'sip'); ?></p>
 				</div>
 				<?php // todo: if we select a single date, we should hide the longer period inputs and vice versa! 
 				?>
 				<div class="field">
-					<label for="archival-single-date" class="label"><?php _e('Date/time (for a precise time)', 'sip'); ?></label>
+					<label for="archival-single-date" class="label"><?php esc_html_e('Date/time (for a precise time)', 'sip'); ?></label>
 					<p class="control">
 						<input id="archival-single-date" name="archival_single_date" type="datetime-local" value="<?php echo ($archival_from && !$archival_to) ? $archival_from : ''; ?>">
 					</p>
 				</div>
 				<div class="field">
-					<label class="label"><?php _e('Time period (for a longer period)', 'sip'); ?></label>
+					<label class="label"><?php esc_html_e('Time period (for a longer period)', 'sip'); ?></label>
 					<div class="field">
 						<label class="checkbox">
 							<input type="checkbox" name="archival_hide_timeline" onclick="toggleField('date-range-control');">
-							<?php _e('Hide timeline', 'sip'); ?>
+							<?php esc_html_e('Hide timeline', 'sip'); ?>
 						</label>
 					</div>
 					<div id="date-range-control" class="control date-range-control">
@@ -108,13 +109,13 @@ if ( $sip_folder ) {
 					</div>
 				</div>
 				<div class="field">
-					<label for="archival-map" class="label"><?php _e('Location', 'sip'); ?></label>
+					<label for="archival-map" class="label"><?php esc_html_e('Location', 'sip'); ?></label>
 					<label class="checkbox">
 						<input type="checkbox" name="archival_hide_map" onclick="toggleField('archival-map','archival-address');">
-						<?php _e('Hide map', 'sip'); ?>
+						<?php esc_html_e('Hide map', 'sip'); ?>
 					</label>
 					<div id="archival-map">
-						<p><?php _e('Map (select an exact location or area)', 'sip'); ?></p>
+						<p><?php esc_html_e('Map (select an exact location or area)', 'sip'); ?></p>
 						<?php include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-map.php' ); ?>
 					</div>
 					<div>
@@ -122,19 +123,19 @@ if ( $sip_folder ) {
 					</div>
 					<input id="archival-lat" name="archival_lat" type="hidden" value="<?php echo ($archival) ? esc_attr(get_post_meta($archival->ID, '_archival_lat', true)) : ''; ?>">
 					<input id="archival-lng" name="archival_lng" type="hidden" value="<?php echo ($archival) ? esc_attr(get_post_meta($archival->ID, '_archival_lng', true)) : ''; ?>">
-					<input id="archival-area" name="archival_area" type="hidden" value="<?php echo ($archival) ? get_post_meta($archival->ID, '_archival_area', true) : ''; // todo: escape it! ?>">
+					<input id="archival-area" name="archival_area" type="hidden" value="<?php echo ($archival) ? get_post_meta($archival->ID, '_archival_area', true) : ''; // todo: maybe escape it! ?>">
 				</div>
 				<div class="field">
-					<label for="archival-tags" class="label"><?php _e('Tags', 'sip'); ?>*</label>
+					<label for="archival-tags" class="label"><?php esc_html_e('Tags', 'sip'); ?>*</label>
 					<p class="control">
 						<textarea id="archival-tags" name="archival_tags" class="textarea" rows="2" maxlength="10" required></textarea>
 					</p>
-					<p class="help"><?php _e('Minimum 1 | Maximum 10', 'sip'); ?></p>
+					<p class="help"><?php esc_html_e('Minimum 1 | Maximum 10', 'sip'); ?></p>
 				</div>
 				<div class="columns">
 					<div class="column">
 						<div class="field">
-							<label for="archival-upload-purpose" class="label"><?php _e('Upload purpose', 'sip'); ?></label>
+							<label for="archival-upload-purpose" class="label"><?php esc_html_e('Upload purpose', 'sip'); ?></label>
 							<p class="control">
 								<select id="archival-upload-purpose" name="archival_upload_purpose" required>
 									<?php
@@ -152,7 +153,7 @@ if ( $sip_folder ) {
 					</div>
 					<div id="blocking-time" class="column">
 						<div class="field">
-							<label for="archival-blocking-time" class="label"><?php _e('Blocking time', 'sip'); ?></label>
+							<label for="archival-blocking-time" class="label"><?php esc_html_e('Blocking time', 'sip'); ?></label>
 							<p class="control">
 								<select id="archival-blocking-time" name="archival_blocking_time" required>
 									<?php
@@ -182,7 +183,7 @@ if ( $sip_folder ) {
 					$meta_type = sanitize_text_field($custom_meta['sip_custom_meta_type']);
 					?>
 					<div class="field">
-						<label for="<?php echo $meta_name; ?>" class="label"><?php echo esc_attr($custom_meta['sip_custom_meta_title_' . $current_locale]); ?></label>
+						<label for="<?php echo $meta_name; ?>" class="label"><?php echo esc_html($custom_meta['sip_custom_meta_title_' . $current_locale]); ?></label>
 						<p class="control">
 							<?php if ($meta_type == 'textarea') : ?>
 								<textarea id="<?php echo $meta_name; ?>" name="<?php echo '_archival_' . $meta_name; ?>" class="textarea"><?php echo ($archival) ? wp_kses_post(get_post_meta($archival->ID, '_archival_' . $meta_name, true)) : ''; ?></textarea>
@@ -197,23 +198,22 @@ if ( $sip_folder ) {
 				<div class="field">
 					<label class="checkbox">
 						<input type="checkbox" name="archival_right_transfer" value="yes" required<?php echo ($archival_right_transfer) ? ' checked' : ''; ?>>
-						<?php // todo: maybe add some default text? 
-						?>
+						<?php // todo: maybe add some default text? ?>
 						<?php echo wp_kses_post(get_option('_sip_right_transfer_text_' . $current_locale)); ?>
 					</label>
 				</div>
 
 				<?php if (current_user_can('edit_others_posts')) : ?>
-					<h3><?php _e('Archive information', 'sip'); ?></h3>
+					<h3><?php esc_html_e('Archive information', 'sip'); ?></h3>
 
 					<div class="field">
-						<label for="archival-numeration" class="label"><?php _e('Numbering', 'sip'); ?></label>
+						<label for="archival-numeration" class="label"><?php esc_html_e('Numbering', 'sip'); ?></label>
 						<p class="control">
 							<input id="archival-numeration" name="archival_numeration" class="input" type="text" value="<?php echo ($archival) ? esc_attr(get_post_meta($archival->ID, '_archival_numeration', true)) : ''; ?>">
 						</p>
 					</div>
 					<div class="field">
-						<label for="archival-annotation" class="label"><?php _e('Note', 'sip'); ?></label>
+						<label for="archival-annotation" class="label"><?php esc_html_e('Note', 'sip'); ?></label>
 						<p class="control">
 							<textarea id="archival-annotation" name="archival_annotation" class="textarea count-character" rows="10" maxlength="5000"><?php echo ($archival) ? wp_kses_post(get_post_meta($archival->ID, '_archival_annotation', true)) : ''; ?></textarea>
 						</p>
@@ -223,9 +223,9 @@ if ( $sip_folder ) {
 					foreach ($sip_custom_archival_user_meta as $custom_archival_user_meta) :
 						$meta_name = sanitize_title($custom_archival_user_meta['sip_custom_archival_user_meta_key']);
 						$meta_type = sanitize_title($custom_archival_user_meta['sip_custom_archival_user_meta_type']);
-					?>
+						?>
 						<div class="field">
-							<label for="<?php echo $meta_name; ?>" class="label"><?php echo esc_attr($custom_archival_user_meta['sip_custom_archival_user_meta_title_' . $current_locale]); ?></label>
+							<label for="<?php echo $meta_name; ?>" class="label"><?php echo esc_html($custom_archival_user_meta['sip_custom_archival_user_meta_title_' . $current_locale]); ?></label>
 							<p class="control">
 								<?php if ($meta_type == 'textarea') : ?>
 									<textarea id="<?php echo $meta_name; ?>" name="<?php echo '_archival_' . $meta_name; ?>" class="textarea"><?php echo ($archival) ? wp_kses_post(get_post_meta($archival->ID, '_archival_' . $meta_name, true)) : ''; ?></textarea>
@@ -242,20 +242,25 @@ if ( $sip_folder ) {
 						<?php if ($archival) : ?>
 							<input type="hidden" name="archival_ID" value="<?php echo $archival->ID; ?>">
 						<?php endif; ?>
-						<input name="save-sip" type="submit" value="<?php _e('Save and preview', 'sip'); ?>">
+						<input name="save-sip" type="submit" value="<?php esc_html_e('Save and preview', 'sip'); ?>">
 					</p>
 				</div>
 
 				<?php
 				$archival_tags = get_terms(array('taxonomy'   => 'archival_tag', 'hide_empty' => false));
-				//$archival_tags_names = wp_list_pluck( $archival_tags, 'name' );
-				$archival_tags_names = array_map('esc_attr', wp_list_pluck($archival_tags, 'name'));
+				if ( is_wp_error( $archival_tags ) ) {
+					$archival_tags_list_names = array();
+					$archival_tags_names      = array();
+				} else {
+					//$archival_tags_names = wp_list_pluck( $archival_tags, 'name' );
+					$archival_tags_names = array_map('esc_attr', wp_list_pluck($archival_tags, 'name'));
 
-				$archival_tags_list_names = '';
-				if ($archival) {
-					$archival_tags_list = get_the_terms($archival->ID, 'archival_tag');
-					//$archival_tags_list_names = wp_list_pluck( $archival_tags_list, 'name' );
-					$archival_tags_list_names = array_map('esc_attr', wp_list_pluck($archival_tags_list, 'name'));
+					$archival_tags_list_names = '';
+					if ($archival) {
+						$archival_tags_list = get_the_terms($archival->ID, 'archival_tag');
+						//$archival_tags_list_names = wp_list_pluck( $archival_tags_list, 'name' );
+						$archival_tags_list_names = array_map('esc_attr', wp_list_pluck($archival_tags_list, 'name'));
+					}
 				}
 
 				$blocking_time_upload_purpose = esc_attr(carbon_get_theme_option('sip_blocking_time_upload_purpose_' . $current_locale));

@@ -5,13 +5,19 @@
  * @return false|string
  */
 function starg_get_sip_form( string $form ) {
-	if ( ! $form || ! file_exists( STARG_SIP_PLUGIN_BASE_DIR . $form ) ) { return false; }
+	if ( ! $form || ! file_exists( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/forms/' . $form ) ) { return false; }
 
 	ob_start();
-	require STARG_SIP_PLUGIN_BASE_DIR . $form;
+	require STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/forms/' . $form;
 	return ob_get_clean();
 }
 
+/**
+ * Tries to create a thumbnail of an uploaded image.
+ * @param string $file
+ * @param string $thumbnail_folder
+ * @return void
+ */
 function starg_create_thumbnail($file, $thumbnail_folder): void {
 	if ( ! extension_loaded( 'imagick' ) ) {
 		error_log( 'Imagick-Extension not loaded.' );
@@ -19,8 +25,9 @@ function starg_create_thumbnail($file, $thumbnail_folder): void {
 	}
 
 	if ( ! file_exists( $thumbnail_folder ) ) {
-		mkdir( $thumbnail_folder );
+		mkdir( $thumbnail_folder, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS, true );
 	}
+
 	if( wp_get_image_mime($file) === 'image/tiff' ) {
 		$new_file_name = $thumbnail_folder.str_replace(array('.tiff', '.tif'), '.jpg', basename($file));
 		$image = new Imagick($file);
@@ -38,27 +45,37 @@ function starg_create_thumbnail($file, $thumbnail_folder): void {
 		$image = wp_get_image_editor( $file );
 		if ( ! is_wp_error( $image ) ) {
 			$image->resize( 300, 300, true );
-			$image->save( $thumbnail_folder.basename($file) );
+			$image->save( $thumbnail_folder.basename( $file ) );
 		}
 	}
 }
 
-function starg_create_pdf_thumbnail($file, $thumbnail_folder) {
+/**
+ * Tries to create a thumbnail from an uploaded pdf.
+ * @param string $file
+ * @param string $thumbnail_folder
+ * @return bool
+ */
+function starg_create_pdf_thumbnail( $file, $thumbnail_folder ) : bool {
+	if ( ! $file || ! $thumbnail_folder ) { return false; }
+
 	if ( ! file_exists( $thumbnail_folder ) ) {
-		mkdir( $thumbnail_folder );
+		mkdir( $thumbnail_folder, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS, true );
 	}
+
 	try {
 		$pdf = new Spatie\PdfToImage\Pdf( $file );
 		$file_written = $pdf->saveImage( $thumbnail_folder . basename( $file ) . '.jpg' );
 		return ( $file_written ) ? true : false;
 	} catch ( Exception $e ) {
-		error_log( 'Error while creating PDF thumbnail: ' . $e );
+		error_log( sprintf( 'Error while creating a thumbnail for a PDF. See: %s', $e->getMessage() ) );
 		return false;
 	}
 }
 
 /**
- * 
+ * Retrieve a list of archive tags based on an archive record ID.
+ * @param int $archive_id
  * @return object|null|false
  */
 function starg_get_archive_tags( int $archive_id ) {
@@ -91,6 +108,9 @@ function starg_get_archival_tag_name( int $archival_tag_id ) {
 	return esc_attr( $result );
 }
 
+/**
+ * Converts the filesize.
+ */
 function starg_format_bytes($size, $precision = 2) {
 	$base = log($size, 1024);
 	$suffixes = array('', 'K', 'M', 'G', 'T');
@@ -108,17 +128,22 @@ function starg_format_bytes($size, $precision = 2) {
  */
 function starg_get_upload_purpose_post_count( string $upload_purpose_option, bool $only_published_posts = false ) : int {
 	if ( ! $upload_purpose_option ) { return 0; }
+
 	$post_status_filter = '';
 	if ( $only_published_posts ) {
-		$post_status_filter = "AND post_status = 'publish'";
+		$post_status_filter = "AND p.post_status = 'publish'";
 	}
 
+	// todo: we should change the way we store the upload purposes! Currently, we're saving the translated string from the plugin options.
+	// This means we get different values for different user! This means we can't filter ALL entries based on this metadata - we can only filter all german ones, all english ones and so on!
+	// maybe bypass this problem by looping through every translation?
 	global $wpdb;
-	$upload_purpose_sql = "SELECT count(post_id)
-		FROM $wpdb->postmeta
-			LEFT JOIN $wpdb->posts ON post_id = ID
-		WHERE meta_key = '_archival_upload_purpose'
-			AND meta_value = %s
+	$upload_purpose_sql = "SELECT count(pm.post_id)
+		FROM $wpdb->postmeta pm
+			LEFT JOIN $wpdb->posts p ON pm.post_id = p.ID
+		WHERE pm.meta_key = '_archival_upload_purpose'
+			AND pm.meta_value = %s
+			AND p.post_type = 'archival'
 			$post_status_filter";
 	$result = $wpdb->get_var( $wpdb->prepare( $upload_purpose_sql, $upload_purpose_option ) );
 
@@ -156,10 +181,16 @@ function starg_get_upload_purpose_post_count_for_user( int $user_archive, string
 }
 
 /**
- * todo: neeeds docblock
+ * Retrieve the number of all archival record posts by year.
  * @param bool $only_published_posts [Optional] Adds an additional filter to the database call to filter by post_status.
  *                                    Default: false = includes posts with all post_status values.
  * @return array|object
+ *         array(
+ *             0 => {
+ *                 'sip_count' => '1',
+ *                 'sip_date'  => '2024',
+ *             },
+ *         )
  */
 function starg_get_upload_year_post_count( bool $only_published_posts = false ) : array|object {
 	$post_status_filter = '';
@@ -181,7 +212,7 @@ function starg_get_upload_year_post_count( bool $only_published_posts = false ) 
 }
 
 /**
- * todo: neeeds docblock
+ * Retrieve the number of an users archival record posts by year.
  * @param bool $only_published_posts [Optional] Adds an additional filter to the database call to filter by post_status.
  *                                    Default: false = includes posts with all post_status values.
  * @return array|object
@@ -233,7 +264,8 @@ function starg_remove_SIP(string $dir) : bool {
 		}
 		return true;
 	} catch ( UnexpectedValueException $e ) {
-		error_log( 'sip ' . $dir . ' was not removed! check: ' . $e->getMessage() );
+		// translators: %1$s: Directory of the archival record in question. %2$s: Error message.
+		error_log( sprintf( esc_html__( 'sip %1$s was not removed! Error message: %2$s', 'sip' ), $dir, $e->getMessage() ) );
 		return false;
 	}
 }
@@ -295,7 +327,7 @@ function starg_get_the_edit_archival_page_url() : string {
 		'number'       => 1,
 	));
 	if ( ! $pages || ! get_the_permalink( $pages[0] ) ) {
-		error_log( 'No Page-Template found: sip-upload.php' );
+		error_log( esc_html__( 'No Page with the Page-Template sip-upload found.', 'sip' ) );
 		return get_home_url();
 	}
 
@@ -318,15 +350,15 @@ function starg_get_the_archival_page_template_url( $archival_id = 0 ) : string {
 		'number'       => 1,
 	));
 	if ( ! $pages || ! get_the_permalink( $pages[0] ) ) {
-		error_log( 'No Page-Template found: sip-archival.php' );
+		error_log( esc_html__( 'No Page with the Page-Template sip-archival found.', 'sip' ) );
 		return get_home_url();
 	}
 
 	$url = get_the_permalink( $pages[0] );
 	if ( $archival_id ) {
-		$url = add_query_arg( array( 'archival_name' => $archival_id, ), $url );
+		$url = add_query_arg( array( 'archival_name' => $archival_id, ), esc_url( $url ) );
 	}
-	return esc_url( $url );
+	return $url;
 }
 
 /**
@@ -342,7 +374,7 @@ function starg_get_the_profile_page_template_url() : string {
 		'number'       => 1,
 	));
 	if ( ! $pages || ! get_the_permalink( $pages[0] ) ) {
-		error_log( 'No Page-Template found: sip-profile.php' );
+		error_log( esc_html__( 'No Page with the Page-Template sip-profile found.', 'sip' ) );
 		return get_home_url();
 	}
 
@@ -380,6 +412,8 @@ function starg_get_notification_message( string $message, string $notification_s
  * @return array Array with all sip folders or empty array on failure.
  */
 function starg_get_archival_sip_folders_by_user_id( int $user_id = 0 ) : array {
+	if ( ! $user_id ) { return array(); }
+
 	global $wpdb;
 	$archival_sip_folders_sql = "SELECT meta_value
 		FROM $wpdb->postmeta
@@ -399,7 +433,13 @@ function starg_get_archival_sip_folders_by_user_id( int $user_id = 0 ) : array {
  * @return int|false
  */
 function starg_get_archival_id_by_sip_folder( string $sip_folder ) {
+	if ( ! $sip_folder ) { return false; }
+
 	global $wpdb;
-	$archival_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_archival_sip_folder' AND meta_value = %s", $sip_folder ) );
+	$archival_post_id_sql = "SELECT post_id
+		FROM $wpdb->postmeta
+		WHERE meta_key = '_archival_sip_folder'
+			AND meta_value = %s";
+	$archival_id = $wpdb->get_var( $wpdb->prepare( $archival_post_id_sql, $sip_folder ) );
 	return (int) $archival_id ?? false;
 }

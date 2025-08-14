@@ -54,7 +54,9 @@ class Starg_Template_Handling {
 	}
 
 	/**
-	 * @todo needs docBlock
+	 * Register a query var for the archival name/id in WordPress to be able to redirect the user to their own archival record entry.
+	 * @param string[] $vars The array of allowed query variable names.
+	 * @return string[]
 	 */
 	public static function starg_add_query_vars( $vars ) {
 		$vars[] = 'archival_name';
@@ -62,14 +64,12 @@ class Starg_Template_Handling {
 	}
 
 	/**
-	 * @todo needs docBlock
+	 * Maybe create rewrite rules for the archival page-templates where the user can view their entry.
+	 * This function is tied to the Polylang plugin.
 	 */
 	public static function starg_check_for_polylang_pages() {
 		// check if the polylang plugin is installed and active.
-		if ( ! function_exists('pll_get_post') || ! function_exists('pll_languages_list')) {
-			_doing_it_wrong( __FUNCTION__, esc_attr__( 'The Plugin Polylang is not installed or deactivated.', 'sip' ), '15.07.2025' );
-			return;
-		}
+		if ( ! function_exists('pll_get_post') || ! function_exists('pll_languages_list')) { return; }
 
 		$languages = wp_list_pluck( pll_languages_list( array( 'fields' => array(), ) ), 'slug' ); // get all languages as slugs.
 		$default_language = pll_default_language('slug');
@@ -80,32 +80,32 @@ class Starg_Template_Handling {
 		) );
 		if ( ! $pages ) { return; }
 
+		// Rewrite rule for every used language with translated page slug.
 		foreach ($languages as $lang) {
-			$translated_page_slug = get_page_uri(pll_get_post($pages[0]->ID, $lang)); // Übersetzter Slug
-			if ($translated_page_slug) {
-				// Rewrite-Regel für jede Sprache und den übersetzten Slug hinzufügen
+			$translated_page_slug = get_page_uri(pll_get_post($pages[0]->ID, $lang)); // Translated Slug
+			if ( ! $translated_page_slug) { continue; }
+
+			add_rewrite_rule(
+				"^$lang/$translated_page_slug/?$", // Translated Slug with language.
+				"index.php?pagename=$translated_page_slug&lang=$lang",
+				'top'
+			);
+			add_rewrite_rule(
+				"^$lang/$translated_page_slug/([^/]*)/?$", // Translated Slug with language.
+				"index.php?pagename=$translated_page_slug&archival_name=\$matches[1]&lang=$lang",
+				'top'
+			);
+			if ($lang == $default_language) {
 				add_rewrite_rule(
-					"^$lang/$translated_page_slug/?$", // Nur der übersetzte Slug
+					"^$translated_page_slug/?$", // only translated Slug.
 					"index.php?pagename=$translated_page_slug&lang=$lang",
 					'top'
 				);
 				add_rewrite_rule(
-					"^$lang/$translated_page_slug/([^/]*)/?$", // Übersetzter Slug in der Sprache
+					"^$translated_page_slug/([^/]*)/?$", // only translated Slug.
 					"index.php?pagename=$translated_page_slug&archival_name=\$matches[1]&lang=$lang",
 					'top'
 				);
-				if ($lang == $default_language) {
-					add_rewrite_rule(
-						"^$translated_page_slug/?$", // Nur der übersetzte Slug
-						"index.php?pagename=$translated_page_slug&lang=$lang",
-						'top'
-					);
-					add_rewrite_rule(
-						"^$translated_page_slug/([^/]*)/?$", // Übersetzter Slug in der Sprache
-						"index.php?pagename=$translated_page_slug&archival_name=\$matches[1]&lang=$lang",
-						'top'
-					);
-				}
 			}
 		}
 	}

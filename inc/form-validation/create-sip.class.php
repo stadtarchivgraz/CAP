@@ -40,7 +40,7 @@ class Create_Sip extends Form_Validation {
 
 		$sip_user_folder_id = $user_input[ 'sipFolder' ];
 		if ( ! $sip_user_folder_id ) {
-			$this->set_error_message( esc_attr__( 'No SIP-Folder provided.', 'sip' ) );
+			$this->set_error_message( esc_attr__( 'No SIP Folder provided.', 'sip' ) );
 			return false;
 		}
 
@@ -48,7 +48,8 @@ class Create_Sip extends Form_Validation {
 		$archival_sql = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_archival_sip_folder' AND meta_value = %s";
 		$archival_id  = $wpdb->get_var($wpdb->prepare( $archival_sql, $sip_user_folder_id ));
 		if ( ! $archival_id ) {
-			$this->set_error_message( sprintf( esc_attr__( 'No archival record found with the SIP-ID: "%s"', 'sip' ), $sip_user_folder_id ) );
+			// translators: %s: ID/Name of the folder where the sip is stored.
+			$this->set_error_message( sprintf( esc_attr__( 'No archival record found with SIP-ID: "%s"', 'sip' ), $sip_user_folder_id ) );
 			return false;
 		}
 
@@ -69,7 +70,7 @@ class Create_Sip extends Form_Validation {
 		$this->header_dir  = $this->sip_folder . 'header/';
 
 		if (! file_exists($this->header_dir)) {
-			mkdir($this->header_dir);
+			mkdir( $this->header_dir, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS );
 		}
 
 		$this->create_xml();

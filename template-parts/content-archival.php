@@ -27,9 +27,10 @@ $sip_archival_actions->process_sip_archival_actions();
 <article id="post-<?php the_ID(); ?>" <?php post_class('sip'); ?>>
 	<div class="container">
 
-		<div class="entry-header">
-			<?php the_title('<h1 class="entry-title title is-2">', '</h1>'); ?>
-		</div>
+		<?php // todo: if we display the title within elementor (or any other pagebuilder) we don't need it in this template. ?>
+		<!-- <div class="entry-header"> -->
+			<?php //the_title('<h1 class="entry-title title is-2">', '</h1>'); ?>
+		<!-- </div> -->
 
 		<div class="entry-content content">
 			<?php
@@ -79,7 +80,7 @@ $sip_archival_actions->process_sip_archival_actions();
 			</dl>
 
 			<?php if (current_user_can('edit_others_posts')) : ?>
-				<h3><?php esc_html_e('Archiv Information', 'sip'); ?></h3>
+				<h3><?php esc_html_e('Archive Information', 'sip'); ?></h3>
 				<dl>
 					<dt><?php esc_html_e('Numbering', 'sip'); ?></dt>
 					<dd><?php echo esc_attr( get_post_meta( $archival_id, '_archival_numeration', true ) ); ?></dd>
@@ -105,7 +106,7 @@ $sip_archival_actions->process_sip_archival_actions();
 				if ( $archival_sip_folder ) :
 					$edit_archival_url            = starg_get_the_edit_archival_page_url();
 					$archival_status              = get_post_status( $archival_id );
-					$edit_archival_url_sip_folder = esc_url( add_query_arg( array( 'sipFolder' => $archival_sip_folder, ), $edit_archival_url ) );
+					$edit_archival_url_sip_folder = add_query_arg( array( 'sipFolder' => $archival_sip_folder, ), $edit_archival_url );
 					?>
 					<form target="" method="post">
 						<input type="hidden" name="starg_form_name" value="archival_actions_form" aria-hidden="true" />

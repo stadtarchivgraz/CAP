@@ -36,8 +36,8 @@ if ( $create_sip instanceof Create_Sip ) {
 					<div class="content">
 						<p>
 							<?php
-							// todo: needs better context. We're setting the length of the excerpt with a translation function. This way every translator can set a different number of words to display in the excerpt.
-							$excerpt_length = (int) _x('30', 'excerpt_length', 'sip');
+							// We're setting the length of the excerpt with a translation function. This way every translator can set a different number of words to display in the excerpt.
+							$excerpt_length = (int) esc_attr_x('30', 'This overrides the default length of the excerpt in the archive for archival record posts.', 'sip');
 							$excerpt_length = (int) apply_filters('excerpt_length', $excerpt_length);
 							echo wp_trim_words(get_the_content(), $excerpt_length, '&hellip;');
 							?>

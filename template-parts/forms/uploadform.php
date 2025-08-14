@@ -47,6 +47,7 @@ $sip_max_size = (carbon_get_theme_option('sip_max_size')) ? (int) sanitize_text_
 						if (xhr.readyState === 4) {
 							const response = JSON.parse(xhr.responseText);
 							if (response.sip_size > <?php echo $sip_max_size; ?>) {
+								<?php // translators: %s: Maximum supported filesize for uploads - for example: "42MB". ?>
 								alert('<?php echo sprintf(__('The maximum size of %s for the SIP has been exceeded. Files need to be removed.', 'sip'), starg_human_filesize($sip_max_size)); ?>');
 								submitButton.disabled = true;
 							} else {
@@ -63,11 +64,11 @@ $sip_max_size = (carbon_get_theme_option('sip_max_size')) ? (int) sanitize_text_
 				sipDropzone.on("success", function(file, response) {
 					if (response.infected) {
 						sipDropzone.removeFile(file);
-						alert("<?php _e('Virus detected on:', 'sip'); ?>" + response.infected);
+						alert("<?php _e('Virus detected in:', 'sip'); ?>" + response.infected);
 					}
 					if (response.not_supported) {
 						sipDropzone.removeFile(file);
-						alert("<?php _e('Not supported file type:', 'sip'); ?>" + response.not_supported);
+						alert("<?php _e('Unsupported file type:', 'sip'); ?>" + response.not_supported);
 					}
 					if (response.sip_full) {
 						sipDropzone.removeFile(file);

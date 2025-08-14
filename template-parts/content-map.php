@@ -17,8 +17,9 @@ if (is_singular('archival') || is_page_template('sip-archival.php')) {
 	$map_posts[] = $archival;
 }
 
-$search_position  = (is_page_template('sip-upload.php')) ? 'topright' : 'topleft';
-$search_collapsed = (is_page_template('sip-upload.php')) ? 'false'    : 'true';
+$is_sip_upload_template = is_page_template('sip-upload.php');
+$search_position        = ( $is_sip_upload_template ) ? 'topright' : 'topleft';
+$search_collapsed       = ( $is_sip_upload_template ) ? 'false'    : 'true';
 
 foreach ($map_posts as $map_post) :
 
@@ -66,7 +67,7 @@ if ($markers) {
 
 ?>
 <div id="map" class="container sip"></div>
-<?php if (is_page_template('sip-upload.php')) : ?>
+<?php if ( $is_sip_upload_template ) : ?>
 	<p><a class="has-text-danger is-small-text" href="#" id="mapClear"><?php _e('Reset map', 'sip'); ?></a></p>
 <?php endif; ?>
 
@@ -98,11 +99,9 @@ if ($markers) {
 		const MapGeoCoder = L.Control.geocoder({
 				position: '<?php echo $search_position; ?>',
 				collapsed: <?php echo $search_collapsed; ?>,
-				placeholder: 'Ort/Adresse...',
-				errorMessage: 'Nicht gefunden.',
-				<?php
-				if ($key) echo 'geocoder: MapGeoCoderProvider,';
-				?>
+				placeholder: '<?php esc_html_e( "Place/Address...", "sip" ); ?>',
+				errorMessage: '<?php esc_html_e( "Nothing found.", "sip" ); ?>',
+				<?php if ($key) echo 'geocoder: MapGeoCoderProvider,'; ?>
 				defaultMarkGeocode: false
 			})
 			.on('markgeocode', function(e) {
@@ -114,7 +113,7 @@ if ($markers) {
 					className: 'dsa-custom-pin',
 					iconAnchor: [0, 15],
 					popupAnchor: [0, -30],
-					html: '<div style="background-color: <?php echo (is_page_template('sip-upload.php')) ? 'cornflowerblue' : '#BDC4E0'; ?>"><i class="fas fa-map-pin"></i></div>'
+					html: '<div style="background-color: <?php echo ( $is_sip_upload_template ) ? 'cornflowerblue' : '#BDC4E0'; ?>"><i class="fas fa-map-pin"></i></div>'
 				});
 				if (areaSelection) {
 					areaSelection.clearMarkers();
@@ -127,7 +126,7 @@ if ($markers) {
 				if (clickMarker) {
 					map.removeLayer(clickMarker);
 				}
-				<?php if (is_page_template('sip-upload.php')) : ?>
+				<?php if ( $is_sip_upload_template ) : ?>
 					if (markers) {
 						map.removeLayer(markers);
 					}
@@ -174,11 +173,11 @@ if ($markers) {
 			onAdd: function(map) {
 				const container = L.DomUtil.create('input');
 				container.type = "button";
-				container.title = "Meine Position";
+				container.title = '<?php esc_html_e( "My position", "sip" ); ?>';
 				container.value = "";
 
 				container.style.backgroundColor = 'white';
-				container.style.backgroundImage = "url('<?php echo plugin_dir_url(__DIR__); ?>/assets/img/street-view.svg')";
+				container.style.backgroundImage = "url('<?php echo STARG_SIP_PLUGIN_BASE_URL; ?>assets/img/street-view.svg')";
 				container.style.backgroundSize = "60%";
 				container.style.backgroundRepeat = "no-repeat";
 				container.style.backgroundPosition = "center";
@@ -202,7 +201,7 @@ if ($markers) {
 		});
 		map.addControl(new customControl());
 
-		<?php if (is_page_template('sip-upload.php')) : ?>
+		<?php if ( $is_sip_upload_template ) : ?>
 
 			map.on('click', function(e) {
 				if (areaSelection.phase === 'inactive') {
@@ -291,7 +290,7 @@ if ($markers) {
 			});
 			map.addControl(areaSelection);
 
-		<?php endif; ?>
+		<?php endif; // end $is_sip_upload_template ?>
 
 		<?php
 		if ( json_decode($area) ) :
@@ -379,7 +378,7 @@ if ($markers) {
 			console.warn('ERROR(' + err.code + '): ' + err.message);
 		}
 
-		<?php if (is_page_template('sip-upload.php')) : ?>
+		<?php if ( $is_sip_upload_template ) : ?>
 			const mapClear = document.getElementById('mapClear');
 			mapClear.addEventListener("click", (e) => {
 
@@ -404,16 +403,16 @@ if ($markers) {
 					areaSelection.clearPolygon();
 				}
 				if (place_address_input) {
-					place_address_input.value = ''; //todo: restore previously saved data on post-update!
+					place_address_input.value = ''; //todo: maybe restore previously saved data on post-update!
 				}
 				if (place_lat_input) {
-					place_lat_input.value = ''; //todo: restore previously saved data on post-update!
+					place_lat_input.value = ''; //todo: maybe restore previously saved data on post-update!
 				}
 				if (place_lng_input) {
-					place_lng_input.value = ''; //todo: restore previously saved data on post-update!
+					place_lng_input.value = ''; //todo: maybe restore previously saved data on post-update!
 				}
 				if (place_area) {
-					place_area.value = ''; //todo: restore previously saved data on post-update!
+					place_area.value = ''; //todo: maybe restore previously saved data on post-update!
 				}
 			});
 		<?php endif; ?>

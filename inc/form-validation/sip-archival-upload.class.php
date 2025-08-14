@@ -10,8 +10,11 @@ class Sip_Archival_Upload extends Form_Validation {
 	public string $nonce_key    = 'starg_add_archival_files_nonce';
 	public string $form_name    = 'add_files_to_sip_form';
 
-
-	public function process_sip_archival_actions() {
+	/**
+	 * Process the uploaded files.
+	 * @todo: finalize! This function is not in use!
+	 */
+	public function process_archival_upload() {
 		$is_form_valid = $this->form_validation();
 		if ( ! $is_form_valid ) {
 			wp_send_json_error( 'Form not valid!', 444 );
@@ -44,7 +47,7 @@ class Sip_Archival_Upload extends Form_Validation {
 		foreach ( $upload_dir_array as $path ) {
 			$upload_dir = $upload_dir . $path . '/';
 			if ( ! file_exists( $upload_dir ) ) {
-				mkdir( $upload_dir );
+				mkdir( $upload_dir, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS );
 			}
 		}
 
@@ -59,7 +62,7 @@ class Sip_Archival_Upload extends Form_Validation {
 				fputcsv($fp, array($sanitize_path,$path));
 				$upload_dir = $upload_dir . $sanitize_path . '/';
 				if ( ! file_exists( $upload_dir ) ) {
-					mkdir( $upload_dir );
+					mkdir( $upload_dir, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS );
 				}
 			}
 		}

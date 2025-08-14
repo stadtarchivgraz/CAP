@@ -23,7 +23,7 @@ class Starg_Update_User_Password extends Form_Validation {
 
 		$user = wp_get_current_user();
 		if ( $user->ID !== (int) $user_input['ID'] ) {
-			$this->set_error_message( __( 'We are facing problems updating your password. Please try again.', 'sip' ) );
+			$this->set_error_message( __( 'We encountered a problem updating your password. Please try again.', 'sip' ) );
 			$this->display_notification();
 			return false;
 		}
@@ -34,13 +34,10 @@ class Starg_Update_User_Password extends Form_Validation {
 		} elseif (! wp_check_password($user_input['oldpassword'], $user->user_pass, $user->ID)) {
 			$password_error = esc_html__('The old password is incorrect.', 'sip');
 		} elseif (strlen($user_input['newpassword']) < 12) {
-			$password_error = esc_html__('The new password is to short.', 'sip');
+			$password_error = esc_html__('The new password is too short.', 'sip');
 		} elseif ($user_input['newpassword'] !== $user_input['repeatpassword']) {
-			$password_error = esc_html__('The repeat and the new password do not match.', 'sip');
+			$password_error = esc_html__('The repeated password does not match the new one.', 'sip');
 		} else {
-			//wp_set_password( $user_input['newpassword'], (int) sanitize_key( $user_input['ID'] )); // forces relog!
-			// We do not want to kill the users session and force a new log in!
-
 			$user_updated = wp_update_user(array(
 				'ID'        => (int) $user_input['ID'],
 				'user_pass' => $user_input['newpassword'],
@@ -48,12 +45,12 @@ class Starg_Update_User_Password extends Form_Validation {
 
 			if ( is_wp_error( $user_updated ) ) {
 				error_log( $user_updated->get_error_message() );
-				return esc_html__( 'We are facing problems updating your password. Please try again.', 'sip' );
+				return esc_html__( 'We encountered a problem updating your password. Please try again.', 'sip' );
 			}
 		}
 
 		if ( $password_error ) {
-			$this->set_error_message( esc_html__( 'The password could not be changed. See error message in the form.', 'sip') );
+			$this->set_error_message( esc_html__( 'The password could not be changed. See the error message in the form.', 'sip') );
 			$this->display_notification();
 			return $password_error;
 		}
@@ -69,9 +66,9 @@ class Starg_Update_User_Password extends Form_Validation {
 	 */
 	protected function get_valid_input_names() : array {
 		return array(
-			'oldpassword'    => 'trim',
-			'newpassword'    => 'trim',
-			'repeatpassword' => 'trim',
+			'oldpassword'    => 'trim',// we do not sanitize passwords as we want the user to be able to use special characters like $%&.
+			'newpassword'    => 'trim',// we do not sanitize passwords as we want the user to be able to use special characters like $%&.
+			'repeatpassword' => 'trim',// we do not sanitize passwords as we want the user to be able to use special characters like $%&.
 			'ID'             => 'sanitize_text_field',// todo: maybe change to user_id?
 			'password_save'  => '', // not needed! this is a submit-input.
 		);

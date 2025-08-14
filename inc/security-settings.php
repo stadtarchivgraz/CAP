@@ -15,6 +15,11 @@ if (! defined('WPINC')) { die; }
  */
 Class Starg_Security_Settings {
 
+	// When creating new folders on the server, we want to avoid making them writable by everyone.
+	// 0755: Owner can read, write and execute. Group and others can read and execute.
+	// Standard is 0777: Everyone can read, <strong>write</strong> and execute.
+	const STARG_FOLDER_PERMISSIONS = 0755;
+
 	public static function init() {
 		remove_action('wp_head', array( 'Starg_Security_Settings', 'wp_generator') );
 		add_filter( 'xmlrpc_methods', array( 'Starg_Security_Settings', 'starg_disable_xmlrpc' ) );
@@ -50,11 +55,29 @@ Class Starg_Security_Settings {
 	}
 
 	/**
-	 * Deactivates REST-API if user is not logged in.
+	 * Restrict REST-API. only logged in user or predefined routes are allowed.
 	 */
 	public static function starg_maybe_disable_rest_api( $results ) {
+		// If an error occurred (by an other plugin or so), return it.
+		if ( ! empty( $results ) ) { return $results; }
+
+		// open the rest api for logged in users.
 		if ( is_user_logged_in() ) { return $results; }
 
+		$request_uri = $_SERVER[ 'REQUEST_URI' ] ?? '';
+
+		// whitelisted routes.
+		$allowed_routes = array(
+			'notification/v1/',
+		);
+
+		foreach ( $allowed_routes as $single_route ) {
+			if ( strpos( $request_uri, $single_route ) !== false ) {
+				return true;
+			}
+		}
+
+		// every guest or other route gets blocked.
 		return new WP_Error( 'REST_API_restricted', array( 'status' => rest_authorization_required_code(), ) );
 	}
 

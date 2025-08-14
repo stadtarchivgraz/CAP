@@ -27,7 +27,7 @@ $sip_max_size = (carbon_get_theme_option( 'sip_max_size') ) ?: 50000000;
 
 $sip_clamav = carbon_get_theme_option( 'sip_clamav' );
 if ( $sip_clamav ) {
-	$clam = new Network( carbon_get_theme_option( 'sip_clamav_host' ), carbon_get_theme_option( 'sip_clamav_port' ) );
+	$clam = new Network( esc_attr( carbon_get_theme_option( 'sip_clamav_host' ) ), (int) esc_attr( carbon_get_theme_option( 'sip_clamav_port' ) ) );
 }
 
 // in order to prevent a PHP-Error we ping ClamAV in a try/catch.
@@ -45,7 +45,7 @@ $upload_dir_array = explode( '/', $upload_folder );
 foreach ( $upload_dir_array as $path ) {
 	$upload_dir = $upload_dir . $path . '/';
 	if ( ! file_exists( $upload_dir ) ) {
-		mkdir( $upload_dir );
+		mkdir( $upload_dir, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS );
 	}
 }
 
@@ -60,7 +60,7 @@ if ( isset( $_POST['fullPath'] ) ) {
 		fputcsv($fp, array($sanitize_path,$path));
 		$upload_dir = $upload_dir . $sanitize_path . '/';
 		if ( ! file_exists( $upload_dir ) ) {
-			mkdir( $upload_dir );
+			mkdir( $upload_dir, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS );
 		}
 	}
 }

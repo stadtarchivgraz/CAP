@@ -41,7 +41,8 @@ abstract class Form_Validation {
 
 	/**
 	 * Describes which inputs we want to process in the form and against which sanitizing function we apply to them.
-	 * @return array
+	 * @todo: maybe add the possibility to check for required inputs as well. This would change the array to something like: [ 'input_name' => [ 'required' => true, 'sanitizing_func' => 'sanitize_text_field', ], ]
+	 * @return array the array should be formed as [ 'input_name' => 'sanitizing_function', ]
 	 */
 	abstract protected function get_valid_input_names() : array;
 

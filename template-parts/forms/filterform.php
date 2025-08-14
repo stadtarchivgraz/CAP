@@ -103,7 +103,6 @@ if ($meta_query) {
 							// 'hide_empty'      => false,
 							'value_field'     => 'slug',
 							'hierarchical'    => true,
-
 						));
 						?>
 					</div>
@@ -116,14 +115,21 @@ if ($meta_query) {
 					<?php
 					$upload_purpose = array();
 					$upload_purpose_options = array();
-					if ($upload_purpose_options = carbon_get_theme_option('sip_upload_purpose_options_' . $current_locale)) {
+
+					// todo: we should change the way we store the upload purposes! Currently, we're saving the translated string from the plugin options.
+					// This means we get different values for different user! This means we can't filter ALL entries based on this metadata - we can only filter all german ones, all english ones and so on!
+					// maybe bypass this problem by looping through every translation?
+					if ( carbon_get_theme_option( 'sip_upload_purpose_options_' . $current_locale ) ) {
+						$upload_purpose_options = carbon_get_theme_option( 'sip_upload_purpose_options_' . $current_locale );
 						$upload_purpose_options = explode("\r\n",  $upload_purpose_options);
 					}
-					foreach ($upload_purpose_options as $upload_purpose_option) {
+
+					foreach ( $upload_purpose_options as $single_upload_purpose_option ) {
+						$single_upload_purpose_option = esc_attr( $single_upload_purpose_option );
 						if ( ! $user_archive ) {
-							$upload_purpose[$upload_purpose_option] = starg_get_upload_purpose_post_count( $upload_purpose_option );
+							$upload_purpose[$single_upload_purpose_option] = starg_get_upload_purpose_post_count( $single_upload_purpose_option );
 						} else {
-							$upload_purpose[$upload_purpose_option] = starg_get_upload_purpose_post_count_for_user( $user_archive, $upload_purpose_option );
+							$upload_purpose[$single_upload_purpose_option] = starg_get_upload_purpose_post_count_for_user( $user_archive, $single_upload_purpose_option );
 						}
 					}
 					?>
@@ -245,5 +251,5 @@ $archivals = new WP_Query($args);
 
 if ( $archivals->have_posts() ) :
 	include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-archivals-list.php');
+	wp_reset_postdata();
 endif;
-wp_reset_postdata();
