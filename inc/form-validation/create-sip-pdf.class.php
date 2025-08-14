@@ -68,6 +68,7 @@ class Create_Sip_Pdf extends Form_Validation {
 
 		$sip_institution_logo_html    = '';
 		$sip_institution_logo_abspath = '';
+		$sip_institution_logo         = '';
 		$archive = get_the_terms($archival_id, 'archive');
 		if ( $archive && ! is_wp_error( $archive ) ) {
 			$sip_institution_logo = strtoupper(carbon_get_term_meta($archive[0]->term_id, 'sip_institution_logo'));
@@ -75,6 +76,7 @@ class Create_Sip_Pdf extends Form_Validation {
 				// $sip_institution_logo_html    = wp_get_attachment_image( $sip_institution_logo, 'medium', false, array( 'height' => 50, ) );
 				// we use the absolute path to the file instead of the url to minimize problems with html2pdf.
 				$sip_institution_logo_abspath = get_attached_file( $sip_institution_logo );
+				$sip_institution_logo = '<img style="max-width:100%;height:50px;" src="' . $sip_institution_logo_abspath . '" height="50" width="auto"/>';
 			}
 		}
 
@@ -141,17 +143,12 @@ class Create_Sip_Pdf extends Form_Validation {
 					width:auto;
 					height: auto;
 					}
-
-
-					
 				</style>
 				<page backtop="20mm" backbottom="20mm" backleft="10mm" backright="10mm">
 					<page_header>
 						<table border="0" cellpadding="0" cellspacing="0" width="100%">
 							<tr>
-								<td style="width: 50%; text-align: left;">
-									<img style="max-width:100%;height:50px;" src="' . $sip_institution_logo_abspath . '" height="50" width="auto"/>
-								</td>
+								<td style="width: 50%; text-align: left;">' . $sip_institution_logo . '</td>
 								<td style="width: 50%; text-align: right;">
 									<strong>' . $archive[0]->name . '</strong><br>
 									' . $archive[0]->description . '

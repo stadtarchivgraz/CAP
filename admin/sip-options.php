@@ -210,5 +210,5 @@ function starg_attach_settings_to_the_archive_taxonomy() {
 				->set_help_text( esc_html__("If empty - the originator's (user's) login will be used.", 'sip' ) ),
 			Field::make('image', 'sip_institution_logo', esc_html__('Institution Logo', 'sip')),
 		));
-		add_action( 'carbon_fields_register_fields', 'starg_attach_settings_to_the_archive_taxonomy' );
 }
+add_action( 'carbon_fields_register_fields', 'starg_attach_settings_to_the_archive_taxonomy' );
