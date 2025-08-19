@@ -3,7 +3,7 @@
  Plugin Name: SIP
  Description: Plugin for creating Submission Information Packages (SIPs) from archival records. The archival records are provided by users. The archivist can choose whether to create a SIP or reject it.
  Author: Stadtarchiv Graz, Guido Handrick
- Version: 3.0.1
+ Version: 3.0.2
  Author URI: http://guido-handrick.info
  Text Domain: sip
  Domain Path: /languages/
@@ -12,41 +12,14 @@
 
 if (! defined('WPINC')) { die; }
 
-define( 'STARG_SIP_PLUGIN_VERSION', '3.0.1' );
+define( 'STARG_SIP_PLUGIN_VERSION', '3.0.2' );
 define( 'STARG_SIP_PLUGIN_NAME',    'SIP' );
 define( 'STARG_SIP_PLUGIN_BASE_DIR', trailingslashit( dirname( __FILE__ ) ) );
 define( 'STARG_SIP_PLUGIN_BASE_URL', plugin_dir_url( __FILE__ ) );
 
 // Load CPT and Taxonomies.
 require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/archival-cpt.php" );
-
-/**
- * Activate the plugin.
- */
-function starg_sip_activate() {
-	//dbi_load_carbon_fields();
-	// Trigger our function that registers the custom post type plugin.
-	starg_custom_post_type_archival();
-	// Clear the permalinks after the post type has been registered.
-	flush_rewrite_rules();
-}
-register_activation_hook( __FILE__, 'starg_sip_activate' );
-
-/**
- * Deactivation hook.
- */
-function starg_sip_deactivate() {
-	// Unregister the post type, so the rules are no longer in memory.
-	unregister_post_type( 'archival' );
-	// Clear the permalinks to remove our post type's rules from the database.
-	flush_rewrite_rules();
-	$timestamp = wp_next_scheduled('archival_delete_cron_event');
-	if ($timestamp) {
-		wp_unschedule_event($timestamp, 'archival_delete_cron_event');
-	}
-
-}
-register_deactivation_hook( __FILE__, 'starg_sip_deactivate' );
+Archival_Custom_Posts::init();
 
 /**
  * Load the translations for the plugin.
@@ -193,10 +166,10 @@ Starg_Admin_Notification::init();
 require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/services.php" );
 Starg_Services::init();
 
-include( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-functions.php" );
-include( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-template-functions.php" );
-include( STARG_SIP_PLUGIN_BASE_DIR . "admin/sip-options.php" );
-include( STARG_SIP_PLUGIN_BASE_DIR . "admin/sip-meta.php" );
+require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-functions.php" );
+require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-template-functions.php" );
+require_once( STARG_SIP_PLUGIN_BASE_DIR . "admin/sip-options.php" );
+require_once( STARG_SIP_PLUGIN_BASE_DIR . "admin/sip-meta.php" );
 
 /**
  * Checks every day for archival resources (SIPs) to delete.
@@ -269,6 +242,59 @@ add_action( 'archival_delete_cron_event', 'starg_archival_delete_cron_job_functi
 __('draft', 'sip');
 __('pending', 'sip');
 __('publish', 'sip');
+
+/**
+ * Activate the plugin.
+ */
+function starg_sip_activate() {
+	if ( ! current_user_can( 'manage_options' ) ) { return; }
+
+	$plugin = isset( $_REQUEST['plugin'] ) ? $_REQUEST['plugin'] : '';
+	check_admin_referer( "activate-plugin_{$plugin}" );
+
+	// Create our custom post type and its custom taxonomies.
+	Archival_Custom_Posts::starg_custom_post_type_archival();
+	Archival_Custom_Posts::starg_create_custom_taxonomies();
+
+	// create the needed capabilities for users to be able to work with our custom post type and custom capabilities.
+	require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/user-helper.php" );
+	Starg_User_Helper::starg_set_capabilities_for_archival_records();
+
+	Starg_Template_Handling::starg_tab_rewrites();
+
+	// Clear the permalinks after the post type has been registered.
+	flush_rewrite_rules();
+}
+register_activation_hook( __FILE__, 'starg_sip_activate' );
+
+/**
+ * Deactivation hook.
+ */
+function starg_sip_deactivate() {
+	 if ( ! current_user_can( 'manage_options' ) ) { return; }
+
+	$plugin = isset( $_REQUEST['plugin'] ) ? $_REQUEST['plugin'] : '';
+	check_admin_referer( "deactivate-plugin_{$plugin}" );
+
+	// Unregister the custom post type and its custom taxonomies, so the rules are no longer in memory.
+	unregister_post_type( Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG );
+	unregister_taxonomy( Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG );
+	unregister_taxonomy( Archival_Custom_Posts::ARCHIVAL_TAG_CUSTOM_TAX_SLUG );
+
+	// remove the capabilities for our custom post type and custom taxonomies.
+	require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/user-helper.php" );
+	Starg_User_Helper::starg_remove_capabilities_for_archival_records();
+
+	// Clear the permalinks to remove our post type's rules from the database.
+	flush_rewrite_rules();
+
+	$timestamp = wp_next_scheduled('archival_delete_cron_event');
+	if ($timestamp) {
+		wp_unschedule_event($timestamp, 'archival_delete_cron_event');
+	}
+}
+register_deactivation_hook( __FILE__, 'starg_sip_deactivate' );
+
 
 ///////////////////////
 ///////// DEV /////////

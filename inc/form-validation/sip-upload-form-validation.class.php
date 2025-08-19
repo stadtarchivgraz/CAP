@@ -24,53 +24,57 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 		// if viewing an existing archival record/sip.
 		$sip_folder = ( isset( $_GET['sipFolder'] ) ) ? sanitize_text_field( $_GET['sipFolder'] ) : '';
 
-		$current_locale = strtolower(get_locale());
-		$user_id        = get_current_user_id();
-		$archives       = (int) get_user_meta( $user_id, 'user_archive', true );
+		$current_locale  = strtolower(get_locale());
+		$current_user_id = get_current_user_id();
+		$user_archive    = (int) get_user_meta( $current_user_id, 'user_archive', true );
 
 		// main data for the new post.
 		$post_data = array(
+			'post_author'  => $current_user_id,
 			'post_title'   => $user_input[ 'archival_title' ],
 			'post_content' => $user_input[ 'archival_description' ],
-			'post_type'    => 'archival',
+			'post_type'    => Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG,
 		);
 
 		// if a post_id for an archival is set, we want to update the archival post.
 		// todo: maybe check the validity of the post_id.
 		if ( $user_input[ 'archival_ID' ] ) {
-			$post_data['ID']          = (int) $user_input[ 'archival_ID' ];
-			$post_data['post_author'] = get_post_field('post_author', (int) $user_input[ 'archival_ID' ]);
-			$post_data['post_status'] = get_post_field('post_status', (int) $user_input[ 'archival_ID' ]);
+			$orig_author_id = get_post_field( 'post_author', (int) $user_input[ 'archival_ID' ] );
 
-			// if we're editing the archival record we need to set the post-author.
-			$post_author_id = (int) get_post_field( 'post_author', (int) $user_input[ 'archival_ID' ] );
-			if ( $post_author_id !== $user_id ) {
-				$archives = (int) get_user_meta( $post_author_id, 'user_archive', true );
+			$post_data['ID']          = (int) $user_input[ 'archival_ID' ];
+			// to keep the original post_status we need to set it again. otherwise we would overwrite it as draft if an archiver edits the post.
+			$post_data['post_status'] = get_post_field( 'post_status', (int) $user_input[ 'archival_ID' ] );
+
+			// if we're editing the archival record from a different user (admin/editor) we need to reset the post_author to its original value.
+			if ( $orig_author_id !== $current_user_id ) {
+				$user_archive = (int) get_user_meta( $orig_author_id, 'user_archive', true );
+				$post_data['post_author'] = $orig_author_id;
 			}
 
 			// if we still have no archive selected, we may try to use the first one created. OR! We tell them and provide a link to the profile where they can change their archive setting!
-			// if ( ! $archives ) {
+			// if ( ! $user_archive ) {
 			// 	$archive_terms = get_the_terms( (int) $user_input[ 'archival_ID' ], 'archive' );
 			// 	if ( $archive_terms || ! is_wp_error( $archive_terms ) ) {
-			// 		$archives = $archive_terms[0]->term_id;
+			// 		$user_archive = $archive_terms[0]->term_id;
 			// 	}
 			// }
 		}
 
 		// todo: maybe tell the user about their missing archive setting and provide a link to the profile where they can change their archive setting!
-		// if ( ! $archives ) {
+		// if ( ! $user_archive ) {
 		// 	$profile_page_link = '<a href="' . starg_get_the_profile_page_template_url() . '">' . esc_attr__( 'profile page', 'sip' ) . '</a>';
 		// 	// translators: %s: a Link to the users profile page.
 		// 	$this->set_error_message( sprintf( esc_html__( 'You have not selected an archive. Please visit your %s and select an archive.', 'sip' ), $profile_page_link ) );
 		// 	// translators: %d: The User-ID.
-		// 	$this->set_error_log_message( sprintf( esc_html__( 'The user with the id %d has not selected an archive!', 'sip' ), $user_id ) );
+		// 	$this->set_error_log_message( sprintf( esc_html__( 'The user with the id %d has not selected an archive!', 'sip' ), $current_user_id ) );
 		// }
 
-		// to be able to set a term we need at least the user role contributor!
+		// set the custom taxonomies for the archival record:
 		$archival_tags  = wp_list_pluck( json_decode( stripcslashes( $user_input['archival_tags'] ), true ), 'value' );
+		$archival_tags  = array_map( 'sanitize_text_field', $archival_tags );
 		$post_data[ 'tax_input' ] = array(
-			'archival_tag' => $archival_tags,
-			'archive'      => $archives,
+			Archival_Custom_Posts::ARCHIVAL_TAG_CUSTOM_TAX_SLUG => $archival_tags,
+			Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG      => $user_archive,
 		);
 
 		if (isset( $user_input[ 'archival_originator' ] )) {

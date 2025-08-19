@@ -14,7 +14,8 @@ if ( $create_sip instanceof Create_Sip ) {
 	while ($archivals->have_posts()) :
 		$archivals->the_post();
 		$archival_post_status = get_post_status();
-		$archival_post_url    = starg_get_the_archival_page_template_url( get_the_ID() );
+		$current_post_id      = get_the_ID();
+		$archival_post_url    = starg_get_the_archival_page_template_url( $current_post_id );
 		?>
 		<li class="column is-6-tablet is-4-desktop">
 			<div class="card is-flex is-flex-direction-column" style="height: 100%;">
@@ -22,7 +23,7 @@ if ( $create_sip instanceof Create_Sip ) {
 					<a class="card-header-title" href="<?php echo $archival_post_url; ?>">
 						<?php the_title(); ?>
 					</a>
-					<?php if (current_user_can('edit_others_posts')) : ?>
+					<?php if (current_user_can('edit_others_archival_records', $current_post_id)) : ?>
 						<a class="card-header-icon" href="<?php echo $archival_post_url; ?>">
 							<?php
 							// todo: actually u should not use variables in translation functions like this.
@@ -46,16 +47,15 @@ if ( $create_sip instanceof Create_Sip ) {
 				</div>
 				<div class="card-footer">
 					<a class="card-footer-item" href="<?php echo $archival_post_url; ?>"><?php esc_html_e('Preview', 'sip'); ?></a>
-					<?php if ($sip_folder = esc_attr( get_post_meta( get_the_ID(), '_archival_sip_folder', true ) ) ) : ?>
-						<?php if ( ( current_user_can('edit_posts') && 'publish' !== $archival_post_status) || current_user_can( 'edit_others_posts' ) ) : ?>
+					<?php if ($sip_folder = esc_attr( get_post_meta( $current_post_id, '_archival_sip_folder', true ) ) ) : ?>
+						<?php if ( ( current_user_can('edit_archival', $current_post_id ) && 'publish' !== $archival_post_status) || current_user_can( 'edit_others_archival_records', $current_post_id ) ) : ?>
 							<a class="card-footer-item" href="<?php echo esc_url( add_query_arg( array( 'sipFolder' => $sip_folder, ), $edit_archival_url ) ); ?>">
 								<?php esc_html_e('Edit', 'sip'); ?>
 							</a>
 						<?php endif; ?>
-						<?php if (current_user_can('edit_others_posts')) : ?>
+						<?php if ( current_user_can('edit_others_archival_records', $current_post_id) ) : ?>
 							<?php // todo: maybe remove target="_blank"? ?>
-							<a class="card-footer-item" href="<?php echo ( isset( $create_sip->url_endpoint ) ) ? add_query_arg( array( $create_sip->url_endpoint => true, 'sipFolder' => $sip_folder ) ) : '#'; ?>"
-								target="_blank" title="<?php esc_attr_e('Create the SIP', 'sip'); ?>">
+							<a class="card-footer-item" href="<?php echo ( isset( $create_sip->url_endpoint ) ) ? add_query_arg( array( $create_sip->url_endpoint => true, 'sipFolder' => $sip_folder ) ) : '#'; ?>" target="_blank" title="<?php esc_attr_e('Create the SIP', 'sip'); ?>">
 								<?php esc_html_e('SIP', 'sip'); ?>
 							</a>
 						<?php endif; ?>

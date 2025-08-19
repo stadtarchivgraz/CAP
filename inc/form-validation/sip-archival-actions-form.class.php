@@ -48,8 +48,8 @@ class Sip_Archival_Actions extends Form_Validation {
 		$archival_status         = get_post_status($archival_id);
 		$archival_user_id        = get_post_field( 'post_author', $archival_id );
 		$is_users_archival_post  = ( (int) $archival_user_id === get_current_user_id() ); // the author of the archival record post is allowed to remove it.
-		$user_can_accept_decline = ( current_user_can('edit_others_posts') && $archival_status !== 'publish' );
-		$user_can_submit         = ( current_user_can( 'edit_posts' ) && $archival_status !== 'publish' );
+		$user_can_accept_decline = ( current_user_can( 'edit_others_posts' ) && $archival_status !== 'publish' );
+		$user_can_submit         = ( current_user_can( 'read_archival', $archival_id ) && $archival_status !== 'publish' ); // todo: maybe change capability to "edit_archival"
 
 		// check if the user is allowed to perform an action here.
 		if ( ! $user_can_accept_decline && ( ! $user_can_submit && ! $is_users_archival_post ) ) {
@@ -58,11 +58,12 @@ class Sip_Archival_Actions extends Form_Validation {
 			return false;
 		}
 
+		$action_result = false;
 		// perform the action. this can be an approval, rejection (=deletion) or a submission.
 		if ( $user_can_accept_decline && $user_input[ 'accept_archival' ] ) {
 			$action_result = $this->_process_action_accept( $archival_id );
 		}
-		
+
 		if ( ( $user_can_accept_decline || $is_users_archival_post ) && $user_input[ 'decline_archival' ] ) {
 			$action_result = $this->_process_action_decline( $sip_folder, $archival_id );
 		}
