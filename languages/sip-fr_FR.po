@@ -35,7 +35,7 @@ msgid "SIP"
 msgstr "SIP"
 
 #: admin/sip-meta.php:49
-#: inc/form-validation/create-sip-pdf.class.php:195
+#: inc/form-validation/create-sip-pdf.class.php:192
 #: template-parts/content-archival.php:60
 msgid "Date/Time"
 msgstr "Data/Ora"
@@ -53,7 +53,7 @@ msgid "Creation Place"
 msgstr "Lieu de création"
 
 #: admin/sip-meta.php:55
-#: template-parts/forms/profileform.php:261
+#: template-parts/forms/profileform.php:290
 msgid "Address"
 msgstr "Adresse"
 
@@ -74,21 +74,21 @@ msgid "Media"
 msgstr "Médias"
 
 #: admin/sip-meta.php:62
-#: inc/form-validation/create-sip-pdf.class.php:191
+#: inc/form-validation/create-sip-pdf.class.php:188
 #: template-parts/content-archival.php:58
 #: template-parts/content-sip-form.php:66
 msgid "Originator"
 msgstr "Créateur"
 
 #: admin/sip-meta.php:63
-#: inc/archival-cpt.php:265
-#: inc/form-validation/create-sip-pdf.class.php:199
+#: inc/archival-cpt.php:308
+#: inc/form-validation/create-sip-pdf.class.php:196
 #: template-parts/content-archival.php:62
 msgid "Upload Purpose"
 msgstr "Objet du téléchargement"
 
 #: admin/sip-meta.php:66
-#: inc/form-validation/create-sip-pdf.class.php:96
+#: inc/form-validation/create-sip-pdf.class.php:98
 #: template-parts/content-archival.php:65
 msgid "Blocking Time"
 msgstr "Durée de blocage"
@@ -100,7 +100,7 @@ msgid "Note"
 msgstr "Note"
 
 #: admin/sip-meta.php:92
-#: inc/form-validation/create-sip-pdf.class.php:214
+#: inc/form-validation/create-sip-pdf.class.php:211
 #: inc/form-validation/create-sip.class.php:440
 #: template-parts/content-archival.php:85
 #: template-parts/content-sip-form.php:210
@@ -277,219 +277,219 @@ msgstr "Abréviation du nom de l'institution"
 msgid "SIP Referenz"
 msgstr "Référence SIP"
 
-#: inc/archival-cpt.php:13
+#: inc/archival-cpt.php:32
 msgid "Archival Materials"
 msgstr "Documents d'archives"
 
-#: inc/archival-cpt.php:14
-#: inc/archival-cpt.php:46
+#: inc/archival-cpt.php:33
+#: inc/archival-cpt.php:65
 msgid "Archival"
 msgstr "Archives"
 
-#: inc/archival-cpt.php:15
+#: inc/archival-cpt.php:34
 msgid "Item Archives"
 msgstr "Archives des articles"
 
-#: inc/archival-cpt.php:16
+#: inc/archival-cpt.php:35
 msgid "Item Attributes"
 msgstr "Attributs de l'élément"
 
-#: inc/archival-cpt.php:17
-#: inc/archival-cpt.php:83
-#: inc/archival-cpt.php:132
+#: inc/archival-cpt.php:36
+#: inc/archival-cpt.php:134
+#: inc/archival-cpt.php:177
 msgid "Parent Item:"
 msgstr "Élément parent :"
 
-#: inc/archival-cpt.php:18
-#: inc/archival-cpt.php:130
+#: inc/archival-cpt.php:37
+#: inc/archival-cpt.php:175
 msgid "All Items"
 msgstr "Tous les articles"
 
-#: inc/archival-cpt.php:19
-#: inc/archival-cpt.php:85
-#: inc/archival-cpt.php:134
+#: inc/archival-cpt.php:38
+#: inc/archival-cpt.php:136
+#: inc/archival-cpt.php:179
 msgid "Add New Item"
 msgstr "Ajouter un nouvel élément"
 
-#: inc/archival-cpt.php:20
+#: inc/archival-cpt.php:39
 msgid "Add New"
 msgstr "Ajouter un nouveau"
 
-#: inc/archival-cpt.php:21
+#: inc/archival-cpt.php:40
 msgid "New Item"
 msgstr "Nouvel article"
 
-#: inc/archival-cpt.php:22
-#: inc/archival-cpt.php:86
-#: inc/archival-cpt.php:135
+#: inc/archival-cpt.php:41
+#: inc/archival-cpt.php:137
+#: inc/archival-cpt.php:180
 msgid "Edit Item"
 msgstr "Modifier l'élément"
 
-#: inc/archival-cpt.php:23
-#: inc/archival-cpt.php:87
-#: inc/archival-cpt.php:136
+#: inc/archival-cpt.php:42
+#: inc/archival-cpt.php:138
+#: inc/archival-cpt.php:181
 msgid "Update Item"
 msgstr "Mettre à jour l'élément"
 
-#: inc/archival-cpt.php:24
-#: inc/archival-cpt.php:88
-#: inc/archival-cpt.php:137
+#: inc/archival-cpt.php:43
+#: inc/archival-cpt.php:139
+#: inc/archival-cpt.php:182
 msgid "View Item"
 msgstr "Voir l'article"
 
-#: inc/archival-cpt.php:25
+#: inc/archival-cpt.php:44
 msgid "View Items"
 msgstr "Voir les articles"
 
-#: inc/archival-cpt.php:26
+#: inc/archival-cpt.php:45
 msgid "Search Item"
 msgstr "Rechercher un article"
 
-#: inc/archival-cpt.php:27
+#: inc/archival-cpt.php:46
 msgid "Not found"
 msgstr "Non trouvé"
 
-#: inc/archival-cpt.php:28
+#: inc/archival-cpt.php:47
 msgid "Not found in Trash"
 msgstr "Non trouvé dans la corbeille"
 
-#: inc/archival-cpt.php:29
+#: inc/archival-cpt.php:48
 msgid "Featured Image"
 msgstr "Image en vedette"
 
-#: inc/archival-cpt.php:30
+#: inc/archival-cpt.php:49
 msgid "Set featured image"
 msgstr "Définir l'image en vedette"
 
-#: inc/archival-cpt.php:31
+#: inc/archival-cpt.php:50
 msgid "Remove featured image"
 msgstr "Supprimer l'image sélectionnée"
 
-#: inc/archival-cpt.php:32
+#: inc/archival-cpt.php:51
 msgid "Use as featured image"
 msgstr "Utiliser comme image principale"
 
-#: inc/archival-cpt.php:33
+#: inc/archival-cpt.php:52
 msgid "Insert into item"
 msgstr "Insérer dans l'article"
 
-#: inc/archival-cpt.php:34
+#: inc/archival-cpt.php:53
 msgid "Uploaded to this item"
 msgstr "Téléchargé sur cet élément"
 
-#: inc/archival-cpt.php:35
-#: inc/archival-cpt.php:96
-#: inc/archival-cpt.php:145
+#: inc/archival-cpt.php:54
+#: inc/archival-cpt.php:147
+#: inc/archival-cpt.php:190
 msgid "Items list"
 msgstr "Liste des articles"
 
-#: inc/archival-cpt.php:36
-#: inc/archival-cpt.php:97
-#: inc/archival-cpt.php:146
+#: inc/archival-cpt.php:55
+#: inc/archival-cpt.php:148
+#: inc/archival-cpt.php:191
 msgid "Items list navigation"
 msgstr "Navigation dans la liste des éléments"
 
-#: inc/archival-cpt.php:37
+#: inc/archival-cpt.php:56
 msgid "Filter items list"
 msgstr "Filtrer la liste des éléments"
 
-#: inc/archival-cpt.php:40
+#: inc/archival-cpt.php:59
 msgid "archival"
 msgstr "archives"
 
-#: inc/archival-cpt.php:80
+#: inc/archival-cpt.php:131
 #: inc/sip-template-functions.php:49
 #: template-parts/forms/filterform.php:91
-#: template-parts/forms/profileform.php:147
 #: template-parts/forms/profileform.php:176
+#: template-parts/forms/profileform.php:205
 msgid "Archive"
 msgstr "Archive"
 
-#: inc/archival-cpt.php:81
+#: inc/archival-cpt.php:132
 msgid "All Archives"
 msgstr "Toutes les archives"
 
-#: inc/archival-cpt.php:82
-#: inc/archival-cpt.php:131
+#: inc/archival-cpt.php:133
+#: inc/archival-cpt.php:176
 msgid "Parent Item"
 msgstr "Élément parent"
 
-#: inc/archival-cpt.php:84
-#: inc/archival-cpt.php:133
+#: inc/archival-cpt.php:135
+#: inc/archival-cpt.php:178
 msgid "New Item Name"
 msgstr "Nouveau nom d'élément"
 
-#: inc/archival-cpt.php:89
-#: inc/archival-cpt.php:138
+#: inc/archival-cpt.php:140
+#: inc/archival-cpt.php:183
 msgid "Separate items with commas"
 msgstr "Séparez les éléments par des virgules"
 
-#: inc/archival-cpt.php:90
-#: inc/archival-cpt.php:139
+#: inc/archival-cpt.php:141
+#: inc/archival-cpt.php:184
 msgid "Add or remove items"
 msgstr "Ajouter ou supprimer des éléments"
 
-#: inc/archival-cpt.php:91
-#: inc/archival-cpt.php:140
+#: inc/archival-cpt.php:142
+#: inc/archival-cpt.php:185
 msgid "Choose from the most used"
 msgstr "Choisissez parmi les plus utilisés"
 
-#: inc/archival-cpt.php:92
-#: inc/archival-cpt.php:141
+#: inc/archival-cpt.php:143
+#: inc/archival-cpt.php:186
 msgid "Popular Items"
 msgstr "Articles populaires"
 
-#: inc/archival-cpt.php:93
-#: inc/archival-cpt.php:142
+#: inc/archival-cpt.php:144
+#: inc/archival-cpt.php:187
 msgid "Search Items"
 msgstr "Rechercher des articles"
 
-#: inc/archival-cpt.php:94
-#: inc/archival-cpt.php:143
+#: inc/archival-cpt.php:145
+#: inc/archival-cpt.php:188
 msgid "Not Found"
 msgstr "Non trouvé"
 
-#: inc/archival-cpt.php:95
-#: inc/archival-cpt.php:144
+#: inc/archival-cpt.php:146
+#: inc/archival-cpt.php:189
 msgid "No items"
 msgstr "Aucun article"
 
-#: inc/archival-cpt.php:100
+#: inc/archival-cpt.php:151
 msgid "archive"
 msgstr "archive"
 
-#: inc/archival-cpt.php:129
+#: inc/archival-cpt.php:174
 msgid "Archival Tag"
 msgstr "Étiquette d'archive"
 
 #. translators: %s: Label of the taxonomy.
-#: inc/archival-cpt.php:182
+#: inc/archival-cpt.php:227
 #: template-parts/forms/filterform.php:200
 #: template-parts/forms/filterform.php:214
 #, php-format
 msgid "Show all %s"
 msgstr "Afficher tous les %s"
 
-#: inc/archival-cpt.php:206
+#: inc/archival-cpt.php:251
 #: template-parts/forms/filterform.php:140
 #: template-parts/forms/filterform.php:167
 msgid "Show all"
 msgstr "Tout afficher"
 
-#: inc/archival-cpt.php:264
+#: inc/archival-cpt.php:307
 msgid "SIP-Folder"
 msgstr "Dossier SIP"
 
-#: inc/archival-cpt.php:266
-#: inc/form-validation/create-sip-pdf.class.php:229
+#: inc/archival-cpt.php:309
+#: inc/form-validation/create-sip-pdf.class.php:226
 msgid "User"
 msgstr "Utilisateur"
 
-#: inc/archival-cpt.php:267
+#: inc/archival-cpt.php:310
 msgid "Numeration"
 msgstr "Numérotation"
 
-#: inc/archival-cpt.php:289
+#: inc/archival-cpt.php:331
 msgid "deleted"
 msgstr "supprimé"
 
@@ -506,7 +506,7 @@ msgstr "Objet du téléchargement"
 msgid "Year"
 msgstr "Année"
 
-#: inc/form-validation/create-sip-pdf.class.php:205
+#: inc/form-validation/create-sip-pdf.class.php:202
 #: template-parts/content-archival.php:78
 #: template-parts/content-sip-form.php:129
 #: template-parts/forms/filterform.php:189
@@ -529,107 +529,107 @@ msgstr "Entrez votre ancien mot de passe."
 msgid "The old password is incorrect."
 msgstr "L'ancien mot de passe est incorrect."
 
-#: template-parts/forms/profileform.php:29
+#: template-parts/forms/profileform.php:30
 msgid "Submissions"
 msgstr "Publications"
 
-#: template-parts/forms/profileform.php:32
+#: template-parts/forms/profileform.php:33
 msgid "Drafts"
 msgstr "Brouillons"
 
-#: template-parts/forms/profileform.php:35
-#: template-parts/forms/profileform.php:207
+#: template-parts/forms/profileform.php:36
+#: template-parts/forms/profileform.php:236
 msgid "Personal account"
 msgstr "Données personnelles"
 
 #: template-parts/content-archival.php:122
 #: template-parts/content-archival.php:133
 #: template-parts/content-archival.php:145
-#: template-parts/content-archivals-list.php:52
-#: template-parts/forms/profileform.php:123
+#: template-parts/content-archivals-list.php:53
+#: template-parts/forms/profileform.php:135
 msgid "Edit"
 msgstr "Modifier"
 
-#: template-parts/forms/profileform.php:132
+#: template-parts/forms/profileform.php:158
 msgid "Are you sure? All files will be deleted."
 msgstr "Etes-vous sûr ? Tous les fichiers seront supprimés."
 
-#: template-parts/forms/profileform.php:133
+#: template-parts/forms/profileform.php:159
 msgid "Delete"
 msgstr "Supprimer"
 
-#: template-parts/forms/profileform.php:150
+#: template-parts/forms/profileform.php:179
 msgid "Log in"
 msgstr "Se connecter"
 
-#: template-parts/forms/profileform.php:162
+#: template-parts/forms/profileform.php:191
 msgid "Public name"
 msgstr "Nom public"
 
-#: template-parts/forms/profileform.php:201
+#: template-parts/forms/profileform.php:230
 msgid "This selection cannot be changed"
 msgstr "Cette sélection ne peut pas être modifiée"
 
-#: template-parts/forms/profileform.php:211
-#: template-parts/forms/profileform.php:216
+#: template-parts/forms/profileform.php:240
+#: template-parts/forms/profileform.php:245
 msgid "First name"
 msgstr "Prénom"
 
-#: template-parts/forms/profileform.php:223
-#: template-parts/forms/profileform.php:228
+#: template-parts/forms/profileform.php:252
+#: template-parts/forms/profileform.php:257
 msgid "Surname"
 msgstr "Nom de famille"
 
-#: template-parts/forms/profileform.php:235
+#: template-parts/forms/profileform.php:264
 msgid "Email address"
 msgstr "Adresse e-mail"
 
-#: template-parts/forms/profileform.php:247
+#: template-parts/forms/profileform.php:276
 msgid "Date of birth"
 msgstr "Date de naissance"
 
-#: template-parts/forms/profileform.php:254
+#: template-parts/forms/profileform.php:283
 msgid "You must be at least 18 years old"
 msgstr "Vous devez avoir au moins 18 ans"
 
-#: template-parts/forms/profileform.php:266
+#: template-parts/forms/profileform.php:295
 msgid "Street and Number"
 msgstr "Rue et numéro"
 
-#: template-parts/forms/profileform.php:276
+#: template-parts/forms/profileform.php:305
 msgid "ZIP Code"
 msgstr "Code postal"
 
-#: template-parts/forms/profileform.php:281
+#: template-parts/forms/profileform.php:310
 msgid "City"
 msgstr "Ville"
 
-#: template-parts/forms/profileform.php:299
+#: template-parts/forms/profileform.php:328
 msgid "Save"
 msgstr "Enregistrer"
 
-#: template-parts/forms/profileform.php:309
-#: template-parts/forms/profileform.php:357
+#: template-parts/forms/profileform.php:338
+#: template-parts/forms/profileform.php:386
 msgid "Change password"
 msgstr "Modifier le mot de passe"
 
-#: template-parts/forms/profileform.php:312
+#: template-parts/forms/profileform.php:341
 msgid "Old"
 msgstr "Ancien"
 
-#: template-parts/forms/profileform.php:324
+#: template-parts/forms/profileform.php:353
 msgid "New"
 msgstr "Nouveau"
 
-#: template-parts/forms/profileform.php:332
+#: template-parts/forms/profileform.php:361
 msgid "Strength of password"
 msgstr "Force du mot de passe"
 
-#: template-parts/forms/profileform.php:333
+#: template-parts/forms/profileform.php:362
 msgid "Tip: Your password should be at least twelve characters long. For a stronger password, use upper and lower case letters, numbers and special characters such as !’?$%^&)."
 msgstr "Astuce : le mot de passe doit contenir au moins douze caractères. Pour un mot de passe plus sécurisé, utilisez des majuscules, des minuscules, des chiffres et des caractères spéciaux comme !’? $%^&)."
 
-#: template-parts/forms/profileform.php:340
+#: template-parts/forms/profileform.php:369
 msgid "Repeat"
 msgstr "Répéter"
 
@@ -649,32 +649,32 @@ msgstr "Profil SIP"
 msgid "SIP Archive"
 msgstr "Archives SIP"
 
-#: sip.php:269
+#: sip.php:242
 msgid "draft"
 msgstr "brouillon"
 
-#: sip.php:270
+#: sip.php:243
 msgid "pending"
 msgstr "en attente"
 
-#: sip.php:271
+#: sip.php:244
 msgid "publish"
 msgstr "publier"
 
-#: inc/form-validation/create-sip-pdf.class.php:187
+#: inc/form-validation/create-sip-pdf.class.php:184
 #: template-parts/content-archival.php:47
 #: template-parts/content-sip-form.php:112
 msgid "Location"
 msgstr "Emplacement"
 
-#: inc/form-validation/create-sip-pdf.class.php:87
-#: inc/form-validation/create-sip-pdf.class.php:88
+#: inc/form-validation/create-sip-pdf.class.php:89
+#: inc/form-validation/create-sip-pdf.class.php:90
 #: template-parts/content-archival.php:49
 #: template-parts/content-archival.php:59
 msgid "unknown"
 msgstr "ignoré"
 
-#: inc/form-validation/create-sip-pdf.class.php:218
+#: inc/form-validation/create-sip-pdf.class.php:215
 #: template-parts/content-archival.php:87
 msgid "Annotation"
 msgstr "Note"
@@ -692,10 +692,11 @@ msgid "Decline"
 msgstr "Déclin"
 
 #: template-parts/content-archival.php:148
+#: template-parts/forms/profileform.php:146
 msgid "Submit"
 msgstr "Soumettre"
 
-#: template-parts/content-archivals-list.php:48
+#: template-parts/content-archivals-list.php:49
 msgid "Preview"
 msgstr "Aperçu"
 
@@ -794,36 +795,36 @@ msgstr "Si vide – l’identifiant de l’expéditeur (utilisateur) sera utilis
 msgid "Institution Logo"
 msgstr "Logo de l’institution"
 
-#: inc/archival-cpt.php:11
+#: inc/archival-cpt.php:30
 msgctxt "Post Type General Name"
 msgid "Archival materials"
 msgstr "Matériaux d’archives"
 
-#: inc/archival-cpt.php:12
+#: inc/archival-cpt.php:31
 msgctxt "Post Type Singular Name"
 msgid "Archival"
 msgstr "Archivistique"
 
-#: inc/archival-cpt.php:47
+#: inc/archival-cpt.php:66
 msgid "Post Type for archival materials in the SIP Plugin"
 msgstr "Type de publication pour les matériaux d’archives dans le plugin SIP"
 
-#: inc/archival-cpt.php:78
+#: inc/archival-cpt.php:129
 msgctxt "Taxonomy General Name"
 msgid "Archives"
 msgstr "Archives"
 
-#: inc/archival-cpt.php:79
+#: inc/archival-cpt.php:130
 msgctxt "Taxonomy Singular Name"
 msgid "Archive"
 msgstr "Archive"
 
-#: inc/archival-cpt.php:127
+#: inc/archival-cpt.php:172
 msgctxt "Taxonomy General Name"
 msgid "Archival Tags"
 msgstr "Étiquettes d’archives"
 
-#: inc/archival-cpt.php:128
+#: inc/archival-cpt.php:173
 msgctxt "Taxonomy Singular Name"
 msgid "Archival Tag"
 msgstr "Étiquette d’archive"
@@ -844,12 +845,12 @@ msgstr "Aucun dossier SIP fourni."
 msgid "No archival record found with SIP Post-ID: \"%d\""
 msgstr "Aucun document d’archive trouvé avec l’ID de publication SIP : «%d»"
 
-#: inc/form-validation/create-sip-pdf.class.php:211
+#: inc/form-validation/create-sip-pdf.class.php:208
 #: template-parts/content-archival.php:83
 msgid "Archive Information"
 msgstr "Informations sur l’archive"
 
-#: inc/form-validation/create-sip-pdf.class.php:241
+#: inc/form-validation/create-sip-pdf.class.php:238
 msgid "Archivist"
 msgstr "Archiviste"
 
@@ -874,41 +875,41 @@ msgid "You are not allowed to perform this action."
 msgstr "Vous n’êtes pas autorisé à effectuer cette action."
 
 #. translators: %d: Post-ID of an archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:92
-#: inc/form-validation/sip-archival-actions-form.class.php:156
+#: inc/form-validation/sip-archival-actions-form.class.php:93
+#: inc/form-validation/sip-archival-actions-form.class.php:157
 #, php-format
 msgid "The post with the ID %d could not be updated."
 msgstr "La publication avec l’ID %d n’a pas pu être mise à jour."
 
 #. translators: %d: Post-ID of an archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:99
-#: inc/form-validation/sip-archival-actions-form.class.php:101
+#: inc/form-validation/sip-archival-actions-form.class.php:100
+#: inc/form-validation/sip-archival-actions-form.class.php:102
 #, php-format
 msgid "Archivist user ID not set for archival record post: %d"
 msgstr "L’ID utilisateur de l’archiviste n’est pas défini pour la publication du document d’archive : %d"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:105
+#: inc/form-validation/sip-archival-actions-form.class.php:106
 msgid "Archival record accepted."
 msgstr "Document d’archive accepté."
 
 #. translators: %s: ID/Name of the folder where the archival record (sip) is stored.
-#: inc/form-validation/sip-archival-actions-form.class.php:122
-#: inc/form-validation/sip-archival-actions-form.class.php:124
+#: inc/form-validation/sip-archival-actions-form.class.php:123
+#: inc/form-validation/sip-archival-actions-form.class.php:125
 #, php-format
 msgid "Failed to delete the folder for archival record %s."
 msgstr "Échec de la suppression du dossier pour le document d’archive %s."
 
 #. translators: %d: Post-ID of the archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:133
+#: inc/form-validation/sip-archival-actions-form.class.php:134
 #, php-format
 msgid "Failed to delete the archival record with the ID %d."
 msgstr "Échec de la suppression du document d’archive avec l’ID %d."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:137
+#: inc/form-validation/sip-archival-actions-form.class.php:138
 msgid "Archival record deleted."
 msgstr "Document d’archive supprimé."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:160
+#: inc/form-validation/sip-archival-actions-form.class.php:161
 msgid "Archival record submitted."
 msgstr "Document d’archive soumis."
 
@@ -970,20 +971,20 @@ msgid "Unsupported file type:"
 msgstr "Type de fichier non pris en charge :"
 
 #. translators: %1$s: Directory of the archival record in question. %2$s: Error message.
-#: inc/sip-functions.php:268
+#: inc/sip-functions.php:271
 #, php-format
 msgid "sip %1$s was not removed! Error message: %2$s"
 msgstr "le SIP %1$s n’a pas été supprimé ! Message d’erreur : %2$s"
 
-#: inc/sip-functions.php:330
+#: inc/sip-functions.php:333
 msgid "No Page with the Page-Template sip-upload found."
 msgstr "Aucune page avec le modèle de page sip-upload trouvée."
 
-#: inc/sip-functions.php:353
+#: inc/sip-functions.php:356
 msgid "No Page with the Page-Template sip-archival found."
 msgstr "Aucune page avec le modèle de page sip-archival trouvée."
 
-#: inc/sip-functions.php:377
+#: inc/sip-functions.php:380
 msgid "No Page with the Page-Template sip-profile found."
 msgstr "Aucune page avec le modèle de page sip-profile trouvée."
 
@@ -1016,13 +1017,13 @@ msgstr "Remarque:"
 #: admin/admin-notification.php:31
 #, php-format
 msgid "%s The PHP extension \"imagick\" is not loaded!"
-msgstr "%s L’extension PHP "imagick" n’est pas chargée!"
+msgstr "%s L’extension PHP \"imagick\" n’est pas chargée!"
 
 #. translators: %s: Notification level like "Error", "Warning", "Note".
 #: admin/admin-notification.php:35
 #, php-format
 msgid "%s The PHP setting \"allow_url_fopen\" is not enabled! This setting must be enabled to create PDF files."
-msgstr "%s Le paramètre PHP "allow_url_fopen" n’est pas activé ! Ce paramètre doit être activé pour créer des fichiers PDF."
+msgstr "%s Le paramètre PHP \"allow_url_fopen\" n’est pas activé ! Ce paramètre doit être activé pour créer des fichiers PDF."
 
 #. translators: %s: Notification level like "Error", "Warning", "Note".
 #: admin/admin-notification.php:41
@@ -1031,51 +1032,50 @@ msgid "%s Ghostscript might not be installed or could not be found on the system
 msgstr "%s Ghostscript n’est peut-être pas installé ou n’a pas pu être trouvé sur le système ! Vous devez installer Ghostscript pour créer des fichiers PDF."
 
 #. translators: %1$s: Notification level like "Error", "Warning", "Note". %2$s: Link to the Plugin in the WordPress repository.
-#: admin/admin-notification.php:48
+#: admin/admin-notification.php:58
 #, php-format
 msgid "%1$s We recommend using the plugin %2$s if you want to translate the site."
 msgstr "%1$s Nous recommandons d’utiliser l’extension %2$s si vous souhaitez traduire le site."
 
 #. translators: %s: Notification level like "Error", "Warning", "Note".
-#: admin/admin-notification.php:54
+#: admin/admin-notification.php:64
 #, php-format
 msgid "%s To communicate with ClamAV, you need to enable the sockets extension in PHP."
-msgstr "%s Pour communiquer avec ClamAV, vous devez activer l’extension PHP "sockets"."
+msgstr "%s Pour communiquer avec ClamAV, vous devez activer l’extension PHP \"sockets\"."
 
-#: admin/admin-notification.php:66
+#: admin/admin-notification.php:77
 msgid "Check your configuration."
 msgstr "Vérifiez votre configuration."
 
 #. translators: %1$s: Notification level like "Error", "Warning", "Note". %2$s: Link to the settings page for clamAV Host/Port.
-#: admin/admin-notification.php:68
+#: admin/admin-notification.php:79
 #, php-format
 msgid "%1$s There is an error in your configuration for ClamAV. We can not connect to ClamAV server. %2$s."
 msgstr "%1$s Il y a une erreur dans votre configuration de ClamAV. Connexion au serveur ClamAV impossible. %2$s."
 
-#: inc/form-validation/sip-upload-form-validation.class.php:137
+#: inc/form-validation/sip-upload-form-validation.class.php:141
 msgid "We encountered a problem creating/updating your entry."
 msgstr "Un problème est survenu lors de la création ou de la mise à jour de votre entrée."
 
 #. translators: %d: Post-ID.
-#: inc/form-validation/sip-upload-form-validation.class.php:144
+#: inc/form-validation/sip-upload-form-validation.class.php:148
 #, php-format
 msgid "Entry %s successfully created/updated."
 msgstr "Entrée %s créée/mise à jour avec succès."
 
-#: template-parts/content-archivals-list.php:40
+#: template-parts/content-archivals-list.php:41
 msgctxt "This overrides the default length of the excerpt in the archive for archival record posts."
 msgid "30"
 msgstr "30"
 
 #. translators: Format for full name of an user. %1$s: first name. %2$s: last name.
-#: template-parts/forms/profileform.php:168
+#: template-parts/forms/profileform.php:197
 #, php-format
 msgctxt "Format for full name of an user. %1$s is first name, %2$s is last name. Rearrange if necessary."
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
-#. translators: Format for full name of an user. %1$s: first name. %2$s: last name.
-#: template-parts/forms/profileform.php:168
+#: template-parts/forms/profileform.php:197
 msgid "Will be generated from your name"
 msgstr "Sera généré à partir de votre nom"
 
@@ -1090,3 +1090,27 @@ msgstr "Aucun résultat trouvé."
 #: template-parts/content-map.php:176
 msgid "My position"
 msgstr "Ma position"
+
+#. translators: %1$s: Notification level like "Error", "Warning", "Note". %2$s: ImageMagick policy line for denying read/write PDFs. %3$s: ImageMagick policy line for allowing read/write PDFs.
+#: admin/admin-notification.php:51
+#, php-format
+msgid "%1$s In order to create PDF files you might need to change the security policy of ImageMagick. Check for policy.xml in your ImageMagick installation folder. Change the row %2$s to %3$s"
+msgstr "%1$s Pour créer des fichiers PDF, vous devrez peut-être modifier la politique de sécurité d’ImageMagick. Vérifiez le fichier policy.xml dans le dossier d’installation d’ImageMagick. Modifiez la ligne %2$s en %3$s"
+
+#: template-parts/forms/profileform.php:59
+#: template-parts/forms/profileform.php:111
+msgctxt "placeholder for a redirect link to a page for making adjustments."
+msgid "here"
+msgstr "ici"
+
+#. translators: %s: Link to the page where the user can view their drafts.
+#: template-parts/forms/profileform.php:61
+#, php-format
+msgid "You have not submitted any entries yet. Please check your drafts %s and complete at at least one of them."
+msgstr "Vous n'avez pas encore soumis d'entrées. Veuillez vérifier vos brouillons à %s et en compléter au moins un."
+
+#. translators: %s: Link to the page where an archival record can be uploaded.
+#: template-parts/forms/profileform.php:113
+#, php-format
+msgid "You have not uploaded any files yet. Please upload your files %s."
+msgstr "Vous n'avez pas encore téléchargé de fichiers. Veuillez télécharger vos fichiers à %s."
