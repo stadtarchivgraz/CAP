@@ -4,13 +4,13 @@ if (! defined('WPINC')) { die; }
 class Starg_Template_Handling {
 
 	public static function init() {
-		add_filter( 'page_template', array( 'Starg_Template_Handling', 'starg_load_page_template' ) );
+		add_filter( 'page_template',        array( 'Starg_Template_Handling', 'starg_load_page_template' ) );
 		add_filter( 'theme_page_templates', array( 'Starg_Template_Handling', 'starg_add_page_templates' ), 10, 1 );
-		add_action( 'init', array( 'Starg_Template_Handling', 'starg_tab_rewrites' ) );
+		add_action( 'init',                 array( 'Starg_Template_Handling', 'starg_tab_rewrites' ) );
 
-		add_filter( 'query_vars', array( 'Starg_Template_Handling', 'starg_add_query_vars' ) );
+		add_filter( 'query_vars',           array( 'Starg_Template_Handling', 'starg_add_query_vars' ) );
 
-		add_action( 'init', array( 'Starg_Template_Handling', 'starg_check_for_polylang_pages' ) );
+		add_action( 'init',                 array( 'Starg_Template_Handling', 'starg_check_for_polylang_pages' ) );
 	}
 
 	/**

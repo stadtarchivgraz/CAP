@@ -52,6 +52,9 @@ function starg_create_thumbnail($file, $thumbnail_folder): void {
 
 /**
  * Tries to create a thumbnail from an uploaded pdf.
+ * Note that ImageMagick disabled the option to process PDFs on default since version 7.
+ * One might need to update the /policy.xml file for ImageMagick from <policy domain="coder" rights="none" pattern="PDF" /> to <policy domain="coder" rights="read|write" pattern="PDF" />
+ *
  * @param string $file
  * @param string $thumbnail_folder
  * @return bool

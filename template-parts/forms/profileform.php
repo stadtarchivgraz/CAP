@@ -19,7 +19,8 @@ require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/sip-archival-acti
 $sip_archival_actions = new Sip_Archival_Actions;
 $sip_archival_actions->process_sip_archival_actions();
 
-$current_tab = (get_query_var('tab')) ?: 'archivals';
+$current_tab       = (get_query_var('tab')) ?: 'archivals';
+$edit_archival_url = starg_get_the_edit_archival_page_url();
 ?>
 
 <div class="container sip">
@@ -54,6 +55,10 @@ $current_tab = (get_query_var('tab')) ?: 'archivals';
 		if ( $archivals->have_posts() ) :
 			include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-archivals-list.php' );
 			wp_reset_postdata();
+		else :
+			$link_to_drafts_tab = '<a href="' . add_query_arg( array( 'tab' => 'drafts', ), starg_get_the_profile_page_template_url() ) . '">' . esc_attr_x( 'here', 'placeholder for a redirect link to a page for making adjustments.', 'sip' ) . '</a>';
+			// translators: %s: Link to the page where the user can view their drafts.
+			echo starg_get_notification_message( sprintf( esc_html__( 'You have not submitted any entries yet. Please check your drafts %s and complete at at least one of them.', 'sip' ), $link_to_drafts_tab ), 'is-info is-light' );
 		endif;
 		?>
 	</section>
@@ -89,9 +94,11 @@ $current_tab = (get_query_var('tab')) ?: 'archivals';
 			wp_reset_postdata();
 		endif;
 
-		foreach ($sip_folders as $sip_folder) {
+		
+		// Some files may have been uploaded without a corresponding archival post. We'll display them as 'uploads' so users can continue editing them.
+		foreach ( $sip_folders as $sip_folder ) {
 			$sip_folder_name = basename($sip_folder);
-			if (!in_array($sip_folder_name, $archival_sip_folders)) {
+			if ( ! in_array($sip_folder_name, $archival_sip_folders) ) {
 				$user_sips[ starg_get_folder_creation_days_ago( $sip_folder, true ) ]  = array(
 					'title'  => $sip_folder_name,
 					'sip'    => $sip_folder_name,
@@ -100,43 +107,65 @@ $current_tab = (get_query_var('tab')) ?: 'archivals';
 			}
 		}
 
-		arsort($user_sips);
+		if ( ! $user_sips ) :
+			$link_to_drafts_tab = '<a href="' . $edit_archival_url . '">' . esc_attr_x( 'here', 'placeholder for a redirect link to a page for making adjustments.', 'sip' ) . '</a>';
+			// translators: %s: Link to the page where an archival record can be uploaded.
+			echo starg_get_notification_message( sprintf( esc_html__( 'You have not uploaded any files yet. Please upload your files %s.', 'sip' ), $link_to_drafts_tab ), 'is-info is-light' );
+		else :
+			// this sorts the actual drafts and their uploads based on the creation date.
+			arsort($user_sips);
 
-		$date_format = get_option('date_format');
-		?>
-		<table class="table is-striped is-narrow">
-			<?php
-			$edit_archival_url = starg_get_the_edit_archival_page_url();
-			foreach ($user_sips as $date => $user_sip) :
-				// we have no data for this entry, so we're not showing it. might be a deleted entry.
-				if ( ! $user_sip['sip'] ) { continue; }
-				?>
-				<tr>
-					<td><?php echo date_i18n($date_format, $date); ?></td>
-					<td>
-						<a class="has-text-weight-bold has-text-dark" href="<?php echo esc_url( add_query_arg( array( 'sipFolder' => $user_sip['sip'], ), $edit_archival_url ) ); ?>">
-							<?php echo $user_sip['title']; ?>
-						</a> - <?php esc_html_e($user_sip['status'], 'sip'); ?>
-					</td>
-					<td class="has-text-right">
-						<a class="button is-large" href="<?php echo esc_url( add_query_arg( array( 'sipFolder' => $user_sip['sip'], ), $edit_archival_url ) ); ?>">
-							<?php esc_html_e('Edit', 'sip'); ?>
-						</a>
-						<form target="" method="post" class="is-inline-block">
-							<input type="hidden" name="starg_form_name" value="archival_actions_form_<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
-							<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
-							<input type="hidden" name="sipFolder" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
-							<input type="hidden" name="starg_form_suffix" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
-							<?php wp_nonce_field( 'starg_archival_actions_nonce_action', 'starg_archival_actions_nonce_' . $user_sip['sip'], false ); ?>
-							<?php // todo: maybe change to a modal? js-alerts are not that fancy! ?>
-							<button class="button is-large is-danger" name="decline_archival" type="submit" value="decline" onclick="return confirm('<?php esc_html_e('Are you sure? All files will be deleted.', 'sip'); ?>')">
-								<?php esc_html_e('Delete', 'sip'); ?>
-							</button>
-						</form>
-					</td>
-				</tr>
-			<?php endforeach; ?>
-		</table>
+			$date_format = get_option('date_format');
+			?>
+			<table class="table is-striped is-narrow">
+				<?php
+				foreach ($user_sips as $date => $user_sip) :
+					// we have no data for this entry, so we're not showing it. might be a deleted entry.
+					if ( ! $user_sip['sip'] ) { continue; }
+					?>
+					<tr>
+						<td><?php echo date_i18n($date_format, $date); ?></td>
+						<td>
+							<a class="has-text-weight-bold has-text-dark" href="<?php echo ( isset( $user_sip['id'] ) ) ? esc_url( starg_get_the_archival_page_template_url( $user_sip['id'] ) ) : '#'; ?>">
+								<?php echo $user_sip['title']; ?>
+							</a> - <?php esc_html_e($user_sip['status'], 'sip'); ?>
+						</td>
+						<td class="has-text-right">
+							<a class="button is-large" href="<?php echo esc_url( add_query_arg( array( 'sipFolder' => $user_sip['sip'], ), $edit_archival_url ) ); ?>">
+								<?php esc_html_e('Edit', 'sip'); ?>
+							</a>
+
+							<?php if ( 'upload' !== $user_sip['status'] ) : ?>
+								<form target="" method="post" class="is-inline-block">
+									<input type="hidden" name="starg_form_name" value="archival_actions_form_<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
+									<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
+									<input type="hidden" name="sipFolder" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
+									<input type="hidden" name="starg_form_suffix" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
+									<?php wp_nonce_field( 'starg_archival_actions_nonce_action', 'starg_archival_actions_nonce_' . $user_sip['sip'], false ); ?>
+									<button class="button is-large is-success" name="submit_archival" type="submit" value="submit">
+										<?php esc_html_e('Submit', 'sip'); ?>
+									</button>
+								</form>
+							<?php endif; ?>
+
+							<form target="" method="post" class="is-inline-block">
+								<input type="hidden" name="starg_form_name" value="archival_actions_form_<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
+								<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
+								<input type="hidden" name="sipFolder" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
+								<input type="hidden" name="starg_form_suffix" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
+								<?php wp_nonce_field( 'starg_archival_actions_nonce_action', 'starg_archival_actions_nonce_' . $user_sip['sip'], false ); ?>
+								<?php // todo: maybe change to a modal? js-alerts are not that fancy! ?>
+								<button class="button is-large is-danger" name="decline_archival" type="submit" value="decline" onclick="return confirm('<?php esc_html_e('Are you sure? All files will be deleted.', 'sip'); ?>')">
+									<?php esc_html_e('Delete', 'sip'); ?>
+								</button>
+							</form>
+
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+		<?php endif; ?>
+
 	</section>
 	<section id="personal-data" class="tab-content" <?php echo ($current_tab !== 'personal-data') ? '  style="display: none"' : ''; ?>>
 		<form class="content" action="" method="post">
