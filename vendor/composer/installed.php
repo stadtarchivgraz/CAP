@@ -1,87 +1,86 @@
-<?php return array (
-  'root' => 
-  array (
-    'pretty_version' => 'dev-master',
-    'version' => 'dev-master',
-    'aliases' => 
-    array (
+<?php return array(
+    'root' => array(
+        'name' => '__root__',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '48202bf7d5077f10d45b29a3579c4c18c47c84bb',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => true,
     ),
-    'reference' => '31f5bd7a0287291d4c68f6431ddc0dae992c93e3',
-    'name' => '__root__',
-  ),
-  'versions' => 
-  array (
-    '__root__' => 
-    array (
-      'pretty_version' => 'dev-master',
-      'version' => 'dev-master',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '31f5bd7a0287291d4c68f6431ddc0dae992c93e3',
+    'versions' => array(
+        '__root__' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '48202bf7d5077f10d45b29a3579c4c18c47c84bb',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'appwrite/php-clamav' => array(
+            'pretty_version' => '2.0.0',
+            'version' => '2.0.0.0',
+            'reference' => 'f3897169f5c1f365312238a516ae9465f804634f',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../appwrite/php-clamav',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'enyo/dropzone' => array(
+            'pretty_version' => 'v5.9.3',
+            'version' => '5.9.3.0',
+            'reference' => '286b2dc1f1195bd12169e4c9d5f91cfbe46e245f',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../enyo/dropzone',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'htmlburger/carbon-fields' => array(
+            'pretty_version' => 'v3.6.9',
+            'version' => '3.6.9.0',
+            'reference' => 'f82e80e3e3469d6e86cc17a8950b918ad448a059',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../htmlburger/carbon-fields',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'james-heinrich/getid3' => array(
+            'pretty_version' => 'v1.9.23',
+            'version' => '1.9.23.0',
+            'reference' => '06c7482532ff2b3f9111b011d880ca6699c8542b',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../james-heinrich/getid3',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'spatie/pdf-to-image' => array(
+            'pretty_version' => '2.3.0',
+            'version' => '2.3.0.0',
+            'reference' => '7c68cc95c0a5e63d712b705ff55459071c2a7b54',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../spatie/pdf-to-image',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'spipu/html2pdf' => array(
+            'pretty_version' => 'v5.3.3',
+            'version' => '5.3.3.0',
+            'reference' => '98416dd8eadd3b966f41430b841d3e4dd6eadc6f',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../spipu/html2pdf',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'tecnickcom/tcpdf' => array(
+            'pretty_version' => '6.10.0',
+            'version' => '6.10.0.0',
+            'reference' => 'ca5b6de294512145db96bcbc94e61696599c391d',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../tecnickcom/tcpdf',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
     ),
-    'appwrite/php-clamav' => 
-    array (
-      'pretty_version' => '2.0.0',
-      'version' => '2.0.0.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => 'f3897169f5c1f365312238a516ae9465f804634f',
-    ),
-    'enyo/dropzone' => 
-    array (
-      'pretty_version' => 'v5.9.3',
-      'version' => '5.9.3.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '286b2dc1f1195bd12169e4c9d5f91cfbe46e245f',
-    ),
-    'htmlburger/carbon-fields' => 
-    array (
-      'pretty_version' => 'v3.6.5',
-      'version' => '3.6.5.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => 'b18f8e2a2cc4cc976306eb867ad1d740a8e7c1d9',
-    ),
-    'james-heinrich/getid3' => 
-    array (
-      'pretty_version' => 'v1.9.23',
-      'version' => '1.9.23.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '06c7482532ff2b3f9111b011d880ca6699c8542b',
-    ),
-    'spatie/pdf-to-image' => 
-    array (
-      'pretty_version' => '2.3.0',
-      'version' => '2.3.0.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '7c68cc95c0a5e63d712b705ff55459071c2a7b54',
-    ),
-    'spipu/html2pdf' => 
-    array (
-      'pretty_version' => 'v5.3.1',
-      'version' => '5.3.1.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => 'f93e8189b8852f18f55c16b9f143a418eefa5194',
-    ),
-    'tecnickcom/tcpdf' => 
-    array (
-      'pretty_version' => '6.8.2',
-      'version' => '6.8.2.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => 'f7a781073e1645062f163e058139e2f89355d420',
-    ),
-  ),
 );
