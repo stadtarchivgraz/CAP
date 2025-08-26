@@ -113,13 +113,17 @@ abstract class Form_Validation {
 	 * @return void
 	 */
 	protected function set_error_log_message( string $error_log_msg = '' ) : void {
+		$logging = apply_filters( 'starg/logging', null );
+		if ( ! $logging instanceof Starg_Logging || ! $logging->error_logging_enabled ) { return; }
+	
 		if ( $this->error_log_msg ) {
-			$this->error_log_msg .= '<br>' . $error_log_msg;
-			error_log( $this->error_log_msg );
+			$this->error_log_msg .= '\n' . $error_log_msg;
+			$logging->create_log_entry( $this->error_log_msg );
 			return;
 		}
+
 		$this->error_log_msg = $error_log_msg;
-		error_log( $this->error_log_msg );
+		$logging->create_log_entry( $error_log_msg );
 	}
 
 	/**

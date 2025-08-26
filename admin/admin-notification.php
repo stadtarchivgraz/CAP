@@ -68,8 +68,12 @@ class Starg_Admin_Notification {
 			try {
 				$clamav     = new Network( esc_attr( carbon_get_theme_option( 'sip_clamav_host' ) ), (int) esc_attr( carbon_get_theme_option( 'sip_clamav_port' ) ) );
 				$clamav_rdy = $clamav->ping();
-			} catch( Exception $e ) {
-				error_log( $e->getMessage() );
+			} catch( Exception $exception ) {
+				// todo: reactivate logging.
+				// $logging = apply_filters( 'starg/logging', null );
+				// if ( $logging instanceof Starg_Logging ) {
+				// 	$logging->create_log_entry( $exception->getMessage() );
+				// }
 			}
 
 			if ( ! $clamav_rdy ) {
@@ -90,7 +94,7 @@ class Starg_Admin_Notification {
 		if ( ! $notice_msg ) { return; }
 		?>
 		<div class="notice notice-warning">
-			<h2><?php echo STARG_SIP_PLUGIN_NAME; ?></h2>
+			<h3><?php echo STARG_SIP_PLUGIN_NAME; ?></h3>
 			<?php foreach( $notice_msg as $single_msg ) : ?>
 				<p><?php echo wp_kses_post( $single_msg ); ?></p>
 			<?php endforeach; ?>

@@ -56,5 +56,33 @@ class Starg_Services {
 				return $create_sip_pdf;
 			});
 		});
+
+		// For admin pages, we want to register this service on admin_init, as the wp hook only triggers when opening a post or page in the backend.
+		if ( is_admin() ) {
+			/**
+			 * Registers a class as service for logging events.
+			 * Intended to be anonymous.
+			 */
+			add_action( 'admin_init', function() {
+				require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/logging.class.php' );
+				$logging = new Starg_Logging;
+				add_filter( 'starg/logging', function() use ( $logging ) {
+					return $logging;
+				});
+			});
+		} else {
+			/**
+			 * Registers a class as service for logging events.
+			 * Intended to be anonymous.
+			 */
+			add_action( 'wp', function() {
+				require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/logging.class.php' );
+				$logging = new Starg_Logging;
+				add_filter( 'starg/logging', function() use ( $logging ) {
+					return $logging;
+				});
+			});
+		}
+		
 	}
 }

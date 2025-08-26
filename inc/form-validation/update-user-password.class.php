@@ -23,7 +23,9 @@ class Starg_Update_User_Password extends Form_Validation {
 
 		$user = wp_get_current_user();
 		if ( $user->ID !== (int) $user_input['ID'] ) {
-			$this->set_error_message( __( 'We encountered a problem updating your password. Please try again.', 'sip' ) );
+			$this->set_error_message( esc_attr__( 'We encountered a problem updating your password. Please try again.', 'sip' ) );
+			// translators: %1$s, %2$s: User ID.
+			$this->set_error_log_message( sprintf( esc_attr( 'The user with the ID %1$s has tried to change the password for the user with the ID %2$s.', 'sip' ), $user->ID, $user_input['ID'] ) );
 			$this->display_notification();
 			return false;
 		}
@@ -44,7 +46,7 @@ class Starg_Update_User_Password extends Form_Validation {
 			));
 
 			if ( is_wp_error( $user_updated ) ) {
-				error_log( $user_updated->get_error_message() );
+				$this->set_error_log_message( $user_updated->get_error_message() );
 				return esc_html__( 'We encountered a problem updating your password. Please try again.', 'sip' );
 			}
 		}

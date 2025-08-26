@@ -5,10 +5,17 @@
  * @return false|string
  */
 function starg_get_sip_form( string $form ) {
-	if ( ! $form || ! file_exists( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/forms/' . $form ) ) { return false; }
+	if ( ! $form || ! file_exists( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/forms/' . $form ) ) {
+		$logging = apply_filters( 'starg/logging', null );
+		if ( $logging instanceof Starg_Logging ) {
+			// translators: %s: Name of the required form template.
+			$logging->create_log_entry( sprintf( esc_attr__( 'The form %s does not exist', 'sip' ), esc_attr( $form ) ) );
+		}
+		return false;
+	}
 
 	ob_start();
-	require STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/forms/' . $form;
+	require STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/forms/' . esc_attr( $form );
 	return ob_get_clean();
 }
 
@@ -20,7 +27,10 @@ function starg_get_sip_form( string $form ) {
  */
 function starg_create_thumbnail($file, $thumbnail_folder): void {
 	if ( ! extension_loaded( 'imagick' ) ) {
-		error_log( 'Imagick-Extension not loaded.' );
+		$logging = apply_filters( 'starg/logging', null );
+		if ( $logging instanceof Starg_Logging ) {
+			$logging->create_log_entry( esc_html__( 'Imagick-Extension not loaded.', 'sip' ) );
+		}
 		return;
 	}
 
@@ -71,7 +81,11 @@ function starg_create_pdf_thumbnail( $file, $thumbnail_folder ) : bool {
 		$file_written = $pdf->saveImage( $thumbnail_folder . basename( $file ) . '.jpg' );
 		return ( $file_written ) ? true : false;
 	} catch ( Exception $e ) {
-		error_log( sprintf( 'Error while creating a thumbnail for a PDF. See: %s', $e->getMessage() ) );
+		$logging = apply_filters( 'starg/logging', null );
+		if ( $logging instanceof Starg_Logging ) {
+			// translators: %s: Error message.
+			$logging->create_log_entry( sprintf( esc_attr__( 'Error while creating a thumbnail for a PDF. See: %s', 'sip' ), $e->getMessage() ) );
+		}
 		return false;
 	}
 }
@@ -268,7 +282,11 @@ function starg_remove_SIP(string $dir) : bool {
 		return true;
 	} catch ( UnexpectedValueException $e ) {
 		// translators: %1$s: Directory of the archival record in question. %2$s: Error message.
-		error_log( sprintf( esc_html__( 'sip %1$s was not removed! Error message: %2$s', 'sip' ), $dir, $e->getMessage() ) );
+		$error_log_msg = sprintf( esc_html__( 'sip %1$s was not removed! Error message: %2$s', 'sip' ), $dir, $e->getMessage() );
+		$logging       = apply_filters( 'starg/logging', null );
+		if ( $logging instanceof Starg_Logging ) {
+			$logging->create_log_entry( $error_log_msg );
+		}
 		return false;
 	}
 }
@@ -330,7 +348,10 @@ function starg_get_the_edit_archival_page_url() : string {
 		'number'       => 1,
 	));
 	if ( ! $pages || ! get_the_permalink( $pages[0] ) ) {
-		error_log( esc_html__( 'No Page with the Page-Template sip-upload found.', 'sip' ) );
+		$logging       = apply_filters( 'starg/logging', null );
+		if ( $logging instanceof Starg_Logging ) {
+			$logging->create_log_entry( esc_html__( 'No page associated with page-template sip-upload found.', 'sip' ) );
+		}
 		return get_home_url();
 	}
 
@@ -353,7 +374,10 @@ function starg_get_the_archival_page_template_url( $archival_id = 0 ) : string {
 		'number'       => 1,
 	));
 	if ( ! $pages || ! get_the_permalink( $pages[0] ) ) {
-		error_log( esc_html__( 'No Page with the Page-Template sip-archival found.', 'sip' ) );
+		$logging = apply_filters( 'starg/logging', null );
+		if ( $logging instanceof Starg_Logging ) {
+			$logging->create_log_entry( esc_html__( 'No page associated with page-template sip-archival found.', 'sip' ) );
+		}
 		return get_home_url();
 	}
 
@@ -377,7 +401,10 @@ function starg_get_the_profile_page_template_url() : string {
 		'number'       => 1,
 	));
 	if ( ! $pages || ! get_the_permalink( $pages[0] ) ) {
-		error_log( esc_html__( 'No Page with the Page-Template sip-profile found.', 'sip' ) );
+		$logging = apply_filters( 'starg/logging', null );
+		if ( $logging instanceof Starg_Logging ) {
+			$logging->create_log_entry( esc_html__( 'No page associated with page-template sip-profile found.', 'sip' ) );
+		}
 		return get_home_url();
 	}
 

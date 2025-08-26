@@ -34,8 +34,11 @@ if ( $sip_clamav ) {
 $clam_rdy = false;
 try {
 	$clam_rdy = $clam->ping();
-} catch( Exception $e ) {
-	error_log( $e->getMessage() );
+} catch( Exception $exception ) {
+	$logging = apply_filters( 'starg/logging', null );
+	if ( $logging instanceof Starg_Logging ) {
+		$logging->create_log_entry( $exception->getMessage() );
+	}
 }
 
 $sip_folder       = esc_attr( carbon_get_theme_option( 'sip_upload_path' ) ) . sanitize_text_field( $_POST['sipUserID'] ) . '/' . sanitize_text_field( $_POST['sipFolder'] ) . '/';

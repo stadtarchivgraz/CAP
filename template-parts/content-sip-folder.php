@@ -46,7 +46,10 @@ try {
 } catch ( Exception $exception ) {
 	// translators: %1$s: ID/Name of the folder where the sip is stored. %2$d: User-ID.
 	echo starg_get_notification_message( sprintf( esc_html__( 'The folder "%1$s" for user "%2$d" is empty.', 'sip' ), $sip, $author_id ), 'is-warning is-light' );
-	error_log( $exception->getMessage() );
+	$logging = apply_filters( 'starg/logging', null );
+	if ( $logging instanceof Starg_Logging ) {
+		$logging->create_log_entry( $exception->getMessage() );
+	}
 	return;
 }
 
