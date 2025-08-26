@@ -156,6 +156,12 @@ Class Starg_Security_Settings {
 			case 'multiselect':
 				$sanitized_value = starg_sanitize_array( $user_input );
 				break;
+
+			// subject to change! At the moment we only allow <style> tags. A <script> tag will be removed!
+			case 'header_scripts':
+			case 'footer_scripts':
+				$sanitized_value = wp_kses( $user_input, array( 'style' => array(), ) );
+				break;
 		}
 
 		$field->set_value( $sanitized_value );

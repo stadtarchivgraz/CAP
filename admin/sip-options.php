@@ -52,10 +52,12 @@ video/mp4';
 			array(
 				Field::make('separator', 'sip_archive', 'Archive'),
 				Field::make('select', 'sip_archive_role', esc_html__('Role', 'sip'))
-					->add_options($roles_capability),
+					->add_options($roles_capability)
+					->set_help_text( esc_html__( 'This role or higher is required to approve or reject submitted archival records.', 'sip' ) ),
 				Field::make('separator', 'sip_upload', 'Upload'),
 				Field::make('text', 'sip_upload_path', esc_html__('Archival Upload Path', 'sip'))
-					->set_default_value($default_path),
+					->set_default_value($default_path)
+					->set_help_text( esc_html__( 'Specify the folder where the digital archival records should be stored. By default, all files are saved in the /wp-content/uploads/archival/ directory.', 'sip' ) ),
 				Field::make('text', 'sip_max_size', esc_html__('Max SIP Size in Bytes', 'sip'))
 					->set_default_value('50000000')
 					->set_width(25),
@@ -101,12 +103,12 @@ video/mp4';
 						)
 					))
 					->add_options(array(
-						'upload' => esc_html__('Uploads'),
-						'draft' => esc_html__('Draft'),
-						'pending' => esc_html__('Pending'),
-						'publish' => esc_html__('Published'),
+						'upload'  => esc_html__( 'Uploads', 'sip' ),
+						'draft'   => esc_html__( 'Draft', 'sip' ),
+						'pending' => esc_html__( 'Pending', 'sip' ),
+						'publish' => esc_html__( 'Published', 'sip' ),
 					))
-					->set_default_value('3310')
+					->set_default_value('upload')
 					->set_width(50),
 				Field::make('separator', 'sip_map_options', esc_html__('Map', 'sip')),
 				Field::make('text', 'sip_map_google_api_key', esc_html__('Google API Key for reverse Geocoding', 'sip')),
@@ -125,6 +127,8 @@ video/mp4';
 					->set_width(33),
 				Field::make('separator', 'sip_style_options', 'Style'),
 				Field::make('header_scripts', 'sip_custom_style', esc_html__('Custom CSS', 'sip'))
+					// translators: %1$s: placeholder for the <style> tag. %2$s: placeholder for the <script> tag.
+					->set_help_text( sprintf( esc_html__( 'Add custom CSS, including the %1$s start and end tags. %2$s tags get removed.', 'sip' ), '&lt;style&gt;', '&lt;script&gt;' ) ),
 			)
 		)
 		->add_tab(esc_html__('Information Texts', 'sip'), $login_fields);
