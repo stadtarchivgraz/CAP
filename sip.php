@@ -3,7 +3,7 @@
  Plugin Name: SIP
  Description: Plugin for creating Submission Information Packages (SIPs) from archival records. The archival records are provided by users. The archivist can choose whether to create a SIP or reject it.
  Author: Stadtarchiv Graz, Guido Handrick
- Version: 3.1.0
+ Version: 3.1.1
  Author URI: http://guido-handrick.info
  Text Domain: sip
  Domain Path: /languages/
