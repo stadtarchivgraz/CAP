@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the SIP plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: SIP 3.0.2\n"
+"Project-Id-Version: SIP 3.1.1\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-08-19T14:32:00+00:00\n"
+"POT-Creation-Date: 2025-08-28T14:19:17+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: sip\n"
@@ -76,12 +76,12 @@ msgstr ""
 msgid "%s To communicate with ClamAV, you need to enable the sockets extension in PHP."
 msgstr ""
 
-#: admin/admin-notification.php:77
+#: admin/admin-notification.php:81
 msgid "Check your configuration."
 msgstr ""
 
 #. translators: %1$s: Notification level like "Error", "Warning", "Note". %2$s: Link to the settings page for clamAV Host/Port.
-#: admin/admin-notification.php:79
+#: admin/admin-notification.php:83
 #, php-format
 msgid "%1$s There is an error in your configuration for ClamAV. We can not connect to ClamAV server. %2$s."
 msgstr ""
@@ -110,7 +110,7 @@ msgid "Creation Place"
 msgstr ""
 
 #: admin/sip-meta.php:55
-#: template-parts/forms/profileform.php:290
+#: template-parts/forms/profileform.php:280
 msgid "Address"
 msgstr ""
 
@@ -225,136 +225,166 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
-#: admin/sip-options.php:57
+#: admin/sip-options.php:56
+msgid "This role or higher is required to approve or reject submitted archival records."
+msgstr ""
+
+#: admin/sip-options.php:58
 msgid "Archival Upload Path"
 msgstr ""
 
-#: admin/sip-options.php:59
+#: admin/sip-options.php:60
+msgid "Specify the folder where the digital archival records should be stored. By default, all files are saved in the /wp-content/uploads/archival/ directory."
+msgstr ""
+
+#: admin/sip-options.php:61
 msgid "Max SIP Size in Bytes"
 msgstr ""
 
-#: admin/sip-options.php:62
+#: admin/sip-options.php:64
 msgid "Supported file MIME Types"
 msgstr ""
 
-#: admin/sip-options.php:64
+#: admin/sip-options.php:66
 msgid "Virus Check with ClamAV"
 msgstr ""
 
-#: admin/sip-options.php:83
+#: admin/sip-options.php:85
 msgid "Automatically delete uploaded files"
 msgstr ""
 
-#: admin/sip-options.php:84
+#: admin/sip-options.php:86
 msgid "older than days"
 msgstr ""
 
-#: admin/sip-options.php:96
+#: admin/sip-options.php:98
 msgid "Archival Status"
 msgstr ""
 
-#: admin/sip-options.php:111
-msgid "Map"
+#: admin/sip-options.php:106
+msgid "Uploads"
 msgstr ""
 
-#: admin/sip-options.php:112
-msgid "Google API Key for reverse Geocoding"
+#: admin/sip-options.php:107
+msgid "Draft"
+msgstr ""
+
+#: admin/sip-options.php:108
+msgid "Pending"
+msgstr ""
+
+#: admin/sip-options.php:109
+msgid "Published"
 msgstr ""
 
 #: admin/sip-options.php:113
+msgid "Map"
+msgstr ""
+
+#: admin/sip-options.php:114
+msgid "Google API Key for reverse Geocoding"
+msgstr ""
+
+#: admin/sip-options.php:115
 msgid "Default Lat"
 msgstr ""
 
-#: admin/sip-options.php:116
+#: admin/sip-options.php:118
 msgid "Default Lng"
 msgstr ""
 
-#: admin/sip-options.php:119
+#: admin/sip-options.php:121
 msgid "Default zoom"
 msgstr ""
 
-#: admin/sip-options.php:127
+#: admin/sip-options.php:129
 msgid "Custom CSS"
 msgstr ""
 
-#: admin/sip-options.php:130
+#. translators: %1$s: placeholder for the <style> tag. %2$s: placeholder for the <script> tag.
+#: admin/sip-options.php:131
+#, php-format
+msgid "Add custom CSS, including the %1$s start and end tags. %2$s tags get removed."
+msgstr ""
+
+#: admin/sip-options.php:134
 msgid "Information Texts"
 msgstr ""
 
-#: admin/sip-options.php:146
-#: admin/sip-options.php:149
+#: admin/sip-options.php:150
+#: admin/sip-options.php:153
 msgid "Name"
 msgstr ""
 
-#: admin/sip-options.php:155
+#: admin/sip-options.php:159
 msgid "Upload Purpose Options"
 msgstr ""
 
-#: admin/sip-options.php:157
+#: admin/sip-options.php:161
 msgid "Blocking Time Options"
 msgstr ""
 
-#: admin/sip-options.php:159
+#: admin/sip-options.php:163
 msgid "Blocking Time Upload Purpose"
 msgstr ""
 
-#: admin/sip-options.php:160
+#: admin/sip-options.php:164
 msgid "Blocking Time Calculate"
 msgstr ""
 
-#: admin/sip-options.php:161
+#: admin/sip-options.php:165
 msgid "Right Transfer Text"
 msgstr ""
 
-#: admin/sip-options.php:163
-#: admin/sip-options.php:165
+#: admin/sip-options.php:167
+#: admin/sip-options.php:169
 #: template-parts/content-sip-form.php:59
 msgid "Title"
 msgstr ""
 
-#: admin/sip-options.php:168
-#: admin/sip-options.php:174
+#: admin/sip-options.php:172
+#: admin/sip-options.php:178
 msgid "Type"
 msgstr ""
 
-#: admin/sip-options.php:180
-#: admin/sip-options.php:190
+#: admin/sip-options.php:184
+#: admin/sip-options.php:194
 msgid "Custom Meta Data"
 msgstr ""
 
-#: admin/sip-options.php:184
+#: admin/sip-options.php:188
 msgid "Form fields"
 msgstr ""
 
-#: admin/sip-options.php:186
+#: admin/sip-options.php:190
 msgid "Users"
 msgstr ""
 
-#: admin/sip-options.php:188
+#: admin/sip-options.php:192
 msgid "Archival Users"
 msgstr ""
 
-#: admin/sip-options.php:203
+#: admin/sip-options.php:207
 msgid "Term Options"
 msgstr ""
 
-#: admin/sip-options.php:206
+#: admin/sip-options.php:210
 msgid "Institution Name abbreviation"
 msgstr ""
 
-#: admin/sip-options.php:208
+#: admin/sip-options.php:212
 msgid "Used to generate the SIP name."
 msgstr ""
 
-#: admin/sip-options.php:209
+#: admin/sip-options.php:213
 msgid "SIP Referenz"
 msgstr ""
 
-#: admin/sip-options.php:210
+#: admin/sip-options.php:214
 msgid "If empty - the originator's (user's) login will be used."
 msgstr ""
 
-#: admin/sip-options.php:211
+#: admin/sip-options.php:215
 msgid "Institution Logo"
 msgstr ""
 
@@ -505,8 +535,8 @@ msgstr ""
 #: inc/archival-cpt.php:131
 #: inc/sip-template-functions.php:49
 #: template-parts/forms/filterform.php:91
-#: template-parts/forms/profileform.php:176
-#: template-parts/forms/profileform.php:205
+#: template-parts/forms/profileform.php:163
+#: template-parts/forms/profileform.php:195
 msgid "Archive"
 msgstr ""
 
@@ -605,6 +635,7 @@ msgid "Numeration"
 msgstr ""
 
 #: inc/archival-cpt.php:331
+#: inc/form-validation/sip-archival-upload.class.php:102
 msgid "deleted"
 msgstr ""
 
@@ -717,6 +748,53 @@ msgstr ""
 msgid "Archival record submitted."
 msgstr ""
 
+#: inc/form-validation/sip-archival-remove.class.php:21
+msgid "Wrong user input while removing an uploaded archival record"
+msgstr ""
+
+#: inc/form-validation/sip-archival-remove.class.php:40
+msgid "Trying to delete a file that does not exist."
+msgstr ""
+
+#. translators: %s: Name of an uploaded file.
+#: inc/form-validation/sip-archival-remove.class.php:64
+#, php-format
+msgid "File %s not deleted"
+msgstr ""
+
+#. translators: %1$s: Name of the uploaded file. %2$s: the name of the sip folder. %3$s: User ID
+#: inc/form-validation/sip-archival-remove.class.php:104
+#: inc/form-validation/sip-archival-remove.class.php:111
+#, php-format
+msgid "Problems updating the csv for upload %1$s in sip folder %2$s from user id %3$d."
+msgstr ""
+
+#. translators: %d: Current user id.
+#: inc/form-validation/sip-archival-upload.class.php:25
+#, php-format
+msgid "Wrong user input while uploading an archival record from user %d."
+msgstr ""
+
+#: inc/form-validation/sip-archival-upload.class.php:102
+msgid "not deleted"
+msgstr ""
+
+#. translators: %1$d: User Id. %2$s: Filename. %3$s: either "deleted" or "not deleted".
+#: inc/form-validation/sip-archival-upload.class.php:106
+#, php-format
+msgid "Infected file uploaded by %1$d in %2$s. File %3$s."
+msgstr ""
+
+#: inc/form-validation/sip-archival-upload.class.php:136
+msgid "clamav is not ready/responding"
+msgstr ""
+
+#. translators: %1$s: File path. %2$d: User ID.
+#: inc/form-validation/sip-archival-upload.class.php:144
+#, php-format
+msgid "Uploaded File %1$s from user id %2$d is infected"
+msgstr ""
+
 #: inc/form-validation/sip-upload-form-validation.class.php:141
 msgid "We encountered a problem creating/updating your entry."
 msgstr ""
@@ -728,31 +806,31 @@ msgid "Entry %s successfully created/updated."
 msgstr ""
 
 #: inc/form-validation/update-user-password.class.php:26
-#: inc/form-validation/update-user-password.class.php:48
+#: inc/form-validation/update-user-password.class.php:50
 msgid "We encountered a problem updating your password. Please try again."
 msgstr ""
 
-#: inc/form-validation/update-user-password.class.php:33
+#: inc/form-validation/update-user-password.class.php:35
 msgid "Enter your old password."
 msgstr ""
 
-#: inc/form-validation/update-user-password.class.php:35
+#: inc/form-validation/update-user-password.class.php:37
 msgid "The old password is incorrect."
 msgstr ""
 
-#: inc/form-validation/update-user-password.class.php:37
+#: inc/form-validation/update-user-password.class.php:39
 msgid "The new password is too short."
 msgstr ""
 
-#: inc/form-validation/update-user-password.class.php:39
+#: inc/form-validation/update-user-password.class.php:41
 msgid "The repeated password does not match the new one."
 msgstr ""
 
-#: inc/form-validation/update-user-password.class.php:53
+#: inc/form-validation/update-user-password.class.php:55
 msgid "The password could not be changed. See the error message in the form."
 msgstr ""
 
-#: inc/form-validation/update-user-password.class.php:58
+#: inc/form-validation/update-user-password.class.php:60
 msgid "Your password was changed successfully. You may have to log in again."
 msgstr ""
 
@@ -764,22 +842,56 @@ msgstr ""
 msgid "Your personal information has been successfully updated."
 msgstr ""
 
+#. translators: %s: Path to the folder for the plugins log files.
+#: inc/logging.class.php:30
+#, php-format
+msgid "Error log was not created: no write permission for log folder %s"
+msgstr ""
+
+#: inc/logging.class.php:55
+msgid "htaccess for log folder was not created."
+msgstr ""
+
+#: inc/logging.class.php:72
+msgid "Error log was not created."
+msgstr ""
+
+#: inc/logging.class.php:119
+msgid "Unknown browser"
+msgstr ""
+
+#. translators: %s: Name of the required form template.
+#: inc/sip-functions.php:12
+#, php-format
+msgid "The form %s does not exist"
+msgstr ""
+
+#: inc/sip-functions.php:32
+msgid "Imagick-Extension not loaded."
+msgstr ""
+
+#. translators: %s: Error message.
+#: inc/sip-functions.php:87
+#, php-format
+msgid "Error while creating a thumbnail for a PDF. See: %s"
+msgstr ""
+
 #. translators: %1$s: Directory of the archival record in question. %2$s: Error message.
-#: inc/sip-functions.php:271
+#: inc/sip-functions.php:285
 #, php-format
 msgid "sip %1$s was not removed! Error message: %2$s"
 msgstr ""
 
-#: inc/sip-functions.php:333
-msgid "No Page with the Page-Template sip-upload found."
+#: inc/sip-functions.php:353
+msgid "No page associated with page-template sip-upload found."
 msgstr ""
 
-#: inc/sip-functions.php:356
-msgid "No Page with the Page-Template sip-archival found."
+#: inc/sip-functions.php:379
+msgid "No page associated with page-template sip-archival found."
 msgstr ""
 
-#: inc/sip-functions.php:380
-msgid "No Page with the Page-Template sip-profile found."
+#: inc/sip-functions.php:406
+msgid "No page associated with page-template sip-profile found."
 msgstr ""
 
 #: inc/sip-notifications.php:46
@@ -808,15 +920,15 @@ msgstr ""
 msgid "You are not allowed to view this page!"
 msgstr ""
 
-#: sip.php:242
+#: sip.php:70
 msgid "draft"
 msgstr ""
 
-#: sip.php:243
+#: sip.php:71
 msgid "pending"
 msgstr ""
 
-#: sip.php:244
+#: sip.php:72
 msgid "publish"
 msgstr ""
 
@@ -845,7 +957,6 @@ msgid "Decline"
 msgstr ""
 
 #: template-parts/content-archival.php:148
-#: template-parts/forms/profileform.php:146
 msgid "Submit"
 msgstr ""
 
@@ -966,7 +1077,7 @@ msgid "Drafts"
 msgstr ""
 
 #: template-parts/forms/profileform.php:36
-#: template-parts/forms/profileform.php:236
+#: template-parts/forms/profileform.php:226
 msgid "Personal account"
 msgstr ""
 
@@ -988,124 +1099,135 @@ msgstr ""
 msgid "You have not uploaded any files yet. Please upload your files %s."
 msgstr ""
 
-#: template-parts/forms/profileform.php:158
+#: template-parts/forms/profileform.php:145
 msgid "Are you sure? All files will be deleted."
 msgstr ""
 
-#: template-parts/forms/profileform.php:159
+#: template-parts/forms/profileform.php:146
 msgid "Delete"
 msgstr ""
 
-#: template-parts/forms/profileform.php:179
+#: template-parts/forms/profileform.php:166
 msgid "Log in"
 msgstr ""
 
-#: template-parts/forms/profileform.php:191
+#: template-parts/forms/profileform.php:178
 msgid "Public name"
 msgstr ""
 
 #. translators: Format for full name of an user. %1$s: first name. %2$s: last name.
-#: template-parts/forms/profileform.php:197
+#: template-parts/forms/profileform.php:185
 #, php-format
 msgctxt "Format for full name of an user. %1$s is first name, %2$s is last name. Rearrange if necessary."
 msgid "%1$s %2$s"
 msgstr ""
 
-#. translators: Format for full name of an user. %1$s: first name. %2$s: last name.
-#: template-parts/forms/profileform.php:197
+#: template-parts/forms/profileform.php:187
 msgid "Will be generated from your name"
 msgstr ""
 
-#: template-parts/forms/profileform.php:230
+#: template-parts/forms/profileform.php:220
 msgid "This selection cannot be changed"
 msgstr ""
 
-#: template-parts/forms/profileform.php:240
-#: template-parts/forms/profileform.php:245
+#: template-parts/forms/profileform.php:230
+#: template-parts/forms/profileform.php:235
 msgid "First name"
 msgstr ""
 
-#: template-parts/forms/profileform.php:252
-#: template-parts/forms/profileform.php:257
+#: template-parts/forms/profileform.php:242
+#: template-parts/forms/profileform.php:247
 msgid "Surname"
 msgstr ""
 
-#: template-parts/forms/profileform.php:264
+#: template-parts/forms/profileform.php:254
 msgid "Email address"
 msgstr ""
 
-#: template-parts/forms/profileform.php:276
+#: template-parts/forms/profileform.php:266
 msgid "Date of birth"
 msgstr ""
 
-#: template-parts/forms/profileform.php:283
+#: template-parts/forms/profileform.php:273
 msgid "You must be at least 18 years old"
 msgstr ""
 
-#: template-parts/forms/profileform.php:295
+#: template-parts/forms/profileform.php:285
 msgid "Street and Number"
 msgstr ""
 
-#: template-parts/forms/profileform.php:305
+#: template-parts/forms/profileform.php:295
 msgid "ZIP Code"
 msgstr ""
 
-#: template-parts/forms/profileform.php:310
+#: template-parts/forms/profileform.php:300
 msgid "City"
 msgstr ""
 
-#: template-parts/forms/profileform.php:328
+#: template-parts/forms/profileform.php:318
 msgid "Save"
 msgstr ""
 
-#: template-parts/forms/profileform.php:338
-#: template-parts/forms/profileform.php:386
+#: template-parts/forms/profileform.php:328
+#: template-parts/forms/profileform.php:376
 msgid "Change password"
 msgstr ""
 
-#: template-parts/forms/profileform.php:341
+#: template-parts/forms/profileform.php:331
 msgid "Old"
 msgstr ""
 
-#: template-parts/forms/profileform.php:353
+#: template-parts/forms/profileform.php:343
 msgid "New"
 msgstr ""
 
-#: template-parts/forms/profileform.php:361
+#: template-parts/forms/profileform.php:351
 msgid "Strength of password"
 msgstr ""
 
-#: template-parts/forms/profileform.php:362
+#: template-parts/forms/profileform.php:352
 msgid "Tip: Your password should be at least twelve characters long. For a stronger password, use upper and lower case letters, numbers and special characters such as !’?$%^&)."
 msgstr ""
 
-#: template-parts/forms/profileform.php:369
+#: template-parts/forms/profileform.php:359
 msgid "Repeat"
 msgstr ""
 
-#: template-parts/forms/uploadform.php:9
+#: template-parts/forms/uploadform.php:20
+msgid "Problems loading the Class \"Sip_Archival_Remove\"."
+msgstr ""
+
+#: template-parts/forms/uploadform.php:29
 msgid "Drag and drop the files here to upload"
 msgstr ""
 
 #. translators: %s: Maximum supported filesize for uploads - for example: "42MB".
-#: template-parts/forms/uploadform.php:51
-#: template-parts/forms/uploadform.php:84
+#: template-parts/forms/uploadform.php:88
+#: template-parts/forms/uploadform.php:125
 #, php-format
 msgid "The maximum size of %s for the SIP has been exceeded. Files need to be removed."
 msgstr ""
 
-#: template-parts/forms/uploadform.php:67
+#: template-parts/forms/uploadform.php:98
+msgid "We are facing problems parsing the JSON response while attempting to delete an uploaded file."
+msgstr ""
+
+#: template-parts/forms/uploadform.php:108
 msgid "Virus detected in:"
 msgstr ""
 
-#: template-parts/forms/uploadform.php:71
+#: template-parts/forms/uploadform.php:112
 msgid "Unsupported file type:"
 msgstr ""
 
-#: template-parts/forms/uploadform.php:75
+#: template-parts/forms/uploadform.php:116
 msgid "Further uploads are not possible. Files must be deleted first."
 msgstr ""
 
-#: template-parts/forms/uploadform.php:110
+#: template-parts/forms/uploadform.php:148
+msgid "Problems loading the Class \"Sip_Archival_Upload\"."
+msgstr ""
+
+#: template-parts/forms/uploadform.php:168
 msgid "Complete upload and insert metadata"
 msgstr ""

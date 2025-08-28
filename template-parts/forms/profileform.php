@@ -135,19 +135,6 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 								<?php esc_html_e('Edit', 'sip'); ?>
 							</a>
 
-							<?php if ( 'upload' !== $user_sip['status'] ) : ?>
-								<form target="" method="post" class="is-inline-block">
-									<input type="hidden" name="starg_form_name" value="archival_actions_form_<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
-									<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
-									<input type="hidden" name="sipFolder" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
-									<input type="hidden" name="starg_form_suffix" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
-									<?php wp_nonce_field( 'starg_archival_actions_nonce_action', 'starg_archival_actions_nonce_' . $user_sip['sip'], false ); ?>
-									<button class="button is-large is-success" name="submit_archival" type="submit" value="submit">
-										<?php esc_html_e('Submit', 'sip'); ?>
-									</button>
-								</form>
-							<?php endif; ?>
-
 							<form target="" method="post" class="is-inline-block">
 								<input type="hidden" name="starg_form_name" value="archival_actions_form_<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
 								<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
@@ -193,8 +180,11 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<?php // translators: Format for full name of an user. %1$s: first name. %2$s: last name. ?>
-							<input id="display-name" class="input is-static" name="display_name" type="text" value="<?php echo ( $user->first_name && $user->last_name ) ? sprintf( esc_attr_x( '%1$s %2$s', 'Format for full name of an user. %1$s is first name, %2$s is last name. Rearrange if necessary.', 'sip' ), $user->first_name, $user->last_name ) : ''; ?>" aria-readonly="true" readonly placeholder="<?php esc_attr_e( 'Will be generated from your name', 'sip' ); ?>">
+							<?php
+							// translators: Format for full name of an user. %1$s: first name. %2$s: last name.
+							$display_name = ( $user->first_name && $user->last_name ) ? sprintf( esc_attr_x( '%1$s %2$s', 'Format for full name of an user. %1$s is first name, %2$s is last name. Rearrange if necessary.', 'sip' ), $user->first_name, $user->last_name ) : '';
+							?>
+							<input id="display-name" class="input is-static" name="display_name" type="text" value="<?php echo $display_name; ?>" aria-readonly="true" readonly placeholder="<?php esc_attr_e( 'Will be generated from your name', 'sip' ); ?>">
 						</p>
 					</div>
 				</div>
