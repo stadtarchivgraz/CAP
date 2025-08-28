@@ -57,32 +57,49 @@ class Starg_Services {
 			});
 		});
 
-		// For admin pages, we want to register this service on admin_init, as the wp hook only triggers when opening a post or page in the backend.
-		if ( is_admin() ) {
-			/**
-			 * Registers a class as service for logging events.
-			 * Intended to be anonymous.
-			 */
-			add_action( 'admin_init', function() {
-				require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/logging.class.php' );
-				$logging = new Starg_Logging;
-				add_filter( 'starg/logging', function() use ( $logging ) {
-					return $logging;
-				});
+
+		/**
+		 * Registers a class as service for uploading the archival records.
+		 * Intended to be anonymous.
+		 */
+		add_action( 'wp', function() {
+			if ( ! is_page_template( array( 'sip-upload.php', ) ) ) { return; }
+
+			require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/sip-archival-upload.class.php' );
+			$sip_archival_upload = new Sip_Archival_Upload;
+			$sip_archival_upload->process_archival_upload();
+			add_filter( 'starg/sip_archival_upload', function() use ( $sip_archival_upload ) {
+				return $sip_archival_upload;
 			});
-		} else {
-			/**
-			 * Registers a class as service for logging events.
-			 * Intended to be anonymous.
-			 */
-			add_action( 'wp', function() {
-				require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/logging.class.php' );
-				$logging = new Starg_Logging;
-				add_filter( 'starg/logging', function() use ( $logging ) {
-					return $logging;
-				});
+		});
+
+
+		/**
+		 * Registers a class as service for removing an archival record during the upload process.
+		 * Intended to be anonymous.
+		 */
+		add_action( 'wp', function() {
+			if ( ! is_page_template( array( 'sip-upload.php', ) ) ) { return; }
+
+			require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/sip-archival-remove.class.php' );
+			$sip_archival_remove = new Sip_Archival_Remove;
+			$sip_archival_remove->process_archival_remove();
+			add_filter( 'starg/sip_archival_remove', function() use ( $sip_archival_remove ) {
+				return $sip_archival_remove;
 			});
-		}
+		});
+
+		/**
+		 * Registers a class as service for logging events.
+		 * Intended to be anonymous.
+		 */
+		add_action( 'init', function() {
+			require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/logging.class.php' );
+			$logging = new Starg_Logging;
+			add_filter( 'starg/logging', function() use ( $logging ) {
+				return $logging;
+			});
+		});
 		
 	}
 }

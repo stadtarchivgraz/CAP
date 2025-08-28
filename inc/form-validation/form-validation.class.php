@@ -27,6 +27,7 @@ abstract class Form_Validation {
 	 * @return bool true on success, false on failure.
 	 */
 	protected function form_validation() : bool {
+		// todo: maybe add logging for invalid forms?
 		if ( ! defined( 'WPINC' ) ) { return false; } // WordPress must be running to continue!
 		if ( ! is_user_logged_in() ) { return false; } // A valid User must be logged in to continue!
 

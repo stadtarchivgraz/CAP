@@ -60,17 +60,21 @@ class Starg_Logging {
 	 * Initialize the log file.
 	 * It also includes a heading in the first line of the file to clarify what each column means.
 	 */
-	private function create_log_file() {
+	private function create_log_file() : bool {
 		if ( self::is_apache() && ! file_exists( $this->debug_log_destination . '.htaccess' ) ) {
 			$this->protect_log_files();
 		}
 
-		if ( file_exists( $this->debug_log_destination . $this->debug_log_filename ) ) { return; }
+		if ( file_exists( $this->debug_log_destination . $this->debug_log_filename ) ) { return true; }
 
 		$log_created = file_put_contents( $this->debug_log_destination . $this->debug_log_filename, 'Timestamp|User ID|Request URI|Browser|Message' . PHP_EOL, FILE_APPEND | LOCK_EX );
 		if ( ! $log_created ) {
 			error_log( STARG_SIP_PLUGIN_NAME . ': ' . esc_attr__( 'Error log was not created.', 'sip' ) );
+			return false;
 		}
+
+		chmod( $this->debug_log_destination . $this->debug_log_filename, 600 );
+		return true;
 	}
 
 	/**
