@@ -248,7 +248,7 @@ class Archival_Custom_Posts {
 		$upload_purpose = ( isset( $_GET[ 'upload_purpose' ] ) ) ? sanitize_text_field( $_GET[ 'upload_purpose' ] ) : '';
 		?>
 		<select name="upload_purpose">
-			<option value="0"><?php _e( 'Show all', 'sip' ); ?></option>
+			<option value="0"><?php esc_attr_e( 'Show all', 'sip' ); ?></option>
 			<?php foreach ( $options as $value => $label ) : ?>
 				<option value="<?php echo esc_attr( $value ); ?>"<?php echo ( $value === $upload_purpose ) ? ' selected' : ''; ?>>
 					<?php echo esc_html( $label ); ?>

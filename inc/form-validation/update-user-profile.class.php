@@ -37,14 +37,14 @@ class Starg_Update_User_Profile extends Form_Validation {
 		}
 
 		// todo: implement user_meta error handling!
-		if ( isset( $user_input[ 'user_archive' ] ) ) {
+		if ( $user_input[ 'user_archive' ] ) {
 			update_user_meta( (int) $user_input['ID'], 'user_archive', $user_input['user_archive'] );
+			update_user_meta( (int) $user_input['ID'], 'user_archive_profile', 1 );
 		}
 
 		update_user_meta( (int) $user_input['ID'], 'user_address', $user_input['user_address'] );
 		update_user_meta( (int) $user_input['ID'], 'user_birthday', $user_input['user_birthday'] );
 		update_user_meta( (int) $user_input['ID'], 'user_privacy_policy_approval', $user_input['user_privacy_policy_approval'] );
-		update_user_meta( (int) $user_input['ID'], 'user_archive_profile', 1);
 
 		$this->set_success_message( esc_html__( 'Your personal information has been successfully updated.', 'sip' ) );
 		$this->display_notification();

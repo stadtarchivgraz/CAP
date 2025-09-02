@@ -31,7 +31,7 @@ class Starg_Update_User_Password extends Form_Validation {
 		}
 
 		$password_error = false;
-		if ( ! isset($user_input['oldpassword']) || ! $user_input['oldpassword']) {
+		if ( ! $user_input['oldpassword']) {
 			$password_error = esc_html__('Enter your old password.', 'sip');
 		} elseif (! wp_check_password($user_input['oldpassword'], $user->user_pass, $user->ID)) {
 			$password_error = esc_html__('The old password is incorrect.', 'sip');

@@ -77,7 +77,7 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 			Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG      => $user_archive,
 		);
 
-		if (isset( $user_input[ 'archival_originator' ] )) {
+		if ( $user_input[ 'archival_originator' ] ) {
 			$post_data['meta_input']['_archival_originator'] = $user_input[ 'archival_originator' ];
 		}
 		if ($user_input[ 'archival_single_date' ]) {
@@ -88,22 +88,22 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 				$post_data['meta_input']['_archival_to']   = $user_input[ 'archival_date_range' ][1] . '-12-31 23:59:59';
 			}
 		}
-		if (isset($user_input[ 'archival_address' ])) {
+		if ($user_input[ 'archival_address' ]) {
 			$post_data['meta_input']['_archival_address'] = $user_input[ 'archival_address' ];
 		}
-		if (isset($user_input[ 'archival_lat' ])) {
+		if ($user_input[ 'archival_lat' ]) {
 			$post_data['meta_input']['_archival_lat'] = $user_input[ 'archival_lat' ];
 		}
-		if (isset($user_input[ 'archival_lng'])) {
+		if ($user_input[ 'archival_lng']) {
 			$post_data['meta_input']['_archival_lng'] = $user_input[ 'archival_lng'];
 		}
-		if (isset($user_input[ 'archival_area' ])) {
+		if ($user_input[ 'archival_area' ]) {
 			$post_data['meta_input']['_archival_area'] = $user_input[ 'archival_area' ];
 		}
-		if (isset($user_input[ 'archival_upload_purpose' ])) {
+		if ($user_input[ 'archival_upload_purpose' ]) {
 			$post_data['meta_input']['_archival_upload_purpose'] = $user_input[ 'archival_upload_purpose' ];
 		}
-		if (isset($user_input[ 'archival_blocking_time' ])) {
+		if ($user_input[ 'archival_blocking_time' ]) {
 			$post_data['meta_input']['_archival_blocking_time'] = $user_input[ 'archival_blocking_time' ];
 		}
 		if ($sip_custom_meta = carbon_get_theme_option('sip_custom_meta')) {
@@ -114,13 +114,13 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 				}
 			}
 		}
-		if (isset($user_input[ 'archival_right_transfer' ])) {
+		if ($user_input[ 'archival_right_transfer' ]) {
 			$post_data['meta_input']['_archival_right_transfer'] = $user_input[ 'archival_right_transfer' ];
 		}
-		if (isset($user_input[ 'archival_numeration' ])) {
+		if ($user_input[ 'archival_numeration' ]) {
 			$post_data['meta_input']['_archival_numeration'] = $user_input[ 'archival_numeration' ];
 		}
-		if (isset($user_input[ 'archival_annotation' ])) {
+		if ($user_input[ 'archival_annotation' ]) {
 			$post_data['meta_input']['_archival_annotation'] = $user_input[ 'archival_annotation' ];
 		}
 		if ($sip_custom_archival_user_meta = carbon_get_theme_option('sip_custom_archival_user_meta')) {
