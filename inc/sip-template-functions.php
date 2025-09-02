@@ -59,7 +59,7 @@ function starg_add_sip_user_archive_field( $user ) {
 						'hide_if_empty' => false,
 						'value_field'   => 'term_id',
 						'required'      => true,
-						'selected'      => $user_archive
+						'selected'      => $user_archive,
 					);
 					wp_dropdown_categories( $args );
 				} else {

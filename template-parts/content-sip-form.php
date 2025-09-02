@@ -50,7 +50,7 @@ if ( $sip_folder ) {
 				}
 			}
 			?>
-			<form action="" method="post">
+			<form action="" method="post"><?php // todo: use values from Sip_Upload_Form_Validation. Maybe create it as a service! ?>
 				<input type="hidden" name="starg_form_name" value="upload_sip_form" aria-hidden="true" />
 				<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
 				<?php wp_nonce_field( 'starg_upload_archival_nonce_action', 'starg_upload_archival_nonce', false ); ?>
@@ -76,8 +76,7 @@ if ( $sip_folder ) {
 					</p>
 					<p id="archival-description_count" class="help"><span><?php echo ($archival) ? strlen($archival->post_content) : 0; ?></span> | <?php esc_html_e('Maximum 5000 characters.', 'sip'); ?></p>
 				</div>
-				<?php // todo: if we select a single date, we should hide the longer period inputs and vice versa! 
-				?>
+				<?php // todo: if we select a single date, we should hide the longer period inputs and vice versa! ?>
 				<div class="field">
 					<label for="archival-single-date" class="label"><?php esc_html_e('Date/time (for a precise time)', 'sip'); ?></label>
 					<p class="control">
@@ -109,21 +108,32 @@ if ( $sip_folder ) {
 					</div>
 				</div>
 				<div class="field">
+					<?php
+					$display_map = true;
+					if ( $archival ) {
+						$map_lat     = esc_attr( get_post_meta( $archival->ID, '_archival_lat', true ) );
+						$map_lng     = esc_attr( get_post_meta( $archival->ID, '_archival_lng', true ) );
+						$map_area    = get_post_meta( $archival->ID, '_archival_area', true ); // todo: maybe escape it!
+						$address     = esc_attr( get_post_meta( $archival->ID, '_archival_address', true ) );
+						$display_map = ( $address && ( ! $map_lat && ! $map_area ) ) ? false : true;
+					}
+					?>
 					<label for="archival-map" class="label"><?php esc_html_e('Location', 'sip'); ?></label>
 					<label class="checkbox">
-						<input type="checkbox" name="archival_hide_map" onclick="toggleField('archival-map','archival-address');">
+						<input type="checkbox" name="archival_hide_map" onclick="toggleField('archival-map','archival-address-wrap');" <?php checked( ! $display_map ); ?>>
 						<?php esc_html_e('Hide map', 'sip'); ?>
 					</label>
-					<div id="archival-map">
+					<div id="archival-map" <?php echo ( $display_map ) ? '': 'style="display:none;"'; ?>>
 						<p><?php esc_html_e('Map (select an exact location or area)', 'sip'); ?></p>
 						<?php include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-map.php' ); ?>
 					</div>
-					<div>
-						<input id="archival-address" name="archival_address" type="hidden" class="input" value="<?php echo ($archival) ? esc_attr(get_post_meta($archival->ID, '_archival_address', true)) : ''; ?>">
+					<div id="archival-address-wrap" <?php echo ( $display_map ) ? 'style="display:none;"': ''; ?>>
+						<label for="archival-address" class="label"><?php esc_html_e('Address', 'sip'); ?></label>
+						<input id="archival-address" name="archival_address" type="text" class="input" value="<?php echo ( $archival ) ? $address : ''; ?>">
 					</div>
-					<input id="archival-lat" name="archival_lat" type="hidden" value="<?php echo ($archival) ? esc_attr(get_post_meta($archival->ID, '_archival_lat', true)) : ''; ?>">
-					<input id="archival-lng" name="archival_lng" type="hidden" value="<?php echo ($archival) ? esc_attr(get_post_meta($archival->ID, '_archival_lng', true)) : ''; ?>">
-					<input id="archival-area" name="archival_area" type="hidden" value="<?php echo ($archival) ? get_post_meta($archival->ID, '_archival_area', true) : ''; // todo: maybe escape it! ?>">
+					<input id="archival-lat" name="archival_lat" type="hidden" value="<?php echo ( $archival )   ? $map_lat  : ''; ?>">
+					<input id="archival-lng" name="archival_lng" type="hidden" value="<?php echo ( $archival )   ? $map_lng  : ''; ?>">
+					<input id="archival-area" name="archival_area" type="hidden" value="<?php echo ( $archival ) ? $map_area : ''; ?>">
 				</div>
 				<div class="field">
 					<label for="archival-tags" class="label"><?php esc_html_e('Tags', 'sip'); ?>*</label>
@@ -142,7 +152,7 @@ if ( $sip_folder ) {
 									$upload_purpose_options = explode("\r\n", carbon_get_theme_option('sip_upload_purpose_options_' . $current_locale));
 									$archival_upload_purpose = ($archival) ? esc_attr(get_post_meta($archival->ID, '_archival_upload_purpose', true)) : '';
 									foreach ($upload_purpose_options as $upload_purpose_option) :
-									?>
+										?>
 										<option value="<?php echo esc_attr($upload_purpose_option); ?>" <?php echo ($archival_upload_purpose == $upload_purpose_option) ? ' selected' : ''; ?>>
 											<?php echo esc_attr($upload_purpose_option); ?>
 										</option>
@@ -166,7 +176,7 @@ if ( $sip_folder ) {
 											$option_number = $int_var = (int)filter_var($blocking_time_option, FILTER_SANITIZE_NUMBER_INT);
 											$blocking_time_option .= ' (' . $option_number - (date('Y', time()) - date('Y', strtotime($user_birthday))) .    ')';
 										}
-									?>
+										?>
 										<option value="<?php echo esc_attr($blocking_time_option); ?>" <?php echo ($archival_blocking_time == $blocking_time_option) ? ' selected' : ''; ?>>
 											<?php echo esc_attr($blocking_time_option); ?>
 										</option>
@@ -252,13 +262,11 @@ if ( $sip_folder ) {
 					$archival_tags_list_names = array();
 					$archival_tags_names      = array();
 				} else {
-					//$archival_tags_names = wp_list_pluck( $archival_tags, 'name' );
 					$archival_tags_names = array_map('esc_attr', wp_list_pluck($archival_tags, 'name'));
 
 					$archival_tags_list_names = '';
 					if ($archival) {
 						$archival_tags_list = get_the_terms($archival->ID, 'archival_tag');
-						//$archival_tags_list_names = wp_list_pluck( $archival_tags_list, 'name' );
 						$archival_tags_list_names = array_map('esc_attr', wp_list_pluck($archival_tags_list, 'name'));
 					}
 				}
@@ -348,33 +356,50 @@ if ( $sip_folder ) {
 
 						inputElm.addEventListener('change', onChangeTagify);
 
-						function onChangeTagify(e) {
-							// outputs a String
-							if (e.target.tagifyValue) {
-								let tags = JSON.parse(e.target.tagifyValue);
-								if (tags.length > e.target.attributes.maxlength.value) {
-									tagify.removeTag();
-								}
-							}
-						}
-
-						function toggleField(field, field2 = false) {
-							let field_element = document.getElementById(field);
-							if (field_element.style.display === "none") {
-								field_element.style.display = "block"; // Show content
-							} else {
-								field_element.style.display = "none"; // Hide content
-							}
-							if (field2) {
-								let field2_element = document.getElementById(field2);
-								if (field2_element.getAttribute('type') === "hidden") {
-									field2_element.setAttribute('type', 'text'); // Show content
-								} else {
-									field2_element.setAttribute('type', 'hidden');
-								}
-							}
-						}
 					});
+
+					function onChangeTagify(e) {
+						// outputs a String
+						if (e.target.tagifyValue) {
+							let tags = JSON.parse(e.target.tagifyValue);
+							if (tags.length > e.target.attributes.maxlength.value) {
+								tagify.removeTag();
+							}
+						}
+					}
+
+					/**
+					 * changes the visibility of one or more fields.
+					 * @param string fields the id of an HTML element.
+					 * @return void
+					 */
+					function toggleField(...fields) {
+						if ( ! fields ) { return; }
+
+						fields.forEach((fieldId) => {
+							const el = document.getElementById(fieldId);
+							if ( ! el ) { return; }
+
+							if (el.tagName.toLowerCase() === 'input' && el.hasAttribute('type')) {
+								const currentType = el.getAttribute('type');
+								if (currentType === 'hidden') {
+									el.setAttribute('type', 'text');
+								} else if (currentType === 'text') {
+									el.setAttribute('type', 'hidden');
+								}
+							} else {
+								const currentDisplay = window.getComputedStyle(el).display;
+								el.style.display = (currentDisplay === 'none') ? 'block' : 'none';
+							}
+
+							// recalculate the size of the map.
+							if ( 'archival-map' === fieldId ) {
+								setTimeout(function() {
+									window.map.invalidateSize();
+								}, 100);
+							}
+						});
+					}
 				</script>
 			</form>
 		</div><!-- .entry-content -->

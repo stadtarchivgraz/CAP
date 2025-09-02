@@ -163,7 +163,7 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 			'archival_title'          => 'sanitize_text_field',
 			'archival_description'    => 'sanitize_textarea_field',
 			'archival_originator'     => 'sanitize_text_field',
-			'archival_address'        => 'sanitize_textarea_field',
+			'archival_address'        => 'sanitize_text_field',
 			'archival_lat'            => 'sanitize_text_field',
 			'archival_lng'            => 'sanitize_text_field',
 			'archival_area'           => 'starg_sanitize_json',

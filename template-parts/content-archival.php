@@ -39,43 +39,55 @@ $sip_archival_actions->process_sip_archival_actions();
 
 			the_content();
 
-			// displays the map with marker where the files were found.
-			include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-map.php' );
+			// only include the map if we have data to display.
+			$map_lat     = esc_attr( get_post_meta( $archival_id, '_archival_lat', true ) );
+			$map_lng     = esc_attr( get_post_meta( $archival_id, '_archival_lng', true ) );
+			$map_area    = get_post_meta( $archival_id, '_archival_area', true ); // todo: maybe escape it!
+			$address     = esc_attr( get_post_meta( $archival_id, '_archival_address', true ) );
+			$display_map = ( $address && ( ! $map_lat && ! $map_area ) ) ? false : true;
+			if ( $display_map ) {
+				// displays the map with marker where the files were found.
+				include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-map.php' );
+			}
 
+			$originator     = esc_html( get_post_meta($archival_id, '_archival_originator', true) );
+			$date_from      = esc_html( get_post_meta($archival_id, '_archival_from', true) );
+			$date_to        = esc_html( get_post_meta($archival_id, '_archival_to', true) );
+			$upload_purpose = esc_html( get_post_meta($archival_id, '_archival_upload_purpose', true) );
+			$blocking_time  = esc_html( get_post_meta($archival_id, '_archival_blocking_time', true ))
 			?>
+
 			<dl>
 				<dt><?php esc_html_e('Location', 'sip'); ?></dt>
 				<dd>
-					<?php echo ( get_post_meta( $archival_id, '_archival_address', true ) ) ? : esc_attr__('unknown', 'sip'); ?>
+					<?php echo ( $address ) ? esc_html( $address ) : esc_html__('unknown', 'sip'); ?>
 					<?php
-					$lat = esc_attr( get_post_meta( $archival_id, '_archival_lat', true ) );
-					$lng = esc_attr( get_post_meta( $archival_id, '_archival_lng', true ) );
-					if ($lat && $lng) {
-						echo ' (' . $lat . '|' . $lng . ')';
+					if ($map_lat && $map_lng) {
+						echo ' (' . $map_lat . '|' . $map_lng . ')';
 					}
 					?>
 				</dd>
 				<dt><?php esc_html_e('Originator', 'sip'); ?></dt>
-				<dd><?php echo (get_post_meta($archival_id, '_archival_originator', true)) ?: esc_attr__('unknown', 'sip'); ?></dd>
+				<dd><?php echo $originator ?: esc_html__('unknown', 'sip'); ?></dd>
 				<dt><?php esc_html_e('Date/Time', 'sip'); ?></dt>
-				<dd><?php echo get_post_meta($archival_id, '_archival_from', true); ?><?php echo ($archival_to = get_post_meta($archival_id, '_archival_to', true)) ? ' &mdash; ' . $archival_to : ''; ?></dd>
+				<dd><?php echo $date_from; ?><?php echo ( $date_to ) ? ' &mdash; ' . $date_to : ''; ?></dd>
 				<dt><?php esc_html_e('Upload Purpose', 'sip'); ?></dt>
-				<dd><?php echo get_post_meta($archival_id, '_archival_upload_purpose', true); ?></dd>
-				<?php if ($archival_blocking_time = get_post_meta($archival_id, '_archival_blocking_time', true)) : ?>
+				<dd><?php echo $upload_purpose; ?></dd>
+				<?php if ( $blocking_time ) : ?>
 					<dt><?php esc_html_e('Blocking Time', 'sip'); ?></dt>
-					<dd><?php echo esc_html( $archival_blocking_time ); ?></dd>
+					<dd><?php echo esc_html( $blocking_time ); ?></dd>
 				<?php endif; ?>
 				<?php if ($sip_custom_meta = carbon_get_theme_option('sip_custom_meta')) :
 					foreach ($sip_custom_meta as $custom_meta) :
 						$meta_name = sanitize_title($custom_meta['sip_custom_meta_key']);
 						if ($meta_value = get_post_meta($archival_id, '_archival_' . $meta_name, true)) : ?>
-							<dt><?php echo esc_attr( $custom_meta['sip_custom_meta_title_' . $current_locale] ); ?></dt>
-							<dd><?php echo esc_attr( $meta_value ); ?></dd>
+							<dt><?php echo esc_html( $custom_meta['sip_custom_meta_title_' . $current_locale] ); ?></dt>
+							<dd><?php echo esc_html( $meta_value ); ?></dd>
 						<?php endif; ?>
 					<?php endforeach; ?>
 				<?php endif; ?>
 				<?php
-				echo strip_tags(get_the_term_list($archival_id, 'archival_tag', '<dt>' . esc_attr__('Tags', 'sip') . '</dt><dd>', ' | ', '</dd>'), '<dt><dd>');
+				echo strip_tags(get_the_term_list($archival_id, 'archival_tag', '<dt>' . esc_html__('Tags', 'sip') . '</dt><dd>', ' | ', '</dd>'), '<dt><dd>');
 				?>
 			</dl>
 
@@ -151,8 +163,8 @@ $sip_archival_actions->process_sip_archival_actions();
 
 					</form>
 				<?php else : ?>
-					<?php // note: the option '_sip_cron_deleted_text_' uses placeholder like %s i suppose. ?>
-					<p><?php echo sprintf( get_option('_sip_cron_deleted_text_' . $current_locale), carbon_get_theme_option('sip_cron_delete_days') ); ?></p>
+					<?php // note: the option '_sip_cron_deleted_text_' uses placeholder like %s. ?>
+					<p><?php echo wp_kses_post( sprintf( get_option('_sip_cron_deleted_text_' . $current_locale), carbon_get_theme_option('sip_cron_delete_days') ) ); ?></p>
 				<?php endif; ?>
 			</div>
 		</footer><!-- .entry-footer -->

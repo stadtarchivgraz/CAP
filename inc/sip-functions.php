@@ -473,3 +473,63 @@ function starg_get_archival_id_by_sip_folder( string $sip_folder ) {
 	$archival_id = $wpdb->get_var( $wpdb->prepare( $archival_post_id_sql, $sip_folder ) );
 	return (int) $archival_id ?? false;
 }
+
+/**
+ * Attempt to generate and store latitude and longitude coordinates for the address associated with an archival record.
+ * We therefore ask either google (if an api key exists) or openstreetmap.
+ * @param int $archival_post_id
+ * @return array
+ */
+function starg_get_map_coordinates_by_post_id( int $archival_post_id ) : array {
+	if ( ! $archival_post_id || ! get_post_meta( $archival_post_id, '_archival_address', true ) ) {
+		return array();
+	}
+
+	$markers['title']         = get_the_title( $archival_post_id );
+	$markers['permalink']     = get_the_permalink($archival_post_id);
+	$markers['place_address'] = esc_attr(get_post_meta($archival_post_id, '_archival_address', true));
+	$markers['lat']           = esc_attr(get_post_meta($archival_post_id, '_archival_lat', true));
+	$markers['lng']           = esc_attr(get_post_meta($archival_post_id, '_archival_lng', true));
+
+	if ( $markers['lat'] || $markers['lng'] ) {
+		return $markers;
+	}
+
+	$google_api_key = esc_attr( carbon_get_theme_option('sip_map_default_google_api_key') );
+	if ( ! empty( $google_api_key ) ) {
+		$json = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode( str_replace(' ', '+', $markers['place_address']) ) . '&key=' . $google_api_key);
+		$obj  = json_decode($json);
+		if ( ! $obj->results[0]->geometry->location->lat ) {
+			return $markers;
+		}
+
+		// save the lat and long values to the post meta data.
+		update_post_meta($archival_post_id, '_archival_lat', sanitize_text_field($obj->results[0]->geometry->location->lat));
+		update_post_meta($archival_post_id, '_archival_lng', sanitize_text_field($obj->results[0]->geometry->location->lng));
+
+		$markers['lat'] = sanitize_text_field($obj->results[0]->geometry->location->lat);
+		$markers['lng'] = sanitize_text_field($obj->results[0]->geometry->location->lng);
+
+		return $markers;
+	}
+
+	// for the openstreetmap api to work properly we need to provide an user-agent and/or an email address.
+	$options = array(
+		"http" => array(
+			"header" => "User-Agent: " . STARG_SIP_PLUGIN_NAME . '/' . STARG_SIP_PLUGIN_VERSION . "\r\n",
+		),
+	);
+	$context = stream_context_create($options);
+	$json    = file_get_contents( 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' . urlencode( str_replace(' ', '+', $markers['place_address']) ), false, $context );
+	// possible values from the request are: "place_id","licence","osm_type","osm_id","lat","lon","class","type","place_rank","importance","addresstype","name","display_name","boundingbox"
+	if ($obj = json_decode($json)) {
+		// save the lat and long values to the post meta data.
+		update_post_meta($archival_post_id, '_archival_lat', sanitize_text_field($obj[0]->lat));
+		update_post_meta($archival_post_id, '_archival_lng', sanitize_text_field($obj[0]->lon));
+
+		$markers['lat'] = sanitize_text_field($obj[0]->lat);
+		$markers['lng'] = sanitize_text_field($obj[0]->lon);
+	}
+
+	return $markers;
+}

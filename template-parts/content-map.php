@@ -1,10 +1,14 @@
 <?php
+/**
+ * Template part to display an interactive map with leaflet and MapTiler.
+ */
+
 $markers   = array();
 $area      = '';
 $count     = 0;
 $map_posts = array();
 
-$key          = esc_attr(carbon_get_theme_option('sip_map_default_google_api_key')); //'AIzaSyCBW6DGvUVGKSpX9PtOrj7-V-kjztd9RcA';
+$key          = esc_attr(carbon_get_theme_option('sip_map_default_google_api_key'));
 $default_lng  = esc_attr(carbon_get_theme_option('sip_map_default_lng'));
 $default_lat  = esc_attr(carbon_get_theme_option('sip_map_default_lat'));
 $default_zoom = esc_attr(carbon_get_theme_option('sip_map_default_zoom'));
@@ -21,46 +25,17 @@ $is_sip_upload_template = is_page_template('sip-upload.php');
 $search_position        = ( $is_sip_upload_template ) ? 'topright' : 'topleft';
 $search_collapsed       = ( $is_sip_upload_template ) ? 'false'    : 'true';
 
-foreach ($map_posts as $map_post) :
-
-	if ($place_address = esc_attr(get_post_meta($map_post->ID, '_archival_address', true))) {
-
-		$markers[$count]['title']         = $map_post->post_title;
-		$markers[$count]['permalink']     = get_the_permalink($map_post->ID);
-		$markers[$count]['place_address'] = $place_address;
-		$markers[$count]['lat']           = esc_attr(get_post_meta($map_post->ID, '_archival_lat', true));
-		$markers[$count]['lng']           = esc_attr(get_post_meta($map_post->ID, '_archival_lng', true));
-
-		if (! $markers[$count]['lat'] || !$markers[$count]['lng']) {
-			if ($key) {
-				$json = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . str_replace(' ', '+', $markers[$count]['place_address']) . '&key=' . $key);
-				$obj = json_decode($json);
-				if (($obj->results[0]->geometry->location->lat)) {
-					update_post_meta($map_post->ID, '_archival_lat', sanitize_text_field($obj->results[0]->geometry->location->lat));
-					$markers[$count]['lat'] = esc_attr($obj->results[0]->geometry->location->lat);
-					update_post_meta($map_post->ID, '_archival_lng', sanitize_text_field($obj->results[0]->geometry->location->lng));
-					$markers[$count]['lng'] = esc_attr($obj->results[0]->geometry->location->lng);
-				}
-			} else {
-				@$json = file_get_contents('https://nominatim.openstreetmap.org/search?format=json&q=' . str_replace(' ', '+', $markers[$count]['place_address']));
-				if ($obj = json_decode($json)) {
-					update_post_meta($map_post->ID, '_archival_lat', sanitize_text_field($obj[0]->lat));
-					$markers[$count]['lat'] = esc_attr($obj[0]->lat);
-					update_post_meta($map_post->ID, '_archival_lng', sanitize_text_field($obj[0]->lon));
-					$markers[$count]['lng'] = esc_attr($obj[0]->lon);
-				}
-			}
-		}
-		$count++;
-	}
+// todo: refactor! create a function in /inc/sip-functions.php
+foreach ($map_posts as $key => $map_post) :
+	$markers[ $key ] = starg_get_map_coordinates_by_post_id( $map_post->ID );
 
 	// todo: maybe escape. should be json.
-	$area = get_post_meta($map_post->ID, '_archival_area', true);
+	$area = get_post_meta( $map_post->ID, '_archival_area', true );
 
 endforeach; // End of the loop.
 wp_reset_postdata(); // todo: should not be needed here. we're not in a custom loop!
 
-if ($markers) {
+if ( isset( $markers[0] ) && isset( $markers[0]['lat'] ) && isset( $markers[0]['lng'] ) ) {
 	$default_lat = $markers[0]['lat'];
 	$default_lng = $markers[0]['lng'];
 }
@@ -75,12 +50,14 @@ if ($markers) {
 	document.addEventListener('DOMContentLoaded', () => {
 		L.Control.prototype._refocusOnMap = function _refocusOnMap() {};
 
-		const map = new L.Map('map', {
+		window.map = new L.Map('map', {
 				scrollWheelZoom: false,
 				maxZoom: 23
 			})
 			.setView(new L.LatLng(<?php echo $default_lat; ?>, <?php echo $default_lng; ?>), <?php echo $default_zoom; ?>);
 
+		// todo: Check the key and consider adding an option for it in the plugin.
+		// One needs to create an (free) account at https://www.maptiler.com/cloud/pricing/ to create the key at https://cloud.maptiler.com/account/keys/ see https://docs.maptiler.com/cloud/api/authentication-key/.
 		const key = '4iSHuzysTSEXKZ9TxnfO';
 		L.tileLayer(`https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=${key}`, { //style URL
 			tileSize: 512,
@@ -201,8 +178,8 @@ if ($markers) {
 		});
 		map.addControl(new customControl());
 
+		<?php // The selected area on the viewing page should not be changed... ?>
 		<?php if ( $is_sip_upload_template ) : ?>
-
 			map.on('click', function(e) {
 				if (areaSelection.phase === 'inactive') {
 					const place_address_input = document.getElementById('archival-address'),
@@ -254,43 +231,43 @@ if ($markers) {
 					})
 				}
 			});
-
-			const areaSelection = new window.leafletAreaSelection.DrawAreaSelection({
-				onPolygonReady: (polygon) => {
-					const place_address_input = document.getElementById('archival-address'),
-						place_lat_input = document.getElementById('archival-lat'),
-						place_lng_input = document.getElementById('archival-lng'),
-						place_area = document.getElementById('archival-area');
-
-					if (place_area) {
-						place_area.value = JSON.stringify(polygon.toGeoJSON());
-					}
-					if (place_address_input) {
-						place_address_input.value = '';
-					}
-					if (place_lat_input) {
-						place_lat_input.value = '';
-					}
-					if (place_lng_input) {
-						place_lng_input.value = '';
-					}
-				},
-				onButtonActivate: () => {
-					if (inputMarker) {
-						map.removeLayer(inputMarker);
-					}
-					if (clickMarker) {
-						map.removeLayer(clickMarker);
-					}
-					if (markers) {
-						map.removeLayer(markers);
-					}
-				},
-				position: 'topleft'
-			});
-			map.addControl(areaSelection);
-
 		<?php endif; // end $is_sip_upload_template ?>
+
+		<?php // but we do want to display the selected area. ?>
+		const areaSelection = new window.leafletAreaSelection.DrawAreaSelection({
+			onPolygonReady: (polygon) => {
+				const place_address_input = document.getElementById('archival-address'),
+					place_lat_input = document.getElementById('archival-lat'),
+					place_lng_input = document.getElementById('archival-lng'),
+					place_area = document.getElementById('archival-area');
+
+				if (place_area) {
+					place_area.value = JSON.stringify(polygon.toGeoJSON());
+				}
+				if (place_address_input) {
+					place_address_input.value = '';
+				}
+				if (place_lat_input) {
+					place_lat_input.value = '';
+				}
+				if (place_lng_input) {
+					place_lng_input.value = '';
+				}
+			},
+			onButtonActivate: () => {
+				if (inputMarker) {
+					map.removeLayer(inputMarker);
+				}
+				if (clickMarker) {
+					map.removeLayer(clickMarker);
+				}
+				if (markers) {
+					map.removeLayer(markers);
+				}
+			},
+			position: 'topleft'
+		});
+		map.addControl(areaSelection);
 
 		<?php
 		if ( json_decode($area) ) :
@@ -323,7 +300,7 @@ if ($markers) {
 
 		<?php
 		foreach ($markers as $marker) {
-			if ($marker['lat'] && $marker['lng']) {
+			if ( isset( $marker['lat'] ) && isset( $marker['lng'] ) ) {
 
 				echo "const dsaIcon = L.divIcon({
               className: 'dsa-custom-pin',

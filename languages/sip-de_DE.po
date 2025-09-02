@@ -1095,13 +1095,13 @@ msgstr "hier"
 #: template-parts/forms/profileform.php:61
 #, php-format
 msgid "You have not submitted any entries yet. Please check your drafts %s and complete at at least one of them."
-msgstr "Sie haben noch keine Einträge eingereicht. Bitte überprüfen Sie Ihre Entwürfe unter %s und schließen Sie mindestens einen davon ab."
+msgstr "Sie haben noch keine Einträge eingereicht. Bitte überprüfen Sie Ihre Entwürfe %s und schließen Sie mindestens einen davon ab."
 
 #. translators: %s: Link to the page where an archival record can be uploaded.
 #: template-parts/forms/profileform.php:113
 #, php-format
 msgid "You have not uploaded any files yet. Please upload your files %s."
-msgstr "Sie haben noch keine Dateien hochgeladen. Bitte laden Sie Ihre Dateien unter %s hoch."
+msgstr "Sie haben noch keine Dateien hochgeladen. Bitte laden Sie Ihre Dateien %s hoch."
 
 #: admin/sip-options.php:56
 msgid "This role or higher is required to approve or reject submitted archival records."
