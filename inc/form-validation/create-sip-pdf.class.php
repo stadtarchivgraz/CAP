@@ -33,12 +33,14 @@ class Create_Sip_Pdf extends Form_Validation {
 		$user_input = $this->user_input_sanitization();
 		if ( ! $user_input ) {
 			$this->set_error_message( esc_attr__( 'User-Input not valid.', 'sip' ) );
+			$this->set_error_log_message( esc_attr__( 'User-Input not valid.', 'sip' ) );
 			return false;
 		}
 
 		$sip_user_folder_id = $user_input[ 'sipFolder' ];
 		if ( ! $sip_user_folder_id ) {
 			$this->set_error_message( esc_attr__( 'No SIP Folder provided.', 'sip' ) );
+			$this->set_error_log_message( esc_attr__( 'No SIP Folder provided.', 'sip' ) );
 			return false;
 		}
 
@@ -63,6 +65,7 @@ class Create_Sip_Pdf extends Form_Validation {
 		if ( ! $archival_id ) {
 			// translators: %d: Post-ID of an archival record.
 			$this->set_error_message( sprintf( esc_attr__( 'No archival record found with SIP Post-ID: "%d"', 'sip' ), $archival_id ) );
+			$this->set_error_log_message( sprintf( esc_attr__( 'No archival record found with SIP Post-ID: "%d"', 'sip' ), $archival_id ) );
 			return false;
 		}
 

@@ -33,7 +33,7 @@ while (have_posts()) :
 		$author_id = (int) get_post_field( 'post_author', starg_get_archival_id_by_sip_folder( $sip_folder ) );
 		$is_second_phase = isset( $_GET['starg'] ) && isset( $_GET['starg_amd'] ) && wp_verify_nonce( sanitize_key( $_GET['starg_amd'] ), 'starg_add_archival_meta_data_nonce_action' );
 
-		if ( ( current_user_can('edit_others_pages') || $author_id === get_current_user_id() ) || $is_second_phase ) {
+		if ( ( current_user_can('edit_others_posts') || $author_id === get_current_user_id() ) || $is_second_phase ) {
 			include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-sip-form.php' );
 		} else {
 			echo starg_get_notification_message(esc_html__('You are not allowed to view this page!', 'sip'), 'is-warning is-light');

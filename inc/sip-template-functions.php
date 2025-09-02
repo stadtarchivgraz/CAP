@@ -92,6 +92,7 @@ function starg_save_sip_user_archive_field( $user_id ) {
 
 /**
  * Change the main query based on the current user.
+ * todo: might be deprecated. A regular user can only access their own archival records. And admin/editors should be able to see every entry.
  * @param WP_Query $query
  */
 function starg_sip_admin_archivals( WP_Query $query ) {
@@ -107,8 +108,8 @@ function starg_sip_admin_archivals( WP_Query $query ) {
 	// only display archival posts from the current user if not admin!
 	if ( ! current_user_can( 'edit_others_posts' ) ) {
 		$query->set( 'author', $user_id );
-	}
-	if ( ! current_user_can( 'manage_options' ) ) {
+	// }
+	// if ( ! current_user_can( 'manage_options' ) ) {
 		$user_archive = get_user_meta( $user_id, 'user_archive', true );
 		$tax_query = array(
 			array(

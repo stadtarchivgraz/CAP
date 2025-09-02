@@ -21,7 +21,7 @@ if ( current_user_can('edit_others_posts') ) {
 }
 
 // regular user should only see their entries.
-if ( ! current_user_can('manage_options') ) {
+if ( ! current_user_can('edit_others_posts') ) {
 	$user_archive = (int) esc_attr( get_user_meta(get_current_user_id(), 'user_archive', true) );
 	$tax_query[]  = array(
 		'taxonomy' => 'archive',
@@ -84,8 +84,10 @@ if ($meta_query) {
 
 <form id="sip-filter" name="sip-filter" action="" method="get" class="container">
 	<div class="columns is-multiline">
-		<?php // todo: maybe extract the get_terms part as it might result in a wp_error! ?>
-		<?php if ( current_user_can( 'manage_options' ) && get_terms( array( 'taxonomy' => 'archive', 'hide_empty' => false, ) ) ) : ?>
+		<?php
+		$archival_terms = get_terms( array( 'taxonomy' => 'archive', 'hide_empty' => false, ) );
+		if ( current_user_can( 'edit_others_posts' ) && ! is_wp_error( $archival_terms ) && $archival_terms ) :
+			?>
 			<div class="column is-full">
 				<div class="field">
 					<label for="filter-archive"><?php esc_html_e('Archive', 'sip'); ?></label>

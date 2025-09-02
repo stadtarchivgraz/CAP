@@ -34,7 +34,7 @@ get_header();
 // only admin/editor and the author should be able to view this page.
 $author_id = (int) get_post_field( 'post_author', (int) $archival_name );
 
-if ( current_user_can( 'edit_others_pages' ) || ( is_user_logged_in() && $author_id === get_current_user_id() ) ) {
+if ( current_user_can( 'edit_others_posts' ) || ( is_user_logged_in() && $author_id === get_current_user_id() ) ) {
 	include(STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-archival.php');
 } else {
 	echo starg_get_notification_message(esc_html__('You are not allowed to view this page!', 'sip'), 'is-warning is-light');

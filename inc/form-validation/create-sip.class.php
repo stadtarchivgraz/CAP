@@ -35,12 +35,14 @@ class Create_Sip extends Form_Validation {
 		$user_input = $this->user_input_sanitization();
 		if ( ! $user_input ) {
 			$this->set_error_message( esc_attr__( 'User-Input not valid.', 'sip' ) );
+			$this->set_error_log_message( esc_attr__( 'User-Input not valid.', 'sip' ) );
 			return false;
 		}
 
 		$sip_user_folder_id = $user_input[ 'sipFolder' ];
 		if ( ! $sip_user_folder_id ) {
 			$this->set_error_message( esc_attr__( 'No SIP Folder provided.', 'sip' ) );
+			$this->set_error_log_message( esc_attr__( 'No SIP Folder provided.', 'sip' ) );
 			return false;
 		}
 
@@ -50,6 +52,7 @@ class Create_Sip extends Form_Validation {
 		if ( ! $archival_id ) {
 			// translators: %s: ID/Name of the folder where the sip is stored.
 			$this->set_error_message( sprintf( esc_attr__( 'No archival record found with SIP-ID: "%s"', 'sip' ), $sip_user_folder_id ) );
+			$this->set_error_log_message( sprintf( esc_attr__( 'No archival record found with SIP-ID: "%s"', 'sip' ), $sip_user_folder_id ) );
 			return false;
 		}
 
@@ -176,7 +179,8 @@ class Create_Sip extends Form_Validation {
 
 		$tags = get_the_terms($this->archival->ID, 'archival_tag');
 
-		if($archival_address = get_post_meta($this->archival->ID, '_archival_address', true)) {
+		$archival_area = '';
+		if ( $archival_address = get_post_meta($this->archival->ID, '_archival_address', true)) {
 			$archival_lat = get_post_meta($this->archival->ID, '_archival_lat', true);
 			$archival_lng = get_post_meta($this->archival->ID, '_archival_lng', true);
 		} else {
