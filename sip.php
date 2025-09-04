@@ -3,18 +3,18 @@
  Plugin Name: SIP
  Description: Plugin for creating Submission Information Packages (SIPs) from archival records. The archival records are provided by users. The archivist can choose whether to create a SIP or reject it.
  Author: Stadtarchiv Graz, Guido Handrick
- Version: 3.1.2
+ Version: 3.1.3
  Author URI: http://guido-handrick.info
  Text Domain: sip
  Domain Path: /languages/
- Requires PHP: 8.2
+ Requires PHP: 8.1
  Requires at least: 6.0
  Used Libraries: php-clamav (https://github.com/appwrite/php-clamav), composer, dropzone (https://github.com/dropzone/dropzone/), carbon-fields (https://github.com/htmlburger/carbon-fields), getID3 (https://github.com/JamesHeinrich/getID3), pdf-to-image (https://github.com/spatie/pdf-to-image), htmltopdf (https://github.com/spipu/html2pdf), TCPDF (https://github.com/tecnickcom/TCPDF), Notification (https://bracketspace.com)
  */
 
 if (! defined('WPINC')) { die; }
 
-define( 'STARG_SIP_PLUGIN_VERSION', '3.1.2' );
+define( 'STARG_SIP_PLUGIN_VERSION', '3.1.3' );
 define( 'STARG_SIP_PLUGIN_NAME',    'SIP' );
 define( 'STARG_SIP_PLUGIN_BASE_DIR', trailingslashit( dirname( __FILE__ ) ) );
 define( 'STARG_SIP_PLUGIN_BASE_URL', plugin_dir_url( __FILE__ ) );
@@ -210,7 +210,7 @@ class Starg_Sip_Plugin {
 		global $wpdb;
 		$days          = (int) esc_attr( carbon_get_theme_option( 'sip_cron_delete_days' ) ); // type:number
 		$status        = carbon_get_theme_option( 'sip_cron_delete_status' ); // type:multiselect
-		$upload_folder = esc_attr( carbon_get_theme_option( 'sip_upload_path' ) ); // type:text
+		$upload_folder = starg_get_archival_upload_path();
 		$sip_folders   = array();
 
 		if ( in_array( 'upload', $status ) ) {

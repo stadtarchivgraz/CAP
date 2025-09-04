@@ -73,7 +73,7 @@ class Starg_Logging {
 			return false;
 		}
 
-		chmod( $this->debug_log_destination . $this->debug_log_filename, 600 );
+		chmod( $this->debug_log_destination . $this->debug_log_filename, 0600 );
 		return true;
 	}
 

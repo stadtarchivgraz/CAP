@@ -36,7 +36,7 @@ if ( ! $sip ) {
 	return;
 }
 
-$sip_folder       = esc_attr(carbon_get_theme_option('sip_upload_path')) . $author_id . '/' . $sip . '/';
+$sip_folder       = starg_get_archival_upload_path() . $author_id . '/' . $sip . '/';
 $upload_folder    = $sip_folder . 'content/';
 $thumbnail_folder = $sip_folder . 'thumb/';
 
@@ -119,11 +119,15 @@ foreach ($it as $path) {
 				$image_size[1] = ($d[2]) ?: 300;
 			} else {
 				$thumbnail = $thumbnail_folder . basename($path_clean);
-				if (! file_exists($thumbnail)) {
+				if ( ! file_exists($thumbnail)) {
 					starg_create_thumbnail($path_clean, $thumbnail_folder);
 				}
-				$thumbnail_url = get_bloginfo('url') . substr($thumbnail_folder, strrpos($thumbnail_folder, '/wp-content')) . basename($path);
-				$image_size = getimagesize($path_clean);
+				// Ensure the image can be found even when it was uploaded with an uppercase file extension. WordPress saves thumbnails using lowercase file extensions!
+				$path_info     = pathinfo($path_clean);
+				$filename      = $path_info['filename'];
+				$extension     = strtolower($path_info['extension']);
+				$thumbnail_url = get_bloginfo('url') . substr($thumbnail_folder, strrpos($thumbnail_folder, '/wp-content')) . $filename . '.' . $extension;
+				$image_size    = getimagesize($path_clean);
 			}
 			// todo: check why we need to use the full path for the $file_url in order to make Html2Pdf work!
 			if ( isset( $pdf ) && $pdf ) {

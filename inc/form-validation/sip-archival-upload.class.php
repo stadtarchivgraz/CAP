@@ -31,7 +31,7 @@ class Sip_Archival_Upload extends Form_Validation {
 		$supported_mime_types = explode("\r\n", carbon_get_theme_option( 'sip_mime_types') );
 		$sip_max_size = (carbon_get_theme_option( 'sip_max_size') ) ?: 50000000;
 
-		$sip_folder       = esc_attr( carbon_get_theme_option( 'sip_upload_path' ) ) . $user_input['sipUserID'] . '/' . $user_input['sipFolder'] . '/';
+		$sip_folder       = starg_get_archival_upload_path() . $user_input['sipUserID'] . '/' . $user_input['sipFolder'] . '/';
 		$upload_folder    = $sip_folder . 'content/';
 		$upload_dir       = '';
 		$upload_dir_array = explode( '/', $upload_folder );

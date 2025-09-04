@@ -87,7 +87,7 @@ class Create_Sip_Pdf extends Form_Validation {
 		$archival_user = get_user_by('id', $archival->post_author);
 		$archival_archivar_user_id = (get_post_meta($archival_id, '_archival_archivar_user_id', true)) ?: get_current_user_id();
 		$archivar = get_user_by('id',  $archival_archivar_user_id);
-		$sip_folder = carbon_get_theme_option('sip_upload_path') . $archival->post_author . '/' . $sip_folder . '/';
+		$sip_folder = starg_get_archival_upload_path() . $archival->post_author . '/' . $sip_folder . '/';
 
 		$archival_address = (get_post_meta($archival_id, '_archival_address', true)) ?: __('unknown', 'sip');
 		$archival_originator = (get_post_meta($archival_id, '_archival_originator', true)) ?: __('unknown', 'sip');

@@ -68,7 +68,7 @@ class Create_Sip extends Form_Validation {
 		$archival_user  = get_user_by('id', $this->archival->post_author);
 		$sip_referenz   = ($sip_referenz) ? strtoupper($sip_referenz) : strtoupper($archival_user->user_login);
 
-		$this->sip_folder  = esc_attr( carbon_get_theme_option('sip_upload_path') ) . $this->archival->post_author . '/' . $sip_user_folder_id . '/';
+		$this->sip_folder  = starg_get_archival_upload_path() . $this->archival->post_author . '/' . $sip_user_folder_id . '/';
 		$this->content_dir = $this->sip_folder . 'content/';
 		$this->header_dir  = $this->sip_folder . 'header/';
 

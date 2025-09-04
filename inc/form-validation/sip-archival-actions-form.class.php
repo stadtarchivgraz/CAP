@@ -116,7 +116,7 @@ class Sip_Archival_Actions extends Form_Validation {
 	 */
 	private function _process_action_decline( string $sip_folder, int $archival_post_id ) : bool {
 		$author_id  = get_post_field('post_author', $archival_post_id);
-		$sip_folder = esc_attr( carbon_get_theme_option('sip_upload_path') ) . $author_id . '/' . $sip_folder . '/';
+		$sip_folder = starg_get_archival_upload_path() . $author_id . '/' . $sip_folder . '/';
 		if (is_dir($sip_folder)) {
 			$sip_deleted = starg_remove_SIP($sip_folder);
 			if ( ! $sip_deleted ) {

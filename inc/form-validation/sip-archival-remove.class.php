@@ -28,7 +28,7 @@ class Sip_Archival_Remove extends Form_Validation {
 			'success' => true,
 		);
 
-		$sip_folder               = esc_attr( carbon_get_theme_option( 'sip_upload_path' ) ) . $user_input['sipUserID'] . '/' . $user_input['sipFolder'] . '/';
+		$sip_folder               = starg_get_archival_upload_path() . $user_input['sipUserID'] . '/' . $user_input['sipFolder'] . '/';
 		$upload_folder            = $sip_folder . 'content/';
 		$upload_file              = $upload_folder . $user_input['deletePath'];
 		$filename                 = sanitize_file_name( basename( $upload_file ) );

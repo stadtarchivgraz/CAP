@@ -21,13 +21,13 @@ function starg_get_sip_form( string $form ) {
 
 /**
  * Tries to create a thumbnail of an uploaded image.
- * @param string $file
+ * @param string $file_path
  * @param string $thumbnail_folder
- * @return void
+ * @return void|array
  */
-function starg_create_thumbnail($file, $thumbnail_folder): void {
+function starg_create_thumbnail($file_path, $thumbnail_folder) {
+	$logging = apply_filters( 'starg/logging', null );
 	if ( ! extension_loaded( 'imagick' ) ) {
-		$logging = apply_filters( 'starg/logging', null );
 		if ( $logging instanceof Starg_Logging ) {
 			$logging->create_log_entry( esc_html__( 'Imagick-Extension not loaded.', 'sip' ) );
 		}
@@ -38,26 +38,43 @@ function starg_create_thumbnail($file, $thumbnail_folder): void {
 		mkdir( $thumbnail_folder, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS, true );
 	}
 
-	if( wp_get_image_mime($file) === 'image/tiff' ) {
-		$new_file_name = $thumbnail_folder.str_replace(array('.tiff', '.tif'), '.jpg', basename($file));
-		$image = new Imagick($file);
+	$new_thumbnail = array();
+	if( wp_get_image_mime($file_path) === 'image/tiff' ) {
+		$new_file_name = $thumbnail_folder.str_replace(array('.tiff', '.tif'), '.jpg', basename($file_path));
+		$image = new Imagick($file_path);
 		$image->setImageFormat('jpg');
 		$image->writeImage($new_file_name);
 		$image = wp_get_image_editor( $new_file_name );
-		if ( ! is_wp_error( $image ) ) {
-			$image->resize( 800, 800 );
-			$filename = $image->generate_filename( 'full', $thumbnail_folder );
-			$image->save( $filename );
-			$image->resize( 300, 300, true );
-			$image->save( $new_file_name );
+
+		if ( is_wp_error( $image ) ) {
+			if ( $logging instanceof Starg_Logging ) {
+				// translators: %s: Name of the uploaded file.
+				$logging->create_log_entry( sprintf( esc_html__( 'Problems creating thumbnail for file %s.', 'sip' ) ), $file_path );
+			}
+			return;
 		}
+
+		$image->resize( 800, 800 );
+		$filename = $image->generate_filename( 'full', $thumbnail_folder );
+		$image->save( $filename );
+		$image->resize( 300, 300, true );
+		$new_thumbnail = $image->save( $new_file_name );
 	} else {
-		$image = wp_get_image_editor( $file );
-		if ( ! is_wp_error( $image ) ) {
-			$image->resize( 300, 300, true );
-			$image->save( $thumbnail_folder.basename( $file ) );
+		$image = wp_get_image_editor( $file_path );
+
+		if ( is_wp_error( $image ) ) {
+			if ( $logging instanceof Starg_Logging ) {
+				// translators: %s: Name of the uploaded file.
+				$logging->create_log_entry( sprintf( esc_html__( 'Problems creating thumbnail for file %s.', 'sip' ) ), $file_path );
+			}
+			return;
 		}
+
+		$image->resize( 300, 300, true );
+		$new_thumbnail = $image->save( $thumbnail_folder.basename( $file_path ) );
 	}
+
+	return $new_thumbnail;
 }
 
 /**
@@ -532,4 +549,17 @@ function starg_get_map_coordinates_by_post_id( int $archival_post_id ) : array {
 	}
 
 	return $markers;
+}
+
+/**
+ * Retrieve the path to the uploaded archival records.
+ * @return string
+ */
+function starg_get_archival_upload_path() : string {
+	$upload_path = esc_attr( carbon_get_theme_option( 'sip_upload_path' ) );
+	if ( empty( $upload_path ) ) {
+		$upload_path = trailingslashit( wp_get_upload_dir()['basedir'] ) . 'archival';
+	}
+
+	return trailingslashit( $upload_path );
 }
