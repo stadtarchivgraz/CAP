@@ -2,7 +2,8 @@
 if (! defined('WPINC')) { die; }
 
 class Starg_User_Helper {
-	public const STARG_USER_ROLES = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber', );
+	public const STARG_TEST_USER_ROLE = 'test_user';
+	public const STARG_USER_ROLES     = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber', Starg_User_Helper::STARG_TEST_USER_ROLE, );
 
 	/**
 	 * Sets new capabilities for the custom post type for archival records and its custom taxonomies.
@@ -86,6 +87,26 @@ class Starg_User_Helper {
 				$role->remove_cap( 'edit_private_archival_records' );
 			}
 		}
+	}
+
+	/**
+	 * Create a user role for test user.
+	 */
+	public static function starg_create_user_role() {
+		add_role(
+			Starg_User_Helper::STARG_TEST_USER_ROLE,
+			esc_html__( 'Test User', 'sip' ),
+			array(
+				'read'                 => true,
+				// 'edit_posts'           => true,
+				// 'upload_files'         => true,
+				// 'edit_published_posts' => false,
+				// 'publish_posts'        => false,
+				// 'delete_posts'         => false,
+				// 'edit_others_posts'    => false,
+				// 'delete_others_posts'  => false,
+			)
+		);
 	}
 
 }

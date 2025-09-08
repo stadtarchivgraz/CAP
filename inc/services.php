@@ -101,5 +101,20 @@ class Starg_Services {
 			});
 		});
 		
+		/**
+		 * Registers a class as service for exporting statistics in backend.
+		 * Intended to be anonymous.
+		 */
+		add_action( 'admin_init', function() {
+			if ( ! current_user_can('manage_options') ) { return; }
+
+			require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/export_statistics.class.php' );
+			$export_statistics = new Export_Statistics;
+			$export_statistics->maybe_export_statistics();
+			add_filter( 'starg/export_statistics', function() use ( $export_statistics ) {
+				return $export_statistics;
+			});
+		});
+
 	}
 }

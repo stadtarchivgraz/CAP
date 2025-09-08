@@ -3,7 +3,7 @@
  Plugin Name: SIP
  Description: Plugin for creating Submission Information Packages (SIPs) from archival records. The archival records are provided by users. The archivist can choose whether to create a SIP or reject it.
  Author: Stadtarchiv Graz, Guido Handrick
- Version: 3.1.4
+ Version: 3.2.0
  Author URI: http://guido-handrick.info
  Text Domain: sip
  Domain Path: /languages/
@@ -14,7 +14,7 @@
 
 if (! defined('WPINC')) { die; }
 
-define( 'STARG_SIP_PLUGIN_VERSION', '3.1.4' );
+define( 'STARG_SIP_PLUGIN_VERSION', '3.2.0' );
 define( 'STARG_SIP_PLUGIN_NAME',    'SIP' );
 define( 'STARG_SIP_PLUGIN_BASE_DIR', trailingslashit( dirname( __FILE__ ) ) );
 define( 'STARG_SIP_PLUGIN_BASE_URL', plugin_dir_url( __FILE__ ) );
@@ -58,6 +58,8 @@ class Starg_Sip_Plugin {
 		if ( is_admin() ) {
 			require_once( STARG_SIP_PLUGIN_BASE_DIR . 'admin/admin-notification.php' );
 			Starg_Admin_Notification::init();
+			require_once( STARG_SIP_PLUGIN_BASE_DIR . 'admin/admin-pages.php' );
+			Starg_Admin_Pages::init();
 		}
 	}
 
@@ -271,6 +273,7 @@ class Starg_Sip_Plugin {
 
 		// create the needed capabilities for users to be able to work with our custom post type and custom capabilities.
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/user-helper.php" );
+		Starg_User_Helper::starg_create_user_role();
 		Starg_User_Helper::starg_set_capabilities_for_archival_records();
 
 		Starg_Template_Handling::starg_tab_rewrites();
