@@ -34,21 +34,21 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 			'post_title'   => $user_input[ 'archival_title' ],
 			'post_content' => $user_input[ 'archival_description' ],
 			'post_type'    => Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG,
+			'post_status'  => ( 'save_draft' === $user_input['save_sip'] ) ? 'draft' : 'pending',
 		);
 
 		// if a post_id for an archival is set, we want to update the archival post.
 		// todo: maybe check the validity of the post_id.
 		if ( $user_input[ 'archival_ID' ] ) {
-			$orig_author_id = get_post_field( 'post_author', (int) $user_input[ 'archival_ID' ] );
-
-			$post_data['ID']          = (int) $user_input[ 'archival_ID' ];
-			// to keep the original post_status we need to set it again. otherwise we would overwrite it as draft if an archiver edits the post.
-			$post_data['post_status'] = get_post_field( 'post_status', (int) $user_input[ 'archival_ID' ] );
+			$orig_author_id  = (int) get_post_field( 'post_author', (int) $user_input[ 'archival_ID' ] );
+			$post_data['ID'] = (int) $user_input[ 'archival_ID' ];
 
 			// if we're editing the archival record from a different user (admin/editor) we need to reset the post_author to its original value.
 			if ( $orig_author_id !== $current_user_id ) {
 				$user_archive = (int) get_user_meta( $orig_author_id, 'user_archive', true );
 				$post_data['post_author'] = $orig_author_id;
+				// to keep the original post_status we need to set it again. otherwise we would overwrite it as draft if an archiver edits the post.
+				$post_data['post_status'] = get_post_field( 'post_status', (int) $user_input[ 'archival_ID' ] );
 			}
 
 			// if we still have no archive selected, we may try to use the first one created. OR! We tell them and provide a link to the profile where they can change their archive setting!
@@ -175,6 +175,7 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 			'archival_annotation'     => 'sanitize_text_field',
 			'archival_single_date'    => 'sanitize_text_field',
 			'archival_date_range'     => 'starg_sanitize_array',
+			'save_sip'                => 'sanitize_text_field',
 		);
 	}
 

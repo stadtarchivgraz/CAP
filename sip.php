@@ -3,7 +3,7 @@
  Plugin Name: SIP
  Description: Plugin for creating Submission Information Packages (SIPs) from archival records. The archival records are provided by users. The archivist can choose whether to create a SIP or reject it.
  Author: Stadtarchiv Graz, Guido Handrick
- Version: 3.1.3
+ Version: 3.1.4
  Author URI: http://guido-handrick.info
  Text Domain: sip
  Domain Path: /languages/
@@ -14,7 +14,7 @@
 
 if (! defined('WPINC')) { die; }
 
-define( 'STARG_SIP_PLUGIN_VERSION', '3.1.3' );
+define( 'STARG_SIP_PLUGIN_VERSION', '3.1.4' );
 define( 'STARG_SIP_PLUGIN_NAME',    'SIP' );
 define( 'STARG_SIP_PLUGIN_BASE_DIR', trailingslashit( dirname( __FILE__ ) ) );
 define( 'STARG_SIP_PLUGIN_BASE_URL', plugin_dir_url( __FILE__ ) );
@@ -38,6 +38,7 @@ class Starg_Sip_Plugin {
 
 		// todo: maybe install the plugin https://wordpress.org/plugins/notification/ instead of including it as an asset in the plugin?
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "assets/notification/load.php" );
+		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-notifications.php" );
 
 
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/template-handling.php' );

@@ -3,7 +3,7 @@
 
 $sip_folder = ( isset( $_GET['sipFolder'] ) ) ? sanitize_text_field( $_GET['sipFolder'] ) : '';
 
-if ( isset( $_POST ) && isset( $_POST['save-sip'] ) ) {
+if ( isset( $_POST ) && isset( $_POST['save_sip'] ) ) {
 	require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/sip-upload-form-validation.class.php' );
 	$upload_form = new Sip_Upload_Form_Validation;
 	$upload_form->process_upload_form();

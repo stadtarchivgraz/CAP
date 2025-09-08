@@ -252,7 +252,12 @@ if ( $sip_folder ) {
 						<?php if ($archival) : ?>
 							<input type="hidden" name="archival_ID" value="<?php echo $archival->ID; ?>">
 						<?php endif; ?>
-						<input name="save-sip" type="submit" value="<?php esc_html_e('Save and preview', 'sip'); ?>">
+						<button class="button is-large" name="save_sip" type="submit" value="save_draft">
+							<?php esc_html_e('Save as draft', 'sip'); ?>
+						</button>
+						<button class="button is-large" name="save_sip" type="submit" value="submit_archival">
+							<?php esc_html_e('Submit', 'sip'); ?>
+						</button>
 					</p>
 				</div>
 
