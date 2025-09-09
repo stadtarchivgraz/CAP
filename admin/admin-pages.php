@@ -20,7 +20,7 @@ class Starg_Admin_Pages {
 			'edit.php?post_type=archival',
 			esc_html__( 'Statistics', 'sip' ),
 			esc_html__( 'Statistics', 'sip' ),
-			'manage_options',
+			'edit_others_pages',
 			'starg-statisitcs',
 			array( 'Starg_Admin_Pages', 'starg_render_statistics_page' ),
 		);
@@ -167,12 +167,9 @@ class Starg_Admin_Pages {
 		<tfoot>
 			<tr>
 				<th><?php esc_html_e( 'Total', 'sip' ); ?></th>
-				<?php // translators: %s: Total number of users. ?>
-				<th colspan="2"><?php printf( esc_html__( '%s', 'sip' ), esc_html( $data['number_users'] ) ); ?></th>
-				<?php // translators: %s: Total number of submissions. ?>
-				<th><?php printf( esc_html__( '%s', 'sip' ), esc_html( $data['number_submissions'] ) ); ?></th>
-				<?php // translators: %s: Total number of files submitted.. ?>
-				<th><?php printf( esc_html__( '%s', 'sip' ), esc_html( $data['number_submitted_files'] ) ); ?></th>
+				<th colspan="2"><?php echo esc_html( $data['number_users'] ); ?></th>
+				<th><?php echo esc_html( $data['number_submissions'] ); ?></th>
+				<th><?php echo esc_html( $data['number_submitted_files'] ); ?></th>
 				<th></th>
 			</tr>
 		</tfoot>
@@ -205,12 +202,9 @@ class Starg_Admin_Pages {
 			<?php foreach ( $data['data'] as $archive => $archive_data ) : ?>
 				<tr>
 					<th><?php echo esc_html( $archive ); ?></th>
-					<?php // translators: %d: Total number of users. ?>
-					<th><?php printf( esc_html__( '%d', 'sip' ), esc_html( $archive_data['user_by_archive'] ) ); ?></th>
-					<?php // translators: %d: Total number of submissions. ?>
-					<th><?php printf( esc_html__( '%d', 'sip' ), esc_html( $archive_data['submitted_by_archive'] ) ); ?></th>
-					<?php // translators: %d: Total number of files submitted. ?>
-					<th><?php printf( esc_html__( '%d', 'sip' ), esc_html( $archive_data['files_by_archive'] ) ); ?></th>
+					<th><?php echo esc_html( $archive_data['user_by_archive'] ); ?></th>
+					<th><?php echo esc_html( $archive_data['submitted_by_archive'] ); ?></th>
+					<th><?php echo esc_html( $archive_data['files_by_archive'] ); ?></th>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>
