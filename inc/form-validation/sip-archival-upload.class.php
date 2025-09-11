@@ -61,67 +61,135 @@ class Sip_Archival_Upload extends Form_Validation {
 		}
 
 		$sanitize_filename = sanitize_file_name( basename( $uploaded_file['name'] ) );
+		$upload_file_path  = trailingslashit( $upload_dir ) . $sanitize_filename; // todo: create checksum for each uploaded file and save it as post-meta!
+
+		// don't overwrite existing files.
+		if ( file_exists( $upload_file_path ) ) {
+			$sanitize_filename = $this->get_unique_filename( $upload_dir, $sanitize_filename );
+			$upload_file_path  = trailingslashit( $upload_dir ) . $sanitize_filename;
+		}
+
 		fputcsv( $fp, array( strtolower( $sanitize_filename ), $sanitize_filename ) );
 		fclose( $fp );
 		// End $this->add_uploaded_file_to_csv()
 
-		// todo: check for for duplicate filenames in the folder. Currently files with the same name are silently overwritten when uploaded.
-		// todo: create checksum for each uploaded file and save it as post-meta!
-		$upload_file_path = trailingslashit( $upload_dir ) . $sanitize_filename;
 		$json_data        = array(
 			'success' => true,
 		);
 		$file_deleted     = false;
-		// todo: simplify!
-		if ( move_uploaded_file( $uploaded_file['tmp_name'], $upload_file_path ) ) {
-			$file_type = wp_check_filetype($upload_file_path);
-			$sip_size  = 0;
-			if ( isset( $_COOKIE['sip_file_size'] ) ) {
-				$sip_size = sanitize_text_field( $_COOKIE['sip_file_size'] );
-			}
-			if ( $sip_size > $sip_max_size ) {
-				$file_deleted          = unlink($upload_file_path);
-				$json_data['sip_full'] = $sanitize_filename;
-				$json_data['success']  = false;
-			} else {
-				$file_size                = filesize($upload_file_path);
-				$sip_size                 = $sip_size + $file_size;
-				$_COOKIE['sip_file_size'] = $sip_size;
-				$json_data['sip_size']    = $sip_size;
 
-				setcookie("sip_file_size", $sip_size, 0, '/');
-			}
-			if ( ! in_array( $file_type['type'], $supported_mime_types ) ) {
-				$file_deleted               = unlink($upload_file_path);
-				$json_data['success']       = false;
-				$json_data['not_supported'] = $sanitize_filename;
-			} elseif ( (bool) carbon_get_theme_option( 'sip_clamav' ) ) {
-				$scan_result = $this->perform_virus_scan( $upload_file_path );
-				if ( ! $scan_result ) {
-					$file_deleted          = unlink($upload_file_path);
-					$json_data['success']  = false;
-					$file_deleted_msg      = ( $file_deleted ) ? esc_attr__( 'deleted', 'sip' ) : esc_attr__( 'not deleted', 'sip' );
-					$json_data['infected'] = $sanitize_filename;
+		/** we can not use something like @see wp_upload_dir(), because we need to specify the upload directory only for archival data! */
+		$file_moved = move_uploaded_file( $uploaded_file['tmp_name'], $upload_file_path );
+		if ( ! $file_moved ) {
+			$file_deleted         = unlink($upload_file_path);
+			$json_data['success'] = false;
+			// translators: %1$s: Filename. %2$s: Path to folder.
+			$this->set_error_log_message( sprintf( esc_attr__( 'Uploaded file %1$s not moved to uploads folder %2$s', 'sip' ), $sanitize_filename, $upload_file_path ) );
 
-					// translators: %1$d: User Id. %2$s: Filename. %3$s: either "deleted" or "not deleted".
-					$this->set_error_log_message( sprintf( esc_attr__('Infected file uploaded by %1$d in %2$s. File %3$s.', 'sip'), get_current_user_id(), $upload_file_path, $file_deleted_msg ) );
-				}
+			header('Content-Type: application/json; charset=utf-8');
+			echo json_encode($json_data);
+			exit;
+		}
+
+		$file_type = wp_check_filetype($upload_file_path);
+		$sip_size  = 0;
+		if ( isset( $_COOKIE['sip_file_size'] ) ) {
+			$sip_size = sanitize_text_field( $_COOKIE['sip_file_size'] );
+		}
+		$json_data['sip_size'] = $sip_size;
+
+		// check max sip size.
+		if ( $sip_size > $sip_max_size ) {
+			$file_deleted          = unlink($upload_file_path);
+			$json_data['sip_full'] = $sanitize_filename;
+			$json_data['success']  = false;
+
+			header('Content-Type: application/json; charset=utf-8');
+			echo json_encode($json_data);
+			exit;
+		}
+
+		// check if file type is supported
+		if ( ! in_array( $file_type['type'], $supported_mime_types ) ) {
+			$file_deleted               = unlink($upload_file_path);
+			$json_data['success']       = false;
+			$json_data['not_supported'] = $sanitize_filename;
+			
+			header('Content-Type: application/json; charset=utf-8');
+			echo json_encode($json_data);
+			exit;
+		}
+
+		$file_scan_result = $this->scan_file( $upload_file_path );
+		if ( true !== $file_scan_result ) {
+			// removal of the uploaded file happens during scan_file here.
+			$json_data['success']  = false;
+			$json_data['infected'] = $sanitize_filename;
+			if ( isset( $file_scan_result['reason'] ) ) {
+				$json_data['reason'] = $file_scan_result['reason'];
 			}
 		}
+
+		$file_size                = filesize($upload_file_path);
+		$sip_size                 = $sip_size + $file_size;
+		$_COOKIE['sip_file_size'] = $sip_size;
+		$json_data['sip_size']    = $sip_size;
+
+		setcookie("sip_file_size", $sip_size, 0, '/');
 
 		header('Content-Type: application/json; charset=utf-8');
 		echo json_encode($json_data);
 		exit;
 	}
 
+	/**
+	 * Add a counter to a filename to prevent overwriting files with the same filename.
+	 */
+	private function get_unique_filename( $directory, $filename ) {
+		$fileinfo     = pathinfo($filename);
+		$basename     = sanitize_file_name($fileinfo['filename']);
+		$extension    = isset($fileinfo['extension']) ? '.' . $fileinfo['extension'] : '';
+		$new_filename = $basename . $extension;
+		$counter      = 1;
+
+		while ( file_exists($directory . '/' . $new_filename) ) {
+			$new_filename = $basename . '-' . $counter . $extension;
+			$counter++;
+		}
+
+		return $new_filename;
+	}
+
 	private function add_uploaded_file_to_csv() {}
+
+	/**
+	 * Perform scans for malware on the uploaded file.
+	 * @param string $upload_file_path
+	 * @return void|bool|array{ success: bool, reason: string } NULL if no scan was performed. true if everything is ok, array{ success: bool, reason: string } if file was not found, antivirus software is not ready, file is infected.
+	 */
+	private function scan_file( string $upload_file_path ) {
+		if ( ! (bool) carbon_get_theme_option( 'sip_clamav' ) ) { return NULL; }
+
+		$scan_result = $this->scan_file_for_viruses( $upload_file_path );
+		if ( ! $scan_result['success'] ) {
+			$file_deleted     = unlink($upload_file_path);
+			$file_deleted_msg = ( $file_deleted ) ? esc_attr__( 'deleted', 'sip' ) : esc_attr__( 'not deleted', 'sip' );
+
+			// translators: %1$d: Filename. %2$s: User Id. %3$s: either "deleted" or "not deleted". %4$s: Virus scan result.
+			$this->set_error_log_message( sprintf( esc_attr__('Problem with file %1$s from user %2$d. File %3$s. Virus scan result: %4$s', 'sip'), $upload_file_path, get_current_user_id(), $file_deleted_msg, $scan_result['reason'] ) );
+
+			return $scan_result;
+		}
+
+		return true;
+	}
 
 	/**
 	 * Perform a virus check with clamAV.
 	 * @param string $upload_file_path Path to the uploaded file.
-	 * @return bool false if clamAV is not responding or if a virus was found. true on success.
+	 * @return array{success:bool, reason:string} success:false if clamAV is not responding or if a virus was found. success:true on success.
 	 */
-	private function perform_virus_scan( $upload_file_path ) : bool {
+	private function scan_file_for_viruses( $upload_file_path ) : array {
 		$clam_rdy = false;
 		try {
 			$clam     = new Network( esc_attr( carbon_get_theme_option( 'sip_clamav_host' ) ), (int) esc_attr( carbon_get_theme_option( 'sip_clamav_port' ) ) );
@@ -129,24 +197,28 @@ class Sip_Archival_Upload extends Form_Validation {
 		} catch( Exception $exception ) {
 			// no connection to clamav!
 			$this->set_error_log_message( $exception->getMessage() );
-			return false;
+			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: not responding', 'sip' ), );
 		}
 
 		// maybe connected to clamav but clamav is not ready/responding.
 		if ( ! $clam_rdy ) {
 			$this->set_error_log_message( esc_attr__( 'clamav is not ready/responding', 'sip' ) );
-			return false;
+			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: not ready', 'sip' ), );
 		}
 
-		// todo: check if the file is scannable. there is also a possibility that the file can not be found.
+		if ( ! file_exists( $upload_file_path ) ) {
+			$this->set_error_log_message(sprintf(esc_attr__('Uploaded File %1$s from user id %2$d was not scanned. File not found', 'sip'), $upload_file_path, get_current_user_id() ) );
+			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: file not found', 'sip' ), );
+		}
+
 		$scan_result = $clam->fileScan($upload_file_path);
 		if ( ! $scan_result ) {
 		// translators: %1$s: File path. %2$d: User ID.
 			$this->set_error_log_message(sprintf(esc_attr__('Uploaded File %1$s from user id %2$d is infected', 'sip'), $upload_file_path, get_current_user_id() ) );
-			return false;
+			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: virus detected', 'sip' ), );
 		}
 
-		return true;
+		return array( 'success' => true, 'reason' => esc_attr__( 'ClamAV: file is safe', 'sip' ), );
 	}
 
 	/**

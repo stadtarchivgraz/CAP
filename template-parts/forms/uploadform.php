@@ -104,15 +104,20 @@ if ($sip_archival_remove instanceof Sip_Archival_Remove) {
 				// todo: maybe change all the alerts into modals?!
 				sipDropzone.on("success", function(file, response) {
 					if (response.infected) {
-						sipDropzone.removeFile(file);
-						alert("<?php esc_attr_e('Virus detected in:', 'sip'); ?>" + ' ' + response.infected);
+						// Give the user more information about a skipped upload. This is useful because an upload might also fail due to a busy virus scanner!
+						if ( response.reason ) {
+							alert( response.reason );
+						} else {
+							alert("<?php esc_attr_e('Virus detected in:', 'sip'); ?>" + ' ' + response.infected);
+						}
+						sipDropzone.removeFile(file);// todo: most likely not needed! we're already deleting the file if something malicious happens.
 					}
 					if (response.not_supported) {
-						sipDropzone.removeFile(file);
+						sipDropzone.removeFile(file);// todo: most likely not needed! we're already deleting the file if something malicious happens.
 						alert("<?php esc_attr_e('Unsupported file type:', 'sip'); ?>" + ' ' + response.not_supported);
 					}
 					if (response.sip_full) {
-						sipDropzone.removeFile(file);
+						sipDropzone.removeFile(file);// todo: most likely not needed! we're already deleting the file if something malicious happens.
 						alert("<?php esc_attr_e('Further uploads are not possible. Files must be deleted first.', 'sip'); ?>");
 					}
 					if (sipDropzone.files.length != 0) {
