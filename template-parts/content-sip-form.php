@@ -14,14 +14,12 @@ $sip_folder     = ( isset( $_GET['sipFolder'] ) && $_GET['sipFolder'] ) ? saniti
 
 // if viewing an existing archival.
 if ( $sip_folder ) {
-	global $wpdb;
-	$archival_id_sql = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_archival_sip_folder' AND meta_value = %s";
-	$archival_id     = $wpdb->get_var($wpdb->prepare($archival_id_sql, $sip_folder));
+	$archival_id = starg_get_archival_id_by_sip_folder( $sip_folder );
 	if ($archival_id) {
 		$archival            = get_post($archival_id);
-		$archival_from       = esc_attr(get_post_meta($archival->ID, '_archival_from', true));
-		$archival_to         = esc_attr(get_post_meta($archival->ID, '_archival_to', true));
-		$archival_originator = esc_attr(get_post_meta($archival->ID, '_archival_originator', true));
+		$archival_from       = esc_attr( get_post_meta( $archival_id, '_archival_from', true ) );
+		$archival_to         = esc_attr( get_post_meta( $archival_id, '_archival_to', true ) );
+		$archival_originator = esc_attr( get_post_meta( $archival_id, '_archival_originator', true ) );
 	}
 }
 ?>

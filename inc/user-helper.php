@@ -97,16 +97,20 @@ class Starg_User_Helper {
 			Starg_User_Helper::STARG_TEST_USER_ROLE,
 			esc_html__( 'Test User', 'sip' ),
 			array(
-				'read'                 => true,
-				// 'edit_posts'           => true,
-				// 'upload_files'         => true,
-				// 'edit_published_posts' => false,
-				// 'publish_posts'        => false,
-				// 'delete_posts'         => false,
-				// 'edit_others_posts'    => false,
-				// 'delete_others_posts'  => false,
+				'read' => true,
 			)
 		);
+	}
+
+	/**
+	 * Remove a user role for test user and reset the role of our test users to subscriber.
+	 */
+	public static function starg_remove_user_role() {
+		$test_users = get_users( array( 'role' => Starg_User_Helper::STARG_TEST_USER_ROLE, ) );
+		foreach ( $test_users as $single_test_user ) {
+			$single_test_user->set_role( 'subscriber' );
+		}
+		remove_role( Starg_User_Helper::STARG_TEST_USER_ROLE );
 	}
 
 }

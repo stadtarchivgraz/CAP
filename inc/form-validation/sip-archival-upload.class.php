@@ -29,7 +29,7 @@ class Sip_Archival_Upload extends Form_Validation {
 		}
 
 		$supported_mime_types = explode("\r\n", carbon_get_theme_option( 'sip_mime_types') );
-		$sip_max_size = (carbon_get_theme_option( 'sip_max_size') ) ?: 50000000;
+		$sip_max_size = (carbon_get_theme_option( 'sip_max_size') ) ? (int) carbon_get_theme_option( 'sip_max_size') : 50000000;
 
 		$sip_folder       = starg_get_archival_upload_path() . $user_input['sipUserID'] . '/' . $user_input['sipFolder'] . '/';
 		$upload_folder    = $sip_folder . 'content/';
@@ -54,7 +54,8 @@ class Sip_Archival_Upload extends Form_Validation {
 				fputcsv( $fp, array( strtolower( $sanitize_path ), $path ) );
 				$upload_dir = $upload_dir . $sanitize_path . '/';
 				if ( ! file_exists( $upload_dir ) ) {
-					mkdir( $upload_dir, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS );
+					/** we could also use something like @see wp_mkdir_p(), but it creates permission with 0777. */
+					mkdir( $upload_dir, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS, true );
 				}
 			}
 		}

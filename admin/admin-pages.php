@@ -52,6 +52,20 @@ class Starg_Admin_Pages {
 			endif;
 			?>
 
+			<h2><?php esc_html_e( 'Archive-related statistics', 'sip' ); ?></h2>
+			<table class="wp-list-table widefat fixed striped">
+				<thead>
+					<tr>
+						<th><?php esc_html_e( 'Archive', 'sip' ); ?></th>
+						<th><?php esc_html_e( 'User', 'sip' ); ?></th>
+						<th><?php esc_html_e( 'Submissions', 'sip' ); ?></th>
+						<th><?php esc_html_e( 'Files submitted', 'sip' ); ?></th>
+					</tr>
+				</thead>
+				<?php self::display_archive_statistics_table_rows( $all_uploaded_files[ 'valid_users' ][ 'statistics_by_archive' ] ); ?>
+			</table>
+
+			<h2><?php esc_html_e( 'Statistics by user', 'sip' ); ?></h2>
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
 					<tr>
@@ -66,8 +80,10 @@ class Starg_Admin_Pages {
 				<?php self::display_user_statistics_table_rows( $all_uploaded_files[ 'valid_users' ] ); ?>
 			</table>
 
-			<hr>
+			<hr style="margin-top: 2em;margin-bottom:2em;">
 
+			<h2><?php esc_html_e( 'Data from administrators or test user', 'sip' ); ?></h2>
+			<h3><?php esc_html_e( 'Archive-related statistics', 'sip' ); ?></h3>
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
 					<tr>
@@ -77,10 +93,10 @@ class Starg_Admin_Pages {
 						<th><?php esc_html_e( 'Files submitted', 'sip' ); ?></th>
 					</tr>
 				</thead>
-				<?php self::display_archive_statistics_table_rows( $all_uploaded_files[ 'valid_users' ][ 'statistics_by_archive' ] ); ?>
+				<?php self::display_archive_statistics_table_rows( $all_uploaded_files[ 'skipped_users' ][ 'statistics_by_archive' ] ); ?>
 			</table>
 
-			<h2><?php esc_html_e( 'Data from administrators or test user', 'sip' ); ?></h2>
+			<h3><?php esc_html_e( 'Statistics by user', 'sip' ); ?></h3>
 			<table class="wp-list-table widefat fixed striped">
 				<thead>
 					<tr>
@@ -93,20 +109,6 @@ class Starg_Admin_Pages {
 					</tr>
 				</thead>
 				<?php self::display_user_statistics_table_rows( $all_uploaded_files[ 'skipped_users' ] ); ?>
-			</table>
-
-			<hr>
-
-			<table class="wp-list-table widefat fixed striped">
-				<thead>
-					<tr>
-						<th><?php esc_html_e( 'Archive', 'sip' ); ?></th>
-						<th><?php esc_html_e( 'User', 'sip' ); ?></th>
-						<th><?php esc_html_e( 'Submissions', 'sip' ); ?></th>
-						<th><?php esc_html_e( 'Files submitted', 'sip' ); ?></th>
-					</tr>
-				</thead>
-				<?php self::display_archive_statistics_table_rows( $all_uploaded_files[ 'skipped_users' ][ 'statistics_by_archive' ] ); ?>
 			</table>
 
 			<?php if ( $export_statistics ) : ?>
@@ -275,11 +277,17 @@ class Starg_Admin_Pages {
 
 				// we need to check the status of the submission. If it is an upload without post we can not count it as submission!
 				$archival_id = starg_get_archival_id_by_sip_folder( $submission_id );
-				if ( $archival_id ) {
-					$archival_status[ $submission_id ] = array( $archival_id => get_post_status( $archival_id ), );
-					$user_files += (int) $uploaded_files;// only count the uploaded files if an archival post exists. Otherwise they are considered simple uploads but not submitted or draft!
+				if ( ! $archival_id ) {
+					continue;
+				}
+
+				$single_archival_status = get_post_status( $archival_id );
+				// filter all drafts from statistics.
+				if ( 'draft' !== $single_archival_status ) {
+					$user_files += (int) $uploaded_files;
 					$single_user_submission++;
 				}
+				$archival_status[ $submission_id ] = array( $archival_id => $single_archival_status, );
 			}
 
 			// skipping user which are not relevant for statistics.

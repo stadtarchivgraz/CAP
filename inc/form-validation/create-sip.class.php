@@ -46,9 +46,7 @@ class Create_Sip extends Form_Validation {
 			return false;
 		}
 
-		global $wpdb;
-		$archival_sql = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_archival_sip_folder' AND meta_value = %s";
-		$archival_id  = $wpdb->get_var($wpdb->prepare( $archival_sql, $sip_user_folder_id ));
+		$archival_id = starg_get_archival_id_by_sip_folder( $sip_user_folder_id );
 		if ( ! $archival_id ) {
 			// translators: %s: ID/Name of the folder where the sip is stored.
 			$this->set_error_message( sprintf( esc_attr__( 'No archival record found with SIP-ID: "%s"', 'sip' ), $sip_user_folder_id ) );
@@ -191,6 +189,7 @@ class Create_Sip extends Form_Validation {
 		$archival_annotation = get_post_meta($this->archival->ID, '_archival_annotation', true);
 		$archival_blocking_time = get_post_meta($this->archival->ID, '_archival_blocking_time', true);
 
+		// todo: refactor!
 		$writer = new XMLWriter;
 		$writer->openURI($this->header_dir . 'metadata.xml');
 		$writer->setIndent(1);

@@ -1,7 +1,6 @@
 <?php
 if (! defined('WPINC')) { die; }
 
-require STARG_SIP_PLUGIN_BASE_DIR . 'vendor/autoload.php';
 use Spipu\Html2Pdf\Html2Pdf;
 
 require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/form-validation.class.php' );
@@ -53,15 +52,10 @@ class Create_Sip_Pdf extends Form_Validation {
 	 * @return false|void
 	 */
 	private function create_pdf( string $sip_folder ) {
-		$current_locale = strtolower(get_locale());
-
+		$current_locale   = strtolower(get_locale());
 		$date_time_format = get_option('date_format') . ' ' . get_option('time_format');
-		$date_format = get_option('date_format');
-
-		global $wpdb;
-		$archival_id_sql = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_archival_sip_folder' AND meta_value = %s";
-		$archival_id = $wpdb->get_var($wpdb->prepare( $archival_id_sql, $sip_folder ));
-
+		$date_format      = get_option('date_format');
+		$archival_id      = starg_get_archival_id_by_sip_folder( $sip_folder );
 		if ( ! $archival_id ) {
 			// translators: %d: Post-ID of an archival record.
 			$this->set_error_message( sprintf( esc_attr__( 'No archival record found with SIP Post-ID: "%d"', 'sip' ), $archival_id ) );

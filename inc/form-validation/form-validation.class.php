@@ -118,7 +118,7 @@ abstract class Form_Validation {
 		if ( ! $logging instanceof Starg_Logging || ! $logging->error_logging_enabled ) { return; }
 	
 		if ( $this->error_log_msg ) {
-			$this->error_log_msg .= '\n' . $error_log_msg;
+			$this->error_log_msg .= ' | ' . $error_log_msg;
 			$logging->create_log_entry( $this->error_log_msg );
 			return;
 		}
