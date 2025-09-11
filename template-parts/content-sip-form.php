@@ -36,9 +36,10 @@ if ( $sip_folder ) {
 			<?php
 			// Display the uploaded items.
 			include(STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-sip-folder.php');
-			if ($exif_dates) {
-				$exif_dates_min = min($exif_dates);
-				$exif_dates_max = max($exif_dates);
+
+			if ( isset( Render_Sip_Content_folder::$exif_dates ) && Render_Sip_Content_folder::$exif_dates ) {
+				$exif_dates_min = (int) min(Render_Sip_Content_folder::$exif_dates);
+				$exif_dates_max = (int) max(Render_Sip_Content_folder::$exif_dates);
 				$period_days    = ceil(($exif_dates_max - $exif_dates_min) / 86400);
 				if (! $archival_from) {
 					$archival_from = date('Y-m-d\TH:i', $exif_dates_min);
