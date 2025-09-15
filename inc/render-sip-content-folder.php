@@ -78,22 +78,15 @@ class Render_Sip_Content_Folder {
 			[$file_data_entry, $file_type]    = Render_Sip_Content_Folder::get_file_metadata($path_clean);
 			$file_data[basename($path_clean)] = $file_data_entry;
 
-			$file_url = get_bloginfo('url') . substr($path, strrpos($path, '/wp-content'));
-			// We need to use the absolute path to the images if we're rendering a PDF.
-			// The PDF-Library we're using (spipu/html2pdf) transforms uppercase letters in URLs into lowercase.
-			// This is fine for windows servers as their filesystem is not case sensitive. But on linux image.png is not the same as Image.png!
-			if ( $is_pdf ) {
-				$file_url = $path_clean;
-			}
-
-			$thumb_link    = '';
-			$image_size    = false;
+			$file_url   = get_bloginfo('url') . substr($path, strrpos($path, '/wp-content'));
+			$thumb_link = '';
+			$image_size = false;
 
 			// create view based on filetype
 			if (strrpos($file_type['type'], 'image') === 0) {
 				$image_size = getimagesize($path_clean);
 			}
-			$thumb_link = Render_Sip_Content_Folder::get_file_link($file_type, $file_url, $thumbnail_folder, $image_size);
+			$thumb_link = Render_Sip_Content_Folder::get_file_link($file_type, $file_url, $path_clean, $thumbnail_folder, $image_size);
 
 			// render data
 			if ($thumb_link) {
@@ -110,19 +103,38 @@ class Render_Sip_Content_Folder {
 	 * Create a link to the file with thumbnail.
 	 *
 	 * @param array $file_type
-	 * @param string $file_url
+	 * @param string $file_url         URL of the file.
+	 * @param string $path_to_file     Absolute path to the file on the hard drive.
 	 * @param string $thumbnail_folder [Optional]
 	 * @param mixed $image_size        [Optional]
 	 *
 	 * @return string
 	 */
-	private static function get_file_link(array $file_type, string $file_url, string $thumbnail_folder = '', $image_size = array()) : string {
+	private static function get_file_link(array $file_type, string $file_url, string $path_to_file, string $thumbnail_folder = '', $image_size = array() ) : string {
+		$file = $file_url;
+		// We need to use the absolute path to the images if we're rendering a PDF.
+		// The PDF-Library we're using (spipu/html2pdf) transforms uppercase letters in URLs into lowercase.
+		// This is fine for windows servers as their filesystem is not case sensitive. But on linux image.png is not the same as Image.png!
+		if ( self::$is_pdf ) {
+			$file = $path_to_file;
+		}
+
 		$ext       = strtolower($file_type['ext']);
 		$type      = explode('/', $file_type['type'])[0];
-		$file_info = pathinfo( $file_url );
+		$file_info = pathinfo( $file );
 
-		$thumbnail_dir_url  = dirname($file_url, 2);
+		$thumbnail_dir_url  = dirname($file, 2);
 		$thumbnail_filename = ( 'pdf' === $ext ) ? $file_info['basename'] : $file_info['filename'];
+
+		// if no thumbnail exists, try to create one.
+		if ( ! file_exists( $thumbnail_folder . $thumbnail_filename . '.jpg' ) ) {
+			if ( 'pdf' === $ext ) {
+				starg_create_pdf_thumbnail( $path_to_file, $thumbnail_folder );
+			} elseif ( 'image' === $type ) {
+				starg_create_thumbnail( $path_to_file, $thumbnail_folder );
+			}
+		}
+
 		if (file_exists($thumbnail_folder . $thumbnail_filename . '.jpg')) {
 			$thumbnail_url = trailingslashit($thumbnail_dir_url) . 'thumb/' . $thumbnail_filename . '.jpg';
 		} else {

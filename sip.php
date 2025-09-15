@@ -200,7 +200,14 @@ class Starg_Sip_Plugin {
 	 */
 	public static function starg_delete_sip_cron_schedule() {
 		if ( ! wp_next_scheduled( 'archival_delete_cron_event' ) && carbon_get_theme_option( 'sip_cron_delete' ) ) {
-			wp_schedule_event( time(), 'daily', 'archival_delete_cron_event' );
+			$archival_delete_cron = wp_schedule_event( time(), 'daily', 'archival_delete_cron_event', array(), true );
+			if ( is_wp_error( $archival_delete_cron ) ) {
+				$logging = apply_filters( 'starg/logging', null );
+				if ($logging instanceof Starg_Logging) {
+					// translators: %s: Errormessage.
+					$logging->create_log_entry(sprintf(esc_html__( 'Archival delete cron not scheduled. see: %s', 'sip'), $archival_delete_cron->get_error_message() ));
+				}
+			}
 		}
 	}
 
@@ -209,15 +216,17 @@ class Starg_Sip_Plugin {
 	 * The time can be set in the backend.
 	 */
 	public static function starg_archival_delete_cron_job_function() {
-		if ( ! carbon_get_theme_option( 'sip_cron_delete' ) ) { return; }
+		if ( ! carbon_get_theme_option( 'sip_cron_delete' ) || ! carbon_get_theme_option( 'sip_cron_delete_status' ) ) { return; }
 
-		global $wpdb;
 		$days          = (int) esc_attr( carbon_get_theme_option( 'sip_cron_delete_days' ) ); // type:number
-		$status        = carbon_get_theme_option( 'sip_cron_delete_status' ); // type:multiselect
+		$status        = array_map( 'esc_html', carbon_get_theme_option( 'sip_cron_delete_status' ) ); // type:multiselect
+		$status        = array_flip( $status );
 		$upload_folder = starg_get_archival_upload_path();
 		$sip_folders   = array();
+		$logging       = apply_filters( 'starg/logging', null );
 
-		if ( in_array( 'upload', $status ) ) {
+		// get all uploaded folders by each user and check if a post exists. if not, this entry is considered abandoned.
+		if ( isset( $status['upload'] ) ) {
 			$user_ids             = get_users( array( 'fields' => 'ID' ) );
 			$archival_sip_folders = DB_Query_Helper::starg_get_all_archival_sip_folders_from_posts();
 			foreach ( $user_ids as $single_user_id ) {
@@ -234,27 +243,44 @@ class Starg_Sip_Plugin {
 					}
 				}
 			}
+			unset( $status['upload'] );
 		}
 
-		$status_str        = "'" . implode( "','", $status ) . "'";
-		$archival_sips_sql = "SELECT ID, meta_value, post_author
-			FROM $wpdb->postmeta LEFT JOIN $wpdb->posts ON post_id = ID
-			WHERE meta_key = '_archival_sip_folder'
-				AND post_status IN (%s)
-				AND post_date <= %s";
-		$post_date_filter     = date( 'Y-m-d 23:59:59', strtotime( "-$days days" ) );
-		$archival_sip_folders = $wpdb->get_results( $wpdb->prepare( $archival_sips_sql, $status_str, $post_date_filter ) );
+		// Check each user-defined status (except 'upload') for archival posts that should be removed.
+		if ( $status ) {
+			$status_str           = "'" . implode( "','", array_flip( $status ) ) . "'";
+			$post_date_filter     = date( 'Y-m-d 23:59:59', strtotime( "-$days days" ) );
+			$archival_sip_folders = DB_Query_Helper::starg_get_posts_with_archival_sip_meta( $status_str, $post_date_filter );
 
-		if ( ! $archival_sip_folders ) { return; }
+			if ( $archival_sip_folders ) {
+				foreach ( $archival_sip_folders as $archival_sip_folder ) {
+					$single_sip_folder = $upload_folder . $archival_sip_folder->post_author . '/' . $archival_sip_folder->meta_value . '/';
+					$sip_folders[]     = $single_sip_folder;
+					$post_meta_deleted = delete_post_meta( $archival_sip_folder->ID, '_archival_sip_folder' );
+					$post_deleted      = wp_trash_post( $archival_sip_folder->ID );
 
-		foreach ( $archival_sip_folders as $archival_sip_folder ) {
-			$sip_folders[] = $upload_folder . $archival_sip_folder->post_author . '/' . $archival_sip_folder->meta_value . '/';
-			delete_post_meta( $archival_sip_folder->ID, '_archival_sip_folder' );
-		}
-		foreach ( $sip_folders as $sip_folder ) {
-			if ( is_dir( $sip_folder ) ) {
-				starg_remove_SIP( $sip_folder );
+					if ( ! $post_meta_deleted ) {
+						if ( $logging instanceof Starg_Logging ) {
+							// translators: %1$s: Post-ID. %2$d: SIP folder.
+							$logging->create_log_entry( sprintf( esc_html__( 'Post meta for post %1$d and SIP folder %2$s not deleted.', 'sip' ), $archival_sip_folder->ID, $single_sip_folder ) );
+						}
+					}
+					if ( ! $post_deleted ) {
+						if ( $logging instanceof Starg_Logging ) {
+							// translators: %1$s: Post-ID. %2$d: SIP folder.
+							$logging->create_log_entry( sprintf( esc_html__( 'Post with ID %1$d and SIP folder %2$s not deleted.', 'sip' ), $archival_sip_folder->ID, $single_sip_folder ) );
+						}
+					}
+				}
 			}
+		}
+
+		if ( empty( $sip_folders) ) { return; }
+
+		foreach ( $sip_folders as $sip_folder ) {
+			if ( ! is_dir( $sip_folder ) ) { continue; }
+
+			starg_remove_SIP( $sip_folder );
 		}
 	}
 

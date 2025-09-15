@@ -536,7 +536,7 @@ class Create_Sip extends Form_Validation {
 									$writer->text($file['Path']);
 									$writer->endAttribute();
 									$writer->startAttribute('xlink:title');
-									$writer->text(($titles[basename($file['Path'])])?:basename($file['Path']));
+									$writer->text( ( isset( $titles[ basename( $file['Path'] ) ] ) ) ? $titles[ basename( $file['Path'] ) ] : basename( $file['Path'] ) );
 									$writer->endAttribute();
 									$writer->startAttribute('LOCTYPE');
 									$writer->text('OTHER');

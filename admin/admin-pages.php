@@ -138,7 +138,7 @@ class Starg_Admin_Pages {
 	 * @return void
 	 */
 	protected static function display_user_statistics_table_rows( array $data ) : void {
-		if ( empty( $data ) ) :
+		if ( empty( $data ) || ! isset( $data['data'] ) ) :
 			?>
 			<tbody>
 				<tr>
@@ -184,11 +184,11 @@ class Starg_Admin_Pages {
 	 * @return void
 	 */
 	protected static function display_archive_statistics_table_rows( array $data ) : void {
-		if ( empty( $data ) ) :
+		if ( empty( $data ) || ! isset( $data['data'] ) ) :
 			?>
 			<tbody>
 				<tr>
-					<td colspan="6">
+					<td colspan="4">
 						<div>
 							<p><?php esc_html_e( 'There are no elements to display.', 'sip' ); ?></p>
 						</div>
@@ -212,7 +212,7 @@ class Starg_Admin_Pages {
 		</tbody>
 		<tfoot>
 			<tr>
-				<th><?php echo count( $data['data'] ); ?></th>
+				<th><?php echo is_countable( $data['data'] ) ? count( $data['data'] ) : 0; ?></th>
 				<th><?php echo esc_html( $data['number_users'] ); ?></th>
 				<th><?php echo esc_html( $data['number_submissions'] ); ?></th>
 				<th><?php echo esc_html( $data['number_submitted_files'] ); ?></th>
