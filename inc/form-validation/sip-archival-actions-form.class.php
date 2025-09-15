@@ -34,9 +34,7 @@ class Sip_Archival_Actions extends Form_Validation {
 		}
 
 		// todo: we have a problem here! a successful upload creates the upload folder but not the post! the post gets created on meta-data input!
-		global $wpdb;
-		$archival_id_sql = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_archival_sip_folder' AND meta_value = %s";
-		$archival_id     = (int) $wpdb->get_var( $wpdb->prepare( $archival_id_sql, $sip_folder ) );
+		$archival_id     = DB_Query_Helper::starg_get_archival_id_by_sip_folder( $sip_folder );
 		if ( ! $archival_id ) {
 			// translators: %s: identifier for an archival record.
 			$this->set_error_message( sprintf( esc_html__( 'No archival record found for the provided SIP folder: %s. This entry can not be deleted.', 'sip' ), $sip_folder ) );

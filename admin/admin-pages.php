@@ -276,7 +276,7 @@ class Starg_Admin_Pages {
 				$archival_status[ $submission_id ] = 'upload';
 
 				// we need to check the status of the submission. If it is an upload without post we can not count it as submission!
-				$archival_id = starg_get_archival_id_by_sip_folder( $submission_id );
+				$archival_id = DB_Query_Helper::starg_get_archival_id_by_sip_folder( $submission_id );
 				if ( ! $archival_id ) {
 					continue;
 				}

@@ -129,9 +129,9 @@ if ($meta_query) {
 					foreach ( $upload_purpose_options as $single_upload_purpose_option ) {
 						$single_upload_purpose_option = esc_attr( $single_upload_purpose_option );
 						if ( ! $user_archive ) {
-							$upload_purpose[$single_upload_purpose_option] = starg_get_upload_purpose_post_count( $single_upload_purpose_option );
+							$upload_purpose[$single_upload_purpose_option] = DB_Query_Helper::starg_get_upload_purpose_post_count( $single_upload_purpose_option );
 						} else {
-							$upload_purpose[$single_upload_purpose_option] = starg_get_upload_purpose_post_count_for_user( $user_archive, $single_upload_purpose_option );
+							$upload_purpose[$single_upload_purpose_option] = DB_Query_Helper::starg_get_upload_purpose_post_count_for_user( $user_archive, $single_upload_purpose_option );
 						}
 					}
 					?>
@@ -157,9 +157,9 @@ if ($meta_query) {
 				<div class="column is-6-tablet">
 					<?php
 					if ( ! $user_archive ) {
-						$years = starg_get_upload_year_post_count();
+						$years = DB_Query_Helper::starg_get_upload_year_post_count();
 					} else {
-						$years = starg_get_upload_year_post_count_for_user( $user_archive );
+						$years = DB_Query_Helper::starg_get_upload_year_post_count_for_user( $user_archive );
 					}
 					?>
 					<div class="field">
@@ -194,7 +194,7 @@ if ($meta_query) {
 							$selected_archival_tag = ( isset( $_GET['filter-tag'] ) && $_GET['filter-tag'] ) ? sanitize_text_field( $_GET['filter-tag'] ) : 0;
 							$archival_tag_taxonomy = get_taxonomy('archival_tag');
 							if ( $user_archive ) :
-								$all_archive_tags = starg_get_archive_tags($user_archive);
+								$all_archive_tags = DB_Query_Helper::starg_get_archive_tags($user_archive);
 								if ( $all_archive_tags ) :
 									?>
 									<select name="filter-tag" id="filter-tag">
@@ -205,7 +205,7 @@ if ($meta_query) {
 										foreach ($all_archive_tags as $archive_tag) :
 											?>
 											<option value="<?php echo $archive_tag->term_taxonomy_id; ?>" <?php selected( $selected_archival_tag, $archive_tag->term_taxonomy_id ); ?>>
-												<?php echo starg_get_archival_tag_name( $archive_tag->term_taxonomy_id ); ?> (<?php echo $archive_tag->count; ?>)
+												<?php echo DB_Query_Helper::starg_get_archival_tag_name( $archive_tag->term_taxonomy_id ); ?> (<?php echo $archive_tag->count; ?>)
 											</option>
 										<?php endforeach; ?>
 									</select>

@@ -50,6 +50,7 @@ class Starg_Sip_Plugin {
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/services.php" );
 		Starg_Services::init();
 
+		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/db-query-helper.php" );
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-functions.php" );
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-template-functions.php" );
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "admin/sip-options.php" );
@@ -218,8 +219,7 @@ class Starg_Sip_Plugin {
 
 		if ( in_array( 'upload', $status ) ) {
 			$user_ids             = get_users( array( 'fields' => 'ID' ) );
-			$archival_sip_folders = $wpdb->get_results( "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = '_archival_sip_folder'" );
-			$archival_sip_folders = wp_list_pluck( $archival_sip_folders, 'meta_value' );
+			$archival_sip_folders = DB_Query_Helper::starg_get_all_archival_sip_folders_from_posts();
 			foreach ( $user_ids as $single_user_id ) {
 				$user_upload_folder = $upload_folder . $single_user_id . '/';
 				if ( ! file_exists( $user_upload_folder ) ) {

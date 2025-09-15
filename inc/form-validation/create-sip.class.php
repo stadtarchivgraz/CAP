@@ -46,7 +46,7 @@ class Create_Sip extends Form_Validation {
 			return false;
 		}
 
-		$archival_id = starg_get_archival_id_by_sip_folder( $sip_user_folder_id );
+		$archival_id = DB_Query_Helper::starg_get_archival_id_by_sip_folder( $sip_user_folder_id );
 		if ( ! $archival_id ) {
 			// translators: %s: ID/Name of the folder where the sip is stored.
 			$this->set_error_message( sprintf( esc_attr__( 'No archival record found with SIP-ID: "%s"', 'sip' ), $sip_user_folder_id ) );

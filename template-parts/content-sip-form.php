@@ -14,7 +14,7 @@ $sip_folder     = ( isset( $_GET['sipFolder'] ) && $_GET['sipFolder'] ) ? saniti
 
 // if viewing an existing archival.
 if ( $sip_folder ) {
-	$archival_id = starg_get_archival_id_by_sip_folder( $sip_folder );
+	$archival_id = DB_Query_Helper::starg_get_archival_id_by_sip_folder( $sip_folder );
 	if ($archival_id) {
 		$archival            = get_post($archival_id);
 		$archival_from       = esc_attr( get_post_meta( $archival_id, '_archival_from', true ) );

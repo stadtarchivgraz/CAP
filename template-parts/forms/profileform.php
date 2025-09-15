@@ -75,7 +75,7 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 
 		$archival_drafts = new WP_Query( $archival_draft_args );
 
-		$archival_sip_folders = starg_get_archival_sip_folders_by_user_id( $user->ID );
+		$archival_sip_folders = DB_Query_Helper::starg_get_archival_sip_folders_by_user_id( $user->ID );
 		$upload_folder        = starg_get_archival_upload_path() . $user->ID . '/';
 		$sip_folders          = glob($upload_folder . '*', GLOB_ONLYDIR);
 

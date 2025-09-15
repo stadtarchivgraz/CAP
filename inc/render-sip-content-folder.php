@@ -18,13 +18,13 @@ class Render_Sip_Content_Folder {
 		$logging   = apply_filters( 'starg/logging', null );
 		$sip_id    = false;
 		$file_data = array();
-		$author_id = 0;
+		$author_id = get_current_user_id();
 		self::$is_pdf = $is_pdf;
 
 		if (isset($_GET['sipFolder']) && $_GET['sipFolder']) {
 			// $author_id = get_current_user_id();
 			$sip_id      = sanitize_text_field($_GET['sipFolder']);
-			$archival_id = starg_get_archival_id_by_sip_folder( $sip_id );
+			$archival_id = DB_Query_Helper::starg_get_archival_id_by_sip_folder( $sip_id );
 			if ( $archival_id ) {
 				$author_id = (int) get_post_field( 'post_author', $archival_id );
 			}

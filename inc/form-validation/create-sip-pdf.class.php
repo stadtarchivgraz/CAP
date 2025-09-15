@@ -55,7 +55,7 @@ class Create_Sip_Pdf extends Form_Validation {
 		$current_locale   = strtolower(get_locale());
 		$date_time_format = get_option('date_format') . ' ' . get_option('time_format');
 		$date_format      = get_option('date_format');
-		$archival_id      = starg_get_archival_id_by_sip_folder( $sip_folder );
+		$archival_id      = DB_Query_Helper::starg_get_archival_id_by_sip_folder( $sip_folder );
 		if ( ! $archival_id ) {
 			// translators: %d: Post-ID of an archival record.
 			$this->set_error_message( sprintf( esc_attr__( 'No archival record found with SIP Post-ID: "%d"', 'sip' ), $archival_id ) );
