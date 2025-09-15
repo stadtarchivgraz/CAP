@@ -202,11 +202,12 @@ class Sip_Archival_Upload extends Form_Validation {
 
 		// maybe connected to clamav but clamav is not ready/responding.
 		if ( ! $clam_rdy ) {
-			$this->set_error_log_message( esc_attr__( 'clamav is not ready/responding', 'sip' ) );
+			$this->set_error_log_message( esc_attr__( 'ClamAV is not ready/responding', 'sip' ) );
 			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: not ready', 'sip' ), );
 		}
 
 		if ( ! file_exists( $upload_file_path ) ) {
+			// translators: %1$s: path to the file. %2$s: user id.
 			$this->set_error_log_message(sprintf(esc_attr__('Uploaded File %1$s from user id %2$d was not scanned. File not found', 'sip'), $upload_file_path, get_current_user_id() ) );
 			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: file not found', 'sip' ), );
 		}
