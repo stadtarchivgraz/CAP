@@ -62,25 +62,24 @@ class Starg_Admin_Notification {
 			if ( ! function_exists( 'socket_create' ) ) {
 				// translators: %s: Notification level like "Error", "Warning", "Note".
 				$notification_message[] = sprintf( esc_attr__( '%s To communicate with ClamAV, you need to enable the sockets extension in PHP.', 'sip' ), $note_sign );
-			}
+			} else {
+				$clamav_rdy = false;
+				try {
+					$clamav     = new Network(esc_attr(carbon_get_theme_option('sip_clamav_host')), (int) esc_attr(carbon_get_theme_option('sip_clamav_port')));
+					$clamav_rdy = $clamav->ping();
+				} catch (Exception $exception) {
+					$logging = apply_filters( 'starg/logging', null );
+					if ( $logging instanceof Starg_Logging ) {
+						$logging->create_log_entry( $exception->getMessage() );
+					}
+				}
 
-			$clamav_rdy = false;
-			try {
-				$clamav     = new Network( esc_attr( carbon_get_theme_option( 'sip_clamav_host' ) ), (int) esc_attr( carbon_get_theme_option( 'sip_clamav_port' ) ) );
-				$clamav_rdy = $clamav->ping();
-			} catch( Exception $exception ) {
-				// todo: reactivate logging.
-				// $logging = apply_filters( 'starg/logging', null );
-				// if ( $logging instanceof Starg_Logging ) {
-				// 	$logging->create_log_entry( $exception->getMessage() );
-				// }
-			}
-
-			if ( ! $clamav_rdy ) {
-				$plugin_settings_url    = starg_get_plugin_options_admin_url();
-				$clamav_settings_link   = '<a href="' . $plugin_settings_url . '">' . esc_attr__( 'Check your configuration.', 'sip' ) . '</a>';
-				// translators: %1$s: Notification level like "Error", "Warning", "Note". %2$s: Link to the settings page for clamAV Host/Port.
-				$notification_message[] = sprintf( esc_attr__( '%1$s There is an error in your configuration for ClamAV. We can not connect to ClamAV server. %2$s.', 'sip' ), $error_sign, $clamav_settings_link );
+				if (! $clamav_rdy) {
+					$plugin_settings_url    = starg_get_plugin_options_admin_url();
+					$clamav_settings_link   = '<a href="' . $plugin_settings_url . '">' . esc_attr__('Check your configuration.', 'sip') . '</a>';
+					// translators: %1$s: Notification level like "Error", "Warning", "Note". %2$s: Link to the settings page for clamAV Host/Port.
+					$notification_message[] = sprintf(esc_attr__('%1$s There is an error in your configuration for ClamAV. We can not connect to ClamAV server. %2$s.', 'sip'), $error_sign, $clamav_settings_link);
+				}
 			}
 		}
 

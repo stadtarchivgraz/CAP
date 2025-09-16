@@ -85,7 +85,7 @@ if ($meta_query) {
 <form id="sip-filter" name="sip-filter" action="" method="get" class="container">
 	<div class="columns is-multiline">
 		<?php
-		$archival_terms = get_terms( array( 'taxonomy' => 'archive', 'hide_empty' => false, ) );
+		$archival_terms = get_terms( array( 'taxonomy' => 'archive', 'hide_empty' => true, ) );
 		if ( current_user_can( 'edit_others_posts' ) && ! is_wp_error( $archival_terms ) && $archival_terms ) :
 			?>
 			<div class="column is-full">
