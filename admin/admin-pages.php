@@ -80,6 +80,9 @@ class Starg_Admin_Pages {
 				<?php self::display_user_statistics_table_rows( $all_uploaded_files[ 'valid_users' ] ); ?>
 			</table>
 
+			<h2><?php esc_html_e( 'User', 'sip' ); ?></h2>
+			<?php self::render_user_role_table(); ?>
+
 			<hr style="margin-top: 2em;margin-bottom:2em;">
 
 			<h2><?php esc_html_e( 'Data from administrators or test user', 'sip' ); ?></h2>
@@ -155,24 +158,25 @@ class Starg_Admin_Pages {
 		?>
 
 		<tbody>
-			<?php foreach ( $data['data'] as $user_id => $single_submission ) : ?>
-				<tr data-user_id="<?php echo esc_attr( $user_id ); ?>">
-					<td><?php echo $single_submission[ 'display_name' ]; ?></td>
-					<td><?php echo $single_submission[ 'user_login' ]; ?></td>
-					<td><?php echo $single_submission[ 'archive_name' ]; ?></td>
-					<td><?php echo $single_submission[ 'users_submission' ]; ?></td>
-					<td><?php echo $single_submission[ 'users_files' ]; ?></td>
-					<td><?php echo $single_submission[ 'extra' ]; ?></td>
+			<?php foreach ($data['data'] as $user_id => $single_submission) : ?>
+				<tr data-user_id="<?php echo esc_attr($user_id); ?>">
+					<td><?php echo esc_html( $single_submission['display_name'] ); ?></td>
+					<td><?php echo esc_html( $single_submission['user_login'] ); ?></td>
+					<td><?php echo esc_html( $single_submission['archive_name'] ); ?></td>
+					<td><?php echo esc_html( $single_submission['users_submission'] ); ?></td>
+					<td><?php echo esc_html( $single_submission['users_files'] ); ?></td>
+					<td><?php echo esc_html( $single_submission['extra'] ); ?></td>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>
 		<tfoot>
 			<tr>
-				<th><?php esc_html_e( 'Total', 'sip' ); ?></th>
-				<th colspan="2"><?php echo esc_html( $data['number_users'] ); ?></th>
-				<th><?php echo esc_html( $data['number_submissions'] ); ?></th>
-				<th><?php echo esc_html( $data['number_submitted_files'] ); ?></th>
-				<th></th>
+				<th><?php esc_html_e('Total', 'sip'); ?></th>
+				<th colspan="2"><?php echo esc_html($data['number_users']); ?></th>
+				<th><?php echo esc_html($data['number_submissions']); ?></th>
+				<th><?php echo esc_html($data['number_submitted_files']); ?></th>
+				<?php // translators: %s: formatted filesize. ?>
+				<th><?php printf( esc_html__( 'Total filesize: %s', 'sip' ), starg_format_bytes( (int) $data['filesize'] ) ); ?></th>
 			</tr>
 		</tfoot>
 	<?php
@@ -222,6 +226,41 @@ class Starg_Admin_Pages {
 	}
 
 	/**
+	 * Renders a HTML-Table with all user roles of the website and the number of users assigned to each role.
+	 */
+	private static function render_user_role_table() : void {
+		$roles_count = self::get_user_role_stats();
+		?>
+		<table class="widefat fixed striped">
+			<thead>
+				<tr>
+					<th><?php esc_html_e( 'User role', 'sip' ); ?></th>
+					<th><?php esc_html_e( 'Number of users', 'sip' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				$total_user = 0;
+				foreach ($roles_count as $role => $count) :
+					$total_user += (int) $count;
+					?>
+					<tr>
+						<td><?php echo esc_html( ucfirst(translate_user_role($role)) ); ?></td>
+						<td><?php echo esc_html( $count ); ?></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td><?php esc_html_e( 'Total', 'sip' ); ?></td>
+					<td><?php echo esc_html( $total_user ); ?></td>
+				</tr>
+			</tfoot>
+		</table>
+	<?php
+	}
+
+	/**
 	 * The main function to create the statistics.
 	 * @param string $sip_folder
 	 * @param bool $skip_test_user [Optional] whether include all users (admins and test user as well) in the statistics. default: true (skip them)
@@ -234,18 +273,20 @@ class Starg_Admin_Pages {
 		$number_valid_users           = 0;
 		$number_valid_submissions     = 0;
 		$number_valid_submitted_files = 0;
+		$filesize_valid               = 0;
 
 		if ( $skip_test_user ) {
 			$number_skipped_users           = 0;
 			$number_skipped_submissions     = 0;
 			$number_skipped_submitted_files = 0;
+			$filesize_skipped               = 0;
 		}
 
-		$archive_name          = esc_html__( 'unknown', 'sip' );
-		$statistics_by_archive = array();
+		$archive_name                  = esc_html__('unknown', 'sip');
+		$statistics_by_archive         = array();
 		$skipped_statistics_by_archive = array();
-		$valid_user_data       = array();
-		$skipped_user_data     = array();
+		$valid_user_data               = array();
+		$skipped_user_data             = array();
 		foreach ( $all_uploaded_files as $user_id => $single_submission ) {
 			if ( empty( $single_submission ) ) {
 				continue;
@@ -290,28 +331,34 @@ class Starg_Admin_Pages {
 				$archival_status[ $submission_id ] = array( $archival_id => $single_archival_status, );
 			}
 
+			// don't count uploads.
+			if ( ! $user_files || ! $single_user_submission ) {
+				continue;
+			}
+
 			// skipping user which are not relevant for statistics.
 			if ( $skip_test_user ) {
 				foreach ( $user->roles as $single_user_role ) {
-					if ( in_array( $single_user_role, Starg_Admin_Pages::$skipped_user_roles ) ) {
+					if (in_array($single_user_role, Starg_Admin_Pages::$skipped_user_roles)) {
 						$number_skipped_users++;
 						$number_skipped_submissions     += $single_user_submission;
 						$number_skipped_submitted_files += $user_files;
-						
-						$skipped_user_data['data'][ $user_id ] = array(
-							'display_name'      => esc_html( $user->display_name ),
-							'user_login'        => esc_html( $user->user_login ),
-							'archive_name'      => esc_html( $archive_name ),
+						$filesize_skipped               += $single_submission['filesize'];
+
+						$skipped_user_data['data'][$user_id] = array(
+							'display_name'      => esc_html($user->display_name),
+							'user_login'        => esc_html($user->user_login),
+							'archive_name'      => esc_html($archive_name),
 							'users_submission'  => $single_user_submission,
 							'users_files'       => $user_files,
-							'extra'             => esc_html( $user->roles[0] ),
+							'extra'             => esc_html($user->roles[0]),
 							// 'archival_status'   => $archival_status, // todo: maybe include the post_status for each archival record?
 						);
 
 						// calculate the data by archive.
-						$skipped_statistics_by_archive['data'][ $archive_name ][ 'user_by_archive' ]      = ($skipped_statistics_by_archive['data'][ $archive_name ][ 'user_by_archive' ] ?? 0) + 1;
-						$skipped_statistics_by_archive['data'][ $archive_name ][ 'submitted_by_archive' ] = ($skipped_statistics_by_archive['data'][ $archive_name ][ 'submitted_by_archive' ] ?? 0) + $single_user_submission;
-						$skipped_statistics_by_archive['data'][ $archive_name ][ 'files_by_archive' ]     = ($skipped_statistics_by_archive['data'][ $archive_name ][ 'files_by_archive' ] ?? 0) + $user_files;
+						$skipped_statistics_by_archive['data'][$archive_name]['user_by_archive']      = ($skipped_statistics_by_archive['data'][$archive_name]['user_by_archive'] ?? 0) + 1;
+						$skipped_statistics_by_archive['data'][$archive_name]['submitted_by_archive'] = ($skipped_statistics_by_archive['data'][$archive_name]['submitted_by_archive'] ?? 0) + $single_user_submission;
+						$skipped_statistics_by_archive['data'][$archive_name]['files_by_archive']     = ($skipped_statistics_by_archive['data'][$archive_name]['files_by_archive'] ?? 0) + $user_files;
 						continue 2;
 					}
 				}
@@ -320,6 +367,7 @@ class Starg_Admin_Pages {
 			$number_valid_users++;
 			$number_valid_submissions     += $single_user_submission;
 			$number_valid_submitted_files += $user_files;
+			$filesize_valid               += $single_submission['filesize'];
 
 			// calculate the data by archive.
 			$statistics_by_archive['data'][ $archive_name ][ 'user_by_archive' ]      = ($statistics_by_archive['data'][ $archive_name ][ 'user_by_archive' ] ?? 0) + 1;
@@ -344,6 +392,7 @@ class Starg_Admin_Pages {
 		$valid_user_data['number_submissions']           = (int) $number_valid_submissions;
 		$valid_user_data['number_submitted_files']       = (int) $number_valid_submitted_files;
 		$valid_user_data['statistics_by_archive']        = $statistics_by_archive;
+		$valid_user_data['filesize']                     = (int) $filesize_valid;
 
 		if ( $skip_test_user ) {
 			$skipped_statistics_by_archive['number_users']           = (int) $number_skipped_users;
@@ -353,6 +402,7 @@ class Starg_Admin_Pages {
 			$skipped_user_data['number_submissions']                 = (int) $number_skipped_submissions;
 			$skipped_user_data['number_submitted_files']             = (int) $number_skipped_submitted_files;
 			$skipped_user_data['statistics_by_archive']              = $skipped_statistics_by_archive;
+			$skipped_user_data['filesize']                           = (int) $filesize_skipped;
 		}
 
 		return array( 'valid_users' => $valid_user_data, 'skipped_users' => $skipped_user_data );
@@ -381,7 +431,8 @@ class Starg_Admin_Pages {
 		if ( empty( $user_dirs ) ) { return array(); }
 
 		foreach ($user_dirs as $user_dir) {
-			$user_id = basename($user_dir);
+			$file_size  = 0;
+			$user_id    = basename($user_dir);
 
 			// these are the folders for the single submission.
 			$element_dirs = glob($user_dir . '/*', GLOB_ONLYDIR);
@@ -389,12 +440,21 @@ class Starg_Admin_Pages {
 			foreach ($element_dirs as $element_dir) {
 				$element_id  = basename($element_dir);
 				// if specified, we only want to count the files inside of a specific folder (like content).
-				$content_dir = $element_dir . '/' . ltrim( $sub_dir, '/' );
+				$content_dir = $element_dir . '/' . ltrim($sub_dir, '/');
 
-				if ( ! is_dir($content_dir)) { continue; }
+				if (! is_dir($content_dir)) {
+					continue;
+				}
 
 				$files = glob($content_dir . '/*');
+				if (! $files) {
+					continue;
+				}
+
 				$file_count = count($files);
+				foreach ($files as $single_file) {
+					$file_size += filesize($single_file);
+				}
 
 				if ( ! isset($stats[$user_id])) {
 					$stats[$user_id] = [];
@@ -402,9 +462,29 @@ class Starg_Admin_Pages {
 
 				$stats[$user_id][$element_id] = $file_count;
 			}
+
+			$stats[$user_id]['filesize']  = $file_size;
 		}
 
 		return $stats;
+	}
+
+	/**
+	 * Create an array that contains user roles along with the number of users assigned to each role.
+	 * @return array
+	 */
+	private static function get_user_role_stats() : array {
+		$roles_count = array();
+		$users       = get_users();
+		foreach ($users as $user) {
+			foreach ($user->roles as $role) {
+				if ( ! isset($roles_count[$role])) {
+					$roles_count[$role] = 0;
+				}
+				$roles_count[$role]++;
+			}
+		}
+		return $roles_count;
 	}
 
 }

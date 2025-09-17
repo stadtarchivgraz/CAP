@@ -127,7 +127,7 @@ class Render_Sip_Content_Folder {
 		$thumbnail_filename = ( 'pdf' === $ext ) ? $file_info['basename'] : $file_info['filename'];
 
 		// if no thumbnail exists, try to create one.
-		if ( ! file_exists( $thumbnail_folder . $thumbnail_filename . '.jpg' ) ) {
+		if ( ! file_exists( $thumbnail_folder . $thumbnail_filename . '.' . $ext ) ) {
 			if ( 'pdf' === $ext ) {
 				starg_create_pdf_thumbnail( $path_to_file, $thumbnail_folder );
 			} elseif ( 'image' === $type ) {
@@ -135,8 +135,8 @@ class Render_Sip_Content_Folder {
 			}
 		}
 
-		if (file_exists($thumbnail_folder . $thumbnail_filename . '.jpg')) {
-			$thumbnail_url = trailingslashit($thumbnail_dir_url) . 'thumb/' . $thumbnail_filename . '.jpg';
+		if (file_exists($thumbnail_folder . $thumbnail_filename . '.' . $ext)) {
+			$thumbnail_url = trailingslashit($thumbnail_dir_url) . 'thumb/' . $thumbnail_filename . '.' . $ext;
 		} else {
 			$thumbnail_url = Render_Sip_Content_Folder::get_fallback_thumbnail($file_type);
 		}
