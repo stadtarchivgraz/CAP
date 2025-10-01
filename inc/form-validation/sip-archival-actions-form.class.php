@@ -25,13 +25,20 @@ class Sip_Archival_Actions extends Form_Validation {
 		$user_input = $this->user_input_sanitization();
 		if ( ! $user_input ) { return false; }
 
-		// if viewing an existing archival/sip.
-		$sip_folder = $user_input[ 'sipFolder' ];
-		if ( ! $sip_folder ) {
-			$this->set_error_message( esc_html__( 'No SIP folder provided.', 'sip' ) );
+		$missing_inputs = $this->user_input_required( $user_input );
+		if ( ! empty( $missing_inputs ) ) {
+			$this->set_notification_for_missing_inputs( $missing_inputs );
 			$this->display_notification();
-			return false;
+			return false;// todo: maybe change to $user_input to be able to fill in the validated data for the user.
 		}
+
+		$sip_folder = $user_input[ 'sipFolder' ];
+		// we check for the $sip_folder with the method user_input_required. So this check should be deprecated.
+		// if ( ! $sip_folder ) {
+		// 	$this->set_error_message( esc_html__( 'No SIP folder provided.', 'sip' ) );
+		// 	$this->display_notification();
+		// 	return false;
+		// }
 
 		// todo: we have a problem here! a successful upload creates the upload folder but not the post! the post gets created on meta-data input!
 		$archival_id     = DB_Query_Helper::starg_get_archival_id_by_sip_folder( $sip_folder );
@@ -172,6 +179,10 @@ class Sip_Archival_Actions extends Form_Validation {
 			'submit_archival'    => 'sanitize_key',
 			'sipFolder'          => 'sanitize_text_field',
 		);
+	}
+
+	protected function get_required_input_names() : array {
+		return array( 'sipFolder' => true, );
 	}
 
 }

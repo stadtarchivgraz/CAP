@@ -160,4 +160,8 @@ class Export_Statistics extends Form_Validation {
 			'export_csv'  => 'sanitize_text_field',
 		);
 	}
+
+	protected function get_required_input_names() : array {
+		return array();
+	}
 }

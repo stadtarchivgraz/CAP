@@ -3,10 +3,9 @@
 
 $sip_folder = ( isset( $_GET['sipFolder'] ) ) ? sanitize_text_field( $_GET['sipFolder'] ) : '';
 
-if ( isset( $_POST ) && isset( $_POST['save_sip'] ) ) {
-	require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/sip-upload-form-validation.class.php' );
-	$upload_form = new Sip_Upload_Form_Validation;
-	$upload_form->process_upload_form();
+$sip_upload_form = apply_filters('starg/sip_upload_form', null);
+if ( isset( $_POST ) && isset( $_POST['save_sip'] ) && $sip_upload_form instanceof Sip_Upload_Form_Validation ) {
+	$sip_upload_form->process_upload_form();
 }
 
 if (isset($_COOKIE['sip_file_size'])) {
@@ -20,8 +19,8 @@ while (have_posts()) :
 	the_post();
 	
 	// display a notification
-	if ( isset( $upload_form ) ) {
-		$upload_form->display_notification();
+	if ( isset( $sip_upload_form ) ) {
+		$sip_upload_form->display_notification();
 	}
 
 	if ( ! isset( $_GET['sipFolder'] ) ) :

@@ -36,6 +36,12 @@ class Create_Sip_Pdf extends Form_Validation {
 			return false;
 		}
 
+		$missing_inputs = $this->user_input_required( $user_input );
+		if ( ! empty( $missing_inputs ) ) {
+			$this->set_notification_for_missing_inputs( $missing_inputs );
+			return false;// todo: maybe change to $user_input to be able to fill in the validated data for the user.
+		}
+
 		$sip_user_folder_id = $user_input[ 'sipFolder' ];
 		if ( ! $sip_user_folder_id ) {
 			$this->set_error_message( esc_attr__( 'No SIP Folder provided.', 'sip' ) );
@@ -292,5 +298,9 @@ class Create_Sip_Pdf extends Form_Validation {
 		return array(
 			'sipFolder'  => 'sanitize_text_field',
 		);
+	}
+
+	protected function get_required_input_names() : array {
+		return array();
 	}
 }

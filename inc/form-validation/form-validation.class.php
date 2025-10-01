@@ -15,11 +15,11 @@ abstract class Form_Validation {
 	public string $nonce_action;
 	public string $nonce_key;
 	public string $form_name;
-	public string $form_name_key = 'starg_form_name';
-	public string $success_msg   = '';
-	public string $error_msg     = '';
-	public string $error_log_msg = '';
-	public string $url_endpoint  = '';
+	public string $form_name_key  = 'starg_form_name';
+	public string $success_msg    = '';
+	public string $error_msg      = '';
+	public string $error_log_msg  = '';
+	public string $url_endpoint   = '';
 
 	/**
 	 * Perform main validation for the form in question.
@@ -39,13 +39,6 @@ abstract class Form_Validation {
 	
 		return true; // all good, form is valid!
 	}
-
-	/**
-	 * Describes which inputs we want to process in the form and against which sanitizing function we apply to them.
-	 * @todo: maybe add the possibility to check for required inputs as well. This would change the array to something like: [ 'input_name' => [ 'required' => true, 'sanitizing_func' => 'sanitize_text_field', ], ]
-	 * @return array the array should be formed as [ 'input_name' => 'sanitizing_function', ]
-	 */
-	abstract protected function get_valid_input_names() : array;
 
 	/**
 	 * Sanitize user input and only return needed values from the $_REQUEST.
@@ -83,6 +76,50 @@ abstract class Form_Validation {
 
 		return $sanitized_user_input;
 	}
+
+	/**
+	 * Loops through every user_input we got and checks if they are required in our form.
+	 * @param array $user_input
+	 * @return array empty array if all required input fields have data, otherwise array with missing input field keys.
+	 */
+	protected function user_input_required( array $user_input ) : array {
+		$all_valid_inputs = $this->get_valid_input_names();
+		$required_inputs  = $this->get_required_input_names();
+		$missing_inputs   = array();
+
+		foreach ( $user_input as $input_key => $input_value ) {
+			if ( ! isset( $all_valid_inputs[ $input_key ] ) ) { continue; } // not our input. no need to check if required.
+			if ( ! isset( $required_inputs[ $input_key ] ) ) { continue; } // input is not required. continue with operation.
+
+			if ( is_array( $input_value ) ) {
+				foreach( $input_value as $other_input_key => $other_input_field ) {
+					if ( ! trim( $other_input_field ) ) {
+						$missing_inputs[ $input_key ] = $other_input_key;
+					}
+				}
+				continue;
+			}
+
+			// required input has no value!
+			if ( ! trim( $input_value ) ) {
+				$missing_inputs[] = $input_key;
+			}
+		}
+
+		return $missing_inputs;
+	}
+
+	/**
+	 * Describes which inputs we want to process in the form and against which sanitizing function we apply to them.
+	 * @return array the array should be formed as [ 'input_name' => 'sanitizing_function', ]
+	 */
+	abstract protected function get_valid_input_names() : array;
+
+	/**
+	 * Describes which inputs of the form are required.
+	 * @return array
+	 */
+	abstract protected function get_required_input_names() : array;
 
 	/**
 	 * Sets a message which can be used to inform the user about a successful operation on the website.
@@ -125,6 +162,21 @@ abstract class Form_Validation {
 
 		$this->error_log_msg = $error_log_msg;
 		$logging->create_log_entry( $error_log_msg );
+	}
+
+	/**
+	 * Create a notification about missing inputs in forms.
+	 * @param array $missing_inputs
+	 * @return void
+	 */
+	protected function set_notification_for_missing_inputs( array $missing_inputs ) : void {
+		if ( ! $missing_inputs ) { return; }
+		$missing_input_links = '';
+		foreach( $missing_inputs as $single_input_field ) {
+			$missing_input_links .= '<a href="#' . esc_attr( str_replace( '_', '-', $single_input_field ) ) . '">' . esc_html( $single_input_field ) . '</a> ';
+		}
+		// translators: %s: one or more hyperlinks to the missing required inputs.
+		$this->set_error_message( sprintf( esc_html__( 'Missing inputs. Please check %s', 'sip' ), $missing_input_links ) );
 	}
 
 	/**

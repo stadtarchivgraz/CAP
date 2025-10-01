@@ -3,8 +3,6 @@ $user = wp_get_current_user();
 $current_locale = strtolower(get_locale());
 $password_error = false;
 
-// todo: check form! $_REQUEST[ 'ID' ] should be something like $_REQUEST[ 'user_id' ]! or just use $user->ID?
-
 require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/update-user-profile.class.php' );
 $update_user_profile = new Starg_Update_User_Profile;
 $update_user_profile->maybe_process_update_user_profile();
@@ -136,11 +134,11 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 							</a>
 
 							<form target="" method="post" class="is-inline-block">
-								<input type="hidden" name="starg_form_name" value="archival_actions_form_<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
+								<input type="hidden" name="<?php echo $sip_archival_actions->form_name_key; ?>" value="<?php echo $sip_archival_actions->form_name . '_' . $user_sip['sip']; ?>" aria-hidden="true" />
 								<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
 								<input type="hidden" name="sipFolder" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
 								<input type="hidden" name="starg_form_suffix" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
-								<?php wp_nonce_field( 'starg_archival_actions_nonce_action', 'starg_archival_actions_nonce_' . $user_sip['sip'], false ); ?>
+								<?php wp_nonce_field( $sip_archival_actions->nonce_action, $sip_archival_actions->nonce_key . '_' . $user_sip['sip'], false ); ?>
 								<?php // todo: maybe change to a modal? js-alerts are not that fancy! ?>
 								<button class="button is-large is-danger" name="decline_archival" type="submit" value="decline" onclick="return confirm('<?php esc_html_e('Are you sure? All files will be deleted.', 'sip'); ?>')">
 									<?php esc_html_e('Delete', 'sip'); ?>
@@ -156,9 +154,9 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 	</section>
 	<section id="personal-data" class="tab-content" <?php echo ($current_tab !== 'personal-data') ? '  style="display: none"' : ''; ?>>
 		<form class="content" action="" method="post">
-			<input type="hidden" name="starg_form_name" value="starg_update_user_data_form" />
-			<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
-			<?php wp_nonce_field( 'starg_update_user_data_nonce_action', 'starg_update_user_data_nonce' ); ?>
+			<input type="hidden" name="<?php echo $update_user_profile->form_name_key; ?>" value="<?php echo $update_user_profile->form_name; ?>" aria-hidden="true" />
+			<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" aria-hidden="true" />
+			<?php wp_nonce_field( $update_user_profile->nonce_action, $update_user_profile->nonce_key ); ?>
 
 			<h3><?php esc_html_e('Archive', 'sip'); ?></h3>
 			<div class="field is-horizontal">
@@ -182,14 +180,14 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 						<p class="control">
 							<?php
 							// translators: Format for full name of an user. %1$s: first name. %2$s: last name.
-							$display_name = ( $user->first_name && $user->last_name ) ? sprintf( esc_attr_x( '%1$s %2$s', 'Format for full name of an user. %1$s is first name, %2$s is last name. Rearrange if necessary.', 'sip' ), $user->first_name, $user->last_name ) : '';
+							$display_name = ( $update_user_profile->get_form_value( 'first_name' ) && $update_user_profile->get_form_value( 'last_name' ) ) ? sprintf( esc_attr_x( '%1$s %2$s', 'Format for full name of an user. %1$s is first name, %2$s is last name. Rearrange if necessary.', 'sip' ), $update_user_profile->get_form_value( 'first_name' ), $update_user_profile->get_form_value( 'last_name' ) ) : '';
 							?>
 							<input id="display-name" class="input is-static" name="display_name" type="text" value="<?php echo $display_name; ?>" aria-readonly="true" readonly placeholder="<?php esc_attr_e( 'Will be generated from your name', 'sip' ); ?>">
 						</p>
 					</div>
 				</div>
 			</div>
-			<?php $user_archive = get_user_meta($user->ID, 'user_archive', true); ?>
+			<?php $user_archive = $update_user_profile->get_form_value( 'user_archive' ); ?>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
 					<label for="archive" class="label"><?php esc_html_e('Archive', 'sip'); ?>*</label>
@@ -212,7 +210,7 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 								);
 								wp_dropdown_categories($args);
 							else :
-								$archive = get_term($user_archive, 'archive'); ?>
+								$archive = get_term($user_archive, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG); ?>
 								<input id="archive" class="input is-static" name="static_user_archive" type="text" value="<?php echo $archive->name; ?>" aria-readonly="true" readonly>
 							<?php endif; ?>
 						</p>
@@ -232,7 +230,7 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input id="first-name" name="first_name" class="input" type="text" value="<?php echo $user->first_name; ?>" placeholder="<?php esc_html_e('First name', 'sip'); ?>" required>
+							<input id="first-name" name="first_name" class="input" type="text" value="<?php echo $update_user_profile->get_form_value( 'first_name' ); ?>" placeholder="<?php esc_html_e('First name', 'sip'); ?>" required autocomplete="given-name">
 						</p>
 					</div>
 				</div>
@@ -244,7 +242,7 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input id="last-name" name="last_name" class="input" type="text" value="<?php echo $user->last_name; ?>" placeholder="<?php esc_html_e('Surname', 'sip'); ?>" required>
+							<input id="last-name" name="last_name" class="input" type="text" value="<?php echo $update_user_profile->get_form_value( 'last_name' ); ?>" placeholder="<?php esc_html_e('Surname', 'sip'); ?>" required autocomplete="family-name">
 						</p>
 					</div>
 				</div>
@@ -256,7 +254,7 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input id="email" name="user_email" class="input" type="email" value="<?php echo $user->user_email; ?>" required>
+							<input id="email" name="user_email" class="input" type="email" value="<?php echo $update_user_profile->get_form_value( 'user_email' ); ?>" required autocomplete="email">
 						</p>
 					</div>
 				</div>
@@ -268,13 +266,13 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input id="date-of-birth" name="user_birthday" class="input" type="date" value="<?php echo get_user_meta($user->ID, 'user_birthday', true); ?>" min="<?php echo date('Y-m-d', strtotime('100 years ago')); ?>" max="<?php echo date('Y-m-d', strtotime('18 years ago')); ?>" required>
+							<input id="date-of-birth" name="user_birthday" class="input" type="date" value="<?php echo $update_user_profile->get_form_value( 'user_birthday' ); ?>" min="<?php echo date('Y-m-d', strtotime('100 years ago')); ?>" max="<?php echo date('Y-m-d', strtotime('18 years ago')); ?>" required>
 						</p>
 						<p class="help"><?php esc_html_e('You must be at least 18 years old', 'sip'); ?></p>
 					</div>
 				</div>
 			</div>
-			<?php $user_address = get_user_meta($user->ID, 'user_address', true); ?>
+			<?php $user_address = $update_user_profile->get_form_value( 'user_address' ); ?>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
 					<label for="address" class="label"><?php esc_html_e('Address', 'sip'); ?>*</label>
@@ -282,7 +280,7 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input id="address" name="user_address[street_number]" class="input" type="text" placeholder="<?php esc_html_e('Street and Number', 'sip'); ?>" value="<?php echo (isset($user_address['street_number'])) ? $user_address['street_number'] : ''; ?>" required>
+							<input id="address" name="user_address[street_number]" class="input" type="text" placeholder="<?php esc_html_e('Street and Number', 'sip'); ?>" value="<?php echo (isset($user_address['street_number'])) ? esc_attr( $user_address['street_number'] ) : ''; ?>" required autocomplete="street-address">
 						</p>
 					</div>
 				</div>
@@ -292,22 +290,22 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input id="zip-code" name="user_address[zip]" class="input" type="text" placeholder="<?php esc_html_e('ZIP Code', 'sip'); ?>" value="<?php echo (isset($user_address['zip'])) ? $user_address['zip'] : ''; ?>" required>
+							<input id="zip" name="user_address[zip]" class="input" type="text" placeholder="<?php esc_html_e('ZIP Code', 'sip'); ?>" value="<?php echo (isset($user_address['zip'])) ? esc_attr( $user_address['zip'] ) : ''; ?>" required autocomplete="postal-code">
 						</p>
 					</div>
 					<div class="field">
 						<p class="control">
-							<input id="city" name="user_address[city]" class="input" type="text" placeholder="<?php esc_html_e('City', 'sip'); ?>" value="<?php echo (isset($user_address['city'])) ? $user_address['city'] : ''; ?>" required>
+							<input id="city" name="user_address[city]" class="input" type="text" placeholder="<?php esc_html_e('City', 'sip'); ?>" value="<?php echo (isset($user_address['city'])) ? esc_attr( $user_address['city'] ) : ''; ?>" required>
 						</p>
 					</div>
 				</div>
 			</div>
-			<?php $user_privacy_policy_approval = get_user_meta($user->ID, 'user_privacy_policy_approval', true); ?>
+			<?php $user_privacy_policy_approval = $update_user_profile->get_form_value( 'user_privacy_policy_approval' ); ?>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal"></div>
 				<div class="field-body">
 					<label class="checkbox">
-						<input type="checkbox" name="user_privacy_policy_approval" required<?php echo ($user_privacy_policy_approval) ? ' checked' : ''; ?>>
+						<input type="checkbox" name="user_privacy_policy_approval" required <?php checked( $user_privacy_policy_approval, 'on' ); ?>>
 						<?php echo wp_kses_post( get_option('_sip_privacy_policy_approval_text_' . $current_locale) ); ?>
 					</label>
 				</div>
@@ -321,31 +319,31 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 		</form>
 
 		<form class="content" action="" method="post">
-			<input type="hidden" name="starg_form_name" value="starg_update_user_password_form" />
+			<input type="hidden" name="<?php echo $update_user_password->form_name_key; ?>" value="<?php echo $update_user_password->form_name; ?>" aria-hidden="true" />
 			<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
-			<?php wp_nonce_field( 'starg_update_user_password_nonce_action', 'starg_update_user_password_nonce' ); ?>
+			<?php wp_nonce_field( $update_user_password->nonce_action, $update_user_password->nonce_key ); ?>
 
 			<h3><?php esc_html_e('Change password', 'sip'); ?></h3>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
-					<label for="old-password" class="label"><?php esc_html_e('Old', 'sip'); ?></label>
+					<label for="old-password" class="label"><?php esc_html_e('Old', 'sip'); ?>*</label>
 				</div>
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input id="old-password" name="oldpassword" class="input" type="password">
+							<input id="old-password" name="oldpassword" class="input" type="password" required autocomplete="current-password">
 						</p>
 					</div>
 				</div>
 			</div>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
-					<label for="pass1" class="label"><?php esc_html_e('New', 'sip'); ?></label>
+					<label for="pass1" class="label"><?php esc_html_e('New', 'sip'); ?>*</label>
 				</div>
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input id="pass1" name="newpassword" class="input" type="password" aria-describedby="pass-strength-result">
+							<input id="pass1" name="newpassword" class="input" type="password" required aria-describedby="pass-strength-result" autocomplete="new-password">
 						</p>
 						<p class="help">
 							<?php esc_html_e('Strength of password', 'sip'); ?> <span id="pass-strength-result" class="hide-if-no-js empty" aria-live="polite"></span><br>
@@ -356,12 +354,12 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 			</div>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
-					<label for="repeat-password" class="label"><?php esc_html_e('Repeat', 'sip'); ?></label>
+					<label for="repeat-password" class="label"><?php esc_html_e('Repeat', 'sip'); ?>*</label>
 				</div>
 				<div class="field-body">
 					<div class="field">
 						<p class="control">
-							<input id="repeat-password" name="repeatpassword" class="input" type="password">
+							<input id="repeat-password" name="repeatpassword" class="input" type="password" required autocomplete="new-password">
 						</p>
 						<?php if ( $password_error ) : ?>
 							<p class="help is-danger"><?php echo $password_error; ?></p>

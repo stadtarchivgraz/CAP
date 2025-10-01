@@ -57,23 +57,6 @@ class Starg_Services {
 			});
 		});
 
-
-		/**
-		 * Registers a class as service for uploading the archival records.
-		 * Intended to be anonymous.
-		 */
-		add_action( 'wp', function() {
-			if ( ! is_page_template( array( 'sip-upload.php', ) ) ) { return; }
-
-			require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/sip-archival-upload.class.php' );
-			$sip_archival_upload = new Sip_Archival_Upload;
-			$sip_archival_upload->process_archival_upload();
-			add_filter( 'starg/sip_archival_upload', function() use ( $sip_archival_upload ) {
-				return $sip_archival_upload;
-			});
-		});
-
-
 		/**
 		 * Registers a class as service for removing an archival record during the upload process.
 		 * Intended to be anonymous.
@@ -86,6 +69,21 @@ class Starg_Services {
 			$sip_archival_remove->process_archival_remove();
 			add_filter( 'starg/sip_archival_remove', function() use ( $sip_archival_remove ) {
 				return $sip_archival_remove;
+			});
+
+
+			require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/sip-upload-form-validation.class.php' );
+			$sip_upload_form = new Sip_Upload_Form_Validation;
+			add_filter( 'starg/sip_upload_form', function() use ( $sip_upload_form ) {
+				return $sip_upload_form;
+			});
+
+
+			require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/sip-archival-upload.class.php' );
+			$sip_archival_upload = new Sip_Archival_Upload;
+			$sip_archival_upload->process_archival_upload();
+			add_filter( 'starg/sip_archival_upload', function() use ( $sip_archival_upload ) {
+				return $sip_archival_upload;
 			});
 		});
 

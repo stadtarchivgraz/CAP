@@ -39,12 +39,19 @@ class Create_Sip extends Form_Validation {
 			return false;
 		}
 
-		$sip_user_folder_id = $user_input[ 'sipFolder' ];
-		if ( ! $sip_user_folder_id ) {
-			$this->set_error_message( esc_attr__( 'No SIP Folder provided.', 'sip' ) );
-			$this->set_error_log_message( esc_attr__( 'No SIP Folder provided.', 'sip' ) );
-			return false;
+		$missing_inputs = $this->user_input_required( $user_input );
+		if ( ! empty( $missing_inputs ) ) {
+			$this->set_notification_for_missing_inputs( $missing_inputs );
+			return false;// todo: maybe change to $user_input to be able to fill in the validated data for the user.
 		}
+
+		$sip_user_folder_id = $user_input[ 'sipFolder' ];
+		// we check for the $sip_folder with the method user_input_required. So this check should be deprecated.
+		// if ( ! $sip_user_folder_id ) {
+		// 	$this->set_error_message( esc_attr__( 'No SIP Folder provided.', 'sip' ) );
+		// 	$this->set_error_log_message( esc_attr__( 'No SIP Folder provided.', 'sip' ) );
+		// 	return false;
+		// }
 
 		$archival_id = DB_Query_Helper::starg_get_archival_id_by_sip_folder( $sip_user_folder_id );
 		if ( ! $archival_id ) {
@@ -636,5 +643,9 @@ class Create_Sip extends Form_Validation {
 		return array(
 			'sipFolder'  => 'sanitize_text_field',
 		);
+	}
+
+	protected function get_required_input_names() : array {
+		return array( 'sipFolder' => true, );
 	}
 }

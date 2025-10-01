@@ -126,4 +126,8 @@ class Sip_Archival_Remove extends Form_Validation {
 		);
 	}
 
+
+	protected function get_required_input_names() : array {
+		return array();
+	}
 }

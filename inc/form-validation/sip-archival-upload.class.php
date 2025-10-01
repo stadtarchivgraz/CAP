@@ -239,4 +239,9 @@ class Sip_Archival_Upload extends Form_Validation {
 		);
 	}
 
+	
+	protected function get_required_input_names() : array {
+		return array();
+	}
+
 }

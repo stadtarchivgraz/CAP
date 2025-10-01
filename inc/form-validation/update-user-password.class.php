@@ -21,6 +21,13 @@ class Starg_Update_User_Password extends Form_Validation {
 		$user_input = $this->user_input_sanitization();
 		if ( ! $user_input ) { return false; }
 
+		$missing_inputs = $this->user_input_required( $user_input );
+		if ( ! empty( $missing_inputs ) ) {
+			$this->set_notification_for_missing_inputs( $missing_inputs );
+			$this->display_notification();
+			return false;// todo: maybe change to $user_input to be able to fill in the validated data for the user.
+		}
+
 		$user = wp_get_current_user();
 		if ( $user->ID !== (int) $user_input['ID'] ) {
 			$this->set_error_message( esc_attr__( 'We encountered a problem updating your password. Please try again.', 'sip' ) );
@@ -76,4 +83,12 @@ class Starg_Update_User_Password extends Form_Validation {
 		);
 	}
 
+
+	protected function get_required_input_names() : array {
+		return array(
+			'oldpassword'    => true,
+			'newpassword'    => true,
+			'repeatpassword' => true,
+		);
+	}
 }
