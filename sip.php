@@ -174,7 +174,8 @@ class Starg_Sip_Plugin {
 			.sip .archival-pagination .page-numbers:hover {
 				background-color: #f8f8f8;
 				color: #333;
-			}';
+			}
+			body .bp-wrap{ z-index:1001;}';
 		wp_add_inline_style( 'sip-full', $style_fixes );
 	}
 

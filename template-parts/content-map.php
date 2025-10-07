@@ -303,11 +303,11 @@ if ( isset( $markers[0] ) && isset( $markers[0]['lat'] ) && isset( $markers[0]['
 			if ( isset( $marker['lat'] ) && isset( $marker['lng'] ) ) {
 
 				echo "const dsaIcon = L.divIcon({
-              className: 'dsa-custom-pin',
-              iconAnchor: [0, 15],
-              popupAnchor: [0, -30],
-              html: '<div style=\"background-color: cornflowerblue\"><i class=\"marker-icon\"></i></div>'
-            });";
+					className: 'dsa-custom-pin',
+					iconAnchor: [0, 15],
+					popupAnchor: [0, -30],
+					html: '<div style=\"background-color: cornflowerblue\"><i class=\"marker-icon\"></i></div>'
+				});";
 				echo 'const marker = L.marker([' . $marker["lat"] . ', ' . $marker["lng"] . '], {icon: dsaIcon}).bindPopup("<div class=\"popup-header\"><p class=\"popup-title\"><a href=\"' . $marker["permalink"] . '\">' . addslashes($marker["title"]) . '</a></p><p class=\"popup-subtitle\">' . addslashes($marker["place_address"]) . '</p></div>");';
 				echo 'markers.addLayer(marker);';
 			}

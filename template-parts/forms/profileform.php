@@ -10,7 +10,8 @@ $update_user_profile->maybe_process_update_user_profile();
 // We need to initialize the class "Starg_Update_User_Password" in the main file of the Plugin in order to use WordPress-functions like "wp_update_user".
 $update_user_password = apply_filters( 'starg/update_user_password', null );
 if ( $update_user_password instanceof Starg_Update_User_Password ) {
-	$password_error = $update_user_password->maybe_process_update_user_password();
+	$password_error = $update_user_password->get_password_error();
+	$update_user_password->display_notification();
 }
 
 require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/sip-archival-actions-form.class.php' );

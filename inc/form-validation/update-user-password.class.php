@@ -6,6 +6,7 @@ class Starg_Update_User_Password extends Form_Validation {
 	public string $nonce_action = 'starg_update_user_password_nonce_action';
 	public string $nonce_key    = 'starg_update_user_password_nonce';
 	public string $form_name    = 'starg_update_user_password_form';
+	private $password_error;
 
 	/**
 	 * Processes the operations needed to update a users password.
@@ -24,7 +25,6 @@ class Starg_Update_User_Password extends Form_Validation {
 		$missing_inputs = $this->user_input_required( $user_input );
 		if ( ! empty( $missing_inputs ) ) {
 			$this->set_notification_for_missing_inputs( $missing_inputs );
-			$this->display_notification();
 			return false;// todo: maybe change to $user_input to be able to fill in the validated data for the user.
 		}
 
@@ -33,19 +33,18 @@ class Starg_Update_User_Password extends Form_Validation {
 			$this->set_error_message( esc_attr__( 'We encountered a problem updating your password. Please try again.', 'sip' ) );
 			// translators: %1$s, %2$s: User ID.
 			$this->set_error_log_message( sprintf( esc_attr( 'The user with the ID %1$s has tried to change the password for the user with the ID %2$s.', 'sip' ), $user->ID, $user_input['ID'] ) );
-			$this->display_notification();
 			return false;
 		}
 
-		$password_error = false;
+		$this->password_error = false;
 		if ( ! $user_input['oldpassword']) {
-			$password_error = esc_html__('Enter your old password.', 'sip');
+			$this->password_error = esc_html__('Enter your old password.', 'sip');
 		} elseif (! wp_check_password($user_input['oldpassword'], $user->user_pass, $user->ID)) {
-			$password_error = esc_html__('The old password is incorrect.', 'sip');
+			$this->password_error = esc_html__('The old password is incorrect.', 'sip');
 		} elseif (strlen($user_input['newpassword']) < 12) {
-			$password_error = esc_html__('The new password is too short.', 'sip');
+			$this->password_error = esc_html__('The new password is too short.', 'sip');
 		} elseif ($user_input['newpassword'] !== $user_input['repeatpassword']) {
-			$password_error = esc_html__('The repeated password does not match the new one.', 'sip');
+			$this->password_error = esc_html__('The repeated password does not match the new one.', 'sip');
 		} else {
 			$user_updated = wp_update_user(array(
 				'ID'        => (int) $user_input['ID'],
@@ -58,15 +57,17 @@ class Starg_Update_User_Password extends Form_Validation {
 			}
 		}
 
-		if ( $password_error ) {
+		if ( $this->password_error ) {
 			$this->set_error_message( esc_html__( 'The password could not be changed. See the error message in the form.', 'sip') );
-			$this->display_notification();
-			return $password_error;
+			return $this->password_error;
 		}
 
 		$this->set_success_message( esc_html__( 'Your password was changed successfully. You may have to log in again.', 'sip' ) );
-		$this->display_notification();
 		return true;
+	}
+
+	public function get_password_error() {
+		return $this->password_error;
 	}
 
 	/**
