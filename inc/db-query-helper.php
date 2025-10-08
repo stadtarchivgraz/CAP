@@ -257,4 +257,53 @@ class DB_Query_Helper {
 		return $archival_sip_folders;
 	}
 
+	/**
+	 * Retrieve email addresses of all users.
+	 * @param string|string[] $user_role       [Optional] If specified, only users with a specific role will be returned.
+	 * @param int             $user_archive_id [Optional] If specified, only users associated with a certain institution will be returned.
+	 * @return array          Array with all the email addresses, or empty array if nothing was found.
+	 */
+	private static function get_all_users_email_addresses( $user_role = '', int $user_archive_id = 0 ): array {
+		$args = array(
+			'role'       => $user_role,
+			'fields'     => array( 'ID', 'user_email', ),
+			'orderby'    => 'user_login',
+			'order'      => 'ASC',
+		);
+
+		// only select editors which are related to a specific archive.
+		if ( $user_archive_id ) {
+			$args[ 'meta_key' ]   = 'user_archive';
+			$args[ 'meta_value' ] = $user_archive_id;
+		}
+
+		$user_query = new WP_User_Query($args);
+
+		if ( empty($user_query->results) ) { return array(); }
+
+		$emails = array();
+		foreach ($user_query->results as $user) {
+			$emails[ $user->ID ] = $user->user_email;
+		}
+		return $emails;
+	}
+
+	/**
+	 * Retrieve all email addresses of all editors.
+	 * @param int $user_archive_id [Optional] if set, we only receive the email addresses for a specific archive_id.
+	 * @return array
+	 */
+	public static function get_all_admin_email_addresses( int $user_archive_id = 0 ): array {
+		return DB_Query_Helper::get_all_users_email_addresses( 'administrator', $user_archive_id );
+	}
+
+	/**
+	 * Retrieve all email addresses of all administrators.
+	 * @param int $user_archive_id [Optional] if set, we only receive the email addresses for a specific archive_id.
+	 * @return array
+	 */
+	public static function get_all_editor_email_addresses( int $user_archive_id = 0 ): array {
+		return DB_Query_Helper::get_all_users_email_addresses( 'editor', $user_archive_id );
+	}
+
 }

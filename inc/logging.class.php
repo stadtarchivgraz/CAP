@@ -16,7 +16,7 @@ class Starg_Logging {
 	public bool    $error_logging_enabled = false;
 
 	function __construct() {
-		// todo: add Plugin-Option to turn logging off/on.
+		if ( ! carbon_get_theme_option( 'sip_logging_enabled' ) ) { return; }
 		// todo: add Plugin-Option to change destination and name of the log file.
 
 		$this->debug_log_destination = ( defined( WP_CONTENT_DIR ) ) ? WP_CONTENT_DIR . '/starg_logs/' : ABSPATH . 'wp-content/starg_logs/';
@@ -83,7 +83,7 @@ class Starg_Logging {
 	 * @return bool
 	 */
 	public function create_log_entry( string $log_msg ) : bool {
-		if ( ! $this-> error_logging_enabled || ! $log_msg ) { return false; }
+		if ( ! $this->error_logging_enabled || ! $log_msg ) { return false; }
 
 		$timestamp = time();
 		$user_id   = get_current_user_id();

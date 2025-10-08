@@ -109,8 +109,74 @@ class Sip_Archival_Actions extends Form_Validation {
 			return false;
 		}
 
+		$author_id = get_post_field( 'post_author', $maybe_new_archival_post_id, true );
+		$this->notify_user( $author_id, $maybe_new_archival_post_id );
+
 		$this->set_success_message( esc_attr__( 'Archival record accepted.', 'sip' ) );
 		return true;
+	}
+
+	/**
+	 * Create the content of the notification and trigger sending.
+	 * @param int $author_id
+	 * @param int $archival_post_id
+	 * @return void
+	 */
+	private function notify_user( int $author_id, int $archival_post_id ): void {
+		if ( ! carbon_get_theme_option( 'sip_notifications_enabled' ) ) { return; }
+
+		$author_name  = '';
+		$author_mail  = '';
+		$user_archive = '';
+		$permalink    = esc_url( get_permalink( $archival_post_id ) );
+		$author       = get_user_by( 'ID', $author_id );
+		if ( $author ) {
+			$author_name       = $author->display_name;
+			$author_mail       = $author->user_email;
+			$user_archive_id   = (int) get_user_meta( $author_id, 'user_archive', true );
+			$user_archive_term = get_term( $user_archive_id, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG );
+			if ( $user_archive_term ) {
+				$user_archive = $user_archive_term->name;
+			}
+		}
+
+		// linebreaks for better reading.
+		// $break = ( carbon_get_theme_option( 'sip_notifications_as_html' ) ) ? '<br>' : PHP_EOL . PHP_EOL;
+
+		// translators: %s: Name of the user.
+		// $message = sprintf( esc_html_x( 'Dear %s,', 'Greeting for people in emails', 'sip' ), $author_name );
+		// $message .= $break;
+		// // translators: %s: Title of the submission.
+		// $message .= sprintf( esc_html__( 'Title: %s', 'sip' ), get_the_title( $archival_post_id ) );
+		// $message .= $break;
+		// // translators: %s: Name of the originator.
+		// $message .= sprintf( esc_html__( 'Author: %s', 'sip' ), get_post_meta( $archival_post_id, '_archival_originator', true ) );
+		// $message .= $break;
+		// $message .= '<a href="' . $permalink . '">' . $permalink . '</a>';
+		// $message .= $break;
+		// $message .= esc_html__( 'has been accepted and will be taken over by the archive.', 'sip' );
+		// $message .= $break;
+		// $message .= esc_html__( 'Thank you for your contribution.', 'sip' );
+
+		$post_title   = get_the_title( $archival_post_id );
+		$originator   = get_post_meta( $archival_post_id, '_archival_originator', true );
+		$link_to_post = '<a href="' . $permalink . '">' . $permalink . '</a>';
+
+		// translators: %1$s: Name of the user. %2$s: Title of the submission. %3$s: Name of the originator. %4$s: Link to the post.
+		$message = sprintf( esc_html__( 'Dear %1$s,
+
+Title: %2$s
+
+Author: %3$s
+
+%4$s
+
+has been accepted and will be taken over by the archive.
+
+Thank you for your contribution.', 'sip' ), $author_name, $post_title, $originator, $link_to_post );
+		// translators: %s: Name of the institution.
+		$subject = sprintf( esc_attr__( 'Your submission to %s', 'sip' ), $user_archive );
+		$this->send_email_notification( $message, $subject, $author_mail );
 	}
 
 	/**

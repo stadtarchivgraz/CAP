@@ -39,6 +39,7 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 
 		$current_locale  = strtolower(get_locale());
 		$current_user_id = get_current_user_id();
+		$orig_author_id  = $current_user_id;
 		$user_archive    = (int) get_user_meta( $current_user_id, 'user_archive', true );
 
 		// main data for the new post.
@@ -63,24 +64,17 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 				// to keep the original post_status we need to set it again. otherwise we would overwrite it as draft if an archiver edits the post.
 				$post_data['post_status'] = get_post_field( 'post_status', (int) $this->user_input[ 'archival_ID' ] );
 			}
-
-			// if we still have no archive selected, we may try to use the first one created. OR! We tell them and provide a link to the profile where they can change their archive setting!
-			// if ( ! $user_archive ) {
-			// 	$archive_terms = get_the_terms( (int) $this->user_input[ 'archival_ID' ], 'archive' );
-			// 	if ( $archive_terms || ! is_wp_error( $archive_terms ) ) {
-			// 		$user_archive = $archive_terms[0]->term_id;
-			// 	}
-			// }
 		}
 
-		// todo: maybe tell the user about their missing archive setting and provide a link to the profile where they can change their archive setting!
-		// if ( ! $user_archive ) {
-		// 	$profile_page_link = '<a href="' . starg_get_the_profile_page_template_url() . '">' . esc_attr__( 'profile page', 'sip' ) . '</a>';
-		// 	// translators: %s: a Link to the users profile page.
-		// 	$this->set_error_message( sprintf( esc_html__( 'You have not selected an archive. Please visit your %s and select an archive.', 'sip' ), $profile_page_link ) );
-		// 	// translators: %d: The User-ID.
-		// 	$this->set_error_log_message( sprintf( esc_html__( 'The user with the id %d has not selected an archive!', 'sip' ), $current_user_id ) );
-		// }
+		// tell the user about their missing archive setting and provide a link to the profile where they can change their archive setting!
+		if ( ! $user_archive ) {
+			$profile_page_link = '<a href="' . starg_get_the_profile_page_template_url() . '">' . esc_attr__( 'profile page', 'sip' ) . '</a>';
+			// translators: %s: a Link to the users profile page.
+			$this->set_error_message( sprintf( esc_html__( 'We could not find an archive for your account. Please visit the %s, select an archive, and save your settings.', 'sip' ), $profile_page_link ) );
+			// translators: %d: The User-ID.
+			$this->set_error_log_message( sprintf( esc_html__( 'The user with the id %d has not selected an archive!', 'sip' ), $current_user_id ) );
+			return false;
+		}
 
 		// set the custom taxonomies for the archival record:
 		$archival_tags  = wp_list_pluck( json_decode( stripcslashes( $this->user_input['archival_tags'] ), true ), 'value' );
@@ -160,10 +154,95 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 		// translators: %d: Post-ID.
 		$this->set_success_message(sprintf(esc_html__('Entry %s successfully created/updated.', 'sip'), get_the_title( $post_id ) ));
 
+		$this->notify_user( $current_user_id, $orig_author_id, $user_archive );
+
 		// used to create the permalink for the edit page for SIP archival records.
 		$url = starg_get_the_archival_page_template_url( $post_id );
 		wp_safe_redirect( $url );
 		exit;
+	}
+
+	/**
+	 * Create the content of the notification and trigger sending.
+	 * @param int $current_user_id
+	 * @param int $orig_author_id
+	 * @param int $user_archive_id
+	 * @return void
+	 */
+	private function notify_user( int $current_user_id, int $orig_author_id, int $user_archive_id ): void {
+		if ( ! carbon_get_theme_option( 'sip_notifications_enabled' ) ) { return; }
+
+		$user_archive      = '';
+		$user_archive_term = get_term( $user_archive_id, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG );
+		if ( $user_archive_term ) {
+			$user_archive = $user_archive_term->name;
+		}
+		if ( $orig_author_id !== $current_user_id ) {
+			$author = get_user_by( 'ID', $orig_author_id );
+		} else {
+			$author = get_user_by( 'ID', $current_user_id );
+		}
+		$author_name  = $author->display_name;
+		$author_email = $author->user_email;
+		$editor_email = DB_Query_Helper::get_all_editor_email_addresses( $user_archive_id );
+		if ( carbon_get_theme_option( 'sip_notification_additional_recipients' ) ) {
+			$other_email_user_ids = array_map( 'esc_attr', carbon_get_theme_option( 'sip_notification_additional_recipients' ) );
+			$other_email          = array();
+			foreach( $other_email_user_ids as $single_user_id ) {
+				$other_email[ $single_user_id ] = get_userdata( $single_user_id )->user_email;
+			}
+			$editor_email = array_merge( $editor_email, $other_email );
+		}
+
+		// linebreaks for better reading.
+		// $break = ( carbon_get_theme_option( 'sip_notifications_as_html' ) ) ? '<br>' : PHP_EOL . PHP_EOL;
+
+		// send a notification to the editors.
+		// translators: %s: Title of the submission.
+		// $message = sprintf( esc_html__( 'Title: %1$s', 'sip' ), $this->user_input[ 'archival_title' ] );
+		// $message .= $break;
+		// // translators: %s: Name of the user.
+		// $message .= sprintf( esc_html__( 'Author: %s', 'sip' ), $author_name );
+		// $message .= $break;
+		// // translators: %s: Name of the institution.
+		// $message .= sprintf( esc_html__( 'New files have been uploaded to the following archive: %s', 'sip' ), $user_archive );
+		// $message .= $break;
+		// $message .= esc_html__( 'Please log in to the archive for review and approval.', 'sip' );
+
+		// translators: %1$s: Title of the submission. translators: %2$s: Name of the user. translators: %3$s: Name of the institution.
+		$message_to_editors = sprintf( esc_html__( 'Title: %1$s
+
+Author: %2$s
+
+New files have been uploaded to the following archive: %3$s
+
+Please log in to the archive for review and approval.', 'sip' ), $this->user_input[ 'archival_title' ], $author_name, $user_archive );
+		// translators: %s: Name of the institution.
+		$subject = sprintf( esc_attr__( 'New archival record submitted to %s.', 'sip' ), $user_archive );
+		$this->send_email_notification( $message_to_editors, $subject, $editor_email );
+
+
+		// send a notification to the user.
+		// translators: %s: Name of the user.
+		// $message = sprintf( esc_html_x( 'Dear %s,', 'Greeting for people in emails', 'sip' ), $author_name );
+		// $message .= $break;
+		// $message .= esc_html__( 'congratulations, your submission has been successfully received!', 'sip' );
+		// $message .= $break;
+		// $message .= esc_html__( 'You will be separately informed via email about the acceptance or rejection of your submission by the archive. The review of a submission takes approximately 10 business days.', 'sip' );
+		// $message .= $break;
+		// $message .= esc_html__( 'Thank you for your contribution.', 'sip' );
+
+		// translators: %s: Name of the user.
+		$message_to_author = sprintf( esc_html__( 'Dear %s,
+
+congratulations, your submission has been successfully received!
+
+You will be separately informed via email about the acceptance or rejection of your submission by the archive. The review of a submission takes approximately 10 business days.
+
+Thank you for your contribution.', 'sip' ), $author_name );
+		// translators: %s: Name of the institution.
+		$subject = sprintf( esc_attr__( 'Your submission to the archive %s has been received.', 'sip' ), $user_archive );
+		$this->send_email_notification( $message_to_author, $subject, $author_email );
 	}
 
 	/**

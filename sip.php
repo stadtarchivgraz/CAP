@@ -3,8 +3,8 @@
  Plugin Name: SIP
  Description: Plugin for creating Submission Information Packages (SIPs) from archival records. The archival records are provided by users. The archivist can choose whether to create a SIP or reject it.
  Author: Stadtarchiv Graz, Guido Handrick
- Version: 3.2.3
- Author URI: http://guido-handrick.info
+ Version: 3.3.0
+ Author URI: https://www.grazmuseum.at/stadtarchiv/
  Text Domain: sip
  Domain Path: /languages/
  Requires PHP: 8.1
@@ -14,7 +14,7 @@
 
 if (! defined('WPINC')) { die; }
 
-define( 'STARG_SIP_PLUGIN_VERSION', '3.2.3' );
+define( 'STARG_SIP_PLUGIN_VERSION', '3.3.0' );
 define( 'STARG_SIP_PLUGIN_NAME',    'SIP' );
 define( 'STARG_SIP_PLUGIN_BASE_DIR', trailingslashit( dirname( __FILE__ ) ) );
 define( 'STARG_SIP_PLUGIN_BASE_URL', plugin_dir_url( __FILE__ ) );
@@ -36,9 +36,13 @@ class Starg_Sip_Plugin {
 
 		add_action( 'archival_delete_cron_event', array( 'Starg_Sip_Plugin', 'starg_archival_delete_cron_job_function' ) );
 
-		// todo: maybe install the plugin https://wordpress.org/plugins/notification/ instead of including it as an asset in the plugin?
-		require_once( STARG_SIP_PLUGIN_BASE_DIR . "assets/notification/load.php" );
-		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-notifications.php" );
+		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/email-helper.php" );
+		add_action( 'init', array( 'Starg_Email_Helper', 'init' ) );
+
+		// load the notification plugin instead.
+		// todo: remove notification plugin after testing.
+		// require_once( STARG_SIP_PLUGIN_BASE_DIR . "assets/notification/load.php" );
+		// require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-notifications.php" );
 
 
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/template-handling.php' );

@@ -110,6 +110,52 @@ abstract class Form_Validation {
 	}
 
 	/**
+	 * Trigger the sending of the notification emails.
+	 * @param string $message_content The main email content.
+	 * @param string $subject The subject of the sent email.
+	 * @param string[] $send_to One ore more recipients of the email.
+	 * @return bool
+	 */
+	protected function send_email_notification( string $message_content, string $subject = '', $send_to = '' ) : bool {
+		if ( ! carbon_get_theme_option( 'sip_notifications_enabled' ) ) { return false; }
+
+		if ( ! $subject ) {
+			// translators: %s: Title of the website.
+			$subject = sprintf( esc_attr__( 'Notification from %s', 'sip' ), esc_attr( get_bloginfo() ) );
+		}
+
+		$logging = apply_filters( 'starg/logging', null );
+		if ( ! $send_to ) {
+			if ( $logging instanceof Starg_Logging ) {
+				// translators: %s: The class which called the function.
+				$logging->create_log_entry( sprintf( esc_html__( 'Email notification for %s not sent. Missing recipient!', 'sip' ), get_called_class() ) );
+			}
+			// sending the mail to the admin, so we know there is something wrong here!
+			$send_to = sanitize_email( get_bloginfo( 'admin_email' ) );
+		}
+
+		$headers = '';
+		$message = sanitize_textarea_field( $message_content );
+		if ( carbon_get_theme_option( 'sip_notifications_as_html' ) ) {
+			// build the html for the email.
+			$message = Starg_Email_Helper::email_notification_wrapper( $message_content, $subject );
+			// set the content type of this email to HTML.
+			$headers = array( 'Content-Type: text/html; charset=UTF-8', );
+		}
+
+		// send the mail.
+		$mail_sent = wp_mail( $send_to, $subject, $message, $headers );
+
+		if ( ! $mail_sent ) {
+			if ( $logging instanceof Starg_Logging ) {
+				// translators: %1$s: The class which called the function. %2$s: Email address of the user to whom the email should have been sent.
+				$logging->create_log_entry( sprintf( esc_html__( 'Email notification for %1$s to %2$s not sent.', 'sip' ), get_called_class(), $send_to ) );
+			}
+		}
+		return $mail_sent;
+	}
+
+	/**
 	 * Describes which inputs we want to process in the form and against which sanitizing function we apply to them.
 	 * @return array the array should be formed as [ 'input_name' => 'sanitizing_function', ]
 	 */

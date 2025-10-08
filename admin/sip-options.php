@@ -16,6 +16,22 @@ function starg_get_plugin_options_admin_url() {
  * @todo: add some more help text for the second tab (Information Texts) with ->set_help_text()
  */
 function starg_attach_general_plugin_settings() {
+	$application_fields   = starg_get_application_setting_fields();
+	$login_fields         = starg_get_login_setting_fields();
+	$email_fields         = starg_get_email_setting_fields();
+	$debug_logging_fields = starg_get_debug_logging_setting_fields();
+
+	// todo: this might be a problem! first of all we're in a plugin. but more important: what if the theme also uses "carbon fields" and adds 'theme_options'...
+	Container::make('theme_options', esc_html__('General options', 'sip'))
+		->set_page_parent('edit.php?post_type=archival')
+		->add_tab( esc_html__( 'Application', 'sip' ), $application_fields )
+		->add_tab( esc_html__( 'Information Texts', 'sip' ), $login_fields )
+		->add_tab( esc_html__( 'Email settings', 'sip' ), $email_fields )
+		->add_tab( esc_html__( 'Logging settings', 'sip' ), $debug_logging_fields );
+}
+add_action( 'carbon_fields_register_fields', 'starg_attach_general_plugin_settings' );
+
+function starg_get_application_setting_fields() {
 	$roles_capability = array(
 		'manage_options'    => esc_html__( 'Administrator', 'sip' ),
 		'edit_others_posts' => esc_html__( 'Editor', 'sip' ),
@@ -32,10 +48,95 @@ image/png
 audio/mp3
 audio/mp4
 video/mp4';
+	return array(
+		Field::make('separator', 'sip_archive', 'Archive'),
+		Field::make('select', 'sip_archive_role', esc_html__('Role', 'sip'))
+			->add_options($roles_capability)
+			->set_help_text( esc_html__( 'This role or higher is required to approve or reject submitted archival records.', 'sip' ) ),
+		Field::make('separator', 'sip_upload', 'Upload'),
+		Field::make('text', 'sip_upload_path', esc_html__('Archival Upload Path', 'sip'))
+			->set_default_value($default_path)
+			->set_width(25)
+			->set_help_text( esc_html__( 'Specify the folder where the digital archival records should be stored. By default, all files are saved in the /wp-content/uploads/archival/ directory.', 'sip' ) ),
+		Field::make('text', 'sip_max_size', esc_html__('Max SIP Size in Bytes', 'sip'))
+			->set_default_value('50000000')
+			->set_width(25),
+		Field::make('textarea', 'sip_mime_types', esc_html__('Supported file MIME Types', 'sip'))
+			->set_default_value($default_mime_types)
+			->set_width(25),
+		Field::make('checkbox', 'sip_clamav', esc_html__('Virus Check with ClamAV', 'sip')),
+		Field::make('text', 'sip_clamav_host', 'ClamAV Host')
+			->set_conditional_logic(array(
+				array(
+					'field' => 'sip_clamav',
+					'value' => true,
+				)
+			))
+			->set_default_value('localhost')
+			->set_width(50),
+		Field::make('text', 'sip_clamav_port', 'ClamAV Port')
+			->set_conditional_logic(array(
+				array(
+					'field' => 'sip_clamav',
+					'value' => true,
+				)
+			))
+			->set_default_value('3310')
+			->set_width(50),
+		Field::make('checkbox', 'sip_cron_delete', esc_html__('Automatically delete uploaded files', 'sip')),
+		Field::make('text', 'sip_cron_delete_days', esc_html__('older than days', 'sip'))
+			->set_conditional_logic(array(
+				array(
+					'field' => 'sip_cron_delete',
+					'value' => true,
+				)
+			))
+			->set_attribute('type', 'number')
+			->set_attribute('min', 1)
+			->set_attribute('step', 1)
+			->set_default_value('30')
+			->set_width(50),
+		Field::make('multiselect', 'sip_cron_delete_status',  esc_html__('Archival Status', 'sip'))
+			->set_conditional_logic(array(
+				array(
+					'field' => 'sip_cron_delete',
+					'value' => true,
+				)
+			))
+			->add_options(array(
+				'upload'  => esc_html__( 'Uploads', 'sip' ),
+				'draft'   => esc_html__( 'Draft', 'sip' ),
+				'pending' => esc_html__( 'Pending', 'sip' ),
+				'publish' => esc_html__( 'Published', 'sip' ),
+			))
+			->set_default_value('upload')
+			->set_width(50),
+		Field::make('separator', 'sip_map_options', esc_html__('Map', 'sip')),
+		Field::make('text', 'sip_map_google_api_key', esc_html__('Google API Key for reverse Geocoding', 'sip')),
+		Field::make('text', 'sip_map_default_lat', esc_html__('Default Lat', 'sip'))
+			->set_default_value('47.06745752167981')
+			->set_width(33),
+		Field::make('text', 'sip_map_default_lng', esc_html__('Default Lng', 'sip'))
+			->set_default_value('15.441103960661826')
+			->set_width(33),
+		Field::make('text', 'sip_map_default_zoom', esc_html__('Default zoom', 'sip'))
+			->set_attribute('type', 'number')
+			->set_attribute('min', 1)
+			->set_attribute('max', 22)
+			->set_attribute('step', 1)
+			->set_default_value('10')
+			->set_width(33),
+		Field::make('separator', 'sip_style_options', 'Style'),
+		Field::make('header_scripts', 'sip_custom_style', esc_html__('Custom CSS', 'sip'))
+			// translators: %1$s: placeholder for the <style> tag. %2$s: placeholder for the <script> tag.
+			->set_help_text( sprintf( esc_html__( 'Add custom CSS, including the %1$s start and end tags. %2$s tags get removed.', 'sip' ), '&lt;style&gt;', '&lt;script&gt;' ) ),
+	);
+}
 
+function starg_get_login_setting_fields() {
+	$login_fields          = array();
 	$sip_archive_languages = starg_get_enabled_languages();
 
-	$login_fields = array();
 	foreach ( $sip_archive_languages as $language ) {
 		$language = str_replace( 'sip-', '', $language );
 		$login_fields[] = Field::make( 'separator', 'from_language_' . strtolower( $language ), $language );
@@ -45,95 +146,95 @@ video/mp4';
 		$login_fields[] = Field::make( 'rich_text', 'sip_cron_deleted_text_' . strtolower( $language ), esc_html__('SIP Folder deleted Text', 'sip') . ' ' . $language );
 	}
 
-	Container::make('theme_options', esc_html__('General options', 'sip'))
-		->set_page_parent('edit.php?post_type=archival')
-		->add_tab(
-			esc_html__('Application', 'sip'),
-			array(
-				Field::make('separator', 'sip_archive', 'Archive'),
-				Field::make('select', 'sip_archive_role', esc_html__('Role', 'sip'))
-					->add_options($roles_capability)
-					->set_help_text( esc_html__( 'This role or higher is required to approve or reject submitted archival records.', 'sip' ) ),
-				Field::make('separator', 'sip_upload', 'Upload'),
-				Field::make('text', 'sip_upload_path', esc_html__('Archival Upload Path', 'sip'))
-					->set_default_value($default_path)
-					->set_help_text( esc_html__( 'Specify the folder where the digital archival records should be stored. By default, all files are saved in the /wp-content/uploads/archival/ directory.', 'sip' ) ),
-				Field::make('text', 'sip_max_size', esc_html__('Max SIP Size in Bytes', 'sip'))
-					->set_default_value('50000000')
-					->set_width(25),
-				Field::make('textarea', 'sip_mime_types', esc_html__('Supported file MIME Types', 'sip'))
-					->set_default_value($default_mime_types),
-				Field::make('checkbox', 'sip_clamav', esc_html__('Virus Check with ClamAV', 'sip')),
-				Field::make('text', 'sip_clamav_host', 'ClamAV Host')
-					->set_conditional_logic(array(
-						array(
-							'field' => 'sip_clamav',
-							'value' => true,
-						)
-					))
-					->set_default_value('localhost')
-					->set_width(50),
-				Field::make('text', 'sip_clamav_port', 'ClamAV Port')
-					->set_conditional_logic(array(
-						array(
-							'field' => 'sip_clamav',
-							'value' => true,
-						)
-					))
-					->set_default_value('3310')
-					->set_width(50),
-				Field::make('checkbox', 'sip_cron_delete', esc_html__('Automatically delete uploaded files', 'sip')),
-				Field::make('text', 'sip_cron_delete_days', esc_html__('older than days', 'sip'))
-					->set_conditional_logic(array(
-						array(
-							'field' => 'sip_cron_delete',
-							'value' => true,
-						)
-					))
-					->set_attribute('type', 'number')
-					->set_attribute('min', 1)
-					->set_attribute('step', 1)
-					->set_default_value('30')
-					->set_width(50),
-				Field::make('multiselect', 'sip_cron_delete_status',  esc_html__('Archival Status', 'sip'))
-					->set_conditional_logic(array(
-						array(
-							'field' => 'sip_cron_delete',
-							'value' => true,
-						)
-					))
-					->add_options(array(
-						'upload'  => esc_html__( 'Uploads', 'sip' ),
-						'draft'   => esc_html__( 'Draft', 'sip' ),
-						'pending' => esc_html__( 'Pending', 'sip' ),
-						'publish' => esc_html__( 'Published', 'sip' ),
-					))
-					->set_default_value('upload')
-					->set_width(50),
-				Field::make('separator', 'sip_map_options', esc_html__('Map', 'sip')),
-				Field::make('text', 'sip_map_google_api_key', esc_html__('Google API Key for reverse Geocoding', 'sip')),
-				Field::make('text', 'sip_map_default_lat', esc_html__('Default Lat', 'sip'))
-					->set_default_value('47.06745752167981')
-					->set_width(33),
-				Field::make('text', 'sip_map_default_lng', esc_html__('Default Lng', 'sip'))
-					->set_default_value('15.441103960661826')
-					->set_width(33),
-				Field::make('text', 'sip_map_default_zoom', esc_html__('Default zoom', 'sip'))
-					->set_attribute('type', 'number')
-					->set_attribute('min', 1)
-					->set_attribute('max', 22)
-					->set_attribute('step', 1)
-					->set_default_value('10')
-					->set_width(33),
-				Field::make('separator', 'sip_style_options', 'Style'),
-				Field::make('header_scripts', 'sip_custom_style', esc_html__('Custom CSS', 'sip'))
-					// translators: %1$s: placeholder for the <style> tag. %2$s: placeholder for the <script> tag.
-					->set_help_text( sprintf( esc_html__( 'Add custom CSS, including the %1$s start and end tags. %2$s tags get removed.', 'sip' ), '&lt;style&gt;', '&lt;script&gt;' ) ),
-			)
-		)
-		->add_tab(esc_html__('Information Texts', 'sip'), $login_fields);
+	return $login_fields;
 }
-add_action( 'carbon_fields_register_fields', 'starg_attach_general_plugin_settings' );
+
+/**
+ * Defines the input fields for the plugins email settings.
+ * @todo: maybe add Field::make( 'color', 'sip_notifications_bg_color', __('','sip') ) or Field::make( 'image', 'sip_notifications_header_image', __('Logo','sip') ) for customization.
+ * @return array
+ */
+function starg_get_email_setting_fields() : array {
+	$admin_emails      = DB_Query_Helper::get_all_admin_email_addresses();
+	$domain            = parse_url( home_url(), PHP_URL_HOST );
+	$conditional_logic = array(
+		array(
+			'field' => 'sip_notifications_enabled',
+			'value' => true,
+		),
+	);
+	$html_email_cl = array_merge( $conditional_logic, array( array( 'field' => 'sip_notifications_as_html', 'value' => true, ) ) );
+	$email_preview = starg_get_preview_notification_email();
+
+
+	$email_setting_fields = array(
+		Field::make( 'checkbox', 'sip_notifications_enabled', esc_html__( 'Enable email notifications', 'sip' ) )
+			->set_default_value( 'no' )
+			->set_help_text( esc_html__( 'This option enables the integrated notification system. When enabled, the system automatically sends emails to the user and their editor on every submission. It also sends an email to the user, if their submission was accepted.', 'sip' ) ),
+		Field::make( 'text', 'sip_notification_email_address', esc_html__( 'Username of the email address', 'sip' ) )
+			->set_attribute( 'type', 'text' )
+			->set_attribute( 'placeholder', 'wordpress' )
+			->set_attribute( 'data-host', '@' . $domain )
+			->set_width(33.3331)
+			->set_help_text( esc_html__( 'This changes the username of the email address which is used to send the emails. Both the "@"-sign and the domain of your website are added automatically.', 'sip' ) )
+			->set_conditional_logic( $conditional_logic ),
+		Field::make( 'text', 'sip_notification_email_url', esc_html__( 'Domain', 'sip' ) )
+			->set_default_value( '@' . $domain )
+			->set_attribute( 'type', 'text' )
+			->set_attribute( 'readOnly', true )
+			->set_width(33.3331)
+			->set_help_text( esc_html__( 'This will be automatically added to the username of the email address.', 'sip' ) )
+			->set_conditional_logic( $conditional_logic ),
+		Field::make( 'text', 'sip_notification_email_name', esc_html__( 'Email name', 'sip' ) )
+			->set_attribute( 'placeholder', 'WordPress' )
+			->set_width(33.3331)
+			->set_help_text( esc_html__( 'This changes the name of the sent emails from "WordPress" to something of your choice.', 'sip' ) )
+			->set_conditional_logic( $conditional_logic ),
+		Field::make( 'text', 'sip_notification_reply_email_address', esc_html__( 'Reply email address', 'sip' ) )
+			->set_attribute( 'type', 'email' )
+			->set_attribute( 'placeholder', 'support@' . $domain )
+			->set_width(50)
+			->set_help_text( esc_html__( 'Add an email address for replies. This way a user can easily contact you on a specific email address.', 'sip' ) )
+			->set_conditional_logic( $conditional_logic ),
+		Field::make( 'multiselect', 'sip_notification_additional_recipients', esc_html__( 'Additional recipients to notify about user submissions', 'sip' ) )
+			->add_options( $admin_emails )
+			->set_width(50)
+			->set_help_text( esc_html__( 'Usually, only users with the "editor" role are notified about submissions. Use this field to select specific admins who should also be notified.', 'sip' ) )
+			->set_conditional_logic( $conditional_logic ),
+		Field::make( 'checkbox', 'sip_notifications_as_html', esc_html__( 'Send emails as html', 'sip' ) )
+			->set_default_value( 'no' )
+			->set_width(25)
+			->set_help_text( esc_html__( 'Sending emails as HTML allows for a more complex structure and design. This also wraps other WordPress emails (like registration confirmation or password reset) in the same design.', 'sip' ) )
+			->set_conditional_logic( $conditional_logic ),
+		Field::make( 'html', 'sip_notification_email_preview', esc_html__( 'Preview', 'sip' ) )
+			->set_html( $email_preview )
+			->set_help_text( esc_html__( 'This is a preview of the email design.', 'sip' ) )
+			->set_conditional_logic( $html_email_cl ),
+		// todo: Customization for email notifications. Like background-color, text-color, logo, text in footer.
+	);
+
+	return $email_setting_fields;
+}
+
+/**
+ * Defines the input fields for the plugins logging settings.
+ * @return array
+ */
+function starg_get_debug_logging_setting_fields() : array {
+	$conditional_logic = array(
+		array(
+			'field' => 'sip_logging_enabled',
+			'value' => true,
+		),
+	);
+
+	$debug_logging_fields = array(
+		Field::make( 'checkbox', 'sip_logging_enabled', esc_html__( 'Enable debug logging', 'sip' ) )
+			->set_default_value( 'yes' ),
+	);
+
+	return $debug_logging_fields;
+}
 
 /**
  * Creates additional settings backend page for the sip upload form.
@@ -216,3 +317,52 @@ function starg_attach_settings_to_the_archive_taxonomy() {
 		));
 }
 add_action( 'carbon_fields_register_fields', 'starg_attach_settings_to_the_archive_taxonomy' );
+
+/**
+ * Creates the HTML for the preview of HTML email notifications.
+ * @return string
+ */
+function starg_get_preview_notification_email(): string {
+	$home_link = '<a href="' . get_home_url() . '">' . get_home_url() . '</a>';
+	ob_start();
+		?>
+		<style>
+			.notification_email_preview.notification_html{background-color: #ececec;font-family:sans-serif;}
+			.notification_email_preview .notification_body{max-width: 40%;margin-left:auto;margin-right:auto;padding-top:2rem;padding-bottom:2rem;}
+			.notification_email_preview .notification_header{margin:1rem auto 2rem;text-align:center;}
+			.notification_email_preview .notification_header img{max-width: 300px;height: auto;}
+			.notification_email_preview .notification_main{background-color: #fff;color:#222;padding:2rem;border-radius:.25rem;box-shadow:1px 1px 5px 3px #cfcfcf;}
+			.notification_email_preview .notification_main h1{margin:0 0 1.5rem;padding:0;font-size:1.5rem;}
+			.notification_email_preview .notification_main p {margin:0;padding:0 0 1rem;font-size:1rem;}
+			.notification_email_preview .notification_footer{margin-top:2rem;text-align: center;font-size:.85rem;}
+			.notification_email_preview .notification_footer p{margin:0;padding:0 0 .5rem;}
+			@media (max-width: 768px) {body {max-width: 100%;margin-left: 1.5rem;margin-right: 1.5rem;}}
+		</style>
+		<div class="notification_email_preview notification_html">
+			<div class="notification_body">
+				<div class="notification_header">
+					<?php
+					if ( has_custom_logo() ) :
+						the_custom_logo();
+					else :
+						?>
+						<h1><?php echo esc_html( get_bloginfo() ); ?></h1>
+					<?php endif; ?>
+				</div>
+				<div class="notification_main">
+					<?php
+// translators: %s: Link to the website.
+echo wpautop( sprintf( esc_attr_x( 'You\'ve got a new notification!
+
+We wanted to let you know that a new notification has been sent to you. Head over to %s and check the status of your submission.
+					
+Thank you for your contribution.', 'Preview text for the email notifications', 'sip' ), $home_link ) ); ?>
+				</div>
+				<div class="notification_footer">
+					<?php echo '<p>' . esc_html__( 'This is an automated notification email. Please do not reply directly.', 'sip' ) . '</p>'; ?>
+				</div>
+			</div>
+		</div>
+	<?php
+	return ob_get_clean();
+}
