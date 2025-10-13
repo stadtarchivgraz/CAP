@@ -148,6 +148,9 @@ abstract class Form_Validation {
 
 		if ( ! $mail_sent ) {
 			if ( $logging instanceof Starg_Logging ) {
+				if ( is_array( $send_to ) ) {
+					$send_to = implode( ',', $send_to );
+				}
 				// translators: %1$s: The class which called the function. %2$s: Email address of the user to whom the email should have been sent.
 				$logging->create_log_entry( sprintf( esc_html__( 'Email notification for %1$s to %2$s not sent.', 'sip' ), get_called_class(), $send_to ) );
 			}

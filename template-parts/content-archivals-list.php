@@ -26,10 +26,10 @@ if ( $create_sip instanceof Create_Sip ) {
 					<?php if (current_user_can('edit_others_archival_records', $current_post_id)) : ?>
 						<a class="card-header-icon" href="<?php echo $archival_post_url; ?>">
 							<?php
-							// todo: actually u should not use variables in translation functions like this.
-							//       this only works because the needed values for the post_status are defined in the main file of the plugin.
+							// actually u should not use variables in translation functions like this.
+							// This only works because the needed values for the post_status are defined in the main file of the plugin.
 							?>
-							<?php esc_html_e($archival_post_status, 'sip'); ?>
+							<?php echo ( 'publish' === $archival_post_status ) ? esc_html__( 'Accepted', 'sip' ) : esc_html_e($archival_post_status, 'sip'); ?>
 						</a>
 					<?php endif; ?>
 				</header>

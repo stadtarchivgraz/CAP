@@ -48,6 +48,9 @@ image/png
 audio/mp3
 audio/mp4
 video/mp4';
+	$maptiler_api_link    = '<a href="https://cloud.maptiler.com/account/keys/" target="_blank">https://cloud.maptiler.com/account/keys/</a>';
+	// $google_maps_api_link = '<a href="hhttps://developers.google.com/maps/third-party-platforms/wordpress/generate-api-key" target="_blank">hhttps://developers.google.com/maps/third-party-platforms/wordpress/generate-api-key</a>';
+
 	return array(
 		Field::make('separator', 'sip_archive', 'Archive'),
 		Field::make('select', 'sip_archive_role', esc_html__('Role', 'sip'))
@@ -107,12 +110,17 @@ video/mp4';
 				'upload'  => esc_html__( 'Uploads', 'sip' ),
 				'draft'   => esc_html__( 'Draft', 'sip' ),
 				'pending' => esc_html__( 'Pending', 'sip' ),
-				'publish' => esc_html__( 'Published', 'sip' ),
+				'publish' => esc_html__( 'Accepted', 'sip' ),
 			))
 			->set_default_value('upload')
 			->set_width(50),
 		Field::make('separator', 'sip_map_options', esc_html__('Map', 'sip')),
-		Field::make('text', 'sip_map_google_api_key', esc_html__('Google API Key for reverse Geocoding', 'sip')),
+		// we use leaflet and therefore open street map instead of google maps. No need for google API-Key.
+		// Field::make('text', 'sip_map_google_api_key', esc_html__('Google API Key for reverse Geocoding', 'sip'))
+		// 	->set_help_text( sprintf( esc_html__( 'Follow the steps at %s to create the API Key.', 'sip' ), $google_maps_api_link )),
+		Field::make('text', 'sip_map_maptiler_api_key', esc_html__('Maptile API Key', 'sip'))
+			// translators: %s: External link to maptiler homepage.
+			->set_help_text( sprintf( esc_html__( 'To create an API Key, you need to create an account at %s first. Then you can create the API-Key.', 'sip' ), $maptiler_api_link ) ),
 		Field::make('text', 'sip_map_default_lat', esc_html__('Default Lat', 'sip'))
 			->set_default_value('47.06745752167981')
 			->set_width(33),

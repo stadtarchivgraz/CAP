@@ -40,6 +40,11 @@ if ( isset( $markers[0] ) && isset( $markers[0]['lat'] ) && isset( $markers[0]['
 	$default_lng = $markers[0]['lng'];
 }
 
+// todo: remove and invalidate key on going live!
+$maptiler_api_key = '4iSHuzysTSEXKZ9TxnfO';
+if ( carbon_get_theme_option( 'sip_map_maptiler_api_key' ) ) {
+	$maptiler_api_key = esc_attr( carbon_get_theme_option( 'sip_map_maptiler_api_key' ) );
+}
 ?>
 <div id="map" class="container sip"></div>
 <?php if ( $is_sip_upload_template ) : ?>
@@ -56,9 +61,8 @@ if ( isset( $markers[0] ) && isset( $markers[0]['lat'] ) && isset( $markers[0]['
 			})
 			.setView(new L.LatLng(<?php echo $default_lat; ?>, <?php echo $default_lng; ?>), <?php echo $default_zoom; ?>);
 
-		// todo: Check the key and consider adding an option for it in the plugin.
 		// One needs to create an (free) account at https://www.maptiler.com/cloud/pricing/ to create the key at https://cloud.maptiler.com/account/keys/ see https://docs.maptiler.com/cloud/api/authentication-key/.
-		const key = '4iSHuzysTSEXKZ9TxnfO';
+		const key = '<?php echo $maptiler_api_key; ?>';
 		L.tileLayer(`https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=${key}`, { //style URL
 			tileSize: 512,
 			zoomOffset: -1,
