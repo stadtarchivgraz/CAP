@@ -108,7 +108,7 @@ class Starg_Sip_Plugin {
 		$leaflet_mapbox_version         = '0.0.16';
 		$leaflet_markercluster_version  = '...';//todo.
 		$leaflet_area_selection_version = '...';//todo.
-		$tagify_version                 = '4.17.9';
+		$tagify_version                 = '4.35.4';
 		$nouislider_version             = '15.8.1';
 		$dropzone_version               = '5.9.3';
 
@@ -122,7 +122,7 @@ class Starg_Sip_Plugin {
 
 		if ( is_singular( array( 'archival', ) ) || is_page_template( array( 'sip-archival.php', 'sip-upload.php', ) ) ) {
 			wp_enqueue_style( 'leaflet_main', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/leaflet.css', array(), $leaflet_version );
-			wp_enqueue_style( 'leaflet_markers', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/leaflet.awesome-markers.css', array(), $leaflet_markers_version );
+			// wp_enqueue_style( 'leaflet_markers', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/leaflet.awesome-markers.css', array(), $leaflet_markers_version );
 			wp_enqueue_style( 'geocoder', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/Control.Geocoder.css', array(), $geocoder_version );
 			wp_enqueue_style( 'mapbox', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/mapbox-gl.css', array(), $mapbox_version );
 			wp_enqueue_style( 'leaflet_markercluster', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/MarkerCluster.css', array(), $leaflet_markercluster_version );
@@ -130,7 +130,7 @@ class Starg_Sip_Plugin {
 			wp_enqueue_style( 'leaflet_area_selection', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/leaflet.area-selection.css', array(), $leaflet_area_selection_version );
 
 			wp_enqueue_script( 'leaflet_main', STARG_SIP_PLUGIN_BASE_URL . 'assets/js/leaflet.js', array(), $leaflet_version, $script_strategy );
-			wp_enqueue_script( 'leaflet_markers', STARG_SIP_PLUGIN_BASE_URL . 'assets/js/leaflet.awesome-markers.min.js', array(), $leaflet_markers_version, $script_strategy );
+			// wp_enqueue_script( 'leaflet_markers', STARG_SIP_PLUGIN_BASE_URL . 'assets/js/leaflet.awesome-markers.min.js', array(), $leaflet_markers_version, $script_strategy );
 			wp_enqueue_script( 'geocoder', STARG_SIP_PLUGIN_BASE_URL . 'assets/js/Control.Geocoder.js', array(), $geocoder_version, $script_strategy );
 			wp_enqueue_script( 'mapbox', STARG_SIP_PLUGIN_BASE_URL . 'assets/js/mapbox-gl.js', array(), $mapbox_version, $script_strategy );
 			wp_enqueue_script( 'leaflet_mapbox', STARG_SIP_PLUGIN_BASE_URL . 'assets/js/leaflet-mapbox-gl.js', array(), $leaflet_mapbox_version, $script_strategy );
