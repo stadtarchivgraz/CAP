@@ -74,12 +74,9 @@ class Starg_Email_Helper {
 	public static function log_failed_mail_errors( WP_Error $wp_error ): void {
 		$logging = apply_filters( 'starg/logging', null );
 		if ( $logging instanceof Starg_Logging ) {
-			// $wp_error may not have errors logged. so we can't use $wp_error->get_error_messages() and attach the whole error object in the logs.
-			// $logging->create_log_entry( print_r( $wp_error, true ) );
-
 			$error_content = esc_html__( 'Error trying to send an email.', 'sip' );
-			if ( isset( $wp_error['errors']['wp_mail_failed'][0] ) ) {
-				$error_content .= ': ' . print_r( $wp_error['errors']['wp_mail_failed'], true );
+			if ( isset( $wp_error->errors['wp_mail_failed'][0] ) ) {
+				$error_content .= ': ' . print_r( $wp_error->errors['wp_mail_failed'], true );
 			}
 			$logging->create_log_entry( $error_content );
 		}

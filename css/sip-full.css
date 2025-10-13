@@ -10047,4 +10047,34 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   z-index: 1;
 }
 
+.sip .archival-pagination {
+  margin-top: 21px;
+}
+
+.sip .archival-pagination .page-numbers {
+  padding: 12px;
+  display: inline-block;
+  font-size: 16px;
+  text-align: center;
+  line-height: 1;
+  background-color: transparent;
+  border: 1px solid #e6e8ea;
+  /* #ecf8ff */
+  border-radius: 4px;
+  vertical-align: middle;
+  box-shadow: none;
+  margin-right: .5rem;
+}
+
+.sip .archival-pagination a.page-numbers:hover,
+.sip .archival-pagination .page-numbers.current,
+.sip .archival-pagination .page-numbers:hover {
+  background-color: #f8f8f8;
+  color: #333;
+}
+
+body .bp-wrap {
+  z-index: 1001;
+}
+
 /*# sourceMappingURL=sip-full.css.map */

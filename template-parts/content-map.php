@@ -43,7 +43,7 @@ if ( isset( $markers[0] ) && isset( $markers[0]['lat'] ) && isset( $markers[0]['
 ?>
 <div id="map" class="container sip"></div>
 <?php if ( $is_sip_upload_template ) : ?>
-	<p><a class="has-text-danger is-small-text" href="#" id="mapClear"><?php _e('Reset map', 'sip'); ?></a></p>
+	<p><a class="has-text-danger is-small-text" href="#" id="mapClear"><?php esc_html_e('Reset map', 'sip'); ?></a></p>
 <?php endif; ?>
 
 <script>

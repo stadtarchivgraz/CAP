@@ -164,6 +164,11 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 
 	/**
 	 * Create the content of the notification and trigger sending.
+	 * We send two notifications here.
+	 *   We notify all editors who have selected the same archive.
+	 *     If specified in the notification settings we also notify these users (admins), if they have selected the same archive.
+	 *   We also send a notification to the user themselves to tell them, that their submission was received.
+	 *
 	 * @param int $current_user_id
 	 * @param int $orig_author_id
 	 * @param int $user_archive_id
@@ -189,7 +194,11 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 			$other_email_user_ids = array_map( 'esc_attr', carbon_get_theme_option( 'sip_notification_additional_recipients' ) );
 			$other_email          = array();
 			foreach( $other_email_user_ids as $single_user_id ) {
-				$other_email[ $single_user_id ] = get_userdata( $single_user_id )->user_email;
+				// add only users with the same archive.
+				$selected_archive_id = get_user_meta( $single_user_id, 'user_archive', true );
+				if ( $user_archive_id === $selected_archive_id ) {
+					$other_email[ $single_user_id ] = get_userdata( $single_user_id )->user_email;
+				}
 			}
 			$editor_email = array_merge( $editor_email, $other_email );
 		}

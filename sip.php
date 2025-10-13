@@ -3,7 +3,7 @@
  Plugin Name: SIP
  Description: Plugin for creating Submission Information Packages (SIPs) from archival records. The archival records are provided by users. The archivist can choose whether to create a SIP or reject it.
  Author: Stadtarchiv Graz, Guido Handrick
- Version: 3.3.0
+ Version: 3.3.1
  Author URI: https://www.grazmuseum.at/stadtarchiv/
  Text Domain: sip
  Domain Path: /languages/
@@ -14,7 +14,7 @@
 
 if (! defined('WPINC')) { die; }
 
-define( 'STARG_SIP_PLUGIN_VERSION', '3.3.0' );
+define( 'STARG_SIP_PLUGIN_VERSION', '3.3.1' );
 define( 'STARG_SIP_PLUGIN_NAME',    'SIP' );
 define( 'STARG_SIP_PLUGIN_BASE_DIR', trailingslashit( dirname( __FILE__ ) ) );
 define( 'STARG_SIP_PLUGIN_BASE_URL', plugin_dir_url( __FILE__ ) );
@@ -84,9 +84,8 @@ class Starg_Sip_Plugin {
 	 * Load additional assets for the plugin.
 	 *
 	 * currently used assets:
-	 *   - Bigger Picture: https://github.com/henrygd/bigger-picture
+	 *   - Bigger Picture: https://github.com/henrygd/bigger-picture (no more active development, only bugfixes! maybe change to other lib?)
 	 *   - Leaflet: https://github.com/Leaflet/Leaflet
-	 *   - Leaflet Awesome Markers: https://github.com/lennardv2/Leaflet.awesome-markers
 	 *   - Leaflet Control Geocoder: https://github.com/perliedman/leaflet-control-geocoder
 	 *   - Mapbox: https://github.com/mapbox/mapbox-gl-js
 	 *   - Leaflet Mapbox: https://github.com/mapbox/mapbox-gl-leaflet
@@ -95,6 +94,8 @@ class Starg_Sip_Plugin {
 	 *   - tagify: https://github.com/yairEO/tagify
 	 *   - noUiSlider: https://github.com/leongersen/noUiSlider
 	 *   - dropzone: https://github.com/dropzone/dropzone
+	 * deprecated assets:
+	 *   - Leaflet Awesome Markers: https://github.com/lennardv2/Leaflet.awesome-markers
 	 */
 	public static function starg_load_assets() {
 		wp_enqueue_style( 'sip-full', STARG_SIP_PLUGIN_BASE_URL . 'css/sip-full.css', array(), STARG_SIP_PLUGIN_VERSION, 'all' );
@@ -102,9 +103,9 @@ class Starg_Sip_Plugin {
 		$bigger_picture_version         = '1.1.19';
 		$leaflet_version                = '1.9.3';
 		$geocoder_version               = '1.13.0';
-		$leaflet_markers_version        = '2.0.2';
-		$mapbox_version                 = '...';//todo.
-		$leaflet_mapbox_version         = '...';//todo.
+		$leaflet_markers_version        = '2.0.2';// not in use!
+		$mapbox_version                 = '...';//todo
+		$leaflet_mapbox_version         = '0.0.16';
 		$leaflet_markercluster_version  = '...';//todo.
 		$leaflet_area_selection_version = '...';//todo.
 		$tagify_version                 = '4.17.9';
@@ -124,8 +125,8 @@ class Starg_Sip_Plugin {
 			wp_enqueue_style( 'leaflet_markers', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/leaflet.awesome-markers.css', array(), $leaflet_markers_version );
 			wp_enqueue_style( 'geocoder', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/Control.Geocoder.css', array(), $geocoder_version );
 			wp_enqueue_style( 'mapbox', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/mapbox-gl.css', array(), $mapbox_version );
-			wp_enqueue_style( 'leaflet_mapbox', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/MarkerCluster.css', array(), $leaflet_mapbox_version );
-			wp_enqueue_style( 'leaflet_markercluster', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/MarkerCluster.Default.css', array(), $leaflet_markercluster_version );
+			wp_enqueue_style( 'leaflet_markercluster', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/MarkerCluster.css', array(), $leaflet_markercluster_version );
+			wp_enqueue_style( 'leaflet_markercluster_default', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/MarkerCluster.Default.css', array(), $leaflet_markercluster_version );
 			wp_enqueue_style( 'leaflet_area_selection', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/leaflet.area-selection.css', array(), $leaflet_area_selection_version );
 
 			wp_enqueue_script( 'leaflet_main', STARG_SIP_PLUGIN_BASE_URL . 'assets/js/leaflet.js', array(), $leaflet_version, $script_strategy );
@@ -156,31 +157,6 @@ class Starg_Sip_Plugin {
 			wp_enqueue_script('utils');// WordPress Script!
 			wp_enqueue_script('user-profile');// WordPress Script!
 		}
-
-		$style_fixes = '.sip .archival-pagination {
-				margin-top: 21px;
-			}
-			.sip .archival-pagination .page-numbers {
-				padding: 12px;
-				display: inline-block;
-				font-size: 16px;
-				text-align: center;
-				line-height: 1;
-				background-color: transparent;
-				border: 1px solid #e6e8ea;/* #ecf8ff */
-				border-radius: 4px;
-				vertical-align: middle;
-				box-shadow: none;
-				margin-right: .5rem;
-			}
-			.sip .archival-pagination a.page-numbers:hover,
-			.sip .archival-pagination .page-numbers.current,
-			.sip .archival-pagination .page-numbers:hover {
-				background-color: #f8f8f8;
-				color: #333;
-			}
-			body .bp-wrap{ z-index:1001;}';
-		wp_add_inline_style( 'sip-full', $style_fixes );
 	}
 
 	/**
