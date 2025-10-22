@@ -119,6 +119,7 @@ video/mp4';
 		Field::make('separator', 'sip_map_options', esc_html__('Map', 'sip')),
 		// we either use google maps for the coordinates of a place on the map, or openstreetmap. Fallback is openstreetmap as it does not need a API-Key.
 		Field::make('text', 'sip_map_google_api_key', esc_html__('Google API Key for reverse Geocoding', 'sip'))
+			// translators: %s: External link to create an API Key.
 			->set_help_text( sprintf( esc_html__( 'Follow the steps at %s to create the API Key.', 'sip' ), $google_maps_api_link )),
 		Field::make('text', 'sip_map_maptiler_api_key', esc_html__('Maptile API Key', 'sip'))
 			// translators: %s: External link to maptiler homepage.

@@ -345,6 +345,7 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 		<?php
 		$modal_title    = esc_html__('Confirm rejection', 'sip');
 		$user_sip_title = ( $user_sip_title ) ? esc_html($user_sip_title) : esc_html__( 'this entry', 'sip' );
+		// translators: %s: Title of the post.
 		$modal_content  = sprintf( esc_html__( 'Are you sure to decline %s? All files will be deleted.', 'sip' ), '<strong>' . $user_sip_title . '</strong>' );
 		$modal_action_d = array(
 			array(
@@ -418,6 +419,7 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 		<?php
 		$modal_title    = esc_html__('Confirm deletion', 'sip');
 		$user_sip_title = ( $user_sip_title ) ? esc_html($user_sip_title) : esc_html__( 'this entry', 'sip' );
+		// translators: %s: Title of the post.
 		$modal_content  = sprintf( esc_html__( 'Are you sure to delete %s? All files will be deleted.', 'sip' ), '<strong>' . $user_sip_title . '</strong>' );
 		$modal_action   = array(
 			array(
