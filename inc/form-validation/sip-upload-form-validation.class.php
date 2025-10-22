@@ -154,7 +154,11 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 		// translators: %d: Post-ID.
 		$this->set_success_message(sprintf(esc_html__('Entry %s successfully created/updated.', 'sip'), get_the_title( $post_id ) ));
 
-		$this->notify_user( $current_user_id, $orig_author_id, $user_archive );
+		// We do not want to send notifications if the submission was saved as draft.
+		// We also do not want to send notifications if an editor adds a numeration or annotation.
+		if ( 'submit_archival' === $this->user_input['save_sip'] && ! current_user_can( 'publish_archival_records' ) ) {
+			$this->notify_user( $current_user_id, $orig_author_id, $user_archive, $post_id );
+		}
 
 		// used to create the permalink for the edit page for SIP archival records.
 		$url = starg_get_the_archival_page_template_url( $post_id );
@@ -174,7 +178,7 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 	 * @param int $user_archive_id
 	 * @return void
 	 */
-	private function notify_user( int $current_user_id, int $orig_author_id, int $user_archive_id ): void {
+	private function notify_user( int $current_user_id, int $orig_author_id, int $user_archive_id, int $post_id = 0 ): void {
 		if ( ! carbon_get_theme_option( 'sip_notifications_enabled' ) ) { return; }
 
 		$user_archive      = '';
@@ -203,6 +207,12 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 			$editor_email = array_merge( $editor_email, $other_email );
 		}
 
+		$link_to_archival = get_home_url();
+		if ( $post_id ) {
+			// todo: maybe use the permalink instead of the title as text?
+			$link_to_archival = '<a href="' . get_permalink( $post_id ) . '">' . $this->user_input[ 'archival_title' ] . '</a>';
+		}
+
 		// linebreaks for better reading.
 		// $break = ( carbon_get_theme_option( 'sip_notifications_as_html' ) ) ? '<br>' : PHP_EOL . PHP_EOL;
 
@@ -218,14 +228,16 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 		// $message .= $break;
 		// $message .= esc_html__( 'Please log in to the archive for review and approval.', 'sip' );
 
-		// translators: %1$s: Title of the submission. translators: %2$s: Name of the user. translators: %3$s: Name of the institution.
+		// translators: %1$s: Title of the submission. %2$s: Name of the user. %3$s: Name of the institution. %4$s: Link to the post.
 		$message_to_editors = sprintf( esc_html__( 'Title: %1$s
 
 Author: %2$s
 
 New files have been uploaded to the following archive: %3$s
 
-Please log in to the archive for review and approval.', 'sip' ), $this->user_input[ 'archival_title' ], $author_name, $user_archive );
+Please log in to the archive for review and approval.
+
+%4$s', 'sip' ), $this->user_input[ 'archival_title' ], $author_name, $user_archive, $link_to_archival );
 		// translators: %s: Name of the institution.
 		$subject = sprintf( esc_attr__( 'New archival record submitted to %s.', 'sip' ), $user_archive );
 		$this->send_email_notification( $message_to_editors, $subject, $editor_email );
