@@ -1,30 +1,38 @@
 <?php
-$sip_time     = time();
-$sip_max_size = (carbon_get_theme_option('sip_max_size')) ? (int) esc_attr(carbon_get_theme_option('sip_max_size')) : 50000000;
+if (! defined('WPINC')) { die; }
 
-$sip_archival_remove_url_endpoint = '';
-$sip_archival_remove_form_name    = '';
-$sip_archival_remove_nonce_action = '';
-$sip_archival_remove_nonce_key    = '';
+$sip_archival_upload = apply_filters('starg/sip_archival_upload', null);
 $sip_archival_remove = apply_filters('starg/sip_archival_remove', null);
-if ($sip_archival_remove instanceof Sip_Archival_Remove) {
-	$sip_archival_remove->process_archival_remove();
-
-	$sip_archival_remove_url_endpoint = add_query_arg(array($sip_archival_remove->url_endpoint => true,));
-	$sip_archival_remove_form_name    = $sip_archival_remove->form_name;
-	$sip_archival_remove_nonce_action = wp_create_nonce($sip_archival_remove->nonce_action);
-	$sip_archival_remove_nonce_key    = $sip_archival_remove->nonce_key;
-} else {
+if ( ! $sip_archival_upload instanceof Sip_Archival_Upload || ! $sip_archival_remove instanceof Sip_Archival_Remove ) {
+	echo starg_get_notification_message( esc_html__( 'Uploading files is currently not possible. Please try again later.', 'sip' ), 'is-info is-light' );
 	$logging = apply_filters( 'starg/logging', null );
 	if ( $logging instanceof Starg_Logging && $logging->error_logging_enabled ) {
-		$logging->create_log_entry( esc_attr__( 'Problems loading the Class "Sip_Archival_Remove".', 'sip' ) );
+		$logging->create_log_entry( esc_attr__( 'Could not initialize upload functionality.', 'sip' ), Log_Severity::Error );
 	}
+	return;
 }
+
+// todo: the timestamp might not be unique enough if we have many users! we changed it to the php function uniqid. Check if this works correctly!
+$sip_folder_id = time();
+$sip_max_size  = (carbon_get_theme_option('sip_max_size')) ? (int) esc_attr(carbon_get_theme_option('sip_max_size')) : 50000000;
+
+$sip_archival_upload->process_archival_upload();
+$sip_archival_upload_url_endpoint = add_query_arg(array($sip_archival_upload->url_endpoint => true,));
+$sip_archival_upload_form_key     = $sip_archival_upload->form_name_key;
+$sip_archival_upload_form_name    = esc_attr( $sip_archival_upload->form_name );
+$sip_archival_upload_nonce        = wp_nonce_field( esc_attr( $sip_archival_upload->nonce_action ), esc_attr( $sip_archival_upload->nonce_key ), false, false );
+
+$sip_archival_remove->process_archival_remove();
+$sip_archival_remove_url_endpoint = add_query_arg(array($sip_archival_remove->url_endpoint => true,));
+$sip_archival_remove_form_name    = $sip_archival_remove->form_name;
+$sip_archival_remove_nonce_action = wp_create_nonce($sip_archival_remove->nonce_action);
+$sip_archival_remove_nonce_key    = $sip_archival_remove->nonce_key;
 ?>
 
 <script>
 	document.addEventListener('DOMContentLoaded', () => {
 		const archivalUploadRemoveEnabled = '<?php echo ( $sip_archival_remove ) ? true : false; ?>';
+		const archivalUploadErrorModal    = document.getElementById( '<?php echo $sip_archival_upload->modal_id; ?>' );
 		Dropzone.options.archivalUploadForm = { // The camelized version of the ID of the form element
 			dictDefaultMessage: "<?php esc_html_e('Drag and drop the files here to upload', 'sip'); ?>",
 			// The configuration we've talked about above
@@ -60,7 +68,7 @@ if ($sip_archival_remove instanceof Sip_Archival_Remove) {
 					if ( ! archivalUploadRemoveEnabled ) { return; }
 
 					const currentUserID                = <?php echo get_current_user_id(); ?>;
-					const sipFolderTime                = '<?php echo $sip_time; ?>';
+					const sipFolderId                  = '<?php echo $sip_folder_id; ?>';
 					const sipArchivalRemoveUrlEndpoint = '<?php echo $sip_archival_remove_url_endpoint; ?>';
 					const sipArchivalRemoveFormName    = '<?php echo $sip_archival_remove_form_name; ?>';
 					const sipArchivalRemoveNonceAction = '<?php echo $sip_archival_remove_nonce_action; ?>';
@@ -74,7 +82,7 @@ if ($sip_archival_remove instanceof Sip_Archival_Remove) {
 					let removepath = (file.fullPath) ? file.fullPath : file.upload.filename;
 
 					// todo: change the way we pass the form data to the php-script
-					const formData = 'deletePath=' + removepath + '&sipUserID=' + currentUserID + '&sipFolder=SIP-' + sipFolderTime + '&' + sipArchivalRemoveNonceKey + '=' + sipArchivalRemoveNonceAction + '&starg_form_name=' + sipArchivalRemoveFormName;
+					const formData = 'deletePath=' + removepath + '&sipUserID=' + currentUserID + '&sipFolder=SIP-' + sipFolderId + '&' + sipArchivalRemoveNonceKey + '=' + sipArchivalRemoveNonceAction + '&starg_form_name=' + sipArchivalRemoveFormName;
 
 					removedFileXhr.send(formData);
 
@@ -85,7 +93,8 @@ if ($sip_archival_remove instanceof Sip_Archival_Remove) {
 								const response = JSON.parse(removedFileXhr.responseText);
 								if (response.sip_size > <?php echo $sip_max_size; ?>) {
 									<?php // translators: %s: Maximum supported filesize for uploads - for example: "42MB". ?>
-									alert('<?php echo sprintf(esc_attr__('The maximum size of %s for the SIP has been exceeded. Files need to be removed.', 'sip'), starg_human_filesize($sip_max_size)); ?>');
+									archivalUploadErrorModal.querySelector('.modal-card-body').innerHTML = "<?php echo sprintf(esc_attr__('The maximum size of %s for the SIP has been exceeded. Files need to be removed.', 'sip'), starg_human_filesize($sip_max_size)); ?>";
+									archivalUploadErrorModal.classList.add( 'is-active' );
 									submitButton.disabled = true;
 								} else {
 									submitButton.disabled = false;
@@ -101,24 +110,24 @@ if ($sip_archival_remove instanceof Sip_Archival_Remove) {
 					};
 				});
 
-				// todo: maybe change all the alerts into modals?!
 				sipDropzone.on("success", function(file, response) {
+					let errorMessage;
 					if (response.infected) {
 						// Give the user more information about a skipped upload. This is useful because an upload might also fail due to a busy virus scanner!
 						if ( response.reason ) {
-							alert( response.reason );
+							errorMessage = response.reason;
 						} else {
-							alert("<?php esc_attr_e('Virus detected in:', 'sip'); ?>" + ' ' + response.infected);
+							errorMessage = "<?php esc_attr_e('Virus detected in:', 'sip'); ?>" + ' ' + response.infected;
 						}
-						sipDropzone.removeFile(file);// todo: most likely not needed! we're already deleting the file if something malicious happens.
+						sipDropzone.removeFile(file);// only removes the file from the dropzone area.
 					}
 					if (response.not_supported) {
-						sipDropzone.removeFile(file);// todo: most likely not needed! we're already deleting the file if something malicious happens.
-						alert("<?php esc_attr_e('Unsupported file type:', 'sip'); ?>" + ' ' + response.not_supported);
+						errorMessage = "<?php esc_attr_e('Unsupported file type:', 'sip'); ?>" + ' ' + response.not_supported;
+						sipDropzone.removeFile(file);// only removes the file from the dropzone area.
 					}
 					if (response.sip_full) {
-						sipDropzone.removeFile(file);// todo: most likely not needed! we're already deleting the file if something malicious happens.
-						alert("<?php esc_attr_e('Further uploads are not possible. Files must be deleted first.', 'sip'); ?>");
+						errorMessage = "<?php esc_attr_e('Further uploads are not possible. Files must be deleted first.', 'sip'); ?>";
+						sipDropzone.removeFile(file);// only removes the file from the dropzone area.
 					}
 					if (sipDropzone.files.length != 0) {
 						submitButton.disabled = false;
@@ -127,8 +136,13 @@ if ($sip_archival_remove instanceof Sip_Archival_Remove) {
 					}
 
 					if (response.sip_size > <?php echo $sip_max_size; ?>) {
-						alert("<?php echo sprintf(esc_attr__('The maximum size of %s for the SIP has been exceeded. Files need to be removed.', 'sip'), starg_human_filesize($sip_max_size)); ?>");
+						errorMessage = "<?php echo sprintf(esc_attr__('The maximum size of %s for the SIP has been exceeded. Files need to be removed.', 'sip'), starg_human_filesize($sip_max_size)); ?>";
 						submitButton.disabled = true;
+					}
+
+					if ( errorMessage ) {
+						archivalUploadErrorModal.querySelector('.modal-card-body').innerHTML = errorMessage;
+						archivalUploadErrorModal.classList.add( 'is-active' );
 					}
 				});
 			}
@@ -136,30 +150,14 @@ if ($sip_archival_remove instanceof Sip_Archival_Remove) {
 	});
 </script>
 
-<?php
-$sip_archival_upload_url_endpoint = '';
-$sip_archival_upload_form_name    = '';
-$sip_archival_upload_nonce        = '';
-$sip_archival_upload              = apply_filters('starg/sip_archival_upload', null);
-if ($sip_archival_upload instanceof Sip_Archival_Upload) {
-	$sip_archival_upload->process_archival_upload();
-
-	$sip_archival_upload_url_endpoint = add_query_arg(array($sip_archival_upload->url_endpoint => true,));
-	$sip_archival_upload_form_name    = esc_attr( $sip_archival_upload->form_name );
-	$sip_archival_upload_nonce        = wp_nonce_field( esc_attr( $sip_archival_upload->nonce_action ), esc_attr( $sip_archival_upload->nonce_key ), false, false );
-} else {
-	$logging = apply_filters( 'starg/logging', null );
-	if ( $logging instanceof Starg_Logging && $logging->error_logging_enabled ) {
-		$logging->create_log_entry( esc_attr__( 'Problems loading the Class "Sip_Archival_Upload".', 'sip' ) );
-	}
-}
-?>
 <form action="<?php echo $sip_archival_upload_url_endpoint; ?>" class="dropzone" id="archivalUploadForm">
-	<input type="hidden" name="starg_form_name" value="<?php echo $sip_archival_upload_form_name ?>" aria-hidden="true" />
+	<input type="hidden" name="<?php echo $sip_archival_upload_form_key; ?>" value="<?php echo $sip_archival_upload_form_name; ?>" aria-hidden="true" />
 	<?php echo $sip_archival_upload_nonce; ?>
 
-	<input type="hidden" name="sipUserID" value="<?php echo get_current_user_id(); ?>">
-	<input type="hidden" name="sipFolder" value="SIP-<?php echo $sip_time; ?>">
+	<input type="hidden" name="sipUserID" value="<?php echo get_current_user_id(); ?>" aria-hidden="true">
+	<input type="hidden" name="sipFolder" value="SIP-<?php echo $sip_folder_id; ?>" aria-hidden="true">
+
+	<?php echo $sip_archival_upload::get_notification_modal( $sip_archival_upload->modal_id, esc_html__( 'File upload error', 'sip' ) ); ?>
 </form>
 
 <form action="" method="get">
@@ -169,6 +167,6 @@ if ($sip_archival_upload instanceof Sip_Archival_Upload) {
 	?>
 	<input type="hidden" name="starg" value="1" aria-hidden="true" />
 	<?php wp_nonce_field( 'starg_add_archival_meta_data_nonce_action', 'starg_amd', false ); ?>
-	<input type="hidden" name="sipFolder" value="SIP-<?php echo $sip_time; ?>">
-	<input id="submit_sip" type="submit" value="<?php _e('Complete upload and insert metadata', 'sip'); ?>" disabled>
+	<input type="hidden" name="sipFolder" value="SIP-<?php echo $sip_folder_id; ?>" aria-hidden="true">
+	<input id="submit_sip" type="submit" value="<?php esc_html_e('Complete upload and insert metadata', 'sip'); ?>" disabled>
 </form>

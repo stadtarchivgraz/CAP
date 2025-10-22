@@ -4262,7 +4262,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   justify-content: center;
   overflow: hidden;
   position: fixed;
-  z-index: 40;
+  z-index: 1100;
 }
 .sip .modal.is-active {
   display: flex;
@@ -7965,6 +7965,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   cursor: pointer !important;
   pointer-events: all !important;
 }
+html.is-clipped,
 .sip .is-clipped {
   overflow: hidden !important;
 }

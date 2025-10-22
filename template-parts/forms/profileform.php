@@ -128,21 +128,18 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 								<?php echo $user_sip['title']; ?>
 							</a> - <?php esc_html_e($user_sip['status'], 'sip'); ?>
 						</td>
-						<td class="has-text-right">
+						<td class="is-flex is-align-items-center is-justify-content-flex-end">
 							<a class="button is-large" href="<?php echo esc_url( add_query_arg( array( 'sipFolder' => $user_sip['sip'], ), $edit_archival_url ) ); ?>">
 								<?php esc_html_e('Edit', 'sip'); ?>
 							</a>
 
-							<form target="" method="post" class="is-inline-block">
+							<form target="" method="post" class="is-inline-block ml-2">
 								<input type="hidden" name="<?php echo $sip_archival_actions->form_name_key; ?>" value="<?php echo $sip_archival_actions->form_name . '_' . $user_sip['sip']; ?>" aria-hidden="true" />
 								<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
 								<input type="hidden" name="sipFolder" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
 								<input type="hidden" name="starg_form_suffix" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
 								<?php wp_nonce_field( $sip_archival_actions->nonce_action, $sip_archival_actions->nonce_key . '_' . $user_sip['sip'], false ); ?>
-								<?php // todo: maybe change to a modal? js-alerts are not that fancy! ?>
-								<button class="button is-large is-danger" name="decline_archival" type="submit" value="decline" onclick="return confirm('<?php esc_html_e('Are you sure? All files will be deleted.', 'sip'); ?>')">
-									<?php esc_html_e('Delete', 'sip'); ?>
-								</button>
+								<?php echo $sip_archival_actions->archival_delete_button( $user_sip['sip'], $user_sip['title'] ); ?>
 							</form>
 
 						</td>

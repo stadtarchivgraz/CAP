@@ -286,11 +286,11 @@ function starg_get_notification_message( string $message, string $notification_s
 	if ( ! $message ) { return; }
 	ob_start();
 	?>
-	<div class="sip">
+	<div class="sip sip-notification-message">
 		<div class="container my-4">
 			<div class="notification <?php echo $notification_style; ?>">
 				<?php if ( $display_close_button ) : ?>
-					<button class="delete"></button>
+					<button class="delete js-close-notification" type="button" aria-label="<?php esc_attr_e( 'delete notification', 'sip' ); ?>"></button>
 				<?php endif; ?>
 				<?php echo wpautop( wp_kses_post( $message ) ); ?>
 			</div>

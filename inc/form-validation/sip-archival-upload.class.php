@@ -9,6 +9,7 @@ class Sip_Archival_Upload extends Form_Validation {
 	public string $nonce_key         = 'starg_add_archival_files_nonce';
 	public string $form_name         = 'add_files_to_sip_form';
 	public string $url_endpoint      = 'upload_file';//todo: subject to change. Actually we use it as query-arg.
+	public string $modal_id          = 'archival_upload_form';
 
 	/**
 	 * Process the uploaded files.

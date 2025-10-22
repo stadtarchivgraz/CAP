@@ -248,4 +248,107 @@ abstract class Form_Validation {
 		echo starg_get_notification_message( $notification_msg, $notification_style, true );
 	}
 
+	/**
+	 * Generates the HTML for an action modal (popup).
+	 * Its purpose is to inform the user about the action they are about to trigger and let them decide whether to perform it or cancel.
+	 * @param string $modal_id
+	 * @param string $modal_title
+	 * @param string $modal_content
+	 * @param array{
+	 *     array{ class: string, name: string, type: string, value:string, text:string }
+	 * } $action_buttons
+	 * @param array{
+	 *     array{ label: string, type: string, name: string, id: string, class: string, placeholder: string }
+	 * } $form_elements
+	 * @return string
+	 */
+	public static function get_action_modal( string $modal_id, string $modal_title, string $modal_content, array $action_buttons = array(), array $form_elements = array() ): string {
+		ob_start();
+		?>
+		<div id="<?php echo esc_attr( $modal_id ); ?>" class="modal">
+			<div class="modal-background"></div>
+			<div class="modal-card">
+				<header class="modal-card-head">
+					<p class="modal-card-title"><?php echo esc_html( $modal_title ); ?></p>
+					<button class="delete" type="button" aria-label="close"></button>
+				</header>
+				<section class="modal-card-body content mb-0">
+					<?php echo wpautop( wp_kses_post( $modal_content ) ); ?>
+					<?php if ( $form_elements ) : ?>
+						<?php
+						foreach ( $form_elements as $single_element ) :
+							$label       = ( isset( $single_element['label'] ) )       ? esc_attr( $single_element['label'] )       : '';
+							$type        = ( isset( $single_element['type'] ) )        ? sanitize_key( $single_element['type'] )    : '';
+							$name        = ( isset( $single_element['name'] ) )        ? sanitize_key( $single_element['name'] )    : '';
+							$id          = ( isset( $single_element['id'] ) )          ? sanitize_key( $single_element['id'] )      : '';
+							$class       = ( isset( $single_element['class'] ) )       ? esc_html( $single_element['class'] )       : '';
+							$placeholder = ( isset( $single_element['placeholder'] ) ) ? esc_html( $single_element['placeholder'] ) : '';
+							?>
+							<div class="field">
+								<?php if ( $label ) : ?>
+									<label class="label" for="<?php echo $id; ?>"><?php echo esc_html( $label ); ?></label>
+								<?php endif; ?>
+
+								<?php if ( 'textarea' === $type ) : ?>
+									<textarea id="<?php echo $id; ?>" name="<?php echo $name; ?>" class="<?php echo $class; ?>" placeholder="<?php echo $placeholder; ?>"></textarea>
+								<?php else : ?>
+									<input id="<?php echo $id; ?>" type="<?php echo $type; ?>" name="<?php echo $name; ?>" class="<?php echo $class; ?>" placeholder="<?php echo $placeholder; ?>">
+								<?php endif; ?>
+							</div>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</section>
+				<footer class="modal-card-foot">
+					<div class="buttons" style="width:100%;">
+						<?php
+						if ( $action_buttons ) :
+							foreach ( $action_buttons as $single_action_button ) :
+								$class = ( isset( $single_action_button['class'] ) ) ? esc_attr( $single_action_button['class'] )     : '';
+								$name  = ( isset( $single_action_button['name'] ) )  ? sanitize_key( $single_action_button['name'] )  : '';
+								$type  = ( isset( $single_action_button['type'] ) )  ? sanitize_key( $single_action_button['type'] )  : '';
+								$value = ( isset( $single_action_button['value'] ) ) ? sanitize_key( $single_action_button['value'] ) : '';
+								$text  = ( isset( $single_action_button['text'] ) )  ? esc_html( $single_action_button['text'] )      : '';
+								?>
+								<button class="button <?php echo $class; ?>" name="<?php echo $name; ?>"
+								type="<?php echo $type; ?>" value="<?php echo $value; ?>" >
+									<?php echo $text; ?>
+								</button>
+							<?php endforeach; ?>
+						<?php endif; ?>
+						<button class="button ml-auto" type="button" value="cancel" ><?php esc_html_e('Cancel', 'sip'); ?></button>
+					</div>
+				</footer>
+			</div>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Generates the HTML for a notification modal (popup).
+	 * Its purpose is to inform the user about what's happening or what has just happened.
+	 * @param string $modal_id
+	 * @param string $modal_title
+	 * @param string $modal_content
+	 * @return string
+	 */
+	public static function get_notification_modal( string $modal_id, string $modal_title, string $modal_content = '' ): string {
+		ob_start();
+		?>
+		<div id="<?php echo esc_attr( $modal_id ); ?>" class="modal">
+			<div class="modal-background"></div>
+			<div class="modal-card">
+				<header class="modal-card-head">
+					<p class="modal-card-title"><?php echo esc_html( $modal_title ); ?></p>
+					<button class="delete" type="button" aria-label="<?php esc_attr_e( 'close', 'sip' ); ?>"></button>
+				</header>
+				<section class="modal-card-body content mb-0">
+					<?php echo wpautop( wp_kses_post( $modal_content ) ); ?>
+				</section>
+			</div>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
 }

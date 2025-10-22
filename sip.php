@@ -98,7 +98,10 @@ class Starg_Sip_Plugin {
 	 *   - Leaflet Awesome Markers: https://github.com/lennardv2/Leaflet.awesome-markers
 	 */
 	public static function starg_load_assets() {
+		$script_strategy = array( 'in_footer' => true, 'strategy' => 'defer', );
+
 		wp_enqueue_style( 'sip-full', STARG_SIP_PLUGIN_BASE_URL . 'css/sip-full.css', array(), STARG_SIP_PLUGIN_VERSION, 'all' );
+		wp_enqueue_script( 'sip-scripts', STARG_SIP_PLUGIN_BASE_URL . 'js/sip-scripts.js', array(), STARG_SIP_PLUGIN_VERSION, $script_strategy );
 
 		$bigger_picture_version         = '1.1.19';
 		$leaflet_version                = '1.9.3';
@@ -111,8 +114,6 @@ class Starg_Sip_Plugin {
 		$tagify_version                 = '4.35.4';
 		$nouislider_version             = '15.8.1';
 		$dropzone_version               = '5.9.3';
-
-		$script_strategy = array( 'in_footer' => true, 'strategy' => 'defer', );
 
 		// only load bigger-pictrue if we're on the single-template for the archival CPT.
 		if ( is_singular( array( 'archival', ) ) || is_page_template( array( 'sip-archival.php', 'sip-upload.php', ) ) ) {

@@ -114,17 +114,18 @@ $sip_archival_actions->process_sip_archival_actions();
 		<footer class="entry-footer default-max-width">
 			<div class="archival-actions">
 				<?php
+				$archival_status     = get_post_status( $archival_id );
 				$archival_sip_folder = esc_attr( get_post_meta( $archival_id, '_archival_sip_folder', true ) );
-				if ( $archival_sip_folder ) :
+				if ( $archival_sip_folder && 'trash' !== $archival_status ) :
 					$edit_archival_url            = starg_get_the_edit_archival_page_url();
-					$archival_status              = get_post_status( $archival_id );
 					$edit_archival_url_sip_folder = add_query_arg( array( 'sipFolder' => $archival_sip_folder, ), $edit_archival_url );
 					?>
+
 					<form target="" method="post">
-						<input type="hidden" name="starg_form_name" value="archival_actions_form" aria-hidden="true" />
+						<input type="hidden" name="<?php echo $sip_archival_actions->form_name_key; ?>" value="<?php echo $sip_archival_actions->form_name; ?>" aria-hidden="true" />
 						<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
 						<input type="hidden" name="sipFolder" value="<?php echo $archival_sip_folder; ?>" aria-hidden="true" />
-						<?php wp_nonce_field( 'starg_archival_actions_nonce_action', 'starg_archival_actions_nonce', false ); ?>
+						<?php wp_nonce_field( $sip_archival_actions->nonce_action, $sip_archival_actions->nonce_key, false ); ?>
 
 						<?php // Admins/Editors can edit, create the SIP and create a PDF of the site if the users entry has been accepted! ?>
 						<?php if ( current_user_can( 'edit_others_posts' ) && 'publish' === $archival_status ) : ?>
@@ -147,10 +148,10 @@ $sip_archival_actions->process_sip_archival_actions();
 							<button class="button is-large" name="accept_archival" type="submit" value="accept">
 								<?php esc_html_e('Accept', 'sip'); ?>
 							</button>
-							<?php // todo: maybe change to a modal? js-alerts are not that fancy! ?>
-							<button class="button has-text-weight-normal is-large" name="decline_archival" type="submit" value="decline" onclick="return confirm('<?php esc_html_e('Are you sure to decline? All files and data will be deleted.', 'sip'); ?>')">
-								<?php esc_html_e('Decline', 'sip'); ?>
-							</button>
+
+							<?php $sip_archival_actions->archival_decline_button( $archival_sip_folder, get_the_title( $archival_id ) ); ?>
+
+							<?php $sip_archival_actions->archival_decline_button_with_response_form( 'response_' . $archival_sip_folder, get_the_title( $archival_id ) ); ?>
 						<?php // All other users can edit and submit their own entry as long as it has not been submitted. ?>
 						<?php elseif ( 'pending' !== $archival_status && 'publish' !== $archival_status ) : ?>
 							<a class="button is-large" href="<?php echo $edit_archival_url_sip_folder; ?>">
@@ -160,12 +161,16 @@ $sip_archival_actions->process_sip_archival_actions();
 								<?php esc_html_e('Submit', 'sip'); ?>
 							</button>
 						<?php endif; ?>
-
 					</form>
+
+				<?php elseif ( 'trash' === $archival_status ) : ?>
+					<?php echo starg_get_notification_message( esc_html__( 'This post has been deleted and is in the trash.', 'sip' ), 'is-warning is-light' ); ?>
+
 				<?php else : ?>
 					<?php // note: the option '_sip_cron_deleted_text_' uses placeholder like %s. ?>
 					<p><?php echo wp_kses_post( sprintf( get_option('_sip_cron_deleted_text_' . $current_locale), carbon_get_theme_option('sip_cron_delete_days') ) ); ?></p>
 				<?php endif; ?>
+
 			</div>
 		</footer><!-- .entry-footer -->
 
