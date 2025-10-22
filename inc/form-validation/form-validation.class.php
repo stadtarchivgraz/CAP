@@ -130,7 +130,7 @@ abstract class Form_Validation {
 		if ( ! $send_to ) {
 			if ( $logging instanceof Starg_Logging ) {
 				// translators: %s: The class which called the function.
-				$logging->create_log_entry( sprintf( esc_html__( 'Email notification for %s not sent. Missing recipient!', 'sip' ), get_called_class() ) );
+				$logging->create_log_entry( sprintf( esc_html__( 'Email notification for %s not sent. Missing recipient!', 'sip' ), get_called_class() ), Log_Severity::Info );
 			}
 			// sending the mail to the admin, so we know there is something wrong here!
 			$send_to = sanitize_email( get_bloginfo( 'admin_email' ) );
@@ -154,7 +154,7 @@ abstract class Form_Validation {
 					$send_to = implode( ',', $send_to );
 				}
 				// translators: %1$s: The class which called the function. %2$s: Email address of the user to whom the email should have been sent.
-				$logging->create_log_entry( sprintf( esc_html__( 'Email notification for %1$s to %2$s not sent.', 'sip' ), get_called_class(), $send_to ) );
+				$logging->create_log_entry( sprintf( esc_html__( 'Email notification for %1$s to %2$s not sent.', 'sip' ), get_called_class(), $send_to ), Log_Severity::Error );
 			}
 		}
 		return $mail_sent;
@@ -168,6 +168,8 @@ abstract class Form_Validation {
 
 	/**
 	 * Describes which inputs of the form are required.
+	 * If a form has not delivered one of these inputs, we do not trigger any action but display an error message.
+	 * For performance reasons we use the input names as keys for the array. This way we can use isset() instead of in_array().
 	 * @return array
 	 */
 	abstract protected function get_required_input_names() : array;

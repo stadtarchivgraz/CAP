@@ -149,7 +149,7 @@ function starg_remove_SIP(string $dir) : bool {
 		$error_log_msg = sprintf( esc_html__( 'sip %1$s was not removed! Error message: %2$s', 'sip' ), $dir, $e->getMessage() );
 		$logging       = apply_filters( 'starg/logging', null );
 		if ( $logging instanceof Starg_Logging ) {
-			$logging->create_log_entry( $error_log_msg );
+			$logging->create_log_entry( $error_log_msg, Log_Severity::Error );
 		}
 		return false;
 	}

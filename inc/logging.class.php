@@ -80,9 +80,10 @@ class Starg_Logging {
 	/**
 	 * Write the entry into the log file.
 	 * @param string $log_msg
+	 * @param Log_Severity $severity [Optional]
 	 * @return bool
 	 */
-	public function create_log_entry( string $log_msg ) : bool {
+	public function create_log_entry( string $log_msg, Log_Severity $severity = Log_Severity::Info ) : bool {
 		if ( ! $this->error_logging_enabled || ! $log_msg ) { return false; }
 
 		$timestamp = time();
@@ -90,7 +91,20 @@ class Starg_Logging {
 		$page      = sanitize_url( $_SERVER[ 'REQUEST_URI' ] );
 		$browser   = self::get_user_browser();
 
-		$debug_log_message = $timestamp . '|' . $user_id . '|' . $page . '|' . $browser . '|' . esc_attr( $log_msg ) . PHP_EOL;
+		switch ( $severity ) {
+			default :
+			case Log_Severity::Warning :
+				$severity_note = esc_attr__( '[Warning]', 'sip' );
+				break;
+			case Log_Severity::Info :
+				$severity_note = esc_attr__( '[Info]', 'sip' );
+				break;
+			case Log_Severity::Error :
+				$severity_note = esc_attr__( '[Error]', 'sip' );
+				break;
+		}
+
+		$debug_log_message = $timestamp . '|' . $user_id . '|' . $page . '|' . $browser . '|' . $severity_note . ' ' . esc_attr( $log_msg ) . PHP_EOL;
 
 		return error_log( $debug_log_message, 3, $this->debug_log_destination . $this->debug_log_filename );
 	}
@@ -122,4 +136,10 @@ class Starg_Logging {
 	private static function is_apache() {
 		return ( isset( $_SERVER['SERVER_SOFTWARE'] ) && stripos( $_SERVER['SERVER_SOFTWARE'], 'Apache' ) !== false );
 	}
+}
+
+enum Log_Severity: int {
+	case Info = 1;
+	case Warning = 2;
+	case Error = 3;
 }

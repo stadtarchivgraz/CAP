@@ -42,7 +42,7 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 		// needed for pagination!
 		$paged          = get_query_var('paged') ?: 1;
 		$published_args = array(
-			'post_type'      => 'archival',
+			'post_type'      => Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG,
 			'post_status'    => array( 'pending', 'publish', ),
 			'author'         => $user->ID,
 			'lang'           => '',
@@ -65,7 +65,7 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 		<?php
 		// todo: with this approach of displaying the drafts we might hide some of the entries! Actually we display 50 at once if possible. Needs pagination!
 		$archival_draft_args = array(
-			'post_type'      => 'archival',
+			'post_type'      => Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG,
 			'post_status'    => 'draft',
 			'author'         => $user->ID,
 			'lang'           => '',
@@ -74,11 +74,11 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 
 		$archival_drafts = new WP_Query( $archival_draft_args );
 
+		// we add all uploaded entries without connected archival post to the drafts.
 		$archival_sip_folders = DB_Query_Helper::starg_get_archival_sip_folders_by_user_id( $user->ID );
 		$upload_folder        = starg_get_archival_upload_path() . $user->ID . '/';
 		$sip_folders          = glob($upload_folder . '*', GLOB_ONLYDIR);
-
-		$user_sips = array();
+		$user_sips            = array();
 
 		if ( $archival_drafts->have_posts() ) :
 			while ( $archival_drafts->have_posts() ) :
@@ -93,7 +93,6 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 			wp_reset_postdata();
 		endif;
 
-		
 		// Some files may have been uploaded without a corresponding archival post. We'll display them as 'uploads' so users can continue editing them.
 		foreach ( $sip_folders as $sip_folder ) {
 			$sip_folder_name = basename($sip_folder);

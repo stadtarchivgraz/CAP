@@ -1,4 +1,6 @@
 <?php
+if (! defined('WPINC')) { die; }
+
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 
@@ -49,7 +51,7 @@ audio/mp3
 audio/mp4
 video/mp4';
 	$maptiler_api_link    = '<a href="https://cloud.maptiler.com/account/keys/" target="_blank">https://cloud.maptiler.com/account/keys/</a>';
-	// $google_maps_api_link = '<a href="hhttps://developers.google.com/maps/third-party-platforms/wordpress/generate-api-key" target="_blank">hhttps://developers.google.com/maps/third-party-platforms/wordpress/generate-api-key</a>';
+	$google_maps_api_link = '<a href="hhttps://developers.google.com/maps/third-party-platforms/wordpress/generate-api-key" target="_blank">hhttps://developers.google.com/maps/third-party-platforms/wordpress/generate-api-key</a>';
 
 	return array(
 		Field::make('separator', 'sip_archive', 'Archive'),
@@ -115,9 +117,9 @@ video/mp4';
 			->set_default_value('upload')
 			->set_width(50),
 		Field::make('separator', 'sip_map_options', esc_html__('Map', 'sip')),
-		// we use leaflet and therefore open street map instead of google maps. No need for google API-Key.
-		// Field::make('text', 'sip_map_google_api_key', esc_html__('Google API Key for reverse Geocoding', 'sip'))
-		// 	->set_help_text( sprintf( esc_html__( 'Follow the steps at %s to create the API Key.', 'sip' ), $google_maps_api_link )),
+		// we either use google maps for the coordinates of a place on the map, or openstreetmap. Fallback is openstreetmap as it does not need a API-Key.
+		Field::make('text', 'sip_map_google_api_key', esc_html__('Google API Key for reverse Geocoding', 'sip'))
+			->set_help_text( sprintf( esc_html__( 'Follow the steps at %s to create the API Key.', 'sip' ), $google_maps_api_link )),
 		Field::make('text', 'sip_map_maptiler_api_key', esc_html__('Maptile API Key', 'sip'))
 			// translators: %s: External link to maptiler homepage.
 			->set_help_text( sprintf( esc_html__( 'To create an API Key, you need to create an account at %s first. Then you can create the API-Key.', 'sip' ), $maptiler_api_link ) ),

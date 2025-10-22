@@ -238,7 +238,7 @@ class Starg_Sip_Plugin {
 					$single_sip_folder = $upload_folder . $archival_sip_folder->post_author . '/' . $archival_sip_folder->meta_value . '/';
 					$sip_folders[]     = $single_sip_folder;
 					$post_meta_deleted = delete_post_meta( $archival_sip_folder->ID, '_archival_sip_folder' );
-					$post_deleted      = wp_trash_post( $archival_sip_folder->ID );
+					$post_deleted      = wp_delete_post( $archival_sip_folder->ID, true );
 
 					if ( ! $post_meta_deleted ) {
 						if ( $logging instanceof Starg_Logging ) {
