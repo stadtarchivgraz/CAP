@@ -82,7 +82,9 @@ abstract class Form_Validation {
 	 * @param array $user_input
 	 * @return array empty array if all required input fields have data, otherwise array with missing input field keys.
 	 */
-	protected function user_input_required( array $user_input ) : array {
+	protected function user_input_required( array $user_input = array() ) : array {
+		if ( ! $user_input ) { return array(); }
+
 		$all_valid_inputs = $this->get_valid_input_names();
 		$required_inputs  = $this->get_required_input_names();
 		$missing_inputs   = array();

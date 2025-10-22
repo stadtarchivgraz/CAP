@@ -7,33 +7,45 @@ class DB_Query_Helper {
 	 * @param int $archive_id
 	 * @return object|null|false
 	 */
-	public static function starg_get_archive_tags(int $archive_id) {
-		if (! $archive_id) {
-			return false;
+	public static function starg_get_archive_tags( int $archive_id = 0 ) {
+		$term_args = array(
+			'taxonomy'   => Archival_Custom_Posts::ARCHIVAL_TAG_CUSTOM_TAX_SLUG,
+			'hide_empty' => false,
+			'orderby'    => 'term_id',
+			'order'      => 'ASC',
+		);
+
+		if ( $archive_id ) {
+			global $wpdb;
+			$all_archivals_sql = "SELECT DISTINCT t.term_id
+			FROM $wpdb->term_relationships tr
+				INNER JOIN $wpdb->posts p ON tr.object_id = p.ID
+				INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+				INNER JOIN $wpdb->terms t ON tt.term_id = t.term_id
+				INNER JOIN $wpdb->term_relationships tr2 ON tr2.object_id = p.ID
+				INNER JOIN $wpdb->term_taxonomy tt2 ON tr2.term_taxonomy_id = tt2.term_taxonomy_id
+			WHERE p.post_type = %s
+				AND tt.taxonomy = %s
+				AND tt2.taxonomy = %s
+				AND tt2.term_taxonomy_id = %d";
+
+			$all_archive_archivals = $wpdb->get_results($wpdb->prepare($all_archivals_sql, Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG, Archival_Custom_Posts::ARCHIVAL_TAG_CUSTOM_TAX_SLUG, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG, $archive_id));
+
+			if ( $all_archive_archivals ) {
+				$all_archival_ids = wp_list_pluck($all_archive_archivals, 'term_id');
+				$term_args['include'] = $all_archival_ids;
+				return get_terms( $term_args );
+			}
 		}
 
-		global $wpdb;
-		$all_archivals_sql     = "SELECT object_id FROM $wpdb->term_relationships WHERE term_taxonomy_id = %d";
-		$all_archive_archivals = $wpdb->get_results($wpdb->prepare($all_archivals_sql, $archive_id));
-		if (! $all_archive_archivals) {
-			return false;
-		}
-
-		$all_archival_ids = implode(',', wp_list_pluck($all_archive_archivals, 'object_id'));
-		$sql = "SELECT a.term_taxonomy_id, count(a.term_taxonomy_id) as count
-		FROM $wpdb->term_relationships a
-			LEFT JOIN $wpdb->term_taxonomy b ON a.term_taxonomy_id = b.term_taxonomy_id
-		WHERE taxonomy = 'archival_tag'
-			AND a.object_id IN (%s)
-		GROUP BY a.term_taxonomy_id";
-
-		return $wpdb->get_results($wpdb->prepare($sql, $all_archival_ids));
+		return get_terms( $term_args );
 	}
 
 	/**
 	 * Retrieve the name for an existing archival tag.
 	 * @param int $archival_tag_id
 	 * @return string
+	 * @deprecated we create all needed data within @see DB_Query_Helper::starg_get_archive_tags()
 	 */
 	public static function starg_get_archival_tag_name(int $archival_tag_id) {
 		global $wpdb;
@@ -54,7 +66,7 @@ class DB_Query_Helper {
 			return 0;
 		}
 
-		$post_status_filter = '';
+		$post_status_filter = 'AND p.post_status != "trash"';
 		if ($only_published_posts) {
 			$post_status_filter = "AND p.post_status = 'publish'";
 		}
@@ -68,9 +80,9 @@ class DB_Query_Helper {
 			LEFT JOIN $wpdb->posts p ON pm.post_id = p.ID
 		WHERE pm.meta_key = '_archival_upload_purpose'
 			AND pm.meta_value = %s
-			AND p.post_type = 'archival'
+			AND p.post_type = %s
 			$post_status_filter";
-		$result = $wpdb->get_var($wpdb->prepare($upload_purpose_sql, $upload_purpose_option));
+		$result = $wpdb->get_var($wpdb->prepare($upload_purpose_sql, $upload_purpose_option, Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG));
 
 		return (int) $result ?: 0;
 	}
@@ -88,21 +100,22 @@ class DB_Query_Helper {
 		if (! $user_archive || ! $upload_purpose_option) {
 			return 0;
 		}
-		$post_status_filter = '';
+		$post_status_filter = 'AND p.post_status != "trash"';
 		if ($only_published_posts) {
-			$post_status_filter = "AND post_status = 'publish'";
+			$post_status_filter = "AND p.post_status = 'publish'";
 		}
 
 		global $wpdb;
-		$sql = "SELECT count(post_id)
-		FROM $wpdb->postmeta
-			LEFT JOIN $wpdb->posts ON post_id = ID
-			LEFT JOIN $wpdb->term_relationships ON object_id = ID
-		WHERE term_taxonomy_id = %d
-			AND meta_key = '_archival_upload_purpose'
-			AND meta_value = %s
+		$sql = "SELECT count(pm.post_id)
+		FROM $wpdb->postmeta pm
+			LEFT JOIN $wpdb->posts p ON pm.post_id = p.ID
+			LEFT JOIN $wpdb->term_relationships tr ON tr.object_id = p.ID
+		WHERE tr.term_taxonomy_id = %d
+			AND pm.meta_key = '_archival_upload_purpose'
+			AND pm.meta_value = %s
+			AND p.post_type = %s
 			$post_status_filter";
-		$result = $wpdb->get_var($wpdb->prepare($sql, $user_archive, $upload_purpose_option));
+		$result = $wpdb->get_var($wpdb->prepare($sql, $user_archive, $upload_purpose_option, Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG));
 
 		return (int) $result ?: 0;
 	}
@@ -120,16 +133,16 @@ class DB_Query_Helper {
 	 *         )
 	 */
 	public static function starg_get_upload_year_post_count(bool $only_published_posts = false): array|object {
-		$post_status_filter = '';
+		$post_status_filter = 'AND p.post_status != "trash"';
 		if ($only_published_posts) {
-			$post_status_filter = "AND post_status = 'publish'";
+			$post_status_filter = "AND p.post_status = 'publish'";
 		}
 
 		global $wpdb;
-		$sql = "SELECT count(post_id) as sip_count, DATE_FORMAT(meta_value, '%Y') as sip_date
-		FROM $wpdb->postmeta
-			LEFT JOIN $wpdb->posts ON post_id = ID
-		WHERE meta_key = '_archival_from'
+		$sql = "SELECT count(pm.post_id) as sip_count, DATE_FORMAT(pm.meta_value, '%Y') as sip_date
+		FROM $wpdb->postmeta pm
+			LEFT JOIN $wpdb->posts p ON pm.post_id = p.ID
+		WHERE pm.meta_key = '_archival_from'
 			$post_status_filter
 		GROUP BY sip_date
 		ORDER BY sip_date DESC";
@@ -140,31 +153,32 @@ class DB_Query_Helper {
 
 	/**
 	 * Retrieve the number of an users archival record posts by year.
+	 * @param int $archive_id
 	 * @param bool $only_published_posts [Optional] Adds an additional filter to the database call to filter by post_status.
 	 *                                    Default: false = includes posts with all post_status values.
 	 * @return array|object
 	 */
-	public static function starg_get_upload_year_post_count_for_user(int $user_archive, bool $only_published_posts = false): array|object {
-		if (! $user_archive) {
+	public static function starg_get_upload_year_post_count_for_user(int $archive_id, bool $only_published_posts = false): array|object {
+		if (! $archive_id) {
 			return array();
 		}
-		$post_status_filter = '';
+		$post_status_filter = 'AND p.post_status != "trash"';
 		if ($only_published_posts) {
-			$post_status_filter = "AND post_status = 'publish'";
+			$post_status_filter = "AND p.post_status = 'publish'";
 		}
 
 		global $wpdb;
-		$sql = "SELECT count(post_id) as sip_count, DATE_FORMAT(meta_value, '%Y') as sip_date
-		FROM $wpdb->postmeta
-			LEFT JOIN $wpdb->posts ON post_id = ID
-			LEFT JOIN $wpdb->term_relationships ON object_id = ID
-		WHERE term_taxonomy_id = %d
-			AND meta_key = '_archival_from'
+		$sql = "SELECT count(pm.post_id) as sip_count, DATE_FORMAT(pm.meta_value, '%Y') as sip_date
+		FROM $wpdb->postmeta pm
+			LEFT JOIN $wpdb->posts p ON pm.post_id = p.ID
+			LEFT JOIN $wpdb->term_relationships tr ON tr.object_id = p.ID
+		WHERE tr.term_taxonomy_id = %d
+			AND pm.meta_key = '_archival_from'
 			$post_status_filter
 		GROUP BY sip_date
 		ORDER BY sip_date DESC";
 
-		$result = $wpdb->get_results($wpdb->prepare($sql, $user_archive));
+		$result = $wpdb->get_results($wpdb->prepare($sql, $archive_id));
 		return $result ?: array();
 	}
 

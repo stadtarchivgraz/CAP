@@ -366,7 +366,7 @@ class Archival_Custom_Posts {
 	 * @return array $settings
 	 */
 	public static function starg_archival_remove_media_buttons( array $settings, string $editor_id ) : array {
-		global $current_screen;
+		$current_screen = get_current_screen();
 		if ( Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG !== $current_screen->post_type || $editor_id !== 'content' ) {
 			return $settings;
 		}

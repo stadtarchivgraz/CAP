@@ -1,91 +1,35 @@
 <?php
+if (! defined('WPINC')) { die; }
 
-$current_locale = strtolower(get_locale());
-$user_archive   = false;
-$tax_query      = array();
-$meta_query     = array();
-
-$paged = get_query_var('paged') ?: 1;
-
-// sets the main arguments for the archival-query.
-$args = array(
-	'post_type'   => 'archival',
-	'post_status' => 'publish',
-	'lang'        => '',
-	'paged'       => $paged,
-);
-
-// Admins or editors should see drafts as well.
-if ( current_user_can('edit_others_posts') ) {
-	$args['post_status'] = array( 'pending', 'publish', 'draft', );
+require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/filter_archival_query.class.php' );
+$filter_archival_query = new Filter_Archival_Query();
+$filtered_query = $filter_archival_query->maybe_trigger_filter();
+if ( ! $filtered_query ) {
+	echo starg_get_notification_message( esc_html__( 'You are not allowed to view this page.', 'sip' ), 'is-error is-light' );
+	return;
 }
 
-// regular user should only see their entries.
-if ( ! current_user_can('edit_others_posts') ) {
-	$user_archive = (int) esc_attr( get_user_meta(get_current_user_id(), 'user_archive', true) );
-	$tax_query[]  = array(
-		'taxonomy' => 'archive',
-		'field'    => 'term_id',
-		'terms'    => $user_archive
-	);
-}
-
-// check for filtering options
-if (isset($_GET['filter-archive']) && $_GET['filter-archive'] ) {
-	$tax_query[] = array(
-		'taxonomy' => 'archive',
-		'field'    => 'slug',
-		'terms'    => sanitize_text_field( $_GET['filter-archive'] ),
-	);
-}
-
-if ( isset($_GET['filter-tag']) && $_GET['filter-tag'] ) {
-	$tax_query[] = array(
-		'taxonomy' => 'archival_tag',
-		'field'    => 'slug',
-		'terms'    => sanitize_text_field( $_GET['filter-tag'] )
-	);
-}
-
-if ( isset($_GET['filter-purpose']) && $_GET['filter-purpose'] ) {
-	$meta_query[] = array(
-		'key'   => '_archival_upload_purpose',
-		'value' => sanitize_text_field( $_GET['filter-purpose'] ),
-	);
-}
-
-if ( isset($_GET['filter-year']) && $_GET['filter-year'] ) {
-	$meta_query[] = array(
-		'key'     => '_archival_from',
-		'value'   => sanitize_text_field( $_GET['filter-year'] ),
-		'type'    => 'DATETIME',
-		'compare' => 'LIKE'
-	);
-}
-
-if ( isset($_GET['filter-search']) && $_GET['filter-search'] ) {
-	$args['s'] = sanitize_text_field( $_GET['filter-search'] );
-}
-
-if ($tax_query) {
-	$args['tax_query'] = $tax_query;
-	if (count($tax_query) > 1) {
-		$args['tax_query']['relation'] = 'AND';
-	}
-}
-
-if ($meta_query) {
-	$args['meta_query'] = $meta_query;
-	if (count($meta_query) > 1) {
-		$args['tax_query']['relation'] = 'AND';
-	}
-}
+$filter_input    = $filter_archival_query->get_user_input();
+$current_locale  = strtolower(get_locale());
+$user_archive_id = (int) esc_attr( get_user_meta( get_current_user_id(), 'user_archive', true ) );
 ?>
 
-<form id="sip-filter" name="sip-filter" action="" method="get" class="container">
+<form id="sip-filter" action="" method="get" class="container">
 	<div class="columns is-multiline">
 		<?php
-		$archival_terms = get_terms( array( 'taxonomy' => 'archive', 'hide_empty' => true, ) );
+		$archive = $filter_input['filter-archive'];
+		$tag     = $filter_input['filter-tag'];
+		$purpose = $filter_input['filter-purpose'];
+		$year    = $filter_input['filter-year'];
+		$search  = $filter_input['filter-search'];
+
+		$archive_id   = $user_archive_id;
+		$archive_term = get_term_by( 'slug', $archive, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG );
+		if ( $archive_term ) {
+			$archive_id = $archive_term->term_id;
+		}
+
+		$archival_terms = get_terms( array( 'taxonomy' => Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG, 'hide_empty' => true, 'number' => 1, ) );
 		if ( current_user_can( 'edit_others_posts' ) && ! is_wp_error( $archival_terms ) && $archival_terms ) :
 			?>
 			<div class="column is-full">
@@ -93,18 +37,28 @@ if ($meta_query) {
 					<label for="filter-archive"><?php esc_html_e('Archive', 'sip'); ?></label>
 					<div class="control">
 						<?php
-						$selected = (isset($_GET['filter-archive'])) ? sanitize_text_field( $_GET['filter-archive'] ) : '';
+						$selected = $archive;
+						if ( ! $selected && ! current_user_can( 'manage_options' ) ) {
+							$archive_object = get_term_by( 'term_id', $user_archive_id, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG );
+							if ( $archive_object ) {
+								$selected = $archive_object->slug;
+							}
+						}
+
+						// Keep in mind, that this function only counts published posts!
+						// We use the "none"-Option here instead of "all" as we can not easily set the option for "show_option_all" other than 0 but we can set "show_option_none" alongside "option_none_value"!
 						wp_dropdown_categories(array(
-							'show_option_all' => esc_attr__('all', 'sip'),
-							'taxonomy'        => 'archive',
-							'name'            => 'filter-archive',
-							'orderby'         => 'name',
-							'selected'        => $selected,
-							'show_count'      => true,
-							'hide_empty'      => true,
-							// 'hide_empty'      => false,
-							'value_field'     => 'slug',
-							'hierarchical'    => true,
+							'show_option_none'  => esc_attr__('all', 'sip'),
+							'option_none_value' => 'all',
+							'taxonomy'          => Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG,
+							'name'              => 'filter-archive',
+							'orderby'           => 'name',
+							'selected'          => $selected,
+							// 'show_count'        => true,
+							'hide_empty'        => true,
+							'value_field'       => 'slug',
+							'hierarchical'      => true,
+							'hide_if_empty'     => true,
 						));
 						?>
 					</div>
@@ -128,10 +82,10 @@ if ($meta_query) {
 
 					foreach ( $upload_purpose_options as $single_upload_purpose_option ) {
 						$single_upload_purpose_option = esc_attr( $single_upload_purpose_option );
-						if ( ! $user_archive ) {
+						if ( ! $archive ) {
 							$upload_purpose[$single_upload_purpose_option] = DB_Query_Helper::starg_get_upload_purpose_post_count( $single_upload_purpose_option );
 						} else {
-							$upload_purpose[$single_upload_purpose_option] = DB_Query_Helper::starg_get_upload_purpose_post_count_for_user( $user_archive, $single_upload_purpose_option );
+							$upload_purpose[$single_upload_purpose_option] = DB_Query_Helper::starg_get_upload_purpose_post_count_for_user( $archive_id, $single_upload_purpose_option );
 						}
 					}
 					?>
@@ -141,7 +95,7 @@ if ($meta_query) {
 							<select name="filter-purpose" id="filter-purpose" class="postform">
 								<option value="0"><?php esc_html_e('Show all', 'sip'); ?></option>
 								<?php
-								$selected_upload_purpose = ( isset( $_GET['filter-purpose'] ) && $_GET['filter-purpose'] ) ? sanitize_text_field( $_GET['filter-purpose'] ) : 0;
+								$selected_upload_purpose = $purpose;
 								foreach ( $upload_purpose as $key => $count ) :
 									?>
 									<?php if ( $count ) : ?>
@@ -156,10 +110,10 @@ if ($meta_query) {
 				</div>
 				<div class="column is-6-tablet">
 					<?php
-					if ( ! $user_archive ) {
+					if ( ! $archive_id ) {
 						$years = DB_Query_Helper::starg_get_upload_year_post_count();
 					} else {
-						$years = DB_Query_Helper::starg_get_upload_year_post_count_for_user( $user_archive );
+						$years = DB_Query_Helper::starg_get_upload_year_post_count_for_user( $archive_id );
 					}
 					?>
 					<div class="field">
@@ -168,7 +122,7 @@ if ($meta_query) {
 							<select name="filter-year" id="filter-year" class="postform">
 								<option value="0"><?php esc_html_e('Show all', 'sip'); ?></option>
 								<?php
-								$selected_year = ( isset( $_GET['filter-year'] ) && $_GET['filter-year'] ) ? sanitize_text_field( $_GET['filter-year'] ) : 0;
+								$selected_year = $year;
 								foreach ( $years as $year ) :
 									?>
 									<?php if ( $year->sip_count && $year->sip_date ) : ?>
@@ -191,21 +145,20 @@ if ($meta_query) {
 						<label for="filter-tag"><?php esc_html_e('Tags', 'sip'); ?></label>
 						<div class="control">
 							<?php
-							$selected_archival_tag = ( isset( $_GET['filter-tag'] ) && $_GET['filter-tag'] ) ? sanitize_text_field( $_GET['filter-tag'] ) : 0;
-							$archival_tag_taxonomy = get_taxonomy('archival_tag');
-							if ( $user_archive ) :
-								$all_archive_tags = DB_Query_Helper::starg_get_archive_tags($user_archive);
+							$archival_tag_taxonomy = get_taxonomy(Archival_Custom_Posts::ARCHIVAL_TAG_CUSTOM_TAX_SLUG);
+							if ( $archive && $archive_id ) :
+								$all_archive_tags = DB_Query_Helper::starg_get_archive_tags( ( 'all' === $archive ) ? 0 : $archive_id );
 								if ( $all_archive_tags ) :
 									?>
 									<select name="filter-tag" id="filter-tag">
 										<option value="0">
-											<?php echo sprintf(__('Show all %s', 'sip'), $archival_tag_taxonomy->label); ?>
+											<?php echo sprintf( esc_html__('Show all %s', 'sip'), $archival_tag_taxonomy->label); ?>
 										</option>
 										<?php
 										foreach ($all_archive_tags as $archive_tag) :
 											?>
-											<option value="<?php echo $archive_tag->term_taxonomy_id; ?>" <?php selected( $selected_archival_tag, $archive_tag->term_taxonomy_id ); ?>>
-												<?php echo DB_Query_Helper::starg_get_archival_tag_name( $archive_tag->term_taxonomy_id ); ?> (<?php echo $archive_tag->count; ?>)
+											<option value="<?php echo esc_attr( $archive_tag->slug ); ?>" <?php selected( $tag, $archive_tag->slug ); ?>>
+												<?php echo esc_html( $archive_tag->name ); ?> (<?php echo esc_attr( $archive_tag->count ); ?>)
 											</option>
 										<?php endforeach; ?>
 									</select>
@@ -214,14 +167,15 @@ if ($meta_query) {
 							else :
 								wp_dropdown_categories(array(
 									'show_option_all' => sprintf( esc_attr__('Show all %s', 'sip'), $archival_tag_taxonomy->label ),
-									'taxonomy'        => 'archival_tag',
+									'taxonomy'        => Archival_Custom_Posts::ARCHIVAL_TAG_CUSTOM_TAX_SLUG,
 									'name'            => 'filter-tag',
 									'orderby'         => 'name',
-									'selected'        => $selected_archival_tag,
+									'selected'        => $tag,
 									'show_count'      => true,
 									'hide_empty'      => false,
 									'value_field'     => 'slug',
 									'hierarchical'    => true,
+									'hide_if_empty'   => true,
 								));
 							endif;
 							?>
@@ -231,7 +185,7 @@ if ($meta_query) {
 				<div class="column is-6-tablet">
 					<div class="field">
 						<label for="filter-search"><?php esc_html_e('Search', 'sip'); ?></label>
-						<input type="text" class="input" id="filter-search" name="filter-search" value="<?php echo (isset($_GET['filter-search'])) ? sanitize_text_field( $_GET['filter-search'] ) : ''; ?>">
+						<input type="text" class="input" id="filter-search" name="filter-search" value="<?php echo $search; ?>">
 					</div>
 				</div>
 			</div>
@@ -249,7 +203,7 @@ if ($meta_query) {
 </script>
 
 <?php
-$archivals = new WP_Query($args);
+$archivals = new WP_Query( $filtered_query );
 
 if ( $archivals->have_posts() ) :
 	include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-archivals-list.php');
