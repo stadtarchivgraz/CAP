@@ -154,9 +154,8 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 		// translators: %d: Post-ID.
 		$this->set_success_message(sprintf(esc_html__('Entry %s successfully created/updated.', 'sip'), get_the_title( $post_id ) ));
 
-		// We do not want to send notifications if the submission was saved as draft.
-		// We also do not want to send notifications if an editor adds a numeration or annotation.
-		if ( 'submit_archival' === $this->user_input['save_sip'] && ! current_user_can( 'publish_archival_records' ) ) {
+		// only send the notification on submit_archival. (not on save_draft or save_archival)
+		if ( 'submit_archival' === $this->user_input['save_sip'] ) {
 			$this->notify_user( $current_user_id, $orig_author_id, $user_archive, $post_id );
 		}
 
@@ -358,7 +357,7 @@ Thank you for your contribution.', 'sip' ), $author_name );
 			'archival_annotation'     => 'sanitize_text_field',
 			'archival_single_date'    => 'sanitize_text_field',
 			'archival_date_range'     => 'starg_sanitize_array',
-			'save_sip'                => 'sanitize_text_field',
+			'save_sip'                => 'sanitize_text_field', // should be either save_draft, save_archival or submit_archival!
 		);
 	}
 
@@ -375,7 +374,7 @@ Thank you for your contribution.', 'sip' ), $author_name );
 			'archival_upload_purpose' => true,
 			'archival_blocking_time'  => true,
 			'archival_right_transfer' => true,
-			'save_sip'                => true,
+			'save_sip'                => true, // should be either save_draft, save_archival or submit_archival!
 		);
 	}
 

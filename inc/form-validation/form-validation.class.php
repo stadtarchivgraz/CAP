@@ -258,11 +258,11 @@ abstract class Form_Validation {
 	 *     array{ class: string, name: string, type: string, value:string, text:string }
 	 * } $action_buttons
 	 * @param array{
-	 *     array{ label: string, type: string, name: string, id: string, class: string, placeholder: string }
+	 *     array{ label: string, type: string, name: string, id: string, class: string, placeholder: string, checked: bool, help_text: string }
 	 * } $form_elements
 	 * @return string
 	 */
-	public static function get_action_modal( string $modal_id, string $modal_title, string $modal_content, array $action_buttons = array(), array $form_elements = array() ): string {
+	public function get_action_modal( string $modal_id, string $modal_title, string $modal_content, array $action_buttons = array(), array $form_elements = array() ): string {
 		ob_start();
 		?>
 		<div id="<?php echo esc_attr( $modal_id ); ?>" class="modal">
@@ -277,23 +277,10 @@ abstract class Form_Validation {
 					<?php if ( $form_elements ) : ?>
 						<?php
 						foreach ( $form_elements as $single_element ) :
-							$label       = ( isset( $single_element['label'] ) )       ? esc_attr( $single_element['label'] )       : '';
-							$type        = ( isset( $single_element['type'] ) )        ? sanitize_key( $single_element['type'] )    : '';
-							$name        = ( isset( $single_element['name'] ) )        ? sanitize_key( $single_element['name'] )    : '';
-							$id          = ( isset( $single_element['id'] ) )          ? sanitize_key( $single_element['id'] )      : '';
-							$class       = ( isset( $single_element['class'] ) )       ? esc_html( $single_element['class'] )       : '';
-							$placeholder = ( isset( $single_element['placeholder'] ) ) ? esc_html( $single_element['placeholder'] ) : '';
+							if ( ! $single_element ) { continue; }
 							?>
 							<div class="field">
-								<?php if ( $label ) : ?>
-									<label class="label" for="<?php echo $id; ?>"><?php echo esc_html( $label ); ?></label>
-								<?php endif; ?>
-
-								<?php if ( 'textarea' === $type ) : ?>
-									<textarea id="<?php echo $id; ?>" name="<?php echo $name; ?>" class="<?php echo $class; ?>" placeholder="<?php echo $placeholder; ?>"></textarea>
-								<?php else : ?>
-									<input id="<?php echo $id; ?>" type="<?php echo $type; ?>" name="<?php echo $name; ?>" class="<?php echo $class; ?>" placeholder="<?php echo $placeholder; ?>">
-								<?php endif; ?>
+								<?php echo $this->get_input_type( $single_element ); ?>
 							</div>
 						<?php endforeach; ?>
 					<?php endif; ?>
@@ -325,6 +312,113 @@ abstract class Form_Validation {
 	}
 
 	/**
+	 * Return a suitable input field based on the input type provided.
+	 * @param array{ label: string, type: string, name: string, id: string, class: string, placeholder: string, help_text: string } $element
+	 * @return string The HTML of the input field
+	 */
+	public function get_input_type( array $element = array() ): string {
+		if ( ! isset( $element[ 'type' ] ) ) { return ''; }
+
+		switch ( $element[ 'type' ] ) {
+			case 'text':
+			default:
+				return $this->get_text_input( $element );
+			case 'textarea':
+				return $this->get_textarea_input( $element );
+			case 'checkbox':
+				return $this->get_checkbox_input( $element );
+		}
+	}
+
+	/**
+	 * Return a text input.
+	 * @param array{ label: string, type: string, name: string, id: string, class: string, placeholder: string, help_text: string } $element
+	 * @return string The HTML of the provided input type.
+	 */
+	public function get_text_input( array $element ): string {
+		$label       = ( isset( $element['label'] ) )       ? esc_attr( $element['label'] )       : '';
+		$type        = ( isset( $element['type'] ) )        ? sanitize_key( $element['type'] )    : '';
+		$name        = ( isset( $element['name'] ) )        ? sanitize_key( $element['name'] )    : '';
+		$id          = ( isset( $element['id'] ) )          ? sanitize_key( $element['id'] )      : '';
+		$class       = ( isset( $element['class'] ) )       ? esc_html( $element['class'] )       : '';
+		$placeholder = ( isset( $element['placeholder'] ) ) ? esc_html( $element['placeholder'] ) : '';
+		$help_text   = ( isset( $element['help_text'] ) )   ? esc_html( $element['help_text'] )   : '';
+
+		ob_start();
+		?>
+			<?php if ( $label ) : ?>
+				<label class="label" for="<?php echo $id; ?>">
+					<?php echo $label; ?>
+				</label>
+			<?php endif; ?>
+			<input id="<?php echo $id; ?>" type="<?php echo $type; ?>" name="<?php echo $name; ?>"
+				class="<?php echo $class; ?>" placeholder="<?php echo $placeholder; ?>">
+			<?php if ( $help_text ) : ?>
+				<small class="help-text"><?php echo $help_text; ?></small>
+			<?php endif; ?>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Return a textarea input.
+	 * @param array{ label: string, type: string, name: string, id: string, class: string, placeholder: string, help_text: string } $element
+	 * @return string The HTML of the provided input type.
+	 */
+	public function get_textarea_input( array $element ): string {
+		$label       = ( isset( $element['label'] ) )       ? esc_attr( $element['label'] )       : '';
+		$type        = ( isset( $element['type'] ) )        ? sanitize_key( $element['type'] )    : '';
+		$name        = ( isset( $element['name'] ) )        ? sanitize_key( $element['name'] )    : '';
+		$id          = ( isset( $element['id'] ) )          ? sanitize_key( $element['id'] )      : '';
+		$class       = ( isset( $element['class'] ) )       ? esc_html( $element['class'] )       : '';
+		$placeholder = ( isset( $element['placeholder'] ) ) ? esc_html( $element['placeholder'] ) : '';
+		$help_text   = ( isset( $element['help_text'] ) )   ? esc_html( $element['help_text'] )   : '';
+
+		ob_start();
+		?>
+			<?php if ( $label ) : ?>
+				<label class="label" for="<?php echo $id; ?>">
+					<?php echo $label; ?>
+				</label>
+			<?php endif; ?>
+			<textarea id="<?php echo $id; ?>" name="<?php echo $name; ?>"
+				class="<?php echo $class; ?>" placeholder="<?php echo $placeholder; ?>"></textarea>
+			<?php if ( $help_text ) : ?>
+				<small class="help-text"><?php echo $help_text; ?></small>
+			<?php endif; ?>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Return a checkbox input.
+	 * @param array{ label: string, type: string, name: string, id: string, checked: bool, class: string, help_text: string } $element
+	 * @return string The HTML of the provided input type.
+	 */
+	public function get_checkbox_input( array $element ): string {
+		$label       = ( isset( $element['label'] ) )       ? esc_attr( $element['label'] )       : '';
+		$type        = ( isset( $element['type'] ) )        ? sanitize_key( $element['type'] )    : '';
+		$name        = ( isset( $element['name'] ) )        ? sanitize_key( $element['name'] )    : '';
+		$id          = ( isset( $element['id'] ) )          ? sanitize_key( $element['id'] )      : '';
+		$checked     = ! empty( $element['checked'] );
+		$class       = ( isset( $element['class'] ) )       ? esc_html( $element['class'] )       : '';
+		$help_text   = ( isset( $element['help_text'] ) )   ? esc_html( $element['help_text'] )   : '';
+
+		ob_start();
+		?>
+			<label class="label" for="<?php echo $id; ?>">
+				<input id="<?php echo $id; ?>" type="<?php echo $type; ?>" name="<?php echo $name; ?>"
+					class="<?php echo $class; ?>" <?php checked( $checked ); ?>>
+				<?php echo $label; ?>
+			</label>
+			<?php if ( $help_text ) : ?>
+				<small class="help-text"><?php echo $help_text; ?></small>
+			<?php endif; ?>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
 	 * Generates the HTML for a notification modal (popup).
 	 * Its purpose is to inform the user about what's happening or what has just happened.
 	 * @param string $modal_id
@@ -332,7 +426,7 @@ abstract class Form_Validation {
 	 * @param string $modal_content
 	 * @return string
 	 */
-	public static function get_notification_modal( string $modal_id, string $modal_title, string $modal_content = '' ): string {
+	public function get_notification_modal( string $modal_id, string $modal_title, string $modal_content = '' ): string {
 		ob_start();
 		?>
 		<div id="<?php echo esc_attr( $modal_id ); ?>" class="modal">

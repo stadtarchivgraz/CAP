@@ -157,7 +157,7 @@ $sip_archival_remove_nonce_key    = $sip_archival_remove->nonce_key;
 	<input type="hidden" name="sipUserID" value="<?php echo get_current_user_id(); ?>" aria-hidden="true">
 	<input type="hidden" name="sipFolder" value="SIP-<?php echo $sip_folder_id; ?>" aria-hidden="true">
 
-	<?php echo $sip_archival_upload::get_notification_modal( $sip_archival_upload->modal_id, esc_html__( 'File upload error', 'sip' ) ); ?>
+	<?php echo $sip_archival_upload->get_notification_modal( $sip_archival_upload->modal_id, esc_html__( 'File upload error', 'sip' ) ); ?>
 </form>
 
 <form action="" method="get">

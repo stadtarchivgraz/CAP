@@ -253,12 +253,31 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 						<?php if ($archival) : ?>
 							<input type="hidden" name="archival_ID" value="<?php echo $archival->ID; ?>">
 						<?php endif; ?>
-						<button class="button is-large" name="save_sip" type="submit" value="save_draft">
-							<?php esc_html_e('Save as draft', 'sip'); ?>
-						</button>
-						<button class="button is-large" name="save_sip" type="submit" value="submit_archival">
-							<?php esc_html_e('Submit', 'sip'); ?>
-						</button>
+
+						<?php
+						$editor_is_author = false;
+						$post_is_draft    = false;
+						$user_can_publish = current_user_can( 'publish_archival_records' );
+						if ( $archival ) {
+							$author_id        = (int) get_post_field( 'post_author', $archival->ID, true );
+							$editor_is_author = ( $user_can_publish && $author_id === get_current_user_id() );
+							$post_is_draft    = 'draft' === get_post_status( $archival->ID );
+						}
+						// contributors are only allowed to save_draft or submit_archival.
+						// if a post is a draft, it should not be edited by editors and only saved as draft or submitted.
+						// if a post is no draft and the editor is its author, it should be saved as draft or submitted.
+						if ( ! $user_can_publish || $post_is_draft || ( $post_is_draft && $editor_is_author ) ) : ?>
+							<button class="button is-large" name="save_sip" type="submit" value="save_draft">
+								<?php esc_html_e('Save as draft', 'sip'); ?>
+							</button>
+							<button class="button is-large" name="save_sip" type="submit" value="submit_archival">
+								<?php esc_html_e('Submit', 'sip'); ?>
+							</button>
+						<?php else : ?>
+							<button class="button is-large" name="save_sip" type="submit" value="save_archival">
+								<?php esc_html_e('Save', 'sip'); ?>
+							</button>
+						<?php endif; ?>
 					</p>
 				</div>
 

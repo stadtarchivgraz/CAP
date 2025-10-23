@@ -75,9 +75,6 @@ class Sip_Archival_Actions extends Form_Validation {
 			$action_result = $this->_process_action_accept( $archival_id );
 		}
 
-		// _starg_debug_var($user_can_accept_decline);
-		// wp_die();
-		// todo: check if it is better to use the expected value for the user_input here.
 		if ( $user_can_accept_decline && ( 'decline' === $this->user_input[ 'decline_archival' ] || 'decline_with_response' === $this->user_input['decline_archival'] ) ) {
 			$action_result = $this->_process_action_decline( $sip_folder, $archival_id );
 		}
@@ -288,7 +285,7 @@ Thank you for your contribution.', 'sip' ), $author_name, $post_title, $originat
 	 */
 	private function notify_user_decline( int $author_id, int $archivist_id = 0 ): void {
 		// the editor who handles the submission.
-		if ( ! $archivist_id ) {
+		if ( ! $archivist_id || $archivist_id !== get_current_user_id() ) {
 			$archivist_id = get_current_user_id();
 		}
 
@@ -311,7 +308,7 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 		}
 
 		// maybe we want to tell the user, who was reviewing their submission, so they can contact them directly.
-		if ( carbon_get_theme_option( 'sip_notifications_allow_contact_to_archivist' ) && $archivist_id ) {
+		if ( $this->user_input[ 'notification_contact_data' ] && $archivist_id ) {
 			$archivist = get_user_by( 'ID', $archivist_id );
 			if ( $archivist ) {
 				$archivist_name   = $archivist->display_name;
@@ -397,6 +394,15 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 				'class'       => 'textarea',
 				'placeholder' => esc_html__( 'Please use this textarea if you want to add a reason for the rejection in the email notification.', 'sip' ),
 			),
+			'notification_contact_data' => array(
+				'label'     => esc_html__('Add the name and email address of the responsible archivist (you) in the notification email.', 'sip'),
+				'type'      => 'checkbox',
+				'name'      => 'notification_contact_data',
+				'id'        => 'notification_contact_data',
+				'class'     => 'checkbox',
+				'checked'   => true,
+				'help_text' => esc_html__( 'This might be useful if a contributor wants to directly contact you.', 'sip' ),
+			),
 		);
 		echo $this->get_action_modal( $user_sip_id, $modal_title, $modal_content, $modal_action_d, $form_elements );
 
@@ -413,7 +419,7 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 		if ( ! $user_sip_id ) { return; }
 		ob_start();
 		?>
-		<button class="button is-large is-danger js-modal-trigger" type="button" data-modal-id="modal_<?php echo $user_sip_id; ?>">
+		<button class="button is-large is-danger js-modal-trigger" type="button" data-modal-id="<?php echo $user_sip_id; ?>">
 			<?php esc_html_e('Delete', 'sip'); ?>
 		</button>
 		<?php
@@ -445,13 +451,13 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 	 */
 	protected function get_valid_input_names() : array {
 		return array(
-			'accept_archival'      => 'sanitize_key',
-			'decline_archival'     => 'sanitize_key',
-			'delete_archival'      => 'sanitize_key',
-			'submit_archival'      => 'sanitize_key',
-			'notification_subject' => 'sanitize_text_field',
-			'notification_content' => 'wp_kses_post',
-			'sipFolder'            => 'sanitize_text_field',
+			'accept_archival'           => 'sanitize_key',
+			'decline_archival'          => 'sanitize_key',
+			'delete_archival'           => 'sanitize_key',
+			'submit_archival'           => 'sanitize_key',
+			'notification_content'      => 'wp_kses_post',
+			'notification_contact_data' => 'sanitize_text_field',
+			'sipFolder'                 => 'sanitize_text_field',
 		);
 	}
 

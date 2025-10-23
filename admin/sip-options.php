@@ -182,9 +182,6 @@ function starg_get_email_setting_fields() : array {
 		Field::make( 'checkbox', 'sip_notifications_enabled', esc_html__( 'Enable email notifications', 'sip' ) )
 			->set_default_value( 'no' )
 			->set_help_text( esc_html__( 'This option enables the integrated notification system. When enabled, the system automatically sends emails to the user and their editor on every submission. It also sends an email to the user, if their submission was accepted.', 'sip' ) ),
-		Field::make( 'checkbox', 'sip_notifications_allow_contact_to_archivist', esc_html__( 'Send the archivist name and email with the notification', 'sip' ) )
-			->set_default_value( 'no' )
-			->set_help_text( esc_html__( 'Setting this option adds the name and email address of the responsible archivist in some notification emails. This might be useful if a contributor wants to directly contact their archivist.', 'sip' ) ),
 		Field::make( 'text', 'sip_notification_email_address', esc_html__( 'Username of the email address', 'sip' ) )
 			->set_attribute( 'type', 'text' )
 			->set_attribute( 'placeholder', 'wordpress' )
