@@ -31,7 +31,7 @@ function starg_create_thumbnail($file_path, $thumbnail_folder) {
 		if ( $logging instanceof Starg_Logging ) {
 			$logging->create_log_entry( esc_html__( 'Imagick-Extension not loaded.', 'sip' ) );
 		}
-		return;
+		return false;
 	}
 
 	if ( ! file_exists( $thumbnail_folder ) ) {
@@ -51,7 +51,7 @@ function starg_create_thumbnail($file_path, $thumbnail_folder) {
 				// translators: %s: Name of the uploaded file.
 				$logging->create_log_entry( sprintf( esc_html__( 'Problems creating thumbnail for file %s.', 'sip' ) ), $file_path );
 			}
-			return;
+			return false;
 		}
 
 		$image->resize( 800, 800 );
@@ -67,7 +67,7 @@ function starg_create_thumbnail($file_path, $thumbnail_folder) {
 				// translators: %s: Name of the uploaded file.
 				$logging->create_log_entry( sprintf( esc_html__( 'Problems creating thumbnail for file %s.', 'sip' ) ), $file_path );
 			}
-			return;
+			return false;
 		}
 
 		$image->resize( 300, 300, true );

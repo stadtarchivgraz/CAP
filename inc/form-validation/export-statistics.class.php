@@ -16,7 +16,7 @@ class Export_Statistics extends Form_Validation {
 	 */
 	protected function form_validation() : bool {
 		if ( ! defined( 'WPINC' ) ) { return false; } // WordPress must be running to continue!
-		if ( ! current_user_can('manage_options') ) { return false; } // A valid User must be logged in to continue!
+		if ( ! current_user_can('publish_archival_records') ) { return false; } // A valid User must be logged in to continue!
 		if ( ! isset( $_REQUEST[ $this->url_endpoint ] ) ) { return false; } // A valid URL-Endpoint must be defined.
 
 		// if we use the form in a loop, we use a suffix for the nonce to differentiate between the elements in the loop.

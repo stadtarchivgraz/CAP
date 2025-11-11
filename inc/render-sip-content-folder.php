@@ -86,7 +86,8 @@ class Render_Sip_Content_Folder {
 			if (strrpos($file_type['type'], 'image') === 0) {
 				$image_size = getimagesize($path_clean);
 			}
-			$thumb_link = Render_Sip_Content_Folder::get_file_link($file_type, $file_url, $path_clean, $thumbnail_folder, $image_size);
+
+			$thumb_link = Render_Sip_Content_Folder::get_file_link($file_type, $file_url, $path_clean, $thumbnail_folder, $image_size, $author_id, $sip_id);
 
 			// render data
 			if ($thumb_link) {
@@ -110,7 +111,7 @@ class Render_Sip_Content_Folder {
 	 *
 	 * @return string
 	 */
-	private static function get_file_link(array $file_type, string $file_url, string $path_to_file, string $thumbnail_folder = '', $image_size = array() ) : string {
+	private static function get_file_link(array $file_type, string $file_url, string $path_to_file, string $thumbnail_folder = '', $image_size = array(), $author_id = '', $sip_id = '' ) : string {
 		$file = $file_url;
 		// We need to use the absolute path to the images if we're rendering a PDF.
 		// The PDF-Library we're using (spipu/html2pdf) transforms uppercase letters in URLs into lowercase.
@@ -123,9 +124,20 @@ class Render_Sip_Content_Folder {
 		$type      = explode('/', $file_type['type'])[0];
 		$file_info = pathinfo( $file );
 
-		$thumbnail_dir_url  = dirname($file, 2);
-		$thumbnail_filename = ( 'pdf' === $ext ) ? $file_info['basename'] . '.jpg' : $file_info['filename'] . '.' . $ext;
+		if ( $author_id && $sip_id ) {
+			$thumbnail_dir_url = trailingslashit( wp_get_upload_dir()['baseurl'] ) . 'archival/' . $author_id . '/' . $sip_id . '/';
+		} else {
+			$thumbnail_dir_url = dirname($file, 2);
+		}
 
+		// $thumbnail_filename = ( 'pdf' === $ext ) ? $file_info['basename'] . '.jpg' : $file_info['filename'] . '.' . $ext;
+		$thumbnail_filename = $file_info['filename'] . '.' . $ext;
+		if ( 'pdf' === $ext ) {
+			$thumbnail_filename = $file_info['basename'] . '.jpg';
+		} elseif( 'image/tiff' === $file_type['type']|| 'image/tif' === $file_type['type'] ) {
+			$thumbnail_filename = str_replace(array('.tiff', '.tif'), '.jpg', $file_info['basename']);
+		}
+		
 		// if no thumbnail exists, try to create one.
 		if ( ! file_exists( $thumbnail_folder . $thumbnail_filename ) ) {
 			if ( 'pdf' === $ext ) {
@@ -136,7 +148,7 @@ class Render_Sip_Content_Folder {
 		}
 
 		if (file_exists($thumbnail_folder . $thumbnail_filename)) {
-			$thumbnail_url = trailingslashit($thumbnail_dir_url) . 'thumb/' . $thumbnail_filename;
+			$thumbnail_url = esc_url( trailingslashit($thumbnail_dir_url) . 'thumb/' . $thumbnail_filename );
 		} else {
 			$thumbnail_url = Render_Sip_Content_Folder::get_fallback_thumbnail($file_type);
 		}

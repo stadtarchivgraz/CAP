@@ -78,7 +78,7 @@ Class Starg_Security_Settings {
 		}
 
 		// every guest or other route gets blocked.
-		return new WP_Error( 'REST_API_restricted', array( 'status' => rest_authorization_required_code(), ) );
+		return new WP_Error( 'REST_API_restricted', esc_attr__( 'REST API not available', 'sip' ), array( 'status' => rest_authorization_required_code(), ) );
 	}
 
 	/**
