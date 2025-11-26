@@ -76,10 +76,19 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 				<div class="field">
 					<label for="archival-description" class="label"><?php esc_html_e('Description', 'sip'); ?>*</label>
 					<p class="control">
-						<textarea id="archival-description" name="archival_description" class="textarea count-character" rows="10" maxlength="5000" placeholder="<?php esc_html_e('You can describe your file in detail here (e.g.: Why is it important for the archive? What does the file show? In what context was the file created? Is there any additional information?)', 'sip'); ?>" required><?php echo wp_kses_post( $archival_description ); ?></textarea>
+						<textarea id="archival-description" name="archival_description" class="textarea count-character" rows="6" maxlength="5000" placeholder="<?php esc_html_e('You can describe your file in detail here (e.g.: Why is it important for the archive? What does the file show? In what context was the file created? Is there any additional information?)', 'sip'); ?>" required><?php echo wp_kses_post( $archival_description ); ?></textarea>
 					</p>
 					<p id="archival-description_count" class="help"><span><?php echo strlen($archival_description); ?></span> | <?php esc_html_e('Maximum 5000 characters.', 'sip'); ?></p>
 				</div>
+
+				<div class="field">
+					<label for="archival-tags" class="label"><?php esc_html_e('Tags', 'sip'); ?>*</label>
+					<p class="control">
+						<textarea id="archival-tags" name="archival_tags" class="textarea" maxlength="10" required></textarea>
+					</p>
+					<p class="help"><?php esc_html_e('Minimum 1 | Maximum 10', 'sip'); ?></p>
+				</div>
+
 				<?php // todo: if we select a single date, we should hide the longer period inputs and vice versa! ?>
 				<div class="field">
 					<label for="archival-single-date" class="label"><?php esc_html_e('Date/time (for a precise time)', 'sip'); ?></label>
@@ -119,7 +128,7 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 					$address     = esc_attr( $sip_upload_form->get_form_value( 'archival_address' ) );
 					$display_map = ( $address && ( ! $map_lat && ! $map_area ) ) ? false : true;
 					?>
-					<label for="archival-map" class="label"><?php esc_html_e('Location', 'sip'); ?></label>
+					<p class="label"><?php esc_html_e('Location', 'sip'); ?></p>
 					<label class="checkbox">
 						<input type="checkbox" name="archival_hide_map" onclick="toggleField('archival-map','archival-address-wrap');" <?php checked( ! $display_map ); ?>>
 						<?php esc_html_e('Hide map', 'sip'); ?>
@@ -135,13 +144,6 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 					<input id="archival-lat" name="archival_lat" type="hidden" value="<?php echo $map_lat; ?>">
 					<input id="archival-lng" name="archival_lng" type="hidden" value="<?php echo $map_lng; ?>">
 					<input id="archival-area" name="archival_area" type="hidden" value="<?php echo $map_area; ?>">
-				</div>
-				<div class="field">
-					<label for="archival-tags" class="label"><?php esc_html_e('Tags', 'sip'); ?>*</label>
-					<p class="control">
-						<textarea id="archival-tags" name="archival_tags" class="textarea" rows="2" maxlength="10" required></textarea>
-					</p>
-					<p class="help"><?php esc_html_e('Minimum 1 | Maximum 10', 'sip'); ?></p>
 				</div>
 				<div class="columns">
 					<div class="column">
@@ -358,6 +360,7 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 							}
 						}
 
+						// the textarea for the tags.
 						let inputElm = document.querySelector('#archival-tags');
 						let tagify = new Tagify(inputElm, {
 							whitelist: <?php echo json_encode($archival_tags_names); ?>,
@@ -367,9 +370,16 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 								maxItems: 5,
 								position: "text", // place the dropdown near the typed text
 								closeOnSelect: false, // keep the dropdown open after selecting a suggestion
-								highlightFirst: true
-							}
+								highlightFirst: true,
+							},
+							// placeholder: '',
+							// blacklist: [],
+							// enforceWhitelist: true, // don't allow new tags.
 						});
+
+						// link the label to the tagify input.
+						let tagifyInput = inputElm.parentNode.querySelector( '.tagify__input' );
+						tagifyInput.setAttribute('aria-labelledby', 'archival-tags');
 
 						tagify.addTags(<?php echo json_encode($archival_tags_list_names); ?>);
 

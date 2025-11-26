@@ -63,13 +63,13 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 	</section>
 	<section id="drafts" class="tab-content" <?php echo ($current_tab !== 'drafts') ? '  style="display: none"' : ''; ?>>
 		<?php
-		// todo: with this approach of displaying the drafts we might hide some of the entries! Actually we display 50 at once if possible. Needs pagination!
+		// todo: with this approach of displaying the drafts we might hide some of the entries! Actually we display 500 at once if possible. Needs pagination!
 		$archival_draft_args = array(
 			'post_type'      => Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG,
 			'post_status'    => 'draft',
 			'author'         => $user->ID,
 			'lang'           => '',
-			'posts_per_page' => 50,
+			'posts_per_page' => 500,
 		);
 
 		$archival_drafts = new WP_Query( $archival_draft_args );
@@ -83,11 +83,12 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 		if ( $archival_drafts->have_posts() ) :
 			while ( $archival_drafts->have_posts() ) :
 				$archival_drafts->the_post();
-				$user_sips[strtotime(get_the_date('Y-m-d H:i:s'))] = array(
-					'id'     => get_the_ID(),
-					'title'  => get_the_title(),
-					'sip'    => esc_attr( get_post_meta(get_the_ID(), '_archival_sip_folder', true) ),
-					'status' => 'draft',
+				$user_sips[] = array(
+					'id'        => get_the_ID(),
+					'title'     => get_the_title(),
+					'sip'       => esc_attr( get_post_meta(get_the_ID(), '_archival_sip_folder', true) ),
+					'status'    => 'draft',
+					'timestamp' => strtotime(get_the_date('Y-m-d H:i:s')),
 				);
 			endwhile;
 			wp_reset_postdata();
@@ -97,10 +98,11 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 		foreach ( $sip_folders as $sip_folder ) {
 			$sip_folder_name = basename($sip_folder);
 			if ( ! in_array($sip_folder_name, $archival_sip_folders) ) {
-				$user_sips[ starg_get_folder_creation_days_ago( $sip_folder, true ) ]  = array(
-					'title'  => $sip_folder_name,
-					'sip'    => $sip_folder_name,
-					'status' => 'upload',
+				$user_sips[]  = array(
+					'title'     => $sip_folder_name,
+					'sip'       => $sip_folder_name,
+					'status'    => 'upload',
+					'timestamp' => starg_get_folder_creation_days_ago( $sip_folder, true ),
 				);
 			}
 		}
@@ -117,12 +119,12 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 			?>
 			<table class="table is-striped is-narrow">
 				<?php
-				foreach ($user_sips as $date => $user_sip) :
+				foreach ($user_sips as $user_sip) :
 					// we have no data for this entry, so we're not showing it. might be a deleted entry.
 					if ( ! $user_sip['sip'] ) { continue; }
 					?>
 					<tr>
-						<td><?php echo date_i18n($date_format, $date); ?></td>
+						<td><?php echo date_i18n($date_format, $user_sip[ 'timestamp' ]); ?></td>
 						<td>
 							<a class="has-text-weight-bold has-text-dark" href="<?php echo ( isset( $user_sip['id'] ) ) ? esc_url( starg_get_the_archival_page_template_url( $user_sip['id'] ) ) : '#'; ?>">
 								<?php echo $user_sip['title']; ?>
@@ -198,12 +200,12 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 									'name'              => 'user_archive',
 									'id'                => 'archive',
 									'class'             => 'postform',
-									'taxonomy'          => 'archive',
+									'taxonomy'          => Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG,
 									'hide_empty'        => false,
 									'hide_if_empty'     => false,
 									'value_field'       => 'term_id',
 									'required'          => true,
-									'selected'          => $user_archive
+									'selected'          => $user_archive,
 								);
 								wp_dropdown_categories($args);
 							else :

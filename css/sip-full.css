@@ -10078,4 +10078,15 @@ body .bp-wrap {
   z-index: 1001;
 }
 
+.sip .tagify__input {
+  display: inline;
+}
+.sip .tagify__input::before,
+.sip .tagify__input::after {
+  bottom: 0;
+  height: 100%;
+  padding: 5px 0;
+  display: inline;
+}
+
 /*# sourceMappingURL=sip-full.css.map */

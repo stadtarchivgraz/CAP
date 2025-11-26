@@ -143,7 +143,9 @@ class Sip_Archival_Actions extends Form_Validation {
 		$author_id    = get_post_field( 'post_author', $archival_post_id );
 		$archivist_id = (int) get_post_meta( $archival_post_id, '_archival_archivar_user_id', true );
 
-		$post_deleted_id = wp_delete_post($archival_post_id, true);
+		// todo: do not delete posts yet. Reactivate later.
+		// $post_deleted_id = wp_delete_post($archival_post_id, true);
+		$post_deleted_id = wp_trash_post($archival_post_id);
 		if ( ! $post_deleted_id ) {
 			// translators: %d: Post-ID of the archival record.
 			$this->set_error_message( sprintf( esc_attr__( 'Failed to delete the archival record with the ID %d.', 'sip' ), $archival_post_id ) );
@@ -191,7 +193,9 @@ class Sip_Archival_Actions extends Form_Validation {
 			}
 		}
 
-		$post_deleted_id = wp_delete_post($archival_post_id, true);
+		// todo: do not delete posts yet. Reactivate later.
+		// $post_deleted_id = wp_delete_post($archival_post_id, true);
+		$post_deleted_id = wp_trash_post($archival_post_id);
 
 		if ( ! $post_deleted_id ) {
 			// translators: %d: Post-ID of the archival record.
@@ -200,7 +204,7 @@ class Sip_Archival_Actions extends Form_Validation {
 		}
 
 		// delete the post_meta.
-		delete_post_meta( $post_deleted_id, '_archival_sip_folder' );
+		// delete_post_meta( $post_deleted_id, '_archival_sip_folder' );
 
 		$this->set_success_message( esc_attr__( 'Archival record deleted.', 'sip' ) );
 		return true;
