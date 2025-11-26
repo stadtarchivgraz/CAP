@@ -53,8 +53,8 @@ msgid "Creation Place"
 msgstr "Lieu de création"
 
 #: admin/sip-meta.php:55
-#: template-parts/content-sip-form.php:132
-#: template-parts/forms/profileform.php:275
+#: template-parts/content-sip-form.php:141
+#: template-parts/forms/profileform.php:288
 msgid "Address"
 msgstr "Adresse"
 
@@ -96,7 +96,7 @@ msgstr "Durée de blocage"
 
 #: admin/sip-meta.php:90
 #: inc/form-validation/create-sip.class.php:463
-#: template-parts/content-sip-form.php:227
+#: template-parts/content-sip-form.php:229
 msgid "Note"
 msgstr "Note"
 
@@ -104,7 +104,7 @@ msgstr "Note"
 #: inc/form-validation/create-sip-pdf.class.php:232
 #: inc/form-validation/create-sip.class.php:450
 #: template-parts/content-archival.php:97
-#: template-parts/content-sip-form.php:221
+#: template-parts/content-sip-form.php:223
 msgid "Numbering"
 msgstr "Numérotation"
 
@@ -113,7 +113,7 @@ msgid "Meta Fields"
 msgstr "Champs méta"
 
 #: admin/sip-meta.php:99
-#: template-parts/content-sip-form.php:218
+#: template-parts/content-sip-form.php:220
 msgid "Archive information"
 msgstr "Informations sur les archives"
 
@@ -219,67 +219,67 @@ msgstr "Textes d'information"
 
 #: admin/admin-pages.php:72
 #: admin/admin-pages.php:106
+#: admin/sip-options.php:262
 #: admin/sip-options.php:265
-#: admin/sip-options.php:268
 #: inc/form-validation/export-statistics.class.php:67
 msgid "Name"
 msgstr "Nom"
 
-#: admin/sip-options.php:274
+#: admin/sip-options.php:271
 msgid "Upload Purpose Options"
 msgstr "Options de téléchargement"
 
-#: admin/sip-options.php:276
+#: admin/sip-options.php:273
 msgid "Blocking Time Options"
 msgstr "Options de blocage du temps"
 
-#: admin/sip-options.php:278
+#: admin/sip-options.php:275
 msgid "Blocking Time Upload Purpose"
 msgstr "Objectif du téléchargement du temps de blocage"
 
-#: admin/sip-options.php:279
+#: admin/sip-options.php:276
 msgid "Blocking Time Calculate"
 msgstr "Calcul du temps de blocage"
 
-#: admin/sip-options.php:282
-#: admin/sip-options.php:284
+#: admin/sip-options.php:279
+#: admin/sip-options.php:281
 #: template-parts/content-sip-form.php:63
 msgid "Title"
 msgstr "Titre"
 
-#: admin/sip-options.php:287
-#: admin/sip-options.php:293
+#: admin/sip-options.php:284
+#: admin/sip-options.php:290
 msgid "Type"
 msgstr "Taper"
 
-#: admin/sip-options.php:299
-#: admin/sip-options.php:309
+#: admin/sip-options.php:296
+#: admin/sip-options.php:306
 msgid "Custom Meta Data"
 msgstr "Métadonnées personnalisées"
 
-#: admin/sip-options.php:303
+#: admin/sip-options.php:300
 msgid "Form fields"
 msgstr "Champs de formulaire"
 
-#: admin/sip-options.php:305
+#: admin/sip-options.php:302
 #: inc/form-validation/export-statistics.class.php:94
 #: inc/form-validation/export-statistics.class.php:131
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: admin/sip-options.php:307
+#: admin/sip-options.php:304
 msgid "Archival Users"
 msgstr "Utilisateurs d'archives"
 
-#: admin/sip-options.php:322
+#: admin/sip-options.php:319
 msgid "Term Options"
 msgstr "Options de terme"
 
-#: admin/sip-options.php:325
+#: admin/sip-options.php:322
 msgid "Institution Name abbreviation"
 msgstr "Abréviation du nom de l'institution"
 
-#: admin/sip-options.php:328
+#: admin/sip-options.php:325
 msgid "SIP Referenz"
 msgstr "Référence SIP"
 
@@ -413,8 +413,8 @@ msgstr "archives"
 #: inc/form-validation/export-statistics.class.php:131
 #: inc/sip-template-functions.php:49
 #: template-parts/forms/filterform.php:37
-#: template-parts/forms/profileform.php:158
-#: template-parts/forms/profileform.php:190
+#: template-parts/forms/profileform.php:160
+#: template-parts/forms/profileform.php:193
 msgid "Archive"
 msgstr "Archive"
 
@@ -514,7 +514,7 @@ msgstr "supprimé"
 msgid "all"
 msgstr "tous"
 
-#: template-parts/content-sip-form.php:149
+#: template-parts/content-sip-form.php:151
 #: template-parts/forms/filterform.php:93
 msgid "Upload purpose"
 msgstr "Objet du téléchargement"
@@ -525,7 +525,7 @@ msgstr "Année"
 
 #: inc/form-validation/create-sip-pdf.class.php:219
 #: template-parts/content-archival.php:90
-#: template-parts/content-sip-form.php:140
+#: template-parts/content-sip-form.php:85
 #: template-parts/forms/filterform.php:145
 msgid "Tags"
 msgstr "Tags"
@@ -560,7 +560,7 @@ msgid "Drafts"
 msgstr "Brouillons"
 
 #: template-parts/forms/profileform.php:35
-#: template-parts/forms/profileform.php:221
+#: template-parts/forms/profileform.php:225
 msgid "Personal account"
 msgstr "Données personnelles"
 
@@ -568,87 +568,89 @@ msgstr "Données personnelles"
 #: template-parts/content-archival.php:146
 #: template-parts/content-archival.php:158
 #: template-parts/content-archivals-list.php:53
-#: template-parts/forms/profileform.php:133
+#: template-parts/forms/profileform.php:135
 msgid "Edit"
 msgstr "Modifier"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:417
-#: inc/form-validation/sip-archival-actions-form.class.php:429
+#: inc/form-validation/sip-archival-actions-form.class.php:427
+#: inc/form-validation/sip-archival-actions-form.class.php:439
 msgid "Delete"
 msgstr "Supprimer"
 
-#: template-parts/forms/profileform.php:161
+#: template-parts/forms/profileform.php:163
 msgid "Log in"
 msgstr "Se connecter"
 
-#: template-parts/forms/profileform.php:173
+#: template-parts/forms/profileform.php:175
 msgid "Public name"
 msgstr "Nom public"
 
-#: template-parts/forms/profileform.php:215
+#: template-parts/forms/profileform.php:219
 msgid "This selection cannot be changed"
 msgstr "Cette sélection ne peut pas être modifiée"
 
-#: template-parts/forms/profileform.php:225
-#: template-parts/forms/profileform.php:230
+#: template-parts/forms/profileform.php:238
+#: template-parts/forms/profileform.php:243
 msgid "First name"
 msgstr "Prénom"
 
-#: template-parts/forms/profileform.php:237
-#: template-parts/forms/profileform.php:242
+#: template-parts/forms/profileform.php:250
+#: template-parts/forms/profileform.php:255
 msgid "Surname"
 msgstr "Nom de famille"
 
-#: template-parts/forms/profileform.php:249
+#: elementor-integration/Email_Shortcode_Widget.class.php:10
+#: template-parts/forms/profileform.php:262
 msgid "Email address"
 msgstr "Adresse e-mail"
 
-#: template-parts/forms/profileform.php:261
+#: template-parts/forms/profileform.php:274
 msgid "Date of birth"
 msgstr "Date de naissance"
 
-#: template-parts/forms/profileform.php:268
+#: template-parts/forms/profileform.php:281
 msgid "You must be at least 18 years old"
 msgstr "Vous devez avoir au moins 18 ans"
 
-#: template-parts/forms/profileform.php:280
+#: template-parts/forms/profileform.php:293
 msgid "Street and Number"
 msgstr "Rue et numéro"
 
-#: template-parts/forms/profileform.php:290
+#: template-parts/forms/profileform.php:303
 msgid "ZIP Code"
 msgstr "Code postal"
 
-#: template-parts/forms/profileform.php:295
+#: template-parts/forms/profileform.php:308
 msgid "City"
 msgstr "Ville"
 
-#: template-parts/forms/profileform.php:313
+#: template-parts/content-sip-form.php:280
+#: template-parts/forms/profileform.php:326
 msgid "Save"
 msgstr "Enregistrer"
 
-#: template-parts/forms/profileform.php:323
-#: template-parts/forms/profileform.php:371
+#: template-parts/forms/profileform.php:336
+#: template-parts/forms/profileform.php:384
 msgid "Change password"
 msgstr "Modifier le mot de passe"
 
-#: template-parts/forms/profileform.php:326
+#: template-parts/forms/profileform.php:339
 msgid "Old"
 msgstr "Ancien"
 
-#: template-parts/forms/profileform.php:338
+#: template-parts/forms/profileform.php:351
 msgid "New"
 msgstr "Nouveau"
 
-#: template-parts/forms/profileform.php:346
+#: template-parts/forms/profileform.php:359
 msgid "Strength of password"
 msgstr "Force du mot de passe"
 
-#: template-parts/forms/profileform.php:347
+#: template-parts/forms/profileform.php:360
 msgid "Tip: Your password should be at least twelve characters long. For a stronger password, use upper and lower case letters, numbers and special characters such as !’?$%^&)."
 msgstr "Astuce : le mot de passe doit contenir au moins douze caractères. Pour un mot de passe plus sécurisé, utilisez des majuscules, des minuscules, des chiffres et des caractères spéciaux comme !’? $%^&)."
 
-#: template-parts/forms/profileform.php:354
+#: template-parts/forms/profileform.php:367
 msgid "Repeat"
 msgstr "Répéter"
 
@@ -668,21 +670,21 @@ msgstr "Profil SIP"
 msgid "SIP Archive"
 msgstr "Archives SIP"
 
-#: sip.php:78
+#: sip.php:80
 msgid "draft"
 msgstr "brouillon"
 
-#: sip.php:79
+#: sip.php:81
 msgid "pending"
 msgstr "en attente"
 
-#: sip.php:80
+#: sip.php:82
 msgid "publish"
 msgstr "publier"
 
 #: inc/form-validation/create-sip-pdf.class.php:201
 #: template-parts/content-archival.php:61
-#: template-parts/content-sip-form.php:122
+#: template-parts/content-sip-form.php:131
 msgid "Location"
 msgstr "Emplacement"
 
@@ -703,18 +705,18 @@ msgstr "Note"
 msgid "Accept"
 msgstr "Accepter"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:343
-#: inc/form-validation/sip-archival-actions-form.class.php:355
-#: inc/form-validation/sip-archival-actions-form.class.php:387
+#: inc/form-validation/sip-archival-actions-form.class.php:344
+#: inc/form-validation/sip-archival-actions-form.class.php:356
+#: inc/form-validation/sip-archival-actions-form.class.php:388
 msgid "Decline"
 msgstr "Déclin"
 
 #: template-parts/content-archival.php:161
-#: template-parts/content-sip-form.php:260
+#: template-parts/content-sip-form.php:276
 msgid "Submit"
 msgstr "Soumettre"
 
-#: admin/sip-options.php:223
+#: admin/sip-options.php:220
 #: template-parts/content-archivals-list.php:49
 msgid "Preview"
 msgstr "Aperçu"
@@ -747,31 +749,31 @@ msgstr "Vous pouvez décrire votre fichier en détail ici (ex. : Pourquoi est-il
 msgid "Maximum 5000 characters."
 msgstr "Maximum 5000 caractères."
 
-#: template-parts/content-sip-form.php:85
+#: template-parts/content-sip-form.php:94
 msgid "Date/time (for a precise time)"
 msgstr "Date/heure (pour une date précise)"
 
-#: template-parts/content-sip-form.php:91
+#: template-parts/content-sip-form.php:100
 msgid "Time period (for a longer period)"
 msgstr "Période (pour une période plus longue)"
 
-#: template-parts/content-sip-form.php:95
+#: template-parts/content-sip-form.php:104
 msgid "Hide timeline"
 msgstr "Masquer la chronologie"
 
-#: template-parts/content-sip-form.php:125
+#: template-parts/content-sip-form.php:134
 msgid "Hide map"
 msgstr "Masquer la carte"
 
-#: template-parts/content-sip-form.php:128
+#: template-parts/content-sip-form.php:137
 msgid "Map (select an exact location or area)"
 msgstr "Carte (sélectionnez un emplacement ou une zone exacte)"
 
-#: template-parts/content-sip-form.php:144
+#: template-parts/content-sip-form.php:89
 msgid "Minimum 1 | Maximum 10"
 msgstr "Minimum 1 | Maximum 10"
 
-#: template-parts/content-sip-form.php:167
+#: template-parts/content-sip-form.php:169
 msgid "Blocking time"
 msgstr "Durée de blocage"
 
@@ -790,7 +792,7 @@ msgstr "La taille maximale de %s pour le SIP a été dépassée. Les fichiers do
 msgid "Further uploads are not possible. Files must be deleted first."
 msgstr "Aucun téléchargement ultérieur n'est possible. Les fichiers doivent d'abord être supprimés."
 
-#: template-parts/forms/uploadform.php:171
+#: template-parts/forms/uploadform.php:180
 msgid "Complete upload and insert metadata"
 msgstr "Complétez le téléchargement et insérez les métadonnées"
 
@@ -798,15 +800,15 @@ msgstr "Complétez le téléchargement et insérez les métadonnées"
 msgid "Max SIP Size in Bytes"
 msgstr "Taille maximale du SIP en octets"
 
-#: admin/sip-options.php:327
+#: admin/sip-options.php:324
 msgid "Used to generate the SIP name."
 msgstr "Utilisé pour générer le nom du SIP."
 
-#: admin/sip-options.php:329
+#: admin/sip-options.php:326
 msgid "If empty - the originator's (user's) login will be used."
 msgstr "Si vide – l’identifiant de l’expéditeur (utilisateur) sera utilisé."
 
-#: admin/sip-options.php:330
+#: admin/sip-options.php:327
 msgid "Institution Logo"
 msgstr "Logo de l’institution"
 
@@ -884,7 +886,7 @@ msgstr "Aucun document d’archive trouvé avec l’ID SIP : %s"
 #. translators: %s: identifier for an archival record.
 #: inc/form-validation/sip-archival-actions-form.class.php:52
 #, php-format
-msgid "No archival record found for the provided SIP folder: %s. This entry can not be deleted."
+msgid "No archival record found for the provided SIP folder: %s. This entry cannot be deleted."
 msgstr "Aucun document d’archive trouvé pour le dossier SIP fourni : %s. Cette entrée ne peut pas être supprimée."
 
 #: inc/form-validation/sip-archival-actions-form.class.php:67
@@ -892,45 +894,45 @@ msgid "You are not allowed to perform this action."
 msgstr "Vous n’êtes pas autorisé à effectuer cette action."
 
 #. translators: %d: Post-ID of an archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:116
-#: inc/form-validation/sip-archival-actions-form.class.php:226
+#: inc/form-validation/sip-archival-actions-form.class.php:113
+#: inc/form-validation/sip-archival-actions-form.class.php:227
 #, php-format
 msgid "The post with the ID %d could not be updated."
 msgstr "La publication avec l’ID %d n’a pas pu être mise à jour."
 
 #. translators: %d: Post-ID of an archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:123
-#: inc/form-validation/sip-archival-actions-form.class.php:125
+#: inc/form-validation/sip-archival-actions-form.class.php:120
+#: inc/form-validation/sip-archival-actions-form.class.php:122
 #, php-format
 msgid "Archivist user ID not set for archival record post: %d"
 msgstr "L’ID utilisateur de l’archiviste n’est pas défini pour la publication du document d’archive : %d"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:131
+#: inc/form-validation/sip-archival-actions-form.class.php:128
 msgid "Archival record accepted."
 msgstr "Document d’archive accepté."
 
 #. translators: %s: ID/Name of the folder where the archival record (sip) is stored.
-#: inc/form-validation/sip-archival-actions-form.class.php:161
-#: inc/form-validation/sip-archival-actions-form.class.php:163
-#: inc/form-validation/sip-archival-actions-form.class.php:190
-#: inc/form-validation/sip-archival-actions-form.class.php:192
+#: inc/form-validation/sip-archival-actions-form.class.php:160
+#: inc/form-validation/sip-archival-actions-form.class.php:162
+#: inc/form-validation/sip-archival-actions-form.class.php:189
+#: inc/form-validation/sip-archival-actions-form.class.php:191
 #, php-format
 msgid "Failed to delete the folder for archival record %s."
 msgstr "Échec de la suppression du dossier pour le document d’archive %s."
 
 #. translators: %d: Post-ID of the archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:152
-#: inc/form-validation/sip-archival-actions-form.class.php:201
+#: inc/form-validation/sip-archival-actions-form.class.php:151
+#: inc/form-validation/sip-archival-actions-form.class.php:202
 #, php-format
 msgid "Failed to delete the archival record with the ID %d."
 msgstr "Échec de la suppression du document d’archive avec l’ID %d."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:173
-#: inc/form-validation/sip-archival-actions-form.class.php:208
+#: inc/form-validation/sip-archival-actions-form.class.php:172
+#: inc/form-validation/sip-archival-actions-form.class.php:209
 msgid "Archival record deleted."
 msgstr "Document d’archive supprimé."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:230
+#: inc/form-validation/sip-archival-actions-form.class.php:231
 msgid "Archival record submitted."
 msgstr "Document d’archive soumis."
 
@@ -994,14 +996,14 @@ msgstr "Type de fichier non pris en charge :"
 #. translators: %1$s: Directory of the archival record in question. %2$s: Error message.
 #: inc/sip-functions.php:149
 #, php-format
-msgid "sip %1$s was not removed! Error message: %2$s"
+msgid "SIP %1$s was not removed! Error message: %2$s"
 msgstr "le SIP %1$s n’a pas été supprimé ! Message d’erreur : %2$s"
 
 #: admin/sip-meta.php:76
 msgid "Right Transfer"
 msgstr "Transfert à droite"
 
-#: admin/sip-options.php:280
+#: admin/sip-options.php:277
 msgid "Right Transfer Text"
 msgstr "Texte de transfert à droite"
 
@@ -1059,7 +1061,7 @@ msgstr "Vérifiez votre configuration."
 #. translators: %1$s: Notification level like "Error", "Warning", "Note". %2$s: Link to the settings page for clamAV Host/Port.
 #: admin/admin-notification.php:81
 #, php-format
-msgid "%1$s There is an error in your configuration for ClamAV. We can not connect to ClamAV server. %2$s."
+msgid "%1$s There is an error in your configuration for ClamAV. We cannot connect to the ClamAV server. %2$s."
 msgstr "%1$s Il y a une erreur dans votre configuration de ClamAV. Connexion au serveur ClamAV impossible. %2$s."
 
 #: inc/form-validation/sip-upload-form-validation.class.php:148
@@ -1078,13 +1080,13 @@ msgid "30"
 msgstr "30"
 
 #. translators: Format for full name of an user. %1$s: first name. %2$s: last name.
-#: template-parts/forms/profileform.php:180
+#: template-parts/forms/profileform.php:182
 #, php-format
 msgctxt "Format for full name of an user. %1$s is first name, %2$s is last name. Rearrange if necessary."
 msgid "%1$s %2$s"
 msgstr "%1$s %2$s"
 
-#: template-parts/forms/profileform.php:182
+#: template-parts/forms/profileform.php:184
 msgid "Will be generated from your name"
 msgstr "Sera généré à partir de votre nom"
 
@@ -1101,7 +1103,7 @@ msgid "My position"
 msgstr "Ma position"
 
 #: template-parts/forms/profileform.php:58
-#: template-parts/forms/profileform.php:109
+#: template-parts/forms/profileform.php:111
 msgctxt "placeholder for a redirect link to a page for making adjustments."
 msgid "here"
 msgstr "ici"
@@ -1109,11 +1111,11 @@ msgstr "ici"
 #. translators: %s: Link to the page where the user can view their drafts.
 #: template-parts/forms/profileform.php:60
 #, php-format
-msgid "You have not submitted any entries yet. Please check your drafts %s and complete at at least one of them."
+msgid "You have not submitted any entries yet. Please check your drafts %s and complete at least one of them."
 msgstr "Vous n'avez pas encore soumis d'entrées. Veuillez vérifier vos brouillons à %s et en compléter au moins un."
 
 #. translators: %s: Link to the page where an archival record can be uploaded.
-#: template-parts/forms/profileform.php:111
+#: template-parts/forms/profileform.php:113
 #, php-format
 msgid "You have not uploaded any files yet. Please upload your files %s."
 msgstr "Vous n'avez pas encore téléchargé de fichiers. Veuillez télécharger vos fichiers à %s."
@@ -1221,14 +1223,14 @@ msgid "No page associated with page-template sip-profile found."
 msgstr "Aucune page associée au modèle de page sip-profile trouvée."
 
 #: template-parts/forms/uploadform.php:107
-msgid "We are facing problems parsing the JSON response while attempting to delete an uploaded file."
+msgid "We encountered problems parsing the JSON response while attempting to delete an uploaded file."
 msgstr "Nous rencontrons des problèmes lors de l’analyse de la réponse JSON en tentant de supprimer un fichier téléversé."
 
 #. translators: %1$s: Name of the uploaded file. %2$s: the name of the sip folder. %3$s: User ID
 #: inc/form-validation/sip-archival-remove.class.php:104
 #: inc/form-validation/sip-archival-remove.class.php:111
 #, php-format
-msgid "Problems updating the csv for upload %1$s in sip folder %2$s from user id %3$d."
+msgid "Problems updating the CSV for upload %1$s in SIP folder %2$s from user ID %3$d."
 msgstr "Problèmes lors de la mise à jour du fichier CSV pour le téléversement %1$s dans le dossier SIP %2$s depuis l'identifiant utilisateur %3$d."
 
 #: admin/admin-pages.php:21
@@ -1265,7 +1267,7 @@ msgstr "Supplémentaire*"
 
 #: admin/admin-pages.php:88
 #: inc/form-validation/export-statistics.class.php:116
-msgid "Data from administrators or test user"
+msgid "Data from administrators or test users"
 msgstr "Données des administrateurs ou des utilisateurs de test"
 
 #: admin/admin-pages.php:130
@@ -1324,7 +1326,7 @@ msgstr "Données exportées avec succès."
 #. translators: %s: identifier for an archival record.
 #: inc/form-validation/sip-archival-actions-form.class.php:54
 #, php-format
-msgid "Problems removing an archival record. Please check sip folder %s"
+msgid "Problems removing an archival record. Please check the SIP folder %s."
 msgstr "Problèmes lors de la suppression d’un enregistrement d’archive. Veuillez vérifier le dossier SIP %s."
 
 #. translators: %s: Name of the uploaded file.
@@ -1352,7 +1354,7 @@ msgstr "Erreur lors de la création du merge_tag pour le plugin de notification 
 msgid "Test User"
 msgstr "Utilisateur de test"
 
-#: template-parts/content-sip-form.php:257
+#: template-parts/content-sip-form.php:273
 msgid "Save as draft"
 msgstr "Enregistrer comme brouillon"
 
@@ -1419,19 +1421,19 @@ msgid "No SIP data found for post %1$s for SIP folder %2$s requested by %3$d."
 msgstr "Aucune donnée SIP trouvée pour le post %1$s pour le dossier SIP %2$s demandé par %3$d."
 
 #. translators: %s: Errormessage.
-#: sip.php:190
+#: sip.php:192
 #, php-format
 msgid "Archival delete cron not scheduled. see: %s"
 msgstr "La tâche cron de suppression d’archive n’est pas programmée. voir : %s"
 
 #. translators: %1$s: Post-ID. %2$d: SIP folder.
-#: sip.php:247
+#: sip.php:253
 #, php-format
 msgid "Post meta for post %1$d and SIP folder %2$s not deleted."
 msgstr "Les métadonnées du post pour le post %1$d et dossier SIP %2$s n’ont pas été supprimées."
 
 #. translators: %1$s: Post-ID. %2$d: SIP folder.
-#: sip.php:253
+#: sip.php:259
 #, php-format
 msgid "Post with ID %1$d and SIP folder %2$s not deleted."
 msgstr "Le post avec l’ID %1$d et le dossier SIP %2$s n’a pas été supprimé."
@@ -1439,7 +1441,7 @@ msgstr "Le post avec l’ID %1$d et le dossier SIP %2$s n’a pas été supprim�
 #. translators: %1$s: Notification level like "Error", "Warning", "Note". %2$s: ImageMagick policy line for denying read/write PDFs. %3$s: ImageMagick policy line for allowing read/write PDFs.
 #: admin/admin-notification.php:51
 #, php-format
-msgid "%1$s In order to create Thumbnails from PDF files you might need to change the security policy of ImageMagick. Check for policy.xml in your ImageMagick installation folder. Change the row %2$s to %3$s"
+msgid "%1$s In order to create thumbnails from PDF files, you might need to change the security policy of ImageMagick. Check for policy.xml in your ImageMagick installation folder. Change the line %2$s to %3$s"
 msgstr "%1$s Pour créer des miniatures à partir de fichiers PDF, vous devrez peut-être modifier la politique de sécurité d'ImageMagick. Vérifiez le fichier policy.xml dans le dossier d'installation d'ImageMagick. Modifiez la ligne %2$s en %3$s"
 
 #. translators: %s: formatted filesize.
@@ -1469,67 +1471,63 @@ msgid "Enable email notifications"
 msgstr "Activer les notifications par e-mail"
 
 #: admin/sip-options.php:184
-msgid "This option enables the integrated notification system. When enabled, the system automatically sends emails to the user and their editor on every submission. It also sends an email to the user, if their submission was accepted."
+msgid "This option enables the integrated notification system. When enabled, the system automatically sends emails to the user and their editor for every submission. It also sends an email to the user if their submission is accepted."
 msgstr "Cette option active le système de notification intégré. Lorsqu'il est activé, le système envoie automatiquement des e-mails à l'utilisateur et à son éditeur à chaque soumission. Il envoie également un e-mail à l'utilisateur si sa soumission a été acceptée."
 
-#: admin/sip-options.php:188
+#: admin/sip-options.php:185
 msgid "Username of the email address"
 msgstr "Nom d'utilisateur de l'adresse e-mail"
 
-#: admin/sip-options.php:193
-msgid "This changes the username of the email address which is used to send the emails. Both the \"@\"-sign and the domain of your website are added automatically."
+#: admin/sip-options.php:190
+msgid "This changes the username of the email address used to send the emails. Both the \"@\"-sign and the domain of your website are added automatically."
 msgstr "Cela modifie le nom d'utilisateur de l'adresse e-mail utilisée pour envoyer les e-mails. Le signe \"@\" et le domaine de votre site Web sont ajoutés automatiquement."
 
-#: admin/sip-options.php:195
+#: admin/sip-options.php:192
 msgid "Domain"
 msgstr "Domaine"
 
-#: admin/sip-options.php:200
+#: admin/sip-options.php:197
 msgid "This will be automatically added to the username of the email address."
 msgstr "Cela sera automatiquement ajouté au nom d'utilisateur de l'adresse e-mail."
 
-#: admin/sip-options.php:202
+#: admin/sip-options.php:199
 msgid "Email name"
 msgstr "Nom de l'e-mail"
 
-#: admin/sip-options.php:205
-msgid "This changes the name of the sent emails from \"WordPress\" to something of your choice."
-msgstr "Cela modifie le nom des e-mails envoyés de \"WordPress\" à quelque chose de votre choix."
-
-#: admin/sip-options.php:207
+#: admin/sip-options.php:204
 msgid "Reply email address"
 msgstr "Adresse e-mail de réponse"
 
-#: admin/sip-options.php:211
-msgid "Add an email address for replies. This way a user can easily contact you on a specific email address."
+#: admin/sip-options.php:208
+msgid "Add an email address for replies so that users can easily contact you at a specific address."
 msgstr "Ajoutez une adresse e-mail pour les réponses. De cette façon, un utilisateur peut facilement vous contacter à une adresse e-mail spécifique."
 
-#: admin/sip-options.php:213
+#: admin/sip-options.php:210
 msgid "Additional recipients to notify about user submissions"
 msgstr "Destinataires supplémentaires à notifier des soumissions des utilisateurs"
 
-#: admin/sip-options.php:216
+#: admin/sip-options.php:213
 msgid "Usually, only users with the \"editor\" role are notified about submissions. Use this field to select specific admins who should also be notified."
 msgstr "Habituellement, seuls les utilisateurs avec le rôle \"éditeur\" sont notifiés des soumissions. Utilisez ce champ pour sélectionner des administrateurs spécifiques qui devraient également être notifiés."
 
-#: admin/sip-options.php:218
-msgid "Send emails as html"
+#: admin/sip-options.php:215
+msgid "Send emails as HTML"
 msgstr "Envoyer des e-mails en HTML"
 
-#: admin/sip-options.php:221
-msgid "Sending emails as HTML allows for a more complex structure and design. This also wraps other WordPress emails (like registration confirmation or password reset) in the same design."
+#: admin/sip-options.php:218
+msgid "Sending emails as HTML allows for a more complex structure and design. This also wraps other WordPress emails (like registration confirmations or password resets) in the same design."
 msgstr "L'envoi d'e-mails en HTML permet une structure et un design plus complexes. Cela enveloppe également d'autres e-mails WordPress (comme la confirmation d'inscription ou la réinitialisation du mot de passe) dans le même design."
 
-#: admin/sip-options.php:225
+#: admin/sip-options.php:222
 msgid "This is a preview of the email design."
 msgstr "Ceci est un aperçu du design de l'e-mail."
 
-#: admin/sip-options.php:246
+#: admin/sip-options.php:243
 msgid "Enable debug logging"
 msgstr "Activer la journalisation de débogage"
 
 #. translators: %s: Link to the website.
-#: admin/sip-options.php:369
+#: admin/sip-options.php:366
 #, php-format
 msgctxt "Preview text for the email notifications"
 msgid ""
@@ -1545,7 +1543,7 @@ msgstr ""
 "\t\t\t\t\t\n"
 "Merci pour votre contribution."
 
-#: admin/sip-options.php:376
+#: admin/sip-options.php:373
 #: inc/email-helper.php:162
 msgid "This is an automated notification email. Please do not reply directly."
 msgstr "Il s'agit d'un e-mail de notification automatisé. Veuillez ne pas répondre directement."
@@ -1567,7 +1565,7 @@ msgstr "Logo"
 #. translators: %s: Email address of support as hyperlink.
 #: inc/email-helper.php:167
 #, php-format
-msgid "If you need assistance, contact us at %s"
+msgid "If you need assistance, contact us at %s."
 msgstr "Si vous avez besoin d'aide, contactez-nous à %s"
 
 #. translators: %s: Title of the website.
@@ -1591,11 +1589,11 @@ msgstr "Notification par e-mail pour %1$s à %2$s non envoyée."
 #. translators: %s: one or more hyperlinks to the missing required inputs.
 #: inc/form-validation/form-validation.class.php:232
 #, php-format
-msgid "Missing inputs. Please check %s"
+msgid "Missing inputs. Please check %s."
 msgstr "Entrées manquantes. Veuillez vérifier %s"
 
 #. translators: %1$s: Name of the user. %2$s: Title of the submission. %3$s: Name of the originator. %4$s: Link to the post.
-#: inc/form-validation/sip-archival-actions-form.class.php:267
+#: inc/form-validation/sip-archival-actions-form.class.php:268
 #, php-format
 msgid ""
 "Dear %1$s,\n"
@@ -1610,15 +1608,26 @@ msgid ""
 "\n"
 "Thank you for your contribution."
 msgstr ""
+"Cher %1$s,\n"
+"\n"
+"Titre : %2$s\n"
+"\n"
+"Auteur : %3$s\n"
+"\n"
+"%4$s\n"
+"\n"
+"a été accepté et sera repris par les archives.\n"
+"\n"
+"Merci pour votre contribution."
 
 #. translators: %s: Name of the institution.
-#: inc/form-validation/sip-archival-actions-form.class.php:279
+#: inc/form-validation/sip-archival-actions-form.class.php:280
 #, php-format
 msgid "Your submission to %s"
 msgstr "Votre soumission à %s"
 
 #: inc/form-validation/sip-archival-upload.class.php:174
-msgid "ClamAV: can not connect because module socket_create is missing."
+msgid "ClamAV: cannot connect because the module socket_create is missing."
 msgstr "ClamAV : impossible de se connecter car le module socket_create est manquant."
 
 #: inc/form-validation/sip-archival-upload.class.php:175
@@ -1642,13 +1651,13 @@ msgid "The user with the id %d has not selected an archive!"
 msgstr "L'utilisateur avec l'ID %d n'a pas sélectionné d'archive !"
 
 #. translators: %s: Name of the institution.
-#: inc/form-validation/sip-upload-form-validation.class.php:242
+#: inc/form-validation/sip-upload-form-validation.class.php:241
 #, php-format
 msgid "New archival record submitted to %s."
 msgstr "Nouveau dossier d'archivage soumis à %s."
 
 #. translators: %s: Name of the user.
-#: inc/form-validation/sip-upload-form-validation.class.php:257
+#: inc/form-validation/sip-upload-form-validation.class.php:256
 #, php-format
 msgid ""
 "Dear %s,\n"
@@ -1659,9 +1668,16 @@ msgid ""
 "\n"
 "Thank you for your contribution."
 msgstr ""
+"Cher %s,\n"
+"\n"
+"Félicitations, votre soumission a bien été reçue !\n"
+"\n"
+"Vous serez informé séparément par e-mail de l'acceptation ou du rejet de votre soumission par les archives. L'examen d'une soumission prend environ 10 jours ouvrables.\n"
+"\n"
+"Merci pour votre contribution."
 
 #. translators: %s: Name of the institution.
-#: inc/form-validation/sip-upload-form-validation.class.php:265
+#: inc/form-validation/sip-upload-form-validation.class.php:264
 #, php-format
 msgid "Your submission to the archive %s has been received."
 msgstr "Votre soumission à l'archive %s a été reçue."
@@ -1691,83 +1707,78 @@ msgstr "Clé API Maptile"
 msgid "To create an API Key, you need to create an account at %s first. Then you can create the API-Key."
 msgstr "Pour créer une clé API, vous devez d'abord créer un compte sur %s. Ensuite, vous pouvez créer la clé API."
 
-#: admin/sip-options.php:185
-msgid "Send the archivist name and email with the notification"
-msgstr "Envoyer le nom et l'email de l'archiviste avec la notification"
-
-#: admin/sip-options.php:187
-msgid "Setting this option adds the name and email address of the responsible archivist in some notification emails. This might be useful if a contributor wants to directly contact their archivist."
-msgstr "En activant cette option, le nom et l'adresse e-mail de l'archiviste responsable seront ajoutés dans certaines notifications par e-mail. Cela pourrait être utile si un contributeur souhaite contacter directement son archiviste."
-
-#: inc/form-validation/form-validation.class.php:318
+#: inc/form-validation/form-validation.class.php:305
 msgid "Cancel"
 msgstr "Annuler"
 
-#: inc/form-validation/form-validation.class.php:343
+#: inc/form-validation/form-validation.class.php:437
 msgid "close"
 msgstr "fermer"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:303
+#: inc/form-validation/sip-archival-actions-form.class.php:304
 msgid "Your submission was rejected"
 msgstr "Votre soumission a été rejetée"
 
 #. translators: %s: Name of the user.
-#: inc/form-validation/sip-archival-actions-form.class.php:305
+#: inc/form-validation/sip-archival-actions-form.class.php:306
 #, php-format
 msgid ""
 "Dear %s,\n"
 "\n"
 "We are sorry to inform you that your submission was rejected."
 msgstr ""
+"Cher %s,\n"
+"\n"
+"Nous sommes au regret de vous informer que votre candidature a été rejetée."
 
 #. translators: %1$s: Name of the responsible archivist. %2$s: Email Link.
-#: inc/form-validation/sip-archival-actions-form.class.php:321
+#: inc/form-validation/sip-archival-actions-form.class.php:322
 #, php-format
-msgid "If you have any questions regarding the rejection please contact the responsible archivist %1$s at %2$s."
+msgid "If you have any questions regarding the rejection, please contact the responsible archivist %1$s at %2$s."
 msgstr "Si vous avez des questions concernant le rejet, veuillez contacter l'archiviste responsable %1$s à %2$s."
-
-#: inc/form-validation/sip-archival-actions-form.class.php:346
-#: inc/form-validation/sip-archival-actions-form.class.php:379
-msgid "Confirm rejection"
-msgstr "Confirmer le rejet"
 
 #: inc/form-validation/sip-archival-actions-form.class.php:347
 #: inc/form-validation/sip-archival-actions-form.class.php:380
-#: inc/form-validation/sip-archival-actions-form.class.php:421
+msgid "Confirm rejection"
+msgstr "Confirmer le rejet"
+
+#: inc/form-validation/sip-archival-actions-form.class.php:348
+#: inc/form-validation/sip-archival-actions-form.class.php:381
+#: inc/form-validation/sip-archival-actions-form.class.php:431
 msgid "this entry"
 msgstr "cette entrée"
 
 #. translators: %s: Title of the post.
-#: inc/form-validation/sip-archival-actions-form.class.php:349
-#: inc/form-validation/sip-archival-actions-form.class.php:381
+#: inc/form-validation/sip-archival-actions-form.class.php:350
+#: inc/form-validation/sip-archival-actions-form.class.php:382
 #, php-format
 msgid "Are you sure to decline %s? All files will be deleted."
 msgstr "Êtes-vous sûr de vouloir refuser %s ? Tous les fichiers seront supprimés."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:376
+#: inc/form-validation/sip-archival-actions-form.class.php:377
 msgid "Decline with response"
 msgstr "Refuser avec réponse"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:393
+#: inc/form-validation/sip-archival-actions-form.class.php:394
 msgid "Reason for the rejection:"
 msgstr "Raison du rejet :"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:398
-msgid "Please use this textarea if you want to add a reason for the rejection in the email notification."
+#: inc/form-validation/sip-archival-actions-form.class.php:399
+msgid "Please use this text area if you want to add a reason for the rejection in the email notification."
 msgstr "Utilisez cette zone de texte si vous souhaitez ajouter une raison pour le rejet dans la notification par e-mail."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:420
+#: inc/form-validation/sip-archival-actions-form.class.php:430
 msgid "Confirm deletion"
 msgstr "Confirmer la suppression"
 
 #. translators: %s: Title of the post.
-#: inc/form-validation/sip-archival-actions-form.class.php:423
+#: inc/form-validation/sip-archival-actions-form.class.php:433
 #, php-format
-msgid "Are you sure to delete %s? All files will be deleted."
+msgid "Are you sure you want to delete %s? All files will be deleted."
 msgstr "Êtes-vous sûr de vouloir supprimer %s ? Tous les fichiers seront supprimés."
 
 #. translators: %1$s: Title of the submission. %2$s: Name of the user. %3$s: Name of the institution. %4$s: Link to the post.
-#: inc/form-validation/sip-upload-form-validation.class.php:232
+#: inc/form-validation/sip-upload-form-validation.class.php:231
 #, php-format
 msgid ""
 "Title: %1$s\n"
@@ -1825,3 +1836,153 @@ msgstr "Impossible d'initialiser la fonctionnalité de téléchargement."
 #: template-parts/forms/uploadform.php:160
 msgid "File upload error"
 msgstr "Erreur de téléchargement de fichier"
+
+#: admin/sip-options.php:202
+msgid "This changes the name of the sent emails from \"WordPress\" to something of your choice."
+msgstr "Cela modifie le nom des e-mails envoyés de « WordPress » à un nom de votre choix."
+
+#: elementor-integration/Email_Shortcode_Widget.class.php:34
+#: elementor-integration/Email_Shortcode_Widget.class.php:42
+msgid "Content"
+msgstr "Contenu"
+
+#: elementor-integration/Email_Shortcode_Widget.class.php:46
+msgid "The email address you want to protect from bots."
+msgstr "L'adresse e-mail que vous souhaitez protéger contre les robots."
+
+#: elementor-integration/Email_Shortcode_Widget.class.php:55
+msgid "Options"
+msgstr "Options"
+
+#: elementor-integration/Email_Shortcode_Widget.class.php:63
+msgid "CSS Class"
+msgstr "Classe CSS"
+
+#: elementor-integration/Email_Shortcode_Widget.class.php:67
+msgid "One or more classes for the element separated by whitespace."
+msgstr "Une ou plusieurs classes pour l'élément séparées par des espaces."
+
+#: inc/form-validation/sip-archival-actions-form.class.php:402
+msgid "Add the name and email address of the responsible archivist (you) in the notification email."
+msgstr "Ajoutez le nom et l'adresse e-mail de l'archiviste responsable (vous) dans l'e-mail de notification."
+
+#: inc/form-validation/sip-archival-actions-form.class.php:408
+msgid "This might be useful if a contributor wants to directly contact you."
+msgstr "Cela peut être utile si un contributeur souhaite vous contacter directement."
+
+#: inc/security-settings.php:81
+msgid "REST API not available"
+msgstr "API REST non disponible"
+
+#. translators: %s: comma separated list of file extensions.
+#: inc/sip-functions.php:465
+#, php-format
+msgid "images (%s)"
+msgstr "images (%s)"
+
+#. translators: %s: comma separated list of file extensions.
+#: inc/sip-functions.php:467
+#, php-format
+msgid "audio files (%s)"
+msgstr "fichiers audio (%s)"
+
+#. translators: %s: comma separated list of file extensions.
+#: inc/sip-functions.php:469
+#, php-format
+msgid "video files (%s)"
+msgstr "fichiers vidéo (%s)"
+
+#: inc/sip-functions.php:484
+msgid "MS Word 97-2003 documents (.doc)"
+msgstr "Documents MS Word 97-2003 (.doc)"
+
+#: inc/sip-functions.php:485
+msgid "MS Word 2007+ documents (.docx)"
+msgstr "Documents MS Word 2007+ (.docx)"
+
+#: inc/sip-functions.php:486
+msgid "MS Excel 97-2003 Spreadsheets (.xls)"
+msgstr "Feuilles de calcul MS Excel 97-2003 (.xls)"
+
+#: inc/sip-functions.php:487
+msgid "MS Excel 2007+ Spreadsheets (.xlsx)"
+msgstr "Feuilles de calcul MS Excel 2007+ (.xlsx)"
+
+#: inc/sip-functions.php:488
+msgid "MS PowerPoint 97-2003 presentations (.ppt)"
+msgstr "Présentations MS PowerPoint 97-2003 (.ppt)"
+
+#: inc/sip-functions.php:489
+msgid "MS PowerPoint 2007+ presentations (.pptx)"
+msgstr "Présentations MS PowerPoint 2007+ (.pptx)"
+
+#: inc/sip-functions.php:492
+msgid "LibreOffice documents (.odt)"
+msgstr "Documents LibreOffice (.odt)"
+
+#: inc/sip-functions.php:493
+msgid "LibreOffice Spreadsheets (.ods)"
+msgstr "Feuilles de calcul LibreOffice (.ods)"
+
+#: inc/sip-functions.php:494
+msgid "LibreOffice presentations (.odp)"
+msgstr "Présentations LibreOffice (.odp)"
+
+#: inc/sip-functions.php:496
+msgid "PDF documents (.pdf)"
+msgstr "Documents PDF (.pdf)"
+
+#: inc/sip-functions.php:497
+msgid "Rich Text Format (.rtf)"
+msgstr "Format RTF (.rtf)"
+
+#: inc/sip-functions.php:500
+msgid "plain text files (.txt)"
+msgstr "Fichiers texte brut (.txt)"
+
+#: inc/sip-functions.php:501
+msgid "markdown (.md)"
+msgstr "Markdown (.md)"
+
+#: inc/sip-functions.php:502
+msgid "comma-separated values (.csv)"
+msgstr "Valeurs séparées par des virgules (.csv)"
+
+#: inc/sip-functions.php:503
+msgid "iCalendar format (.ics)"
+msgstr "Format iCalendar (.ics)"
+
+#: inc/sip-functions.php:504
+msgid "Cascading Style Sheets (.css)"
+msgstr "Feuilles de style en cascade (.css)"
+
+#: inc/sip-functions.php:505
+msgid "HyperText Markup Language (.htm, .html)"
+msgstr "Langage de balisage hypertexte (.htm, .html)"
+
+#: inc/sip-functions.php:506
+#: inc/sip-functions.php:507
+msgid "eXtensible Markup Language (.xml)"
+msgstr "Langage de balisage extensible (.xml)"
+
+#: inc/sip-functions.php:508
+msgid "eXtensible Hypertext Markup Language (.xhtml)"
+msgstr "Langage de balisage hypertexte extensible (.xhtml)"
+
+#. translators: %s: Name of an unknown file format.
+#: inc/sip-functions.php:521
+#, php-format
+msgid "unknown file format %s"
+msgstr "Format de fichier inconnu %s"
+
+#. translators: %s: Link to the privacy policy page as set in WordPress.
+#: template-parts/forms/profileform.php:231
+#, php-format
+msgid "For more information about how we store and use this data, please see our %s."
+msgstr "Pour plus d'informations sur la manière dont nous stockons et utilisons ces données, veuillez consulter notre %s."
+
+#. translators: %s: Comma separated list of supported file types.
+#: template-parts/forms/uploadform.php:167
+#, php-format
+msgid "Supported file types are: %s"
+msgstr "Les types de fichiers pris en charge sont : %s"
