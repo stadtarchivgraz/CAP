@@ -229,7 +229,7 @@ abstract class Form_Validation {
 			$missing_input_links .= '<a href="#' . esc_attr( str_replace( '_', '-', $single_input_field ) ) . '">' . esc_html( $single_input_field ) . '</a> ';
 		}
 		// translators: %s: one or more hyperlinks to the missing required inputs.
-		$this->set_error_message( sprintf( esc_html__( 'Missing inputs. Please check %s', 'sip' ), $missing_input_links ) );
+		$this->set_error_message( sprintf( esc_html__( 'Missing inputs. Please check %s.', 'sip' ), $missing_input_links ) );
 	}
 
 	/**

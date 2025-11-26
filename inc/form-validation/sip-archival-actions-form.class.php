@@ -49,9 +49,9 @@ class Sip_Archival_Actions extends Form_Validation {
 		$archival_id     = DB_Query_Helper::starg_get_archival_id_by_sip_folder( $sip_folder );
 		if ( ! $archival_id ) {
 			// translators: %s: identifier for an archival record.
-			$this->set_error_message( sprintf( esc_html__( 'No archival record found for the provided SIP folder: %s. This entry can not be deleted.', 'sip' ), $sip_folder ) );
+			$this->set_error_message( sprintf( esc_html__( 'No archival record found for the provided SIP folder: %s. This entry cannot be deleted.', 'sip' ), $sip_folder ) );
 			// translators: %s: identifier for an archival record.
-			$this->set_error_log_message( sprintf( esc_html__( 'Problems removing an archival record. Please check sip folder %s', 'sip' ), $sip_folder ) );
+			$this->set_error_log_message( sprintf( esc_html__( 'Problems removing an archival record. Please check the SIP folder %s.', 'sip' ), $sip_folder ) );
 			$this->display_notification();
 			return false;
 		}
@@ -315,7 +315,7 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 				$archivist_email  = sanitize_email( $archivist->user_email );
 				$archivist_mailto = '<a href="mailto:' . $archivist_email . '">' . $archivist_email . '</a>';
 				// translators: %1$s: Name of the responsible archivist. %2$s: Email Link.
-				$message .= PHP_EOL . PHP_EOL . sprintf( esc_html__( 'If you have any questions regarding the rejection please contact the responsible archivist %1$s at %2$s.', 'sip' ), $archivist_name, $archivist_mailto );
+				$message .= PHP_EOL . PHP_EOL . sprintf( esc_html__( 'If you have any questions regarding the rejection, please contact the responsible archivist %1$s at %2$s.', 'sip' ), $archivist_name, $archivist_mailto );
 			}
 		}
 
@@ -392,7 +392,7 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 				'name'        => 'notification_content',
 				'id'          => 'notification_content',
 				'class'       => 'textarea',
-				'placeholder' => esc_html__( 'Please use this textarea if you want to add a reason for the rejection in the email notification.', 'sip' ),
+				'placeholder' => esc_html__( 'Please use this text area if you want to add a reason for the rejection in the email notification.', 'sip' ),
 			),
 			'notification_contact_data' => array(
 				'label'     => esc_html__('Add the name and email address of the responsible archivist (you) in the notification email.', 'sip'),
@@ -426,7 +426,7 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 		$modal_title    = esc_html__('Confirm deletion', 'sip');
 		$user_sip_title = ( $user_sip_title ) ? esc_html($user_sip_title) : esc_html__( 'this entry', 'sip' );
 		// translators: %s: Title of the post.
-		$modal_content  = sprintf( esc_html__( 'Are you sure to delete %s? All files will be deleted.', 'sip' ), '<strong>' . $user_sip_title . '</strong>' );
+		$modal_content  = sprintf( esc_html__( 'Are you sure you want to delete %s? All files will be deleted.', 'sip' ), '<strong>' . $user_sip_title . '</strong>' );
 		$modal_action   = array(
 			array(
 				'name'  => 'delete_archival',

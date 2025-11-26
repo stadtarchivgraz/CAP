@@ -85,7 +85,7 @@ class Starg_Admin_Pages {
 
 			<hr style="margin-top: 2em;margin-bottom:2em;">
 
-			<h2><?php esc_html_e( 'Data from administrators or test user', 'sip' ); ?></h2>
+			<h2><?php esc_html_e( 'Data from administrators or test users', 'sip' ); ?></h2>
 			<h3><?php esc_html_e( 'Archive-related statistics', 'sip' ); ?></h3>
 			<table class="wp-list-table widefat fixed striped">
 				<thead>

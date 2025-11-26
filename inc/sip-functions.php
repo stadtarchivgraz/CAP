@@ -49,7 +49,7 @@ function starg_create_thumbnail($file_path, $thumbnail_folder) {
 		if ( is_wp_error( $image ) ) {
 			if ( $logging instanceof Starg_Logging ) {
 				// translators: %s: Name of the uploaded file.
-				$logging->create_log_entry( sprintf( esc_html__( 'Problems creating thumbnail for file %s.', 'sip' ) ), $file_path );
+				$logging->create_log_entry( sprintf( esc_html__( 'Problems creating thumbnail for file %s.', 'sip' ), $file_path ) );
 			}
 			return false;
 		}
@@ -65,7 +65,7 @@ function starg_create_thumbnail($file_path, $thumbnail_folder) {
 		if ( is_wp_error( $image ) ) {
 			if ( $logging instanceof Starg_Logging ) {
 				// translators: %s: Name of the uploaded file.
-				$logging->create_log_entry( sprintf( esc_html__( 'Problems creating thumbnail for file %s.', 'sip' ) ), $file_path );
+				$logging->create_log_entry( sprintf( esc_html__( 'Problems creating thumbnail for file %s.', 'sip' ), $file_path ) );
 			}
 			return false;
 		}
@@ -101,7 +101,7 @@ function starg_create_pdf_thumbnail( $file, $thumbnail_folder ) : bool {
 		$logging = apply_filters( 'starg/logging', null );
 		if ( $logging instanceof Starg_Logging ) {
 			// translators: %s: Error message.
-			$logging->create_log_entry( sprintf( esc_attr__( 'Error while creating a thumbnail for a PDF. See: %s', 'sip' ), $e->getMessage() ) );
+			$logging->create_log_entry( sprintf( esc_attr__( 'Error while creating a thumbnail for a PDF. See: %s', 'sip' ), $e->getMessage() ), Log_Severity::Warning );
 		}
 		return false;
 	}
@@ -146,7 +146,7 @@ function starg_remove_SIP(string $dir) : bool {
 		return true;
 	} catch ( UnexpectedValueException $e ) {
 		// translators: %1$s: Directory of the archival record in question. %2$s: Error message.
-		$error_log_msg = sprintf( esc_html__( 'sip %1$s was not removed! Error message: %2$s', 'sip' ), $dir, $e->getMessage() );
+		$error_log_msg = sprintf( esc_html__( 'SIP %1$s was not removed! Error message: %2$s', 'sip' ), $dir, $e->getMessage() );
 		$logging       = apply_filters( 'starg/logging', null );
 		if ( $logging instanceof Starg_Logging ) {
 			$logging->create_log_entry( $error_log_msg, Log_Severity::Error );

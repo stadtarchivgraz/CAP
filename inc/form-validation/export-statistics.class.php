@@ -113,7 +113,7 @@ class Export_Statistics extends Form_Validation {
 
 		// START statistics for admin/test user //
 
-		fputcsv($output, array( esc_html__( 'Data from administrators or test user', 'sip' ) ) );
+		fputcsv($output, array( esc_html__( 'Data from administrators or test users', 'sip' ) ) );
 		foreach ( $all_uploaded_files[ 'skipped_users' ]['data'] as $single_skipped_user ) {
 			fputcsv($output, array_map( 'esc_html', $single_skipped_user ) );
 		}

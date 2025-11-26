@@ -57,7 +57,7 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 		else :
 			$link_to_drafts_tab = '<a href="' . add_query_arg( array( 'tab' => 'drafts', ), starg_get_the_profile_page_template_url() ) . '">' . esc_attr_x( 'here', 'placeholder for a redirect link to a page for making adjustments.', 'sip' ) . '</a>';
 			// translators: %s: Link to the page where the user can view their drafts.
-			echo starg_get_notification_message( sprintf( esc_html__( 'You have not submitted any entries yet. Please check your drafts %s and complete at at least one of them.', 'sip' ), $link_to_drafts_tab ), 'is-info is-light' );
+			echo starg_get_notification_message( sprintf( esc_html__( 'You have not submitted any entries yet. Please check your drafts %s and complete at least one of them.', 'sip' ), $link_to_drafts_tab ), 'is-info is-light' );
 		endif;
 		?>
 	</section>

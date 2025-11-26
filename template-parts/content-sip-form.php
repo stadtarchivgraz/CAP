@@ -54,8 +54,8 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 				}
 			}
 			?>
-			<form action="" method="post"><?php // todo: use values from Sip_Upload_Form_Validation. Maybe create it as a service! ?>
-				<input type="hidden" name="starg_form_name" value="<?php echo $sip_upload_form->form_name; ?>" aria-hidden="true" />
+			<form action="" method="post" class="mt-4">
+				<input type="hidden" name="<?php echo $sip_upload_form->form_name_key; ?>" value="<?php echo $sip_upload_form->form_name; ?>" aria-hidden="true" />
 				<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
 				<?php wp_nonce_field( $sip_upload_form->nonce_action, $sip_upload_form->nonce_key, false ); ?>
 

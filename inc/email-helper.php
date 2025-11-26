@@ -164,7 +164,7 @@ class Starg_Email_Helper {
 					if ( $sanitized_reply_to ) {
 						$reply_to_link = '<a href="mailto:' . $sanitized_reply_to . '">' . $sanitized_reply_to . '</a>';
 						// translators: %s: Email address of support as hyperlink.
-						echo '<p>' . sprintf( esc_html__( 'If you need assistance, contact us at %s', 'sip' ), $reply_to_link ) . '</p>';
+						echo '<p>' . sprintf( esc_html__( 'If you need assistance, contact us at %s.', 'sip' ), $reply_to_link ) . '</p>';
 					}
 					?>
 				</footer>

@@ -104,7 +104,7 @@ $sip_archival_remove_nonce_key    = $sip_archival_remove->nonce_key;
 									submitButton.disabled = true;
 								}
 							} catch (e) {
-								console.warn( "<?php esc_attr_e( 'We are facing problems parsing the JSON response while attempting to delete an uploaded file.', 'sip' ); ?>" );
+								console.warn( "<?php esc_attr_e( 'We encountered problems parsing the JSON response while attempting to delete an uploaded file.', 'sip' ); ?>" );
 							}
 						}
 					};

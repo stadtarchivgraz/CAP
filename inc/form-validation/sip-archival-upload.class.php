@@ -171,7 +171,7 @@ class Sip_Archival_Upload extends Form_Validation {
 	private function scan_file( string $upload_file_path ) {
 		if ( ! (bool) carbon_get_theme_option( 'sip_clamav' ) ) { return NULL; }
 		if ( ! function_exists('socket_create') ) {
-			$this->set_error_log_message(esc_attr__('ClamAV: can not connect because module socket_create is missing.', 'sip'));
+			$this->set_error_log_message(esc_attr__('ClamAV: cannot connect because the module socket_create is missing.', 'sip'));
 			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: file not scanned.', 'sip' ), );
 		}
 

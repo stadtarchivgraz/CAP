@@ -101,14 +101,14 @@ class Sip_Archival_Remove extends Form_Validation {
 
 		if ( in_array( false, $lines_written ) ) {
 			// translators: %1$s: Name of the uploaded file. %2$s: the name of the sip folder. %3$s: User ID
-			$this->set_error_log_message( sprintf( esc_attr__( 'Problems updating the csv for upload %1$s in sip folder %2$s from user id %3$d.', 'sip' ), $lc_filename, $sip_folder, $sipUserID ) );
+			$this->set_error_log_message( sprintf( esc_attr__( 'Problems updating the CSV for upload %1$s in SIP folder %2$s from user ID %3$d.', 'sip' ), $lc_filename, $sip_folder, $sipUserID ) );
 			return false;
 		}
 
 		$file_written = fclose($csv_file);
 		if ( ! $file_written ) {
 			// translators: %1$s: Name of the uploaded file. %2$s: the name of the sip folder. %3$s: User ID
-			$this->set_error_log_message( sprintf( esc_attr__( 'Problems updating the csv for upload %1$s in sip folder %2$s from user id %3$d.', 'sip' ), $lc_filename, $sip_folder, $sipUserID ) );
+			$this->set_error_log_message( sprintf( esc_attr__( 'Problems updating the CSV for upload %1$s in SIP folder %2$s from user ID %3$d.', 'sip' ), $lc_filename, $sip_folder, $sipUserID ) );
 		}
 
 		return $file_written;

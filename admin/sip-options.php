@@ -181,13 +181,13 @@ function starg_get_email_setting_fields() : array {
 	$email_setting_fields = array(
 		Field::make( 'checkbox', 'sip_notifications_enabled', esc_html__( 'Enable email notifications', 'sip' ) )
 			->set_default_value( 'no' )
-			->set_help_text( esc_html__( 'This option enables the integrated notification system. When enabled, the system automatically sends emails to the user and their editor on every submission. It also sends an email to the user, if their submission was accepted.', 'sip' ) ),
+			->set_help_text( esc_html__( 'This option enables the integrated notification system. When enabled, the system automatically sends emails to the user and their editor for every submission. It also sends an email to the user if their submission is accepted.', 'sip' ) ),
 		Field::make( 'text', 'sip_notification_email_address', esc_html__( 'Username of the email address', 'sip' ) )
 			->set_attribute( 'type', 'text' )
 			->set_attribute( 'placeholder', 'wordpress' )
 			->set_attribute( 'data-host', '@' . $domain )
 			->set_width(33.3331)
-			->set_help_text( esc_html__( 'This changes the username of the email address which is used to send the emails. Both the "@"-sign and the domain of your website are added automatically.', 'sip' ) )
+			->set_help_text( esc_html__( 'This changes the username of the email address used to send the emails. Both the "@"-sign and the domain of your website are added automatically.', 'sip' ) )
 			->set_conditional_logic( $conditional_logic ),
 		Field::make( 'text', 'sip_notification_email_url', esc_html__( 'Domain', 'sip' ) )
 			->set_default_value( '@' . $domain )
@@ -205,17 +205,17 @@ function starg_get_email_setting_fields() : array {
 			->set_attribute( 'type', 'email' )
 			->set_attribute( 'placeholder', 'support@' . $domain )
 			->set_width(50)
-			->set_help_text( esc_html__( 'Add an email address for replies. This way a user can easily contact you on a specific email address.', 'sip' ) )
+			->set_help_text( esc_html__( 'Add an email address for replies so that users can easily contact you at a specific address.', 'sip' ) )
 			->set_conditional_logic( $conditional_logic ),
 		Field::make( 'multiselect', 'sip_notification_additional_recipients', esc_html__( 'Additional recipients to notify about user submissions', 'sip' ) )
 			->add_options( $admin_emails )
 			->set_width(50)
 			->set_help_text( esc_html__( 'Usually, only users with the "editor" role are notified about submissions. Use this field to select specific admins who should also be notified.', 'sip' ) )
 			->set_conditional_logic( $conditional_logic ),
-		Field::make( 'checkbox', 'sip_notifications_as_html', esc_html__( 'Send emails as html', 'sip' ) )
+		Field::make( 'checkbox', 'sip_notifications_as_html', esc_html__( 'Send emails as HTML', 'sip' ) )
 			->set_default_value( 'no' )
 			->set_width(25)
-			->set_help_text( esc_html__( 'Sending emails as HTML allows for a more complex structure and design. This also wraps other WordPress emails (like registration confirmation or password reset) in the same design.', 'sip' ) )
+			->set_help_text( esc_html__( 'Sending emails as HTML allows for a more complex structure and design. This also wraps other WordPress emails (like registration confirmations or password resets) in the same design.', 'sip' ) )
 			->set_conditional_logic( $conditional_logic ),
 		Field::make( 'html', 'sip_notification_email_preview', esc_html__( 'Preview', 'sip' ) )
 			->set_html( $email_preview )
