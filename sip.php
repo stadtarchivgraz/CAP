@@ -111,11 +111,11 @@ class Starg_Sip_Plugin {
 		$leaflet_mapbox_version         = '0.0.16';
 		$leaflet_markercluster_version  = '...';//todo.
 		$leaflet_area_selection_version = '...';//todo.
-		$tagify_version                 = '4.35.4';
+		$tagify_version                 = '4.35.6';
 		$nouislider_version             = '15.8.1';
 		$dropzone_version               = '5.9.3';
 
-		// only load bigger-pictrue if we're on the single-template for the archival CPT.
+		// only load bigger-picture if we're on the single-template for the archival CPT.
 		if ( is_singular( array( 'archival', ) ) || is_page_template( array( 'sip-archival.php', 'sip-upload.php', ) ) ) {
 			wp_enqueue_style( 'bigger_picture', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/bigger-picture.css', array(), $bigger_picture_version );
 			wp_enqueue_script( 'bigger_picture', STARG_SIP_PLUGIN_BASE_URL . 'assets/js/bigger-picture.min.js', array(), $bigger_picture_version, $script_strategy );
