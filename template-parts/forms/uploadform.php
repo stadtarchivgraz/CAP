@@ -160,6 +160,15 @@ $sip_archival_remove_nonce_key    = $sip_archival_remove->nonce_key;
 	<?php echo $sip_archival_upload->get_notification_modal( $sip_archival_upload->modal_id, esc_html__( 'File upload error', 'sip' ) ); ?>
 </form>
 
+<?php
+$supported_mime_types = starg_get_supported_human_readable_mime_types();
+if ( $supported_mime_types ) {
+	// translators: %s: Comma separated list of supported file types.
+	echo starg_get_information_box( sprintf( esc_html__( 'Supported file types are: %s', 'sip' ), $supported_mime_types ) );
+}
+?>
+
+
 <form action="" method="get">
 	<?php
 	// todo: think of a different solution. with this one we have 3 query-args in the url. that is not that fancy...

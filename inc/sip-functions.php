@@ -372,3 +372,151 @@ function starg_get_archival_upload_path() : string {
 
 	return trailingslashit( $upload_path );
 }
+
+/**
+ * Creates a information element for the frontend.
+ * @param string $title
+ * @param string $message the message to display.
+ * @param string $style [Optional] for styling purposes use classes like 'is-info', 'is-warning', 'is-error', or 'is-small', 'is-medium', 'is-large'.
+ * @return void|string
+ */
+function starg_get_information_box( string $message, string $title = '', string $style = '' ) {
+	if ( ! $message ) { return; }
+	ob_start();
+	?>
+	<div class="sip sip-information-box mt-2 mb-3">
+		<div class="message <?php echo esc_attr( $style ); ?>">
+			<?php if ( trim( $title ) ) : ?>
+				<div class="message-header">
+					<p><?php echo esc_html( trim( $title ) ); ?></p>
+				</div>
+			<?php endif; ?>
+			<div class="message-body">
+				<?php echo wpautop( wp_kses_post( $message ) ); ?>
+			</div>
+		</div>
+	</div>
+	<?php
+	return ob_get_clean();
+}
+
+/**
+ * Returns a human readable list of supported file formats.
+ * @return string
+ */
+function starg_get_supported_human_readable_mime_types(): string {
+	$mime_types = explode("\r\n", carbon_get_theme_option( 'sip_mime_types' ) );
+	if ( ! $mime_types ) { return ''; }
+
+	$mime_types = array_map( 'sanitize_text_field', $mime_types );
+
+	$delimiter     = ', ';
+	$media_formats = starg_get_human_readable_media_format( $mime_types, $delimiter );
+	$output        = array();
+	foreach ( $mime_types as $single_mime_type ) {
+		switch ( true ) {
+			case str_starts_with( $single_mime_type, 'image/' ):
+				$output[] = $media_formats[ 'image' ];
+				break;
+			case str_starts_with( $single_mime_type, 'audio/' ):
+				$output[] = $media_formats[ 'audio' ];
+				break;
+			case str_starts_with( $single_mime_type, 'video/' ):
+				$output[] = $media_formats[ 'video' ];
+				break;
+			default:
+				$output[] = starg_get_human_readable_office_format( $single_mime_type );
+		}
+	}
+
+	$output = array_unique( $output );
+
+	return implode( $delimiter, $output );
+}
+
+/**
+ * Return a human readable version for media files like images, audio or video files.
+ * @param array $mime_types
+ * @param string $delimiter
+ * @return array
+ */
+function starg_get_human_readable_media_format( array $mime_types = array(), string $delimiter = ', ' ): array {
+	if ( ! $mime_types ) { return array(); }
+
+	$supported_image_types = '';
+	$supported_audio_types = '';
+	$supported_video_types = '';
+	foreach ( $mime_types as $single_mime_type ) {
+		if ( str_starts_with( $single_mime_type, 'image/' ) ) {
+			$supported_image_types .= '.' . str_replace( '/', '', substr( $single_mime_type, strpos( $single_mime_type, '/' ) ) ) . $delimiter;
+		} elseif ( str_starts_with( $single_mime_type, 'audio/' ) ) {
+			$supported_audio_types .= '.' . str_replace( '/', '', substr( $single_mime_type, strpos( $single_mime_type, '/' ) ) ) . $delimiter;
+		} elseif ( str_starts_with( $single_mime_type, 'video/' ) ) {
+			$supported_video_types .= '.' . str_replace( '/', '', substr( $single_mime_type, strpos( $single_mime_type, '/' ) ) ) . $delimiter;
+		}
+	}
+
+	$supported_image_types = substr( trim( esc_attr( $supported_image_types ) ), 0, -1 );
+	$supported_audio_types = substr( trim( esc_attr( $supported_audio_types ) ), 0, -1 );
+	$supported_video_types = substr( trim( esc_attr( $supported_video_types ) ), 0, -1 );
+
+	$translated_mime_types = array(
+		// translators: %s: comma separated list of file extensions.
+		'image' => sprintf( esc_attr__( 'images (%s)', 'sip' ), $supported_image_types ),
+		// translators: %s: comma separated list of file extensions.
+		'audio' => sprintf( esc_attr__( 'audio files (%s)', 'sip' ), $supported_audio_types ),
+		// translators: %s: comma separated list of file extensions.
+		'video' => sprintf( esc_attr__( 'video files (%s)', 'sip' ), $supported_video_types ),
+	);
+
+	return $translated_mime_types;
+}
+
+/**
+ * Return a human readable version of a mime-type.
+ * @param string $mime_type
+ * @return string
+ */
+function starg_get_human_readable_office_format( string $mime_type = '' ): string {
+	// A list of typical Mime-Types for files.
+	$mime_type_map = array(
+		// MS Office
+		'application/msword'                                                        => esc_attr__( 'MS Word 97-2003 documents (.doc)', 'sip' ),
+		'application/vnd.openxmlformats-officedocument.wordprocessingml.document'   => esc_attr__( 'MS Word 2007+ documents (.docx)', 'sip' ),
+		'application/vnd.ms-excel'                                                  => esc_attr__( 'MS Excel 97-2003 Spreadsheets (.xls)', 'sip' ),
+		'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'         => esc_attr__( 'MS Excel 2007+ Spreadsheets (.xlsx)', 'sip' ),
+		'application/vnd.ms-powerpoint'                                             => esc_attr__( 'MS PowerPoint 97-2003 presentations (.ppt)', 'sip' ),
+		'application/vnd.openxmlformats-officedocument.presentationml.presentation' => esc_attr__( 'MS PowerPoint 2007+ presentations (.pptx)', 'sip' ),
+
+		// LibreOffice
+		'application/vnd.oasis.opendocument.text'         => esc_attr__( 'LibreOffice documents (.odt)', 'sip' ),
+		'application/vnd.oasis.opendocument.spreadsheet'  => esc_attr__( 'LibreOffice Spreadsheets (.ods)', 'sip' ),
+		'application/vnd.oasis.opendocument.presentation' => esc_attr__( 'LibreOffice presentations (.odp)', 'sip' ),
+
+		'application/pdf' => esc_attr__( 'PDF documents (.pdf)', 'sip' ),
+		'application/rtf' => esc_attr__( 'Rich Text Format (.rtf)', 'sip' ),
+
+		// other documents
+		'text/plain'            => esc_attr__( 'plain text files (.txt)', 'sip' ),
+		'text/markdown'         => esc_attr__( 'markdown (.md)', 'sip' ),
+		'text/csv'              => esc_attr__( 'comma-separated values (.csv)', 'sip' ),
+		'text/calendar'         => esc_attr__( 'iCalendar format (.ics)', 'sip' ),
+		'text/css'              => esc_attr__( 'Cascading Style Sheets (.css)', 'sip' ),
+		'text/html'             => esc_attr__( 'HyperText Markup Language (.htm, .html)', 'sip' ),
+		'text/xml'              => esc_attr__( 'eXtensible Markup Language (.xml)', 'sip' ), // deprecated way for this mime-type, but may still be in use.
+		'application/xml'       => esc_attr__( 'eXtensible Markup Language (.xml)', 'sip' ),
+		'application/xhtml+xml' => esc_attr__( 'eXtensible Hypertext Markup Language (.xhtml)', 'sip' ),
+
+		// compressed files.
+		// 'application/x-tar'   => esc_attr__( 'compressed file (.tar)', 'sip' ),
+		// 'application/x-bz'    => esc_attr__( 'compressed file (.bzip)', 'sip' ),
+		// 'application/x-bz2'   => esc_attr__( 'compressed file (.bip2)', 'sip' ),
+		// 'application/gzip'    => esc_attr__( 'compressed file (.gzip)', 'sip' ),
+		// 'application/vnd.rar' => esc_attr__( 'compressed file (.rar)', 'sip' ),
+		// 'application/zip'     => esc_attr__( 'compressed file (.zip)', 'sip' ),
+		// 'application/7z'      => esc_attr__( 'compressed file (.7z)', 'sip' ),
+	);
+
+	// translators: %s: Name of an unknown file format.
+	return isset($mime_type_map[$mime_type]) ? $mime_type_map[$mime_type] : sprintf( esc_attr__( 'unknown file format %s', 'sip' ), $mime_type );
+}

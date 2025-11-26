@@ -57,9 +57,11 @@ class Starg_Sip_Plugin {
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/db-query-helper.php" );
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-functions.php" );
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-template-functions.php" );
+		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/shortcode-helper.php" );
+		add_action( 'init', array( 'Shortcode_Helper', 'init' ) );
+
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "admin/sip-options.php" );
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "admin/sip-meta.php" );
-
 		if ( is_admin() ) {
 			require_once( STARG_SIP_PLUGIN_BASE_DIR . 'admin/admin-notification.php' );
 			Starg_Admin_Notification::init();

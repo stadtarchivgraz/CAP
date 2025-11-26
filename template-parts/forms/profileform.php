@@ -189,11 +189,13 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 			<?php $user_archive = $update_user_profile->get_form_value( 'user_archive' ); ?>
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
-					<label for="archive" class="label"><?php esc_html_e('Archive', 'sip'); ?>*</label>
+					<label for="archive" class="label">
+						<?php esc_html_e('Archive', 'sip'); ?>*
+					</label>
 				</div>
 				<div class="field-body">
 					<div class="field">
-						<p class="control">
+						<div class="control">
 							<?php
 							if ( ! $user_archive) :
 								$args = array(
@@ -212,7 +214,7 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 								$archive = get_term($user_archive, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG); ?>
 								<input id="archive" class="input is-static" name="static_user_archive" type="text" value="<?php echo $archive->name; ?>" aria-readonly="true" readonly>
 							<?php endif; ?>
-						</p>
+						</div>
 						<?php if (!$user_archive) : ?>
 							<p class="help"><?php esc_html_e('This selection cannot be changed', 'sip'); ?></p>
 						<?php endif; ?>
@@ -221,6 +223,15 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 			</div>
 
 			<h3><?php esc_html_e('Personal account', 'sip'); ?></h3>
+			<?php
+			if ( get_privacy_policy_url() ) : ?>
+				<div class="field mb-5">
+					<?php
+					// translators: %s: Link to the privacy policy page as set in WordPress.
+					echo starg_get_information_box( sprintf( esc_attr__( 'For more information about how we store and use this data, please see our %s.', 'sip' ), get_the_privacy_policy_link() ) );
+					?>
+				</div>
+			<?php endif; ?>
 
 			<div class="field is-horizontal">
 				<div class="field-label is-normal">
