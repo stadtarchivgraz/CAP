@@ -340,7 +340,7 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 		if ( ! $user_sip_id ) { return; }
 		ob_start();
 		?>
-		<button class="button is-large is-danger js-modal-trigger" type="button" data-modal-id="<?php echo $user_sip_id; ?>">
+		<button class="button is-danger is-light is-outlined js-modal-trigger" type="button" data-modal-id="<?php echo $user_sip_id; ?>">
 			<?php esc_html_e('Decline', 'sip'); ?>
 		</button>
 		<?php
@@ -373,7 +373,7 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 		if ( ! $user_sip_id ) { return; }
 		ob_start();
 		?>
-		<button class="button is-large is-danger js-modal-trigger" type="button" data-modal-id="<?php echo $user_sip_id; ?>">
+		<button class="button is-danger is-light is-outlined js-modal-trigger" type="button" data-modal-id="<?php echo $user_sip_id; ?>">
 			<?php esc_html_e('Decline with response', 'sip'); ?>
 		</button>
 		<?php
@@ -423,7 +423,7 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 		if ( ! $user_sip_id ) { return; }
 		ob_start();
 		?>
-		<button class="button is-large is-danger js-modal-trigger" type="button" data-modal-id="<?php echo $user_sip_id; ?>">
+		<button class="button is-danger is-light is-outlined js-modal-trigger" type="button" data-modal-id="<?php echo $user_sip_id; ?>">
 			<?php esc_html_e('Delete', 'sip'); ?>
 		</button>
 		<?php

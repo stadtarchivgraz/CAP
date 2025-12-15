@@ -91,7 +91,7 @@ $sip_archival_actions->process_sip_archival_actions();
 				?>
 			</dl>
 
-			<?php if (current_user_can('edit_others_posts')) : ?>
+			<?php if (current_user_can('edit_others_archival_records')) : ?>
 				<h3><?php esc_html_e('Archive Information', 'sip'); ?></h3>
 				<dl>
 					<dt><?php esc_html_e('Numbering', 'sip'); ?></dt>
@@ -128,38 +128,51 @@ $sip_archival_actions->process_sip_archival_actions();
 						<?php wp_nonce_field( $sip_archival_actions->nonce_action, $sip_archival_actions->nonce_key, false ); ?>
 
 						<?php // Admins/Editors can edit, create the SIP and create a PDF of the site if the users entry has been accepted! ?>
-						<?php if ( current_user_can( 'edit_others_posts' ) && 'publish' === $archival_status ) : ?>
+						<?php if ( current_user_can( 'edit_others_archival_records' ) && 'publish' === $archival_status ) : ?>
 							<?php $create_sip_url     = ( isset( $create_sip->url_endpoint ) )     ? add_query_arg( array( $create_sip->url_endpoint => true, 'sipFolder' => $archival_sip_folder, ) )     : '#'; ?>
 							<?php $create_sip_pdf_url = ( isset( $create_sip_pdf->url_endpoint ) ) ? add_query_arg( array( $create_sip_pdf->url_endpoint => true, 'sipFolder' => $archival_sip_folder, ) ) : '#'; ?>
-							<a class="button is-large" href="<?php echo $edit_archival_url_sip_folder; ?>" target="_blank">
-								<?php esc_html_e('Edit', 'sip'); ?>
-							</a>
-							<a class="button is-large" href="<?php echo $create_sip_url; ?>">
+							<div class="mb-4">
+								<a class="button" href="<?php echo $edit_archival_url_sip_folder; ?>" target="_blank">
+									<?php esc_html_e('Edit', 'sip'); ?>
+								</a>
+							</div>
+							<a class="button" href="<?php echo $create_sip_url; ?>">
 								<?php esc_html_e('SIP', 'sip'); ?>
 							</a>
-							<a class="button is-large" href="<?php echo $create_sip_pdf_url; ?>">
+							<a class="button" href="<?php echo $create_sip_pdf_url; ?>">
 								<?php esc_html_e('PDF', 'sip'); ?>
 							</a>
 						<?php // Admins/Editors can edit, accept or decline the users entry. ?>
-						<?php elseif ( current_user_can( 'edit_others_posts' ) && 'publish' !== $archival_status ) : ?>
-							<a class="button is-large" href="<?php echo $edit_archival_url_sip_folder; ?>">
-								<?php esc_html_e('Edit', 'sip'); ?>
-							</a>
-							<button class="button is-large" name="accept_archival" type="submit" value="accept">
-								<?php esc_html_e('Accept', 'sip'); ?>
-							</button>
+						<?php elseif ( current_user_can( 'edit_others_archival_records' ) && 'publish' !== $archival_status ) : ?>
+							<div class="mb-4">
+								<a class="button" href="<?php echo $edit_archival_url_sip_folder; ?>">
+									<?php esc_html_e('Edit', 'sip'); ?>
+								</a>
+							</div>
 
-							<?php $sip_archival_actions->archival_decline_button( $archival_sip_folder, get_the_title( $archival_id ) ); ?>
+							<div class="mb-4">
+								<button class="button is-success is-light is-outlined" name="accept_archival" type="submit" value="accept">
+									<?php esc_html_e('Accept', 'sip'); ?>
+								</button>
+							</div>
 
-							<?php $sip_archival_actions->archival_decline_button_with_response_form( 'response_' . $archival_sip_folder, get_the_title( $archival_id ) ); ?>
+							<div>
+								<?php $sip_archival_actions->archival_decline_button( $archival_sip_folder, get_the_title( $archival_id ) ); ?>
+
+								<?php $sip_archival_actions->archival_decline_button_with_response_form( 'response_' . $archival_sip_folder, get_the_title( $archival_id ) ); ?>
+							</div>
 						<?php // All other users can edit and submit their own entry as long as it has not been submitted. ?>
 						<?php elseif ( 'pending' !== $archival_status && 'publish' !== $archival_status ) : ?>
-							<a class="button is-large" href="<?php echo $edit_archival_url_sip_folder; ?>">
-								<?php esc_html_e('Edit', 'sip'); ?>
-							</a>
-							<button class="button is-large" name="submit_archival" type="submit" value="submit">
-								<?php esc_html_e('Submit', 'sip'); ?>
-							</button>
+							<div class="mb-4">
+								<a class="button" href="<?php echo $edit_archival_url_sip_folder; ?>">
+									<?php esc_html_e('Edit', 'sip'); ?>
+								</a>
+							</div>
+							<div>
+								<button class="button is-success is-light is-outlined" name="submit_archival" type="submit" value="submit">
+									<?php esc_html_e('Submit', 'sip'); ?>
+								</button>
+							</div>
 						<?php endif; ?>
 					</form>
 

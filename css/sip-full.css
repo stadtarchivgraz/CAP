@@ -1,15 +1,15 @@
 @charset "UTF-8";
 /*! bulma.io v0.9.4 | MIT License | github.com/jgthms/bulma */
 .sip {
-  /* Bulma Utilities */
-  /* Bulma Base */
-  /*! minireset.css v0.0.6 | MIT License | github.com/jgthms/minireset.css */
-  /* Bulma Elements */
-  /* Bulma Form */
-  /* Bulma Components */
-  /* Bulma Grid */
-  /* Bulma Helpers */
-  /* Bulma Layout */
+  --theme-base-rem: calc(16px / 1rem);
+  font-size: calc(var(--theme-base-rem) * 1rem);
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  min-width: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  text-rendering: optimizeLegibility;
+  text-size-adjust: 100%;
 }
 .sip .pagination-previous,
 .sip .pagination-next,
@@ -23,7 +23,7 @@
   border-radius: 4px;
   box-shadow: none;
   display: inline-flex;
-  font-size: 1rem;
+  font-size: 1em;
   height: 2.5em;
   justify-content: flex-start;
   line-height: 1.5;
@@ -285,17 +285,6 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
 .sip td:not([align]),
 .sip th:not([align]) {
   text-align: inherit;
-}
-.sip html {
-  background-color: hsl(0, 0%, 100%);
-  font-size: 16px;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  min-width: 300px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  text-rendering: optimizeLegibility;
-  text-size-adjust: 100%;
 }
 .sip article,
 .sip aside,
@@ -1414,19 +1403,19 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   color: #cc0f35;
 }
 .sip .button.is-small {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .button.is-small:not(.is-rounded) {
   border-radius: 2px;
 }
 .sip .button.is-normal {
-  font-size: 1rem;
+  font-size: 1em;
 }
 .sip .button.is-medium {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .button.is-large {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .button[disabled], fieldset[disabled] .sip .button {
   background-color: hsl(0, 0%, 100%);
@@ -1479,16 +1468,16 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   margin-bottom: 1rem;
 }
 .sip .buttons.are-small .button:not(.is-normal):not(.is-medium):not(.is-large) {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .buttons.are-small .button:not(.is-normal):not(.is-medium):not(.is-large):not(.is-rounded) {
   border-radius: 2px;
 }
 .sip .buttons.are-medium .button:not(.is-small):not(.is-normal):not(.is-large) {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .buttons.are-large .button:not(.is-small):not(.is-normal):not(.is-medium) {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .buttons.has-addons .button:not(:first-child) {
   border-bottom-left-radius: 0;
@@ -1531,32 +1520,32 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
 }
 @media screen and (max-width: 768px) {
   .sip .button.is-responsive.is-small {
-    font-size: 0.5625rem;
+    font-size: 0.5625em;
   }
   .sip .button.is-responsive,
   .sip .button.is-responsive.is-normal {
-    font-size: 0.65625rem;
+    font-size: 0.65625em;
   }
   .sip .button.is-responsive.is-medium {
-    font-size: 0.75rem;
+    font-size: 0.75em;
   }
   .sip .button.is-responsive.is-large {
-    font-size: 1rem;
+    font-size: 1em;
   }
 }
 @media screen and (min-width: 769px) and (max-width: 1023px) {
   .sip .button.is-responsive.is-small {
-    font-size: 0.65625rem;
+    font-size: 0.65625em;
   }
   .sip .button.is-responsive,
   .sip .button.is-responsive.is-normal {
-    font-size: 0.75rem;
+    font-size: 0.75em;
   }
   .sip .button.is-responsive.is-medium {
-    font-size: 1rem;
+    font-size: 1em;
   }
   .sip .button.is-responsive.is-large {
-    font-size: 1.25rem;
+    font-size: 1.25em;
   }
 }
 .sip .container {
@@ -1753,16 +1742,16 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   margin-top: 0;
 }
 .sip .content.is-small {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .content.is-normal {
-  font-size: 1rem;
+  font-size: 1em;
 }
 .sip .content.is-medium {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .content.is-large {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .icon {
   align-items: center;
@@ -1788,7 +1777,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   color: inherit;
   display: inline-flex;
   flex-wrap: wrap;
-  line-height: 1.5rem;
+  line-height: 1.5em;
   vertical-align: top;
 }
 .sip .icon-text .icon {
@@ -2372,10 +2361,10 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   margin-bottom: 1rem;
 }
 .sip .tags.are-medium .tag:not(.is-normal):not(.is-large) {
-  font-size: 1rem;
+  font-size: 1em;
 }
 .sip .tags.are-large .tag:not(.is-normal):not(.is-medium) {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .tags.is-centered {
   justify-content: center;
@@ -2411,7 +2400,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   border-radius: 4px;
   color: hsl(0, 0%, 29%);
   display: inline-flex;
-  font-size: 0.75rem;
+  font-size: 0.75em;
   height: 2em;
   justify-content: center;
   line-height: 1.5;
@@ -2488,13 +2477,13 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   color: #cc0f35;
 }
 .sip .tag:not(body).is-normal {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .tag:not(body).is-medium {
-  font-size: 1rem;
+  font-size: 1em;
 }
 .sip .tag:not(body).is-large {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .tag:not(body) .icon:first-child:not(:last-child) {
   margin-left: -0.375em;
@@ -2568,7 +2557,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
 }
 .sip .title {
   color: hsl(0, 0%, 21%);
-  font-size: 2rem;
+  font-size: 2em;
   font-weight: 600;
   line-height: 1.125;
 }
@@ -2580,29 +2569,29 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   margin-top: -1.25rem;
 }
 .sip .title.is-1 {
-  font-size: 3rem;
+  font-size: 3em;
 }
 .sip .title.is-2 {
-  font-size: 2.5rem;
+  font-size: 2.5em;
 }
 .sip .title.is-3 {
-  font-size: 2rem;
+  font-size: 2em;
 }
 .sip .title.is-4 {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .title.is-5 {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .title.is-6 {
-  font-size: 1rem;
+  font-size: 1em;
 }
 .sip .title.is-7 {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .subtitle {
   color: hsl(0, 0%, 29%);
-  font-size: 1.25rem;
+  font-size: 1.25em;
   font-weight: 400;
   line-height: 1.25;
 }
@@ -2614,25 +2603,25 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   margin-top: -1.25rem;
 }
 .sip .subtitle.is-1 {
-  font-size: 3rem;
+  font-size: 3em;
 }
 .sip .subtitle.is-2 {
-  font-size: 2.5rem;
+  font-size: 2.5em;
 }
 .sip .subtitle.is-3 {
-  font-size: 2rem;
+  font-size: 2em;
 }
 .sip .subtitle.is-4 {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .subtitle.is-5 {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .subtitle.is-6 {
-  font-size: 1rem;
+  font-size: 1em;
 }
 .sip .subtitle.is-7 {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .heading {
   display: block;
@@ -2646,7 +2635,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   background-color: hsl(0, 0%, 96%);
   border-radius: 9999px;
   display: inline-flex;
-  font-size: 1.25rem;
+  font-size: 1.25em;
   height: 2em;
   justify-content: center;
   margin-right: 1.5rem;
@@ -2768,13 +2757,13 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
 }
 .sip .is-small.textarea, .sip .is-small.input {
   border-radius: 2px;
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .is-medium.textarea, .sip .is-medium.input {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .is-large.textarea, .sip .is-large.input {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .is-fullwidth.textarea, .sip .is-fullwidth.input {
   display: block;
@@ -3000,13 +2989,13 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
 }
 .sip .select.is-small {
   border-radius: 2px;
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .select.is-medium {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .select.is-large {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .select.is-disabled::after {
   border-color: hsl(0, 0%, 48%) !important;
@@ -3026,13 +3015,13 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   transform: none;
 }
 .sip .select.is-loading.is-small:after {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .select.is-loading.is-medium:after {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .select.is-loading.is-large:after {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .file {
   align-items: stretch;
@@ -3241,19 +3230,19 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   color: #fff;
 }
 .sip .file.is-small {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .file.is-normal {
-  font-size: 1rem;
+  font-size: 1em;
 }
 .sip .file.is-medium {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .file.is-medium .file-icon .fa {
   font-size: 21px;
 }
 .sip .file.is-large {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .file.is-large .file-icon .fa {
   font-size: 28px;
@@ -3395,24 +3384,24 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
 .sip .label {
   color: hsl(0, 0%, 21%);
   display: block;
-  font-size: 1rem;
+  font-size: 1em;
   font-weight: 700;
 }
 .sip .label:not(:last-child) {
   margin-bottom: 0.5em;
 }
 .sip .label.is-small {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .label.is-medium {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .label.is-large {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .help {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.75em;
   margin-top: 0.25rem;
 }
 .sip .help.is-white {
@@ -3570,18 +3559,18 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
     text-align: right;
   }
   .sip .field-label.is-small {
-    font-size: 0.75rem;
+    font-size: 0.75em;
     padding-top: 0.375em;
   }
   .sip .field-label.is-normal {
     padding-top: 0.375em;
   }
   .sip .field-label.is-medium {
-    font-size: 1.25rem;
+    font-size: 1.25em;
     padding-top: 0.375em;
   }
   .sip .field-label.is-large {
-    font-size: 1.5rem;
+    font-size: 1.5em;
     padding-top: 0.375em;
   }
 }
@@ -3611,7 +3600,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
 .sip .control {
   box-sizing: border-box;
   clear: both;
-  font-size: 1rem;
+  font-size: 1em;
   position: relative;
   text-align: inherit;
 }
@@ -3623,17 +3612,17 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
 .sip .control.has-icons-left .input.is-small ~ .icon,
 .sip .control.has-icons-left .select.is-small ~ .icon, .sip .control.has-icons-right .input.is-small ~ .icon,
 .sip .control.has-icons-right .select.is-small ~ .icon {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .control.has-icons-left .input.is-medium ~ .icon,
 .sip .control.has-icons-left .select.is-medium ~ .icon, .sip .control.has-icons-right .input.is-medium ~ .icon,
 .sip .control.has-icons-right .select.is-medium ~ .icon {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .control.has-icons-left .input.is-large ~ .icon,
 .sip .control.has-icons-left .select.is-large ~ .icon, .sip .control.has-icons-right .input.is-large ~ .icon,
 .sip .control.has-icons-right .select.is-large ~ .icon {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .control.has-icons-left .icon, .sip .control.has-icons-right .icon {
   color: hsl(0, 0%, 86%);
@@ -3665,16 +3654,16 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   z-index: 4;
 }
 .sip .control.is-loading.is-small:after {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .control.is-loading.is-medium:after {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .control.is-loading.is-large:after {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .breadcrumb {
-  font-size: 1rem;
+  font-size: 1em;
   white-space: nowrap;
 }
 .sip .breadcrumb a {
@@ -3725,13 +3714,13 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   justify-content: flex-end;
 }
 .sip .breadcrumb.is-small {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .breadcrumb.is-medium {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .breadcrumb.is-large {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .breadcrumb.has-arrow-separator li + li::before {
   content: "→";
@@ -3869,7 +3858,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
 .sip .dropdown-item {
   color: hsl(0, 0%, 29%);
   display: block;
-  font-size: 0.875rem;
+  font-size: 0.875em;
   line-height: 1.5;
   padding: 0.375rem 1rem;
   position: relative;
@@ -4046,16 +4035,16 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   }
 }
 .sip .menu {
-  font-size: 1rem;
+  font-size: 1em;
 }
 .sip .menu.is-small {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .menu.is-medium {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .menu.is-large {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .menu-list {
   line-height: 1.25;
@@ -4094,7 +4083,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
 .sip .message {
   background-color: hsl(0, 0%, 96%);
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 1em;
 }
 .sip .message strong {
   color: currentColor;
@@ -4104,13 +4093,13 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   text-decoration: underline;
 }
 .sip .message.is-small {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .message.is-medium {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .message.is-large {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .message.is-white {
   background-color: white;
@@ -4320,7 +4309,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   color: hsl(0, 0%, 21%);
   flex-grow: 1;
   flex-shrink: 0;
-  font-size: 1.5rem;
+  font-size: 1.5em;
   line-height: 1;
 }
 .sip .modal-card-foot {
@@ -5072,7 +5061,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   right: 1.125em;
 }
 .sip .navbar-dropdown {
-  font-size: 0.875rem;
+  font-size: 0.875em;
   padding-bottom: 0.5rem;
   padding-top: 0.5rem;
 }
@@ -5224,7 +5213,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
     border-top: 2px solid hsl(0, 0%, 86%);
     box-shadow: 0 8px 8px rgba(10, 10, 10, 0.1);
     display: none;
-    font-size: 0.875rem;
+    font-size: 0.875em;
     left: 0;
     min-width: 100%;
     position: absolute;
@@ -5320,17 +5309,17 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   min-height: calc(100vh - 3.25rem);
 }
 .sip .pagination {
-  font-size: 1rem;
+  font-size: 1em;
   margin: -0.25rem;
 }
 .sip .pagination.is-small {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .pagination.is-medium {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .pagination.is-large {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .pagination.is-rounded .pagination-previous,
 .sip .pagination.is-rounded .pagination-next {
@@ -5477,7 +5466,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
 .sip .panel {
   border-radius: 6px;
   box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
-  font-size: 1rem;
+  font-size: 1em;
 }
 .sip .panel:not(:last-child) {
   margin-bottom: 1.5rem;
@@ -5672,7 +5661,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   -webkit-overflow-scrolling: touch;
   align-items: stretch;
   display: flex;
-  font-size: 1rem;
+  font-size: 1em;
   justify-content: space-between;
   overflow: hidden;
   overflow-x: auto;
@@ -5796,13 +5785,13 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   padding-right: 1.25em;
 }
 .sip .tabs.is-small {
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 .sip .tabs.is-medium {
-  font-size: 1.25rem;
+  font-size: 1.25em;
 }
 .sip .tabs.is-large {
-  font-size: 1.5rem;
+  font-size: 1.5em;
 }
 .sip .column {
   display: block;
@@ -8347,162 +8336,162 @@ html.is-clipped,
   padding-bottom: auto !important;
 }
 .sip .is-size-1 {
-  font-size: 3rem !important;
+  font-size: 3em !important;
 }
 .sip .is-size-2 {
-  font-size: 2.5rem !important;
+  font-size: 2.5em !important;
 }
 .sip .is-size-3 {
-  font-size: 2rem !important;
+  font-size: 2em !important;
 }
 .sip .is-size-4 {
-  font-size: 1.5rem !important;
+  font-size: 1.5em !important;
 }
 .sip .is-size-5 {
-  font-size: 1.25rem !important;
+  font-size: 1.25em !important;
 }
 .sip .is-size-6 {
-  font-size: 1rem !important;
+  font-size: 1em !important;
 }
 .sip .is-size-7 {
-  font-size: 0.75rem !important;
+  font-size: 0.75em !important;
 }
 @media screen and (max-width: 768px) {
   .sip .is-size-1-mobile {
-    font-size: 3rem !important;
+    font-size: 3em !important;
   }
   .sip .is-size-2-mobile {
-    font-size: 2.5rem !important;
+    font-size: 2.5em !important;
   }
   .sip .is-size-3-mobile {
-    font-size: 2rem !important;
+    font-size: 2em !important;
   }
   .sip .is-size-4-mobile {
-    font-size: 1.5rem !important;
+    font-size: 1.5em !important;
   }
   .sip .is-size-5-mobile {
-    font-size: 1.25rem !important;
+    font-size: 1.25em !important;
   }
   .sip .is-size-6-mobile {
-    font-size: 1rem !important;
+    font-size: 1em !important;
   }
   .sip .is-size-7-mobile {
-    font-size: 0.75rem !important;
+    font-size: 0.75em !important;
   }
 }
 @media screen and (min-width: 769px), print {
   .sip .is-size-1-tablet {
-    font-size: 3rem !important;
+    font-size: 3em !important;
   }
   .sip .is-size-2-tablet {
-    font-size: 2.5rem !important;
+    font-size: 2.5em !important;
   }
   .sip .is-size-3-tablet {
-    font-size: 2rem !important;
+    font-size: 2em !important;
   }
   .sip .is-size-4-tablet {
-    font-size: 1.5rem !important;
+    font-size: 1.5em !important;
   }
   .sip .is-size-5-tablet {
-    font-size: 1.25rem !important;
+    font-size: 1.25em !important;
   }
   .sip .is-size-6-tablet {
-    font-size: 1rem !important;
+    font-size: 1em !important;
   }
   .sip .is-size-7-tablet {
-    font-size: 0.75rem !important;
+    font-size: 0.75em !important;
   }
 }
 @media screen and (max-width: 1023px) {
   .sip .is-size-1-touch {
-    font-size: 3rem !important;
+    font-size: 3em !important;
   }
   .sip .is-size-2-touch {
-    font-size: 2.5rem !important;
+    font-size: 2.5em !important;
   }
   .sip .is-size-3-touch {
-    font-size: 2rem !important;
+    font-size: 2em !important;
   }
   .sip .is-size-4-touch {
-    font-size: 1.5rem !important;
+    font-size: 1.5em !important;
   }
   .sip .is-size-5-touch {
-    font-size: 1.25rem !important;
+    font-size: 1.25em !important;
   }
   .sip .is-size-6-touch {
-    font-size: 1rem !important;
+    font-size: 1em !important;
   }
   .sip .is-size-7-touch {
-    font-size: 0.75rem !important;
+    font-size: 0.75em !important;
   }
 }
 @media screen and (min-width: 1024px) {
   .sip .is-size-1-desktop {
-    font-size: 3rem !important;
+    font-size: 3em !important;
   }
   .sip .is-size-2-desktop {
-    font-size: 2.5rem !important;
+    font-size: 2.5em !important;
   }
   .sip .is-size-3-desktop {
-    font-size: 2rem !important;
+    font-size: 2em !important;
   }
   .sip .is-size-4-desktop {
-    font-size: 1.5rem !important;
+    font-size: 1.5em !important;
   }
   .sip .is-size-5-desktop {
-    font-size: 1.25rem !important;
+    font-size: 1.25em !important;
   }
   .sip .is-size-6-desktop {
-    font-size: 1rem !important;
+    font-size: 1em !important;
   }
   .sip .is-size-7-desktop {
-    font-size: 0.75rem !important;
+    font-size: 0.75em !important;
   }
 }
 @media screen and (min-width: 1216px) {
   .sip .is-size-1-widescreen {
-    font-size: 3rem !important;
+    font-size: 3em !important;
   }
   .sip .is-size-2-widescreen {
-    font-size: 2.5rem !important;
+    font-size: 2.5em !important;
   }
   .sip .is-size-3-widescreen {
-    font-size: 2rem !important;
+    font-size: 2em !important;
   }
   .sip .is-size-4-widescreen {
-    font-size: 1.5rem !important;
+    font-size: 1.5em !important;
   }
   .sip .is-size-5-widescreen {
-    font-size: 1.25rem !important;
+    font-size: 1.25em !important;
   }
   .sip .is-size-6-widescreen {
-    font-size: 1rem !important;
+    font-size: 1em !important;
   }
   .sip .is-size-7-widescreen {
-    font-size: 0.75rem !important;
+    font-size: 0.75em !important;
   }
 }
 @media screen and (min-width: 1408px) {
   .sip .is-size-1-fullhd {
-    font-size: 3rem !important;
+    font-size: 3em !important;
   }
   .sip .is-size-2-fullhd {
-    font-size: 2.5rem !important;
+    font-size: 2.5em !important;
   }
   .sip .is-size-3-fullhd {
-    font-size: 2rem !important;
+    font-size: 2em !important;
   }
   .sip .is-size-4-fullhd {
-    font-size: 1.5rem !important;
+    font-size: 1.5em !important;
   }
   .sip .is-size-5-fullhd {
-    font-size: 1.25rem !important;
+    font-size: 1.25em !important;
   }
   .sip .is-size-6-fullhd {
-    font-size: 1rem !important;
+    font-size: 1em !important;
   }
   .sip .is-size-7-fullhd {
-    font-size: 0.75rem !important;
+    font-size: 0.75em !important;
   }
 }
 .sip .has-text-centered {
@@ -9839,13 +9828,13 @@ html.is-clipped,
   border-radius: 1.875rem 1.875rem 0;
   transform: rotate(45deg);
   border: 2px solid hsl(0, 0%, 86%);
-  font-size: 1.125rem;
+  font-size: 1.125em;
   text-align: center;
   color: hsl(0, 0%, 86%);
 }
 .sip .dsa-custom-pin > div i {
   transform: rotate(-45deg);
-  font-size: 1.125rem;
+  font-size: 1.125em;
 }
 .sip .dsa-custom-pin > div.cluster {
   width: 2.5rem !important;
@@ -9856,7 +9845,7 @@ html.is-clipped,
 .sip .dsa-custom-pin > div.cluster > div {
   transform: rotate(-45deg);
   font-weight: 600;
-  font-size: 1.25rem;
+  font-size: 1.25em;
   width: 2.125rem;
   line-height: 2.125rem;
 }
@@ -9867,7 +9856,7 @@ html.is-clipped,
   box-shadow: 0 0 0.25rem var(--secondary-color);
 }
 .sip .dsa-custom-pin > div.position i {
-  font-size: 1rem;
+  font-size: 1em;
   position: relative;
   top: 1px;
   right: 1px;
@@ -9899,7 +9888,7 @@ html.is-clipped,
   margin: 0;
   font-family: false;
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 0.875em;
   color: var(--secondary-color);
 }
 .sip .leaflet-popup-content p {
@@ -9925,11 +9914,11 @@ html.is-clipped,
   box-shadow: none;
   width: 17.5rem;
   padding: 0.5rem 1rem;
-  font-size: 1rem;
+  font-size: 1em;
 }
 @media screen and (min-width: 769px), print {
   .sip .leaflet-control-geocoder-form input {
-    font-size: 1.125rem;
+    font-size: 1.125em;
   }
 }
 .sip .leaflet-control-geocoder-form input:focus {

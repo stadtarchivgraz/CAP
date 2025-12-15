@@ -6,7 +6,7 @@
 /* if true, we're creating a PDF file of an archival page. */
 $is_pdf = isset($pdf);
 
-echo '<div class="container sip">';
+echo '<div class="container">';
 
 	echo (! $is_pdf) ? '<ol class="sip-listing" id="sip-files" type="">' : '';
 

@@ -60,9 +60,9 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 				<?php wp_nonce_field( $sip_upload_form->nonce_action, $sip_upload_form->nonce_key, false ); ?>
 
 				<div class="field">
-					<label for="archival-title" class="label is-large"><?php esc_html_e('Title', 'sip'); ?>*</label>
-					<p class="control is-large">
-						<input id="archival-title" name="archival_title" class="input is-large count-character" type="text" placeholder="<?php esc_html_e('Give your submission a descriptive title', 'sip'); ?>" value="<?php echo esc_html( $archival_title ); ?>" maxlength="100" required>
+					<label for="archival-title" class="label"><?php esc_html_e('Title', 'sip'); ?>*</label>
+					<p class="control">
+						<input id="archival-title" name="archival_title" class="input count-character" type="text" placeholder="<?php esc_html_e('Give your submission a descriptive title', 'sip'); ?>" value="<?php echo esc_html( $archival_title ); ?>" maxlength="100" required>
 					</p>
 					<p id="archival-title_count" class="help"><span><?php echo strlen($archival_title); ?></span> | <?php esc_html_e('Maximum 100 characters.', 'sip'); ?></p>
 				</div>
@@ -228,7 +228,7 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 					<div class="field">
 						<label for="archival-annotation" class="label"><?php esc_html_e('Note', 'sip'); ?></label>
 						<p class="control">
-							<textarea id="archival-annotation" name="archival_annotation" class="textarea count-character" rows="10" maxlength="5000"><?php echo wp_kses_post( $sip_upload_form->get_form_value( 'archival_annotation' ) ); ?></textarea>
+							<textarea id="archival-annotation" name="archival_annotation" class="textarea count-character" rows="5" maxlength="5000"><?php echo wp_kses_post( $sip_upload_form->get_form_value( 'archival_annotation' ) ); ?></textarea>
 						</p>
 					</div>
 					<?php
@@ -269,14 +269,18 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 						// if a post is a draft, it should not be edited by editors and only saved as draft or submitted.
 						// if a post is no draft and the editor is its author, it should be saved as draft or submitted.
 						if ( ! $user_can_publish || $post_is_draft || ( $post_is_draft && $editor_is_author ) ) : ?>
-							<button class="button is-large" name="save_sip" type="submit" value="save_draft">
-								<?php esc_html_e('Save as draft', 'sip'); ?>
-							</button>
-							<button class="button is-large" name="save_sip" type="submit" value="submit_archival">
-								<?php esc_html_e('Submit', 'sip'); ?>
-							</button>
+							<div class="mb-4">
+								<button class="button" name="save_sip" type="submit" value="save_draft">
+									<?php esc_html_e('Save as draft', 'sip'); ?>
+								</button>
+							</div>
+							<div>
+								<button class="button is-success is-light is-outlined" name="save_sip" type="submit" value="submit_archival">
+									<?php esc_html_e('Submit', 'sip'); ?>
+								</button>
+							</div>
 						<?php else : ?>
-							<button class="button is-large" name="save_sip" type="submit" value="save_archival">
+							<button class="button is-success is-light is-outlined" name="save_sip" type="submit" value="save_archival">
 								<?php esc_html_e('Save', 'sip'); ?>
 							</button>
 						<?php endif; ?>

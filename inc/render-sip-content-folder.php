@@ -113,7 +113,7 @@ class Render_Sip_Content_Folder {
 	 */
 	private static function get_file_link(array $file_type, string $file_url, string $path_to_file, string $thumbnail_folder = '', $image_size = array(), $author_id = '', $sip_id = '' ) : string {
 		$file = $file_url;
-		// We need to use the absolute path to the images if we're rendering a PDF.
+		// We need to use the absolute path to the images when we're rendering a PDF.
 		// The PDF-Library we're using (spipu/html2pdf) transforms uppercase letters in URLs into lowercase.
 		// This is fine for windows servers as their filesystem is not case sensitive. But on linux image.png is not the same as Image.png!
 		if ( self::$is_pdf ) {
@@ -148,33 +148,38 @@ class Render_Sip_Content_Folder {
 		}
 
 		if (file_exists($thumbnail_folder . $thumbnail_filename)) {
-			$thumbnail_url = esc_url( trailingslashit($thumbnail_dir_url) . 'thumb/' . $thumbnail_filename );
+			// for PDFs we need to use the full path to the thumbnail file.
+			if ( self::$is_pdf ) {
+				$thumbnail_url = esc_attr( $thumbnail_folder . $thumbnail_filename );
+			} else {
+				$thumbnail_url = esc_url( trailingslashit($thumbnail_dir_url) . 'thumb/' . $thumbnail_filename );
+			}
 		} else {
 			$thumbnail_url = Render_Sip_Content_Folder::get_fallback_thumbnail($file_type);
 		}
 
 		// no links for PDFs. Wouldn't work anyway as we use the absolute path to the files!
 		if ( self::$is_pdf ) {
-			return '<img src="' . $thumbnail_url . '" alt="">';
+			return '<img src="' . $thumbnail_url . '" alt="' . $thumbnail_filename . '" style="width:100px;height:auto;">';
 		}
 
 		switch ($type) {
 			case 'application':
-				return '<a data-iframe="' . $file_url . '" href="' . $file_url . '"><img src="' . $thumbnail_url . '" alt=""></a>';
+				return '<a data-iframe="' . $file_url . '" href="' . $file_url . '"><img src="' . $thumbnail_url . '" alt="' . $thumbnail_filename . '"></a>';
 
 			case 'image':
 				$img_data_width  = ( isset( $image_size[0] ) ) ? ' data-width="' . $image_size[0] . '"' : '';
 				$img_data_height = ( isset( $image_size[1] ) ) ? ' data-height="' . $image_size[1] . '"' : '';
 				return '<a' . $img_data_width . $img_data_height . ' data-thumb="' . $thumbnail_url . '" data-img="' . $file_url .
-					'" href="' . $file_url . '"><img src="' . $thumbnail_url . '" alt=""></a>';
+					'" href="' . $file_url . '"><img src="' . $thumbnail_url . '" alt="' . $thumbnail_filename . '"></a>';
 
 			case 'audio':
 			case 'video':
 				$sources = [["src" => $file_url, "type" => $file_type['type']]];
-				return '<a data-sources=\'' . json_encode($sources, JSON_UNESCAPED_SLASHES) . '\' href="' . $file_url . '"><img src="' . $thumbnail_url . '" alt=""></a>';
+				return '<a data-sources=\'' . json_encode($sources, JSON_UNESCAPED_SLASHES) . '\' href="' . $file_url . '"><img src="' . $thumbnail_url . '" alt="' . $thumbnail_filename . '"></a>';
 
 			case 'text':
-				return '<a data-iframe="' . $file_url . '" href="' . $file_url . '"><img src="' . $thumbnail_url . '" alt=""></a>';
+				return '<a data-iframe="' . $file_url . '" href="' . $file_url . '"><img src="' . $thumbnail_url . '" alt="' . $thumbnail_filename . '"></a>';
 		}
 
 		return '';
@@ -219,12 +224,12 @@ class Render_Sip_Content_Folder {
 	 */
 	private static function get_file_info( array $data, string $path_clean ) : string {
 		$exif_dates = Render_Sip_Content_Folder::$exif_dates;
-		$info  = (isset($data['filename']) ? esc_html( $data['filename'] ) . '<br>' : '');
-		$info .= (isset($data['filesize']) ? starg_format_bytes( (float) esc_html( $data['filesize'] )) . '<br>' : '');
-		$info .= (isset($data['playtime_string']) ? esc_html( $data['playtime_string'] ) . '<br>' : '');
-		$info .= (isset($exif_dates[basename($path_clean)])
+		$info  = (isset($data['filename'])) ? esc_attr( $data['filename'] ) . '<br>' : '';
+		$info .= (isset($data['filesize'])) ? starg_format_bytes( (float) esc_html( $data['filesize'] )) . '<br>' : '';
+		$info .= (isset($data['playtime_string'])) ? esc_html( $data['playtime_string'] ) . '<br>' : '';
+		$info .= (isset($exif_dates[basename($path_clean)]))
 			? date('c', (int) esc_attr( $exif_dates[basename($path_clean)] )) . '<br>'
-			: '');
+			: '';
 		return $info;
 	}
 
