@@ -114,6 +114,40 @@ class Starg_Admin_Pages {
 				<?php self::display_user_statistics_table_rows( $all_uploaded_files[ 'skipped_users' ] ); ?>
 			</table>
 
+			<?php if ( $all_uploaded_files[ 'drafts' ] ) : ?>
+				<hr style="margin-top: 2em;margin-bottom:2em;">
+
+				<h3><?php esc_html_e( 'Drafts', 'sip' ); ?></h3>
+				<table class="wp-list-table widefat fixed striped">
+					<thead>
+						<tr>
+							<th><?php esc_html_e( 'Username', 'sip' ); ?></th>
+							<th><?php esc_html_e( 'Uploads', 'sip' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php self::display_drafts_or_uploads_table_rows( $all_uploaded_files[ 'drafts' ] ); ?>
+					</tbody>
+				</table>
+			<?php endif; ?>
+
+			<?php if ( $all_uploaded_files[ 'uploads' ] ) : ?>
+				<hr style="margin-top: 2em;margin-bottom:2em;">
+
+				<h3><?php esc_html_e( 'Uploads without post or metadata', 'sip' ); ?></h3>
+				<table class="wp-list-table widefat fixed striped">
+					<thead>
+						<tr>
+							<th><?php esc_html_e( 'Username', 'sip' ); ?></th>
+							<th><?php esc_html_e( 'Uploads', 'sip' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php self::display_drafts_or_uploads_table_rows( $all_uploaded_files[ 'uploads' ] ); ?>
+					</tbody>
+				</table>
+			<?php endif; ?>
+
 			<?php if ( $export_statistics ) : ?>
 				<form class="form" action="" method="get" style="margin-top: 2rem;">
 					<?php
@@ -134,6 +168,11 @@ class Starg_Admin_Pages {
 		</div>
 	<?php
 	}
+
+
+	/***************/
+	/* HTML Tables */
+	/***************/
 
 	/**
 	 * Renders the table rows for the statistics data.
@@ -225,6 +264,33 @@ class Starg_Admin_Pages {
 	<?php
 	}
 
+	protected static function display_drafts_or_uploads_table_rows( array $data ): void {
+		?>
+		<tbody>
+			<?php foreach ( $data as $user_id => $user_data ) : ?>
+				<tr data-user_id="<?php echo esc_attr($user_id); ?>">
+					<td><?php echo esc_attr( get_user_by( 'ID', $user_id )->display_name ); ?></td>
+					<td>
+						<ul style="margin: 0;">
+							<?php
+							foreach ( $user_data as $key => $value ) :
+								if ( 'filesize' === $key ) { continue; }
+								?>
+								<li>
+									<?php
+									// translators: %1$s: Number of files. %2$s: Name of the folder.
+									printf( _n( 'There is %1$s file in folder %2$s.', 'There are %1$s files in folder %2$s.', (int) $value, 'sip' ), esc_attr( $value ), esc_attr( $key ) );
+									?>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	<?php
+	}
+
 	/**
 	 * Renders a HTML-Table with all user roles of the website and the number of users assigned to each role.
 	 */
@@ -260,11 +326,16 @@ class Starg_Admin_Pages {
 	<?php
 	}
 
+
+	/****************/
+	/* prepare data */
+	/****************/
+
 	/**
 	 * The main function to create the statistics.
 	 * @param string $sip_folder
 	 * @param bool $skip_test_user [Optional] whether include all users (admins and test user as well) in the statistics. default: true (skip them)
-	 * @return array
+	 * @return array{valid_users:array, skipped_user:array, uploads_onl:array }
 	 */
 	private static function _get_user_statistics( string $sip_folder, bool $skip_test_user = true ) : array {
 		$all_uploaded_files = Starg_Admin_Pages::_get_all_uploaded_files( $sip_folder );
@@ -274,6 +345,8 @@ class Starg_Admin_Pages {
 		$number_valid_submissions     = 0;
 		$number_valid_submitted_files = 0;
 		$filesize_valid               = 0;
+		$drafts                       = array();
+		$uploads                      = array();
 
 		if ( $skip_test_user ) {
 			$number_skipped_users           = 0;
@@ -319,12 +392,20 @@ class Starg_Admin_Pages {
 				// we need to check the status of the submission. If it is an upload without post we can not count it as submission!
 				$archival_id = DB_Query_Helper::starg_get_archival_id_by_sip_folder( $submission_id );
 				if ( ! $archival_id ) {
+					// todo: also include the filesize for uploads without posts.
+					if ( 'filesize' !== $submission_id ) {
+						$uploads[ $user_id ][ $submission_id ] = $uploaded_files;
+					}
 					continue;
 				}
 
 				$single_archival_status = get_post_status( $archival_id );
 				// filter all drafts from statistics.
-				if ( 'draft' !== $single_archival_status ) {
+				if ( 'draft' === $single_archival_status ) {
+					if ( 'filesize' !== $submission_id ) {
+						$drafts[ $user_id ][ $submission_id ] = $uploaded_files;
+					}
+				} else {
 					$user_files += (int) $uploaded_files;
 					$single_user_submission++;
 				}
@@ -405,14 +486,14 @@ class Starg_Admin_Pages {
 			$skipped_user_data['filesize']                           = (int) $filesize_skipped;
 		}
 
-		return array( 'valid_users' => $valid_user_data, 'skipped_users' => $skipped_user_data );
+		return array( 'valid_users' => $valid_user_data, 'skipped_users' => $skipped_user_data, 'drafts' => $drafts, 'uploads' => $uploads, );
 	}
 
 	/**
 	 * Wrapper function for @see Starg_Admin_Pages::_get_user_statistics
 	 * @param string $sip_folder
 	 * @param bool $skip_test_user [Optional] whether include all users (admins and test user as well) in the statistics. default: true (skip them)
-	 * @return array
+	 * @return array{valid_users:array, skipped_user:array, uploads_onl:array }
 	 */
 	public static function get_user_statistics( string $sip_folder, bool $skip_test_user = true ) : array {
 		return self::_get_user_statistics( $sip_folder, $skip_test_user );
