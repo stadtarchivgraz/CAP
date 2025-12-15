@@ -178,8 +178,6 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 	 * @return void
 	 */
 	private function notify_user( int $current_user_id, int $orig_author_id, int $user_archive_id, int $post_id = 0 ): void {
-		if ( ! carbon_get_theme_option( 'sip_notifications_enabled' ) ) { return; }
-
 		$user_archive      = '';
 		$user_archive_term = get_term( $user_archive_id, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG );
 		if ( $user_archive_term ) {
@@ -198,9 +196,9 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 			$other_email          = array();
 			foreach( $other_email_user_ids as $single_user_id ) {
 				// add only users with the same archive.
-				$selected_archive_id = get_user_meta( $single_user_id, 'user_archive', true );
+				$selected_archive_id = (int) get_user_meta( (int) $single_user_id, 'user_archive', true );
 				if ( $user_archive_id === $selected_archive_id ) {
-					$other_email[ $single_user_id ] = get_userdata( $single_user_id )->user_email;
+					$other_email[] = get_userdata( $single_user_id )->user_email;
 				}
 			}
 			$editor_email = array_merge( $editor_email, $other_email );

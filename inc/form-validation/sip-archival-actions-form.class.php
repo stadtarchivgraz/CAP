@@ -85,7 +85,7 @@ class Sip_Archival_Actions extends Form_Validation {
 		}
 
 		if ( $is_users_archival_post && $user_can_submit && 'submit' === $this->user_input[ 'submit_archival' ] ) {
-			$action_result = $this->_process_action_submit( $archival_id );
+			$action_result = $this->_process_action_submit( $archival_id, $archival_author_id );
 		}
 		
 		$this->display_notification();
@@ -215,7 +215,7 @@ class Sip_Archival_Actions extends Form_Validation {
 	 * @param int $archival_post_id
 	 * @return bool
 	 */
-	private function _process_action_submit( int $archival_post_id ): bool {
+	private function _process_action_submit( int $archival_post_id, $archival_author_id ): bool {
 		$post_data = array(
 			'ID'          => $archival_post_id,
 			'post_status' => 'pending',
@@ -227,6 +227,9 @@ class Sip_Archival_Actions extends Form_Validation {
 			$this->set_error_message( sprintf( esc_attr__( 'The post with the ID %d could not be updated.', 'sip' ), $archival_post_id ) );
 			return false;
 		}
+		$user_archive_id = (int) get_user_meta( $archival_author_id, 'user_archive', true );
+
+		$this->notify_user_submit( get_current_user_id(), (int) $archival_author_id, $user_archive_id, $archival_post_id );
 
 		$this->set_success_message(esc_attr__('Archival record submitted.', 'sip'));
 		return true;
@@ -302,13 +305,14 @@ Thank you for your contribution.', 'sip' ), $author_name, $post_title, $originat
 		}
 
 		$subject = esc_html__( 'Your submission was rejected', 'sip' );
-		// translators: %s: Name of the user.
-		$message = sprintf( esc_html__( 'Dear %s,
+		// translators: %1$s: Name of the user. %2$s: Name of the Website.
+		$message = sprintf( esc_html__( 'Dear %1$s,
 
-We are sorry to inform you that your submission was rejected.', 'sip' ), $author_name );
+thank you very much for your submission to %2$s! Unfortunately, we cannot accept your submission into the archive and must reject it.', 'sip' ), $author_name, esc_attr( get_bloginfo( 'name' ) ) );
 
 		if ( $this->user_input['notification_content'] ) {
-			$message .= PHP_EOL . PHP_EOL . $this->user_input['notification_content'];
+			// translators: %s: Reason for the rejection.
+			$message .= PHP_EOL . PHP_EOL . sprintf( esc_html__( 'The reason for the rejection is: %s', 'sip' ), $this->user_input['notification_content'] );
 		}
 
 		// maybe we want to tell the user, who was reviewing their submission, so they can contact them directly.
@@ -319,11 +323,107 @@ We are sorry to inform you that your submission was rejected.', 'sip' ), $author
 				$archivist_email  = sanitize_email( $archivist->user_email );
 				$archivist_mailto = '<a href="mailto:' . $archivist_email . '">' . $archivist_email . '</a>';
 				// translators: %1$s: Name of the responsible archivist. %2$s: Email Link.
-				$message .= PHP_EOL . PHP_EOL . sprintf( esc_html__( 'If you have any questions regarding the rejection, please contact the responsible archivist %1$s at %2$s.', 'sip' ), $archivist_name, $archivist_mailto );
+				$message .= PHP_EOL . PHP_EOL . sprintf( esc_html__( 'If you have any questions regarding the rejection, please contact %1$s at %2$s.', 'sip' ), $archivist_name, $archivist_mailto );
 			}
 		}
 
 		$this->send_email_notification( $message, $subject, $author_email );
+	}
+
+	/**
+	 * Create the content of the notification if a submission was submitted and trigger sending.
+	 * @param int $current_user_id
+	 * @param int $orig_author_id
+	 * @param int $user_archive_id
+	 * @param int $post_id
+	 * @return void
+	 */
+	private function notify_user_submit( int $current_user_id, int $orig_author_id, int $user_archive_id, int $post_id = 0 ): void {
+		if ( ! carbon_get_theme_option( 'sip_notifications_enabled' ) ) { return; }
+
+		$user_archive      = '';
+		$user_archive_term = get_term( $user_archive_id, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG );
+		if ( $user_archive_term ) {
+			$user_archive = $user_archive_term->name;
+		}
+		if ( $orig_author_id !== $current_user_id ) {
+			$author = get_user_by( 'ID', $orig_author_id );
+		} else {
+			$author = get_user_by( 'ID', $current_user_id );
+		}
+		$author_name  = $author->display_name;
+		$author_email = $author->user_email;
+		$editor_email = DB_Query_Helper::get_all_editor_email_addresses( $user_archive_id );
+		if ( carbon_get_theme_option( 'sip_notification_additional_recipients' ) ) {
+			$other_email_user_ids = array_map( 'esc_attr', carbon_get_theme_option( 'sip_notification_additional_recipients' ) );
+			$other_email          = array();
+			foreach( $other_email_user_ids as $single_user_id ) {
+				// add only users with the same archive.
+				$selected_archive_id = get_user_meta( $single_user_id, 'user_archive', true );
+				if ( $user_archive_id === $selected_archive_id ) {
+					$other_email[ $single_user_id ] = get_userdata( $single_user_id )->user_email;
+				}
+			}
+			$editor_email = array_merge( $editor_email, $other_email );
+		}
+
+		$link_to_archival = get_home_url();
+		if ( $post_id ) {
+			// todo: maybe use the permalink instead of the title as text?
+			$link_to_archival = '<a href="' . get_permalink( $post_id ) . '">' . $this->user_input[ 'archival_title' ] . '</a>';
+		}
+
+		// linebreaks for better reading.
+		// $break = ( carbon_get_theme_option( 'sip_notifications_as_html' ) ) ? '<br>' : PHP_EOL . PHP_EOL;
+
+		// send a notification to the editors.
+		// translators: %s: Title of the submission.
+		// $message = sprintf( esc_html__( 'Title: %1$s', 'sip' ), $this->user_input[ 'archival_title' ] );
+		// $message .= $break;
+		// // translators: %s: Name of the user.
+		// $message .= sprintf( esc_html__( 'Author: %s', 'sip' ), $author_name );
+		// $message .= $break;
+		// // translators: %s: Name of the institution.
+		// $message .= sprintf( esc_html__( 'New files have been uploaded to the following archive: %s', 'sip' ), $user_archive );
+		// $message .= $break;
+		// $message .= esc_html__( 'Please log in to the archive for review and approval.', 'sip' );
+
+		// translators: %1$s: Title of the submission. %2$s: Name of the user. %3$s: Name of the institution. %4$s: Link to the post.
+		$message_to_editors = sprintf( esc_html__( 'Title: %1$s
+
+Author: %2$s
+
+New files have been uploaded to the following archive: %3$s
+
+Please log in to the archive for review and approval.
+
+%4$s', 'sip' ), $this->user_input[ 'archival_title' ], $author_name, $user_archive, $link_to_archival );
+		// translators: %s: Name of the institution.
+		$subject = sprintf( esc_attr__( 'New archival record submitted to %s.', 'sip' ), $user_archive );
+		$this->send_email_notification( $message_to_editors, $subject, $editor_email );
+
+
+		// send a notification to the user.
+		// translators: %s: Name of the user.
+		// $message = sprintf( esc_html_x( 'Dear %s,', 'Greeting for people in emails', 'sip' ), $author_name );
+		// $message .= $break;
+		// $message .= esc_html__( 'congratulations, your submission has been successfully received!', 'sip' );
+		// $message .= $break;
+		// $message .= esc_html__( 'You will be separately informed via email about the acceptance or rejection of your submission by the archive. The review of a submission takes approximately 10 business days.', 'sip' );
+		// $message .= $break;
+		// $message .= esc_html__( 'Thank you for your contribution.', 'sip' );
+
+		// translators: %s: Name of the user.
+		$message_to_author = sprintf( esc_html__( 'Dear %s,
+
+congratulations, your submission has been successfully received!
+
+You will be separately informed via email about the acceptance or rejection of your submission by the archive. The review of a submission takes approximately 10 business days.
+
+Thank you for your contribution.', 'sip' ), $author_name );
+		// translators: %s: Name of the institution.
+		$subject = sprintf( esc_attr__( 'Your submission to the archive %s has been received.', 'sip' ), $user_archive );
+		$this->send_email_notification( $message_to_author, $subject, $author_email );
 	}
 
 	/*****************/

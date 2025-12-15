@@ -337,42 +337,54 @@ function starg_get_preview_notification_email(): string {
 	$home_link = '<a href="' . get_home_url() . '">' . get_home_url() . '</a>';
 	ob_start();
 		?>
-		<style>
-			.notification_email_preview.notification_html{background-color: #ececec;font-family:sans-serif;}
-			.notification_email_preview .notification_body{max-width: 40%;margin-left:auto;margin-right:auto;padding-top:2rem;padding-bottom:2rem;}
-			.notification_email_preview .notification_header{margin:1rem auto 2rem;text-align:center;}
-			.notification_email_preview .notification_header img{max-width: 300px;height: auto;}
-			.notification_email_preview .notification_main{background-color: #fff;color:#222;padding:2rem;border-radius:.25rem;box-shadow:1px 1px 5px 3px #cfcfcf;}
-			.notification_email_preview .notification_main h1{margin:0 0 1.5rem;padding:0;font-size:1.5rem;}
-			.notification_email_preview .notification_main p {margin:0;padding:0 0 1rem;font-size:1rem;}
-			.notification_email_preview .notification_footer{margin-top:2rem;text-align: center;font-size:.85rem;}
-			.notification_email_preview .notification_footer p{margin:0;padding:0 0 .5rem;}
-			@media (max-width: 768px) {body {max-width: 100%;margin-left: 1.5rem;margin-right: 1.5rem;}}
-		</style>
 		<div class="notification_email_preview notification_html">
-			<div class="notification_body">
-				<div class="notification_header">
-					<?php
-					if ( has_custom_logo() ) :
-						the_custom_logo();
-					else :
-						?>
-						<h1><?php echo esc_html( get_bloginfo() ); ?></h1>
-					<?php endif; ?>
-				</div>
-				<div class="notification_main">
-					<?php
-// translators: %s: Link to the website.
-echo wpautop( sprintf( esc_attr_x( 'You\'ve got a new notification!
+			<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ececec;">
+				<tr>
+					<td align="center" style="padding:24px 16px;">
 
-We wanted to let you know that a new notification has been sent to you. Head over to %s and check the status of your submission.
-					
-Thank you for your contribution.', 'Preview text for the email notifications', 'sip' ), $home_link ) ); ?>
-				</div>
-				<div class="notification_footer">
-					<?php echo '<p>' . esc_html__( 'This is an automated notification email. Please do not reply directly.', 'sip' ) . '</p>'; ?>
-				</div>
-			</div>
+					<?php // Outer container ?>
+					<table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;font-family:sans-serif;">
+
+						<?php // Header / Logo ?>
+						<tr>
+							<td align="center" style="padding:16px 0 24px 0;">
+								<?php
+								if ( has_custom_logo() ) :
+									the_custom_logo();
+								else :
+								?>
+								<h1 style="margin:0;font-size:24px;line-height:1.3;color:#222;">
+									<?php echo esc_html( get_bloginfo() ); ?>
+								</h1>
+								<?php endif; ?>
+							</td>
+						</tr>
+
+						<?php // Main content ?>
+						<tr>
+							<td style="background-color:#ffffff;padding:32px;color:#222222;font-size:16px;line-height:1.5;border-radius:4px;box-shadow:1px 1px 5px 3px #cfcfcf;">
+								<?php
+								// translators: %s: Link to the website.
+								echo wpautop( sprintf( esc_attr_x( "You've got a new notification!\n\nWe wanted to let you know that a new notification has been sent to you. Head over to %s and check the status of your submission.\n\nThank you for your contribution.", 'Preview text for the email notifications', 'sip' ), $home_link ) );
+								?>
+							</td>
+						</tr>
+
+						<?php // Footer ?>
+						<tr>
+							<td align="center" style="padding:16px 0 0 0;font-size:13px;line-height:1.4;color:#000000;">
+								<p style="margin:0;">
+									<?php echo esc_html__( 'This is an automated notification email. Please do not reply directly.', 'sip' ); ?>
+								</p>
+							</td>
+						</tr>
+
+					</table>
+					<?php // /Outer container ?>
+
+					</td>
+				</tr>
+			</table>
 		</div>
 	<?php
 	return ob_get_clean();

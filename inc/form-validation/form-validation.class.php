@@ -119,18 +119,24 @@ abstract class Form_Validation {
 	 * @return bool
 	 */
 	protected function send_email_notification( string $message_content, string $subject = '', $send_to = '' ) : bool {
-		if ( ! carbon_get_theme_option( 'sip_notifications_enabled' ) ) { return false; }
+		$logging = apply_filters( 'starg/logging', null );
+		if ( ! carbon_get_theme_option( 'sip_notifications_enabled' ) ) {
+			if ( $logging instanceof Starg_Logging ) {
+				// translators: %s: The class which called the function.
+				$logging->create_log_entry( esc_html__( 'Email notification not active!', 'sip' ), Log_Severity::Info );
+			}
+			return false;
+		}
 
 		if ( ! $subject ) {
 			// translators: %s: Title of the website.
 			$subject = sprintf( esc_attr__( 'Notification from %s', 'sip' ), esc_attr( get_bloginfo() ) );
 		}
 
-		$logging = apply_filters( 'starg/logging', null );
 		if ( ! $send_to ) {
 			if ( $logging instanceof Starg_Logging ) {
 				// translators: %s: The class which called the function.
-				$logging->create_log_entry( sprintf( esc_html__( 'Email notification for %s not sent. Missing recipient!', 'sip' ), get_called_class() ), Log_Severity::Info );
+				$logging->create_log_entry( sprintf( esc_html__( 'Email notification for %s not sent. Missing recipient!', 'sip' ), get_called_class() ), Log_Severity::Warning );
 			}
 			// sending the mail to the admin, so we know there is something wrong here!
 			$send_to = sanitize_email( get_bloginfo( 'admin_email' ) );

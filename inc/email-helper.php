@@ -113,13 +113,6 @@ class Starg_Email_Helper {
 		}
 		$sanitized_reply_to = sanitize_email( Starg_Email_Helper::get_notification_reply_address() );
 
-		$custom_logo_id = get_theme_mod('custom_logo');
-		if ( $custom_logo_id ) {
-			$logo_path   = get_attached_file($custom_logo_id);
-			$logo_data   = file_get_contents($logo_path);
-			$logo_base64 = base64_encode($logo_data);
-			$logo_type   = mime_content_type($logo_path);
-		}
 		ob_start();
 		?>
 		<html>
@@ -127,47 +120,54 @@ class Starg_Email_Helper {
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<title><?php echo esc_attr( $title ); ?></title>
-				<meta name="robots" content="noindex, nofollow">
+				<meta name="color-scheme" content="light">
+				<meta name="supported-color-schemes" content="light">
 				<meta name="x-apple-disable-message-reformatting">
 				<meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-				<style>
-					html{background-color: #ececec;font-family:sans-serif;}
-					body{margin:2rem auto;max-width: 40%;}
-					header{margin:1rem auto 2rem;text-align:center;}
-					header img{max-width: 300px;height: auto;}
-					main{padding:2rem;background-color: #fff;color:#222;border-radius:.25rem;box-shadow:1px 1px 5px 3px #cfcfcf;}
-					main h1{margin:0 0 1.5rem;padding:0;font-size:1.5rem;}
-					main p {margin:0;padding:0 0 1rem;font-size:1rem;}
-					footer{margin-top:2rem;color:#000;text-align: center;font-size:.85rem;}
-					footer p{margin:0;padding:0 0 .5rem;}
-					@media (max-width: 768px) {body {margin-left: 1.5rem;margin-right: 1.5rem;max-width: 100%;}}
-				</style>
+				<meta name="format-detection" content="telephone=no,address=no,email=no">
 			</head>
-			<body>
-				<header>
-					<a href="<?php echo sanitize_url( get_home_url() ); ?>">
-						<?php if ( $custom_logo_id ) : ?>
-							<img src="data:<?php echo $logo_type; ?>;base64,<?php echo $logo_base64; ?>" alt="<?php esc_attr_e( 'Logo', 'sip' ); ?>">
-						<?php else : ?>
-							<h1><?php echo esc_html( get_bloginfo() ); ?></h1>
-						<?php endif; ?>
-					</a>
-				</header>
-				<main>
-					<?php echo wpautop( make_clickable( wp_kses_post( $message ) ) ); ?>
-				</main>
-				<footer>
-					<?php
-					echo '<p>' . esc_html__( 'This is an automated notification email. Please do not reply directly.', 'sip' ) . '</p>';
+			<body style="margin:0;">
+				<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ececec;">
+					<tr><td align="center" style="padding:24px 16px;">
 
-					if ( $sanitized_reply_to ) {
-						$reply_to_link = '<a href="mailto:' . $sanitized_reply_to . '">' . $sanitized_reply_to . '</a>';
-						// translators: %s: Email address of support as hyperlink.
-						echo '<p>' . sprintf( esc_html__( 'If you need assistance, contact us at %s.', 'sip' ), $reply_to_link ) . '</p>';
-					}
-					?>
-				</footer>
+						<?php // Outer container ?>
+						<table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;font-family:sans-serif;">
+							<tr><?php // Header / Logo ?>
+								<td align="center" style="padding:16px 0 24px 0;">
+									<?php if ( has_custom_logo() ) : ?>
+										<?php the_custom_logo(); ?>
+									<?php else : ?>
+										<h1>
+											<a href="<?php echo sanitize_url( get_home_url() ); ?>">
+												<?php echo esc_html( get_bloginfo() ); ?>
+											</a>
+										</h1>
+									<?php endif; ?>
+								</td>
+							</tr>
+
+							<tr><?php // Main content ?>
+								<td style="background-color:#ffffff;padding:32px;color:#222222;font-size:16px;line-height:1.5;border-radius:4px;box-shadow:1px 1px 5px 3px #cfcfcf;">
+									<?php echo wpautop( make_clickable( wp_kses_post( $message ) ) ); ?>
+								</td>
+							</tr>
+
+							<tr><?php // Footer ?>
+								<td align="center" style="padding:16px 0 0 0;font-size:13px;line-height:1.4;color:#000000;">
+									<?php
+									echo '<p>' . esc_html__( 'This is an automated notification email. Please do not reply directly.', 'sip' ) . '</p>';
+
+									if ( $sanitized_reply_to ) {
+										$reply_to_link = '<a href="mailto:' . $sanitized_reply_to . '">' . $sanitized_reply_to . '</a>';
+										// translators: %s: Email address of support as hyperlink.
+										echo '<p>' . sprintf( esc_html__( 'If you need assistance, contact us at %s.', 'sip' ), $reply_to_link ) . '</p>';
+									}
+									?>
+								</td>
+							</tr>
+						</table><?php // /Outer container ?>
+					</td></tr>
+				</table>
 			</body>
 		</html>
 		<?php
