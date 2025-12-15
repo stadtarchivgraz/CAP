@@ -89,6 +89,24 @@ $sip_archival_actions->process_sip_archival_actions();
 				<?php
 				echo strip_tags(get_the_term_list($archival_id, 'archival_tag', '<dt>' . esc_html__('Tags', 'sip') . '</dt><dd>', ' | ', '</dd>'), '<dt><dd>');
 				?>
+
+				<?php
+				// for editors we add the date of the first submission and the contact data of the submitting user.
+				if (current_user_can('edit_others_archival_records')) :
+					$post_author_id    = (int) get_post_field( 'post_author', $archival_id );
+					$post_author       = get_user_by( 'ID', $post_author_id );
+					$post_author_email = $post_author->user_email;
+					$formatted_first_submission = esc_attr__( 'not available', 'sip' );
+					if ( get_post_meta($archival_id, '_archival_first_submission', true) ) {
+						$archival_first_submission  = esc_attr( get_post_meta($archival_id, '_archival_first_submission', true) );
+						$formatted_first_submission = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $archival_first_submission ) );
+					}
+					?>
+					<dt><?php esc_html_e('Date of first submission', 'sip'); ?></dt>
+					<dd><?php echo $formatted_first_submission; ?></dd>
+					<dt><?php esc_html_e('Uploading user', 'sip'); ?></dt>
+					<dd><a href="mailto:<?php echo antispambot( sanitize_email( $post_author_email ) ); ?>"><?php echo esc_html( $post_author->display_name ); ?></a></dd>
+				<?php endif; ?>
 			</dl>
 
 			<?php if (current_user_can('edit_others_archival_records')) : ?>

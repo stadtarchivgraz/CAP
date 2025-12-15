@@ -140,6 +140,25 @@ function starg_sip_upload_types( array $existing_mimes = array() ) {
 }
 add_filter( 'upload_mimes', 'starg_sip_upload_types' );
 
+/**
+ * Save the date of the first submission.
+ * The user can only save the submission as draft or in pending state. Only editors can publish posts.
+ * @param string $new_status
+ * @param string $old_status
+ * @param WP_Post $post
+ * @return void
+ */
+function starg_save_first_submission_date( string $new_status, string $old_status, WP_Post $post ) {
+	if ( Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG !== $post->post_type ) { return; }
+
+	if ( $new_status === 'pending' && $old_status !== 'pending' ) {
+		if ( ! get_post_meta($post->ID, '_archival_first_submission', true)) {
+			update_post_meta($post->ID, '_archival_first_submission', current_time('mysql'));
+		}
+	}
+}
+add_action( 'transition_post_status', 'starg_save_first_submission_date', 10, 3 );
+
 /*
 add_action('pre_get_posts', function($query) {
 	print_r($query);
