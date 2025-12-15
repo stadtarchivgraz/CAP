@@ -59,4 +59,4 @@ Vielen Dank für deinen Beitrag.','Dear %1$s,
 
 thank you very much for your submission to %2$s! Unfortunately, we cannot accept your submission into the archive and must reject it.'=>'Guten Tag %1$s,
 
-vielen Dank für Ihre Abgabe bei %2$s! Leider können wir Ihre Einreichung nicht ins Archiv aufnehmen.','The reason for the rejection is: %s'=>'Der Grund für die Ablehnung ist: %s','If you have any questions regarding the rejection, please contact %1$s at %2$s.'=>'Wenn Sie Fragen zur Ablehnung haben, wenden Sie sich bitte an %1$s unter %2$s.','Uploads without post or metadata'=>'Uploads ohne Beitrag oder Metadaten']];
+vielen Dank für Ihre Abgabe bei %2$s! Leider können wir Ihre Einreichung nicht ins Archiv aufnehmen.','Reason for the rejection: %s'=>'Grund für die Ablehnung: %s','If you have any questions regarding the rejection, please contact %1$s at %2$s.'=>'Wenn Sie Fragen zur Ablehnung haben, wenden Sie sich bitte an %1$s unter %2$s.','Uploads without post or metadata'=>'Uploads ohne Beitrag oder Metadaten']];

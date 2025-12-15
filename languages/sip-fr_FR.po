@@ -2012,8 +2012,8 @@ msgstr ""
 #. translators: %s: Reason for the rejection.
 #: inc/form-validation/sip-archival-actions-form.class.php:315
 #, php-format
-msgid "The reason for the rejection is: %s"
-msgstr "La raison du rejet est la suivante: %s"
+msgid "Reason for the rejection: %s"
+msgstr "Motif du rejet: %s"
 
 #. translators: %1$s: Name of the responsible archivist. %2$s: Email Link.
 #: inc/form-validation/sip-archival-actions-form.class.php:326

@@ -312,7 +312,7 @@ thank you very much for your submission to %2$s! Unfortunately, we cannot accept
 
 		if ( $this->user_input['notification_content'] ) {
 			// translators: %s: Reason for the rejection.
-			$message .= PHP_EOL . PHP_EOL . sprintf( esc_html__( 'The reason for the rejection is: %s', 'sip' ), $this->user_input['notification_content'] );
+			$message .= PHP_EOL . PHP_EOL . sprintf( esc_html__( 'Reason for the rejection: %s', 'sip' ), $this->user_input['notification_content'] );
 		}
 
 		// maybe we want to tell the user, who was reviewing their submission, so they can contact them directly.
