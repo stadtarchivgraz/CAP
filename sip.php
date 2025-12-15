@@ -3,7 +3,7 @@
  Plugin Name: SIP
  Description: Plugin for creating Submission Information Packages (SIPs) from archival records. The archival records are provided by users. The archivist can choose whether to create a SIP or reject it.
  Author: Stadtarchiv Graz, Guido Handrick
- Version: 3.4.0
+ Version: 3.4.5
  Author URI: https://www.grazmuseum.at/stadtarchiv/
  Text Domain: sip
  Domain Path: /languages/
@@ -14,7 +14,7 @@
 
 if (! defined('WPINC')) { die; }
 
-define( 'STARG_SIP_PLUGIN_VERSION', '3.4.0' );
+define( 'STARG_SIP_PLUGIN_VERSION', '3.4.5' );
 define( 'STARG_SIP_PLUGIN_NAME',    'SIP' );
 define( 'STARG_SIP_PLUGIN_BASE_DIR', trailingslashit( dirname( __FILE__ ) ) );
 define( 'STARG_SIP_PLUGIN_BASE_URL', plugin_dir_url( __FILE__ ) );
@@ -24,6 +24,7 @@ class Starg_Sip_Plugin {
 	function __construct() {
 		register_activation_hook( __FILE__,   array( 'Starg_Sip_Plugin', 'starg_sip_activate' ) );
 		register_deactivation_hook( __FILE__, array( 'Starg_Sip_Plugin', 'starg_sip_deactivate' ) );
+		//register_uninstall_hook( __FILE__,    array( 'Starg_Sip_Plugin', 'starg_sip_uninstall' ) );
 
 		// Load CPT and Taxonomies.
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/archival-cpt.php" );
@@ -324,6 +325,16 @@ class Starg_Sip_Plugin {
 		}
 	}
 
+	public static function starg_sip_uninstall() {
+		if ( ! current_user_can( 'manage_options' ) ) { return; }
+
+		$plugin = isset( $_REQUEST['plugin'] ) ? $_REQUEST['plugin'] : '';
+		check_admin_referer( "delete-plugin_{$plugin}" );
+
+		// todo: deactivate cron, delete CPT posts and their Taxonomies, remove user_role and capabilities, remove DB-Tables.
+
+		flush_rewrite_rules();
+	}
 }
 
 $starg_sip_plugin = new Starg_Sip_Plugin;
