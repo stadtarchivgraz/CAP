@@ -520,3 +520,22 @@ function starg_get_human_readable_office_format( string $mime_type = '' ): strin
 	// translators: %s: Name of an unknown file format.
 	return isset($mime_type_map[$mime_type]) ? $mime_type_map[$mime_type] : sprintf( esc_attr__( 'unknown file format %s', 'sip' ), $mime_type );
 }
+
+/**
+ * Transform locale abbreviation to human readable Text.
+ * For example this function transforms "en_US" to "English"
+ * @param string $locale         The locale abbreviation to transform.
+ * @param string $display_locale [Optional] The language to display the transformed text to. Defaults to users locale setting.
+ * @return string
+ */
+function starg_get_human_readable_language( string $locale = '', string $display_locale = '' ): string {
+	if ( ! $display_locale ) {
+		$display_locale = get_user_locale();
+	}
+
+	if ( ! method_exists( 'Locale', 'getDisplayLanguage' ) ) {
+		return esc_attr( $locale );
+	}
+
+	return \Locale::getDisplayLanguage( esc_attr( $locale ), $display_locale );
+}

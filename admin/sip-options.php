@@ -15,7 +15,6 @@ function starg_get_plugin_options_admin_url() {
 
 /**
  * Creates the general settings backend page for the CAP-plugin.
- * @todo: add some more help text for the second tab (Information Texts) with ->set_help_text()
  */
 function starg_attach_general_plugin_settings() {
 	$application_fields   = starg_get_application_setting_fields();
@@ -38,8 +37,8 @@ function starg_get_application_setting_fields() {
 		'manage_options'    => esc_html__( 'Administrator', 'sip' ),
 		'edit_others_posts' => esc_html__( 'Editor', 'sip' ),
 		'publish_posts'     => esc_html__( 'Author', 'sip' ),
-		'edit_posts'        => esc_html__( 'Contributor', 'sip' ),
-		'read'              => esc_html__( 'Subscriber', 'sip' ),
+		// 'edit_posts'        => esc_html__( 'Contributor', 'sip' ),
+		// 'read'              => esc_html__( 'Subscriber', 'sip' ),
 	);
 	$wp_upload_dir      = wp_get_upload_dir();
 	$default_path       = $wp_upload_dir['basedir'] . '/archival/';
@@ -54,21 +53,29 @@ video/mp4';
 	$google_maps_api_link = '<a href="hhttps://developers.google.com/maps/third-party-platforms/wordpress/generate-api-key" target="_blank">hhttps://developers.google.com/maps/third-party-platforms/wordpress/generate-api-key</a>';
 
 	return array(
-		Field::make('separator', 'sip_archive', 'Archive'),
-		Field::make('select', 'sip_archive_role', esc_html__('Role', 'sip'))
+		Field::make('separator', 'sip_archive', esc_html__( 'Editorial Options', 'sip' ) ),
+		Field::make('select', 'sip_archive_role', esc_html__('User role for editorial members', 'sip'))
 			->add_options($roles_capability)
 			->set_help_text( esc_html__( 'This role or higher is required to approve or reject submitted archival records.', 'sip' ) ),
-		Field::make('separator', 'sip_upload', 'Upload'),
+		Field::make('separator', 'sip_upload', esc_html__( 'Upload', 'sip' ) ),
 		Field::make('text', 'sip_upload_path', esc_html__('Archival Upload Path', 'sip'))
 			->set_default_value($default_path)
-			->set_width(25)
+			->set_width(20)
 			->set_help_text( esc_html__( 'Specify the folder where the digital archival records should be stored. By default, all files are saved in the /wp-content/uploads/archival/ directory.', 'sip' ) ),
 		Field::make('text', 'sip_max_size', esc_html__('Max SIP Size in Bytes', 'sip'))
 			->set_default_value('50000000')
-			->set_width(25),
+			->set_width(20)
+			->set_help_text( esc_html__( 'This is the maximum size of files a user is allowed to upload for one submission.', 'sip' ) ),
 		Field::make('textarea', 'sip_mime_types', esc_html__('Supported file MIME Types', 'sip'))
 			->set_default_value($default_mime_types)
-			->set_width(25),
+			->set_width(20)
+			->set_help_text( esc_html__( 'Defines which file types are allowed to be uploaded to the application.
+The value is specified as a list of MIME types (e.g. application/pdf, image/png). Files with unsupported MIME types will be rejected during upload.', 'sip' ) ),
+		Field::make('checkbox', 'sip_display_mime_types_hint', esc_html__('Display a help text on the upload page that lists the supported file types', 'sip'))
+			->set_default_value( 'yes' )
+			->set_width(20)
+			->set_help_text( esc_html__( 'If checked, a readable version of the supported mime types will be displayed as a help text on the upload page.', 'sip' ) ),
+		Field::make('separator', 'sip_virus_check', esc_html__( 'Virus Check', 'sip' ) ),
 		Field::make('checkbox', 'sip_clamav', esc_html__('Virus Check with ClamAV', 'sip')),
 		Field::make('text', 'sip_clamav_host', 'ClamAV Host')
 			->set_conditional_logic(array(
@@ -78,7 +85,9 @@ video/mp4';
 				)
 			))
 			->set_default_value('localhost')
-			->set_width(50),
+			->set_width(50)
+			->set_help_text( esc_html__( 'The IP address or hostname where the ClamAV service is reachable.
+This setting defines which server the application connects to in order to scan files for malware.', 'sip' ) ),
 		Field::make('text', 'sip_clamav_port', 'ClamAV Port')
 			->set_conditional_logic(array(
 				array(
@@ -87,8 +96,13 @@ video/mp4';
 				)
 			))
 			->set_default_value('3310')
-			->set_width(50),
-		Field::make('checkbox', 'sip_cron_delete', esc_html__('Automatically delete uploaded files', 'sip')),
+			->set_width(50)
+			->set_help_text( esc_html__( 'The network port on which the ClamAV service is listening on the specified host.
+Ensure that the port is correctly configured and reachable from the application.', 'sip' ) ),
+		Field::make('separator', 'sip_housekeeping', esc_html__( 'Housekeeping', 'sip' ) ),
+		Field::make('checkbox', 'sip_cron_delete', esc_html__('Automatically delete uploaded files', 'sip'))
+			->set_help_text( esc_html__( 'Enables the automatic deletion of uploaded files.
+When enabled, files are automatically removed from the system based on the configured retention rules.', 'sip' ) ),
 		Field::make('text', 'sip_cron_delete_days', esc_html__('older than days', 'sip'))
 			->set_conditional_logic(array(
 				array(
@@ -100,7 +114,9 @@ video/mp4';
 			->set_attribute('min', 1)
 			->set_attribute('step', 1)
 			->set_default_value('30')
-			->set_width(50),
+			->set_width(50)
+			->set_help_text( esc_html__( 'Defines the number of days after which uploaded files are automatically deleted.
+All files with an upload date older than the specified number of days will be removed during automatic cleanup.', 'sip' ) ),
 		Field::make('multiselect', 'sip_cron_delete_status',  esc_html__('Archival Status', 'sip'))
 			->set_conditional_logic(array(
 				array(
@@ -115,7 +131,9 @@ video/mp4';
 				'publish' => esc_html__( 'Accepted', 'sip' ),
 			))
 			->set_default_value('upload')
-			->set_width(50),
+			->set_width(50)
+			->set_help_text( esc_html__( 'Allows selection of the statuses that are subject to automatic deletion.
+Multiple statuses can be selected at the same time (e.g. upload, draft, pending, accepted).', 'sip' ) ),
 		Field::make('separator', 'sip_map_options', esc_html__('Map', 'sip')),
 		// we either use google maps for the coordinates of a place on the map, or openstreetmap. Fallback is openstreetmap as it does not need a API-Key.
 		Field::make('text', 'sip_map_google_api_key', esc_html__('Google API Key for reverse Geocoding', 'sip'))
@@ -126,17 +144,23 @@ video/mp4';
 			->set_help_text( sprintf( esc_html__( 'To create an API Key, you need to create an account at %s first. Then you can create the API-Key.', 'sip' ), $maptiler_api_link ) ),
 		Field::make('text', 'sip_map_default_lat', esc_html__('Default Lat', 'sip'))
 			->set_default_value('47.06745752167981')
-			->set_width(33),
+			->set_width(33)
+			->set_help_text( esc_html__( 'Defines the latitude for the initial map position.
+The value is specified in decimal degrees (e.g. 48.137154) and determines the vertical position on the map.', 'sip' ) ),
 		Field::make('text', 'sip_map_default_lng', esc_html__('Default Lng', 'sip'))
 			->set_default_value('15.441103960661826')
-			->set_width(33),
+			->set_width(33)
+			->set_help_text( esc_html__( 'Defines the longitude for the initial map position.
+The value is specified in decimal degrees (e.g. 11.576124) and determines the horizontal position on the map.', 'sip' ) ),
 		Field::make('text', 'sip_map_default_zoom', esc_html__('Default zoom', 'sip'))
 			->set_attribute('type', 'number')
 			->set_attribute('min', 1)
 			->set_attribute('max', 22)
 			->set_attribute('step', 1)
 			->set_default_value('10')
-			->set_width(33),
+			->set_width(33)
+			->set_help_text( esc_html__( 'Defines the initial zoom level of the map.
+Higher values result in a more zoomed-in view, while lower values display a larger map area.', 'sip' ) ),
 		Field::make('separator', 'sip_style_options', 'Style'),
 		Field::make('header_scripts', 'sip_custom_style', esc_html__('Custom CSS', 'sip'))
 			// translators: %1$s: placeholder for the <style> tag. %2$s: placeholder for the <script> tag.
@@ -150,11 +174,16 @@ function starg_get_login_setting_fields() {
 
 	foreach ( $sip_archive_languages as $language ) {
 		$language = str_replace( 'sip-', '', $language );
-		$login_fields[] = Field::make( 'separator', 'from_language_' . strtolower( $language ), $language );
-		$login_fields[] = Field::make( 'rich_text', 'sip_register_text_' . strtolower( $language ), esc_html__('Register Text', 'sip') . ' ' . $language );
-		$login_fields[] = Field::make( 'rich_text', 'sip_update_profile_text_' . strtolower( $language ), esc_html__('Update Profile Text', 'sip') . ' ' . $language );
-		$login_fields[] = Field::make( 'rich_text', 'sip_privacy_policy_approval_text_' . strtolower( $language ), esc_html__('Privacy Policy Approval Text', 'sip') . ' ' . $language );
-		$login_fields[] = Field::make( 'rich_text', 'sip_cron_deleted_text_' . strtolower( $language ), esc_html__('SIP Folder deleted Text', 'sip') . ' ' . $language );
+		$login_fields[] = Field::make( 'separator', 'from_language_' . strtolower( $language ), starg_get_human_readable_language( $language ) );
+		$login_fields[] = Field::make( 'rich_text', 'sip_register_text_' . strtolower( $language ), esc_html__('Register Text', 'sip') . ' ' . starg_get_human_readable_language( $language ) )
+			->set_help_text( esc_html__( 'This text is displayed when a user accesses a page that requires authentication.
+The configured content replaces the default frontend message.', 'sip' ) );
+		$login_fields[] = Field::make( 'rich_text', 'sip_update_profile_text_' . strtolower( $language ), esc_html__('Update Profile Text', 'sip') . ' ' . starg_get_human_readable_language( $language ) )
+			->set_help_text( esc_html__( 'This text is displayed when a user is required to complete their profile before using the page.
+The configured content replaces the default frontend message.', 'sip' ) );
+		$login_fields[] = Field::make( 'rich_text', 'sip_privacy_policy_approval_text_' . strtolower( $language ), esc_html__('Privacy Policy Approval Text', 'sip') . ' ' . starg_get_human_readable_language( $language ) )
+			->set_help_text( esc_html__( 'Defines the text displayed in the frontend along with a link to the privacy policy or terms of use page.', 'sip' ) );
+		$login_fields[] = Field::make( 'rich_text', 'sip_cron_deleted_text_' . strtolower( $language ), esc_html__('SIP Folder deleted Text', 'sip') . ' ' . starg_get_human_readable_language( $language ) );
 	}
 
 	return $login_fields;
@@ -168,6 +197,11 @@ function starg_get_login_setting_fields() {
 function starg_get_email_setting_fields() : array {
 	$admin_emails      = DB_Query_Helper::get_all_admin_email_addresses();
 	$domain            = parse_url( home_url(), PHP_URL_HOST );
+	$domain_parts      = explode( '.', $domain );
+	if (count($domain_parts) > 2 && $domain_parts[0] === 'www') {
+		array_shift($domain_parts);
+		$domain = implode( '.', $domain_parts );
+	}
 	$conditional_logic = array(
 		array(
 			'field' => 'sip_notifications_enabled',
@@ -184,6 +218,7 @@ function starg_get_email_setting_fields() : array {
 			->set_help_text( esc_html__( 'This option enables the integrated notification system. When enabled, the system automatically sends emails to the user and their editor for every submission. It also sends an email to the user if their submission is accepted.', 'sip' ) ),
 		Field::make( 'text', 'sip_notification_email_address', esc_html__( 'Username of the email address', 'sip' ) )
 			->set_attribute( 'type', 'text' )
+			// ->set_attribute( 'readOnly', true )
 			->set_attribute( 'placeholder', 'wordpress' )
 			->set_attribute( 'data-host', '@' . $domain )
 			->set_width(33.3331)
@@ -191,6 +226,7 @@ function starg_get_email_setting_fields() : array {
 			->set_conditional_logic( $conditional_logic ),
 		Field::make( 'text', 'sip_notification_email_url', esc_html__( 'Domain', 'sip' ) )
 			->set_default_value( '@' . $domain )
+			->set_attribute( 'placeholder', '@' . $domain )
 			->set_attribute( 'type', 'text' )
 			->set_attribute( 'readOnly', true )
 			->set_width(33.3331)
@@ -210,7 +246,7 @@ function starg_get_email_setting_fields() : array {
 		Field::make( 'multiselect', 'sip_notification_additional_recipients', esc_html__( 'Additional recipients to notify about user submissions', 'sip' ) )
 			->add_options( $admin_emails )
 			->set_width(50)
-			->set_help_text( esc_html__( 'Usually, only users with the "editor" role are notified about submissions. Use this field to select specific admins who should also be notified.', 'sip' ) )
+			->set_help_text( esc_html__( 'Usually, only users with the "editor" role are notified about submissions. Use this field to select administrators who should also be notified.', 'sip' ) )
 			->set_conditional_logic( $conditional_logic ),
 		Field::make( 'checkbox', 'sip_notifications_as_html', esc_html__( 'Send emails as HTML', 'sip' ) )
 			->set_default_value( 'no' )
@@ -267,18 +303,28 @@ function starg_attach_user_form_field_settings() {
 
 	foreach ( $sip_archive_languages as $language ) {
 		$language = str_replace( 'sip-', '', $language );
-		$form_fields[] = Field::make( 'separator', 'from_language_' . strtolower( $language ), $language );
-		$form_fields[] = Field::make('textarea', 'sip_upload_purpose_options_' . strtolower($language), esc_html__('Upload Purpose Options', 'sip')  . ' ' . $language)
-			->set_width(50);
-		$form_fields[] = Field::make('textarea', 'sip_blocking_time_options_' . strtolower($language), esc_html__('Blocking Time Options', 'sip') .  ' ' . $language)
-			->set_width(50);
-		$form_fields[] = Field::make( 'text', 'sip_blocking_time_upload_purpose_' . strtolower( $language ), esc_html__('Blocking Time Upload Purpose', 'sip') .  ' ' . $language );
-		$form_fields[] = Field::make( 'text', 'sip_blocking_time_calculate_' . strtolower( $language ), esc_html__('Blocking Time Calculate', 'sip') .  ' ' . $language );
-		$form_fields[] = Field::make( 'rich_text', 'sip_right_transfer_text_' . strtolower( $language ), esc_html__('Right Transfer Text', 'sip') .  ' ' . $language );
+		$form_fields[] = Field::make( 'separator', 'from_language_' . strtolower( $language ), starg_get_human_readable_language( $language ) );
+		$form_fields[] = Field::make( 'textarea', 'sip_upload_purpose_options_' . strtolower($language), esc_html__('Upload Purpose Options', 'sip')  . ' - ' . starg_get_human_readable_language( $language ))
+			->set_width(50)
+			->set_help_text( esc_html__( 'Defines the predefined reasons for which users can upload files.
+The entries configured here are available for selection in the upload form. Each entry represents a possible upload purpose (e.g. archiving, publication, private storage).', 'sip' ) );
+		$form_fields[] = Field::make( 'textarea', 'sip_blocking_time_options_' . strtolower($language), esc_html__('Blocking Time Options', 'sip') .  ' - ' . starg_get_human_readable_language( $language ))
+			->set_width(50)
+			->set_help_text( esc_html__( 'Defines the available blocking periods users can choose from during upload.
+The blocking time determines how long uploaded files remain inaccessible to the public. The configured values are presented to users as selectable options.', 'sip' ) );
+		$form_fields[] = Field::make( 'text', 'sip_blocking_time_upload_purpose_' . strtolower( $language ), esc_html__('Blocking Time Upload Purpose', 'sip') .  ' - ' . starg_get_human_readable_language( $language ) )
+			->set_help_text( esc_html__( 'Specifies which upload purposes allow a blocking time to be selected or applied.
+Only the upload purposes defined here will enable users to set a blocking time during upload. Make sure to use a comma separated list of one or more defined upload purposes from the previous selection.', 'sip' ) );
+		$form_fields[] = Field::make( 'text', 'sip_blocking_time_calculate_' . strtolower( $language ), esc_html__('Blocking Time Calculate', 'sip') .  ' - ' . starg_get_human_readable_language( $language ) )
+			->set_help_text( esc_html__( 'Defines how the blocking time is calculated by default.
+This setting allows you to specify a rule used to automatically determine the end of the blocking period, e.g. year of birth + 100 years.', 'sip' ) );
+		$form_fields[] = Field::make( 'rich_text', 'sip_right_transfer_text_' . strtolower( $language ), esc_html__('Right Transfer Text', 'sip') .  ' - ' . starg_get_human_readable_language( $language ) )
+			->set_help_text( esc_html__( 'Defines the text displayed to users regarding the transfer of rights.
+The content should provide information about the donation agreement between the users and the website and clearly explain the legal terms of the transfer.', 'sip' ) );
 
-		$sub_form_fields[] = Field::make( 'text', 'sip_custom_meta_title_' . strtolower( $language ), esc_html__('Title','sip') .  ' ' . $language );
+		$sub_form_fields[] = Field::make( 'text', 'sip_custom_meta_title_' . strtolower( $language ), esc_html__('Title','sip') .  ' - ' . starg_get_human_readable_language( $language ) );
 
-		$sub_user_form_fields[] = Field::make( 'text', 'sip_custom_archival_user_meta_title_' . strtolower( $language ), esc_html__('Title','sip') .  ' ' . $language );
+		$sub_user_form_fields[] = Field::make( 'text', 'sip_custom_archival_user_meta_title_' . strtolower( $language ), esc_html__('Title','sip') .  ' - ' . starg_get_human_readable_language( $language ) );
 	}
 
 	$sub_form_fields[] = Field::make('select', 'sip_custom_meta_type', esc_html__('Type', 'sip'))

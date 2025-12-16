@@ -162,7 +162,7 @@ $sip_archival_remove_nonce_key    = $sip_archival_remove->nonce_key;
 
 <?php
 $supported_mime_types = starg_get_supported_human_readable_mime_types();
-if ( $supported_mime_types ) {
+if ( $supported_mime_types && carbon_get_theme_option( 'sip_display_mime_types_hint' ) ) {
 	// translators: %s: Comma separated list of supported file types.
 	echo starg_get_information_box( sprintf( esc_html__( 'Supported file types are: %s', 'sip' ), $supported_mime_types ) );
 }
