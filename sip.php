@@ -240,7 +240,9 @@ class Starg_Sip_Plugin {
 			if ( $archival_sip_folders ) {
 				foreach ( $archival_sip_folders as $archival_sip_folder ) {
 					$single_sip_folder = $upload_folder . $archival_sip_folder->post_author . '/' . $archival_sip_folder->meta_value . '/';
-					$sip_folders[]     = $single_sip_folder;
+
+					// todo: reactivate later! At the moment we only remove uploaded files if the corresponding post is deleted in the backend, so we don't add these sip folders to the array here!
+					//$sip_folders[]     = $single_sip_folder;
 
 					// todo: do not delete posts yet. Reactivate later.
 					// $post_meta_deleted = delete_post_meta( $archival_sip_folder->ID, '_archival_sip_folder' );

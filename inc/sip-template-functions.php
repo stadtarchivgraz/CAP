@@ -159,6 +159,32 @@ function starg_save_first_submission_date( string $new_status, string $old_statu
 }
 add_action( 'transition_post_status', 'starg_save_first_submission_date', 10, 3 );
 
+/**
+ * Delete the uploaded files if a post is about to be deleted.
+ * This function fires before the post is actually deleted, because we need to check the post meta for the correct name of the sip folder.
+ * @param int $post_id
+ * @param WP_Post $post
+ * @return void
+ */
+function starg_remove_uploads_on_backend_removal( int $post_id, WP_Post $post ): void {
+	if ( ! is_admin() ) { return; }
+	if ( Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG !== $post->post_type ) { return; }
+
+	$sip_folder_id = get_post_meta( $post_id, '_archival_sip_folder', true );
+	if ( ! $sip_folder_id ) {
+		$logging = apply_filters( 'starg/logging', null );
+		if ( $logging instanceof Starg_Logging ) {
+			// translators: %1$s: Post-ID.
+			$logging->create_log_entry( sprintf( esc_html__( 'Trying to delete the uploads of post %s. But this post has no sip_folder post_meta.', 'sip' ), $post_id ) );
+		}
+		return;
+	}
+
+	$upload_path = starg_get_archival_upload_path() . $post->post_author . '/' . $sip_folder_id;
+	starg_remove_SIP( $upload_path );
+}
+add_action( 'before_delete_post', 'starg_remove_uploads_on_backend_removal', 20, 2 );
+
 /*
 add_action('pre_get_posts', function($query) {
 	print_r($query);
