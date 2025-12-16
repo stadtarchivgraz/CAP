@@ -127,6 +127,8 @@ class Render_Sip_Content_Folder {
 		if ( $author_id && $sip_id ) {
 			$thumbnail_dir_url = trailingslashit( wp_get_upload_dir()['baseurl'] ) . 'archival/' . $author_id . '/' . $sip_id . '/';
 		} else {
+			// fallback for thumbnails. should not be needed as we almost always have author_id and sip_id.
+			// @fixme: fails if files are stored in folders.
 			$thumbnail_dir_url = dirname($file, 2);
 		}
 

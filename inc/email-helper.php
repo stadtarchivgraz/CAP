@@ -84,7 +84,7 @@ class Starg_Email_Helper {
 
 	/**
 	 * Create a new email array to wrap the message up in a HTML.
-	 * @param array $email The original email data from WordPress.
+	 * @param array{to:string,subject:string,message:string,headers:string[]} $email The original email data from WordPress.
 	 * @return array{to:string,subject:string,message:string,headers:string[]}
 	 * 
 	 * @todo maybe add 'Reply-To: ' . Starg_Email_Helper::get_notification_reply_address() or 'X-Mailer: WordPress/PHPMailer'
@@ -127,10 +127,10 @@ class Starg_Email_Helper {
 				<meta name="format-detection" content="telephone=no,address=no,email=no">
 			</head>
 			<body style="margin:0;">
-				<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ececec;">
+				<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ececec;"><?php // Outer container ?>
 					<tr><td align="center" style="padding:24px 16px;">
 
-						<?php // Outer container ?>
+						<?php // Inner container ?>
 						<table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;font-family:sans-serif;">
 							<tr><?php // Header / Logo ?>
 								<td align="center" style="padding:16px 0 24px 0;">
@@ -165,9 +165,9 @@ class Starg_Email_Helper {
 									?>
 								</td>
 							</tr>
-						</table><?php // /Outer container ?>
+						</table><?php // Inner container ?>
 					</td></tr>
-				</table>
+				</table><?php // Outer container ?>
 			</body>
 		</html>
 		<?php
