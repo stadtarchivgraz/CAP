@@ -59,45 +59,58 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 				<input type="hidden" name="starg_form_post_id" value="<?php the_ID(); ?>" aria-hidden="true" />
 				<?php wp_nonce_field( $sip_upload_form->nonce_action, $sip_upload_form->nonce_key, false ); ?>
 
-				<div class="field">
-					<label for="archival-title" class="label"><?php esc_html_e('Title', 'sip'); ?>*</label>
-					<p class="control">
-						<input id="archival-title" name="archival_title" class="input count-character" type="text" placeholder="<?php esc_html_e('Give your submission a descriptive title', 'sip'); ?>" value="<?php echo esc_html( $archival_title ); ?>" maxlength="100" required>
-					</p>
-					<p id="archival-title_count" class="help"><span><?php echo strlen($archival_title); ?></span> | <?php esc_html_e('Maximum 100 characters.', 'sip'); ?></p>
+				<div class="columns">
+					<div class="column is-half">
+						<div class="field">
+							<label for="archival-title" class="label"><?php esc_html_e('Title', 'sip'); ?>*</label>
+							<p class="control">
+								<input id="archival-title" name="archival_title" class="input count-character" type="text" placeholder="<?php esc_html_e('Give your submission a descriptive title', 'sip'); ?>" value="<?php echo esc_html( $archival_title ); ?>" maxlength="100" required aria-describedby="archival-title-help-text">
+							</p>
+							<p id="archival-title-help-text" class="help"><?php esc_html_e( 'Enter a meaningful title for the post. The title is used for identification and is displayed in listings and on the post detail page.', 'sip' ); ?></p>
+							<p id="archival-title_count" class="help"><span><?php echo strlen($archival_title); ?></span> | <?php esc_html_e('Maximum 100 characters.', 'sip'); ?></p>
+						</div>
+					</div>
+					<div class="column is-half">
+						<div class="field">
+							<label for="archival-originator" class="label"><?php esc_html_e('Originator', 'sip'); ?>*</label>
+							<p class="control">
+								<input id="archival-originator" name="archival_originator" class="input" type="text" value="<?php echo esc_html( $archival_originator ); ?>" required aria-describedby="archival-originator-help-text">
+							</p>
+							<p id="archival-originator-help-text" class="help"><?php esc_html_e('If you are not the originator (creator) of the uploaded file, please enter the name of the originator here. This may be a person, institution, or organization and is used for proper attribution of rights.', 'sip'); ?></p>
+						</div>
+					</div>
 				</div>
-				<div class="field">
-					<label for="archival-originator" class="label"><?php esc_html_e('Originator', 'sip'); ?>*</label>
-					<p class="control">
-						<input id="archival-originator" name="archival_originator" class="input" type="text" value="<?php echo esc_html( $archival_originator ); ?>" required>
-					</p>
-					<p class="help"><?php esc_html_e('If you are not the originator (creator) of the uploaded file, please enter the name of the originator here', 'sip'); ?></p>
-				</div>
+				
 				<div class="field">
 					<label for="archival-description" class="label"><?php esc_html_e('Description', 'sip'); ?>*</label>
 					<p class="control">
-						<textarea id="archival-description" name="archival_description" class="textarea count-character" rows="6" maxlength="5000" placeholder="<?php esc_html_e('You can describe your file in detail here (e.g.: Why is it important for the archive? What does the file show? In what context was the file created? Is there any additional information?)', 'sip'); ?>" required><?php echo wp_kses_post( $archival_description ); ?></textarea>
+						<textarea id="archival-description" name="archival_description" class="textarea count-character" rows="5" maxlength="5000" placeholder="<?php esc_html_e('You can describe your file in detail here (e.g.: Why is it important for the archive? What does the file show? In what context was the file created? Is there any additional information?)', 'sip'); ?>" required aria-describedby="archival-description-help-text"><?php echo wp_kses_post( $archival_description ); ?></textarea>
 					</p>
+					<p id="archival-description-help-text" class="help"><?php esc_html_e('Provide a detailed description of the post or the uploaded files. The description may include context, background information, or additional details and helps improve understanding and discoverability.', 'sip'); ?></p>
 					<p id="archival-description_count" class="help"><span><?php echo strlen($archival_description); ?></span> | <?php esc_html_e('Maximum 5000 characters.', 'sip'); ?></p>
 				</div>
 
+				<?php // Tags ?>
 				<div class="field">
 					<label for="archival-tags" class="label"><?php esc_html_e('Tags', 'sip'); ?>*</label>
 					<p class="control">
 						<textarea id="archival-tags" name="archival_tags" class="textarea" maxlength="10" required></textarea>
 					</p>
+					<p id="archival-tags-help-text" class="help"><?php esc_html_e('Enter tags or keywords to categorize the post or uploaded files. Multiple keywords may be added to improve searchability and filtering.', 'sip'); ?></p>
 					<p class="help"><?php esc_html_e('Minimum 1 | Maximum 10', 'sip'); ?></p>
 				</div>
 
+				<?php // Date/Time ?>
 				<?php // todo: if we select a single date, we should hide the longer period inputs and vice versa! ?>
 				<div class="field">
 					<label for="archival-single-date" class="label"><?php esc_html_e('Date/time (for a precise time)', 'sip'); ?></label>
 					<p class="control">
-						<input id="archival-single-date" name="archival_single_date" type="datetime-local" value="<?php echo ($archival_from && !$archival_to) ? $archival_from : ''; ?>">
+						<input id="archival-single-date" name="archival_single_date" type="datetime-local" value="<?php echo ($archival_from && !$archival_to) ? $archival_from : ''; ?>" aria-describedby="archival-single-date-help-text">
 					</p>
+					<p id="archival-single-date-help-text" class="help"><?php esc_html_e( 'Enter the date and, if applicable, the time when the uploaded files were created. This refers to the creation time of the content, not the upload date.', 'sip' ); ?></p>
 				</div>
 				<div class="field">
-					<label class="label"><?php esc_html_e('Time period (for a longer period)', 'sip'); ?></label>
+					<span class="label"><?php esc_html_e('Time period (for a longer period)', 'sip'); ?></span>
 					<div class="field">
 						<label class="checkbox">
 							<input type="checkbox" name="archival_hide_timeline" onclick="toggleField('date-range-control');">
@@ -110,16 +123,20 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 					<div class="columns">
 						<div class="column">
 							<p class="control">
-								<input id="archival-date-range-start" name="archival_date_range[]" type="number" max="<?php echo date('Y'); ?>" min="1850" step="1" maxlength="4">
+								<input id="archival-date-range-start" name="archival_date_range[]" type="number" max="<?php echo date('Y'); ?>" min="1850" step="1" maxlength="4" aria-describedby="archival-date-range-start-help-text">
 							</p>
+							<p id="archival-date-range-start-help-text" class="help"><?php esc_html_e( 'Enter the start period when the uploaded files might have been created. This refers to the creation time of the content, not the upload date.', 'sip' ); ?></p>
 						</div>
 						<div class="column">
 							<p class="control">
-								<input id="archival-date-range-end" name="archival_date_range[]" type="number" max="<?php echo date('Y'); ?>" min="1850" step="1" maxlength="4">
+								<input id="archival-date-range-end" name="archival_date_range[]" type="number" max="<?php echo date('Y'); ?>" min="1850" step="1" maxlength="4"aria-describedby="archival-date-range-end-help-text">
 							</p>
+							<p id="archival-date-range-end-help-text" class="help"><?php esc_html_e( 'Enter the end period when the uploaded files might have been created. This refers to the creation time of the content, not the upload date.', 'sip' ); ?></p>
 						</div>
 					</div>
 				</div>
+
+				<?php // Map ?>
 				<div class="field">
 					<?php
 					$map_lat     = esc_attr( $sip_upload_form->get_form_value( 'archival_lat' ) );
@@ -141,16 +158,18 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 						<label for="archival-address" class="label"><?php esc_html_e('Address', 'sip'); ?></label>
 						<input id="archival-address" name="archival_address" type="text" class="input" value="<?php echo $address; ?>">
 					</div>
-					<input id="archival-lat" name="archival_lat" type="hidden" value="<?php echo $map_lat; ?>">
-					<input id="archival-lng" name="archival_lng" type="hidden" value="<?php echo $map_lng; ?>">
-					<input id="archival-area" name="archival_area" type="hidden" value="<?php echo $map_area; ?>">
+					<input id="archival-lat" name="archival_lat" type="hidden" value="<?php echo $map_lat; ?>" aria-hidden="true">
+					<input id="archival-lng" name="archival_lng" type="hidden" value="<?php echo $map_lng; ?>" aria-hidden="true">
+					<input id="archival-area" name="archival_area" type="hidden" value="<?php echo $map_area; ?>" aria-hidden="true">
 				</div>
+
+				<?php // Upload purpose/Blocking time ?>
 				<div class="columns">
 					<div class="column">
 						<div class="field">
-							<label for="archival-upload-purpose" class="label"><?php esc_html_e('Upload purpose', 'sip'); ?></label>
+							<label for="archival-upload-purpose" class="label"><?php esc_html_e('Upload purpose', 'sip'); ?>*</label>
 							<p class="control">
-								<select id="archival-upload-purpose" name="archival_upload_purpose" required>
+								<select id="archival-upload-purpose" name="archival_upload_purpose" required aria-describedby="archival-upload-purpose-help-text">
 									<?php
 									$upload_purpose_options  = explode("\r\n", carbon_get_theme_option('sip_upload_purpose_options_' . $current_locale));
 									$archival_upload_purpose = $sip_upload_form->get_form_value( 'archival_upload_purpose' );
@@ -162,13 +181,14 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 									<?php endforeach; ?>
 								</select>
 							</p>
+							<p id="archival-upload-purpose-help-text" class="help"><?php esc_html_e( 'Select the purpose of the upload from the predefined list. The selected purpose helps categorize the content.', 'sip' ); ?></p>
 						</div>
 					</div>
 					<div id="blocking-time" class="column">
 						<div class="field">
-							<label for="archival-blocking-time" class="label"><?php esc_html_e('Blocking time', 'sip'); ?></label>
+							<label for="archival-blocking-time" class="label"><?php esc_html_e('Blocking time', 'sip'); ?>*</label>
 							<p class="control">
-								<select id="archival-blocking-time" name="archival_blocking_time" required>
+								<select id="archival-blocking-time" name="archival_blocking_time" required aria-describedby="archival-blocking-time-help-text">
 									<?php
 									$blocking_time_options = explode("\r\n", carbon_get_theme_option('sip_blocking_time_options_' . $current_locale));
 									$sip_blocking_time_calculate = esc_attr(carbon_get_theme_option('sip_blocking_time_calculate_' . $current_locale));
@@ -186,11 +206,13 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 									<?php endforeach; ?>
 								</select>
 							</p>
+							<p id="archival-blocking-time-help-text" class="help"><?php esc_html_e( 'Select a blocking time to define how long the files should remain inaccessible to the public. The available blocking periods are predefined and determine when the content becomes publicly accessible.', 'sip' ); ?></p>
 						</div>
 					</div>
 				</div>
+
 				<?php
-				// big todo!!!
+				// todo: refactor.
 				$sip_custom_meta = carbon_get_theme_option('sip_custom_meta');
 				foreach ($sip_custom_meta as $custom_meta) :
 					$meta_name = sanitize_title($custom_meta['sip_custom_meta_key']);

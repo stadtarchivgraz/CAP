@@ -46,7 +46,7 @@ if ( carbon_get_theme_option( 'sip_map_maptiler_api_key' ) ) {
 	$maptiler_api_key = esc_attr( carbon_get_theme_option( 'sip_map_maptiler_api_key' ) );
 }
 ?>
-<div id="map" class="container"></div>
+<div id="map"></div>
 <?php if ( $is_sip_upload_template ) : ?>
 	<p><a class="has-text-danger is-small-text" href="#" id="mapClear"><?php esc_html_e('Reset map', 'sip'); ?></a></p>
 <?php endif; ?>
