@@ -65,13 +65,29 @@ class Render_Sip_Content_Folder {
 		}
 
 
+		// todo: refactor: use separate functions for PDF rendering and website.
+		if ( $is_pdf ) {
+			echo '<table width="538" cellpadding="4" cellspacing="2" border="0" style="border-collapse:collapse; margin-top: 24px;margin-bottom:24px;">';
+			echo '<tr><td colspan="5" style="font-size:16px;font-weight:bold;padding-bottom:12px;">' . esc_attr__( 'Uploaded files:', 'sip' ) . '</td></tr>';
+			echo '<tr>';
+		} else {
+			echo '<ol class="sip-listing" id="sip-files" type="">';
+		}
+		$element_counter = 0; // to add a new tr if needed. We display 5 images in one row.
+		$file_name_list  = array(); // save all filenames for the ordered list we render after the thumbnails.
 		foreach ($it as $path) {
 			$path       = trim($path);
 			$path_clean = substr($path, strpos($path, '/'));
 
 			// todo: something wrong with the <ol>?
 			if (is_dir($path_clean)) {
-				echo '<li class="subfolder">' . basename($path) . '</li><ol>';
+				if ( $is_pdf ) {
+					// for PDFs we create a new table row for the name of the folder.
+					// translators: %s: Name of a folder.
+					echo '</tr><tr><td colspan="5" style="font-size:14px;font-weight:bold;">' . sprintf( esc_attr__( 'Folder: %s', 'sip' ), basename($path) ) . '</td></tr><tr>';
+				} else {
+					echo '<li class="subfolder">' . basename($path) . '</li><ol style="list-style:none;">';
+				}
 				continue;
 			}
 
@@ -89,14 +105,50 @@ class Render_Sip_Content_Folder {
 
 			$thumb_link = Render_Sip_Content_Folder::get_file_link($file_type, $file_url, $path_clean, $thumbnail_folder, $image_size, $author_id, $sip_id);
 
+			if ( $is_pdf ) {
+				// after 5 elements (thumbnails) we add a new tr.
+				if ($element_counter > 0 && $element_counter % 5 == 0) {
+					echo '</tr><tr>';
+				}
+			}
+
 			// render data
 			if ($thumb_link) {
-				echo ( ! $is_pdf ) ? '<li>' : '<table style="width: 100%"><tr><td style="width:40%;">';
-				echo $thumb_link;
-				echo ( ! $is_pdf ) ? '<p>' : '</td><td style="width: 60%">';
-				echo Render_Sip_Content_Folder::get_file_info($file_data_entry, $path_clean);
-				echo ( ! $is_pdf ) ? '</p></li>' : '</td></tr></table><br>';
+				if ( $is_pdf ) {
+					echo '<td width="107" align="center" style="padding:8px;">';
+					echo $thumb_link;
+					echo '<p>' . $element_counter +1 . '.</p>';// add "1" to the actual element counter to start with 1 instead of 0! We also add a "." here for "x."!
+					$file_name_list[] = Render_Sip_Content_Folder::get_file_info($file_data_entry, $path_clean);
+					echo'</td>';
+				} else {
+					echo '<li>';
+					echo $thumb_link;
+					echo '<p>';
+					echo Render_Sip_Content_Folder::get_file_info($file_data_entry, $path_clean);
+					echo '</p></li>';
+				}
+
+				$element_counter++;
 			}
+		}
+
+		if ( $is_pdf ) {
+			echo '</tr></table>';
+			// rendering thumbnails is done. Now add the filenames as ordered list.
+			echo '<table width="538" cellpadding="4" cellspacing="2" border="0" style="border-collapse:collapse;">';
+				echo '<tr colspan="2">';
+					echo '<td style="font-size:16px; font-weight:bold; padding-bottom:12px;">' . esc_html__( 'Filenames', 'sip' ) . '</td>';
+				echo '</tr>';
+				echo '<tr>';
+				foreach ( $file_name_list as $key => $single_filename ) {
+					//echo ( $key > 0 && $key % 2 == 0 ) ? '</tr><tr>' : '';
+					echo '</tr><tr>';
+					echo '<td style="padding:4px 0;">' . $key +1 . '. ' . wp_kses_post( $single_filename ) . '</td>';
+				}
+				echo '</tr>';
+			echo '</table>';
+		} else {
+			echo '</ol>';
 		}
 	}
 

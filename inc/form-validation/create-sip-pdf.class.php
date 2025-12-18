@@ -280,11 +280,11 @@ class Create_Sip_Pdf extends Form_Validation {
 				' . Create_Sip_Pdf::render_header($sip_institution_logo, $archive) . '
 				' . Create_Sip_Pdf::render_footer($date_time_format) . '
 				' . Create_Sip_Pdf::render_title_block($archival, $date_time_format) . '
-				' . wp_kses_post( $content_sip_folder ) . '
-				' . apply_filters('the_content', $archival->post_content) . '
+				' . wp_kses_post( $archival->post_content ) . '
 				' . Create_Sip_Pdf::render_archival_meta($archival_id, $archival_address, $archival_originator, $archival_date_time, $archival_upload_purpose, $archival_blocking_time_row, $archival_custom_meta_row) . '
 				' . Create_Sip_Pdf::render_admin_meta($archival_id, $archival_user_custom_meta_row) . '
 				' . Create_Sip_Pdf::render_user_block($archival_user, $archivist, $date_format) . '
+				' . wp_kses_post( $content_sip_folder ) . '
 			</page>';
 
 		return $html;

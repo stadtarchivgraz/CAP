@@ -8,12 +8,8 @@ $is_pdf = isset($pdf);
 
 echo '<div class="container">';
 
-	echo (! $is_pdf) ? '<ol class="sip-listing" id="sip-files" type="">' : '';
-
-		require_once(STARG_SIP_PLUGIN_BASE_DIR . 'inc/render-sip-content-folder.php');
-		Render_Sip_Content_Folder::render_sip_folder_content( $is_pdf );
-
-	echo (! $is_pdf) ? '</ol>' : '';
+	require_once(STARG_SIP_PLUGIN_BASE_DIR . 'inc/render-sip-content-folder.php');
+	Render_Sip_Content_Folder::render_sip_folder_content( $is_pdf );
 
 echo '</div>';
 
