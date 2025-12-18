@@ -29,14 +29,14 @@ msgstr "Méta personnalisée"
 #: sip.php
 #: admin/sip-meta.php:47
 #: admin/sip-meta.php:48
-#: template-parts/content-archival.php:158
+#: template-parts/content-archival.php:160
 #: template-parts/content-archivals-list.php:59
 msgid "SIP"
 msgstr "SIP"
 
 #: admin/sip-meta.php:50
 #: inc/form-validation/create-sip-pdf.class.php:209
-#: template-parts/content-archival.php:72
+#: template-parts/content-archival.php:74
 msgid "Date/Time"
 msgstr "Data/Ora"
 
@@ -53,7 +53,7 @@ msgid "Creation Place"
 msgstr "Lieu de création"
 
 #: admin/sip-meta.php:58
-#: template-parts/content-sip-form.php:157
+#: template-parts/content-sip-form.php:158
 #: template-parts/forms/profileform.php:287
 msgid "Address"
 msgstr "Adresse"
@@ -76,35 +76,35 @@ msgstr "Médias"
 
 #: admin/sip-meta.php:69
 #: inc/form-validation/create-sip-pdf.class.php:205
-#: template-parts/content-archival.php:70
-#: template-parts/content-sip-form.php:74
+#: template-parts/content-archival.php:72
+#: template-parts/content-sip-form.php:75
 msgid "Originator"
 msgstr "Créateur"
 
 #: admin/sip-meta.php:71
 #: inc/archival-cpt.php:308
 #: inc/form-validation/create-sip-pdf.class.php:213
-#: template-parts/content-archival.php:74
+#: template-parts/content-archival.php:76
 msgid "Upload Purpose"
 msgstr "Objet du téléchargement"
 
 #: admin/sip-meta.php:75
 #: inc/form-validation/create-sip-pdf.class.php:101
-#: template-parts/content-archival.php:77
+#: template-parts/content-archival.php:79
 msgid "Blocking Time"
 msgstr "Durée de blocage"
 
 #: admin/sip-meta.php:100
 #: inc/form-validation/create-sip.class.php:463
-#: template-parts/content-sip-form.php:250
+#: template-parts/content-sip-form.php:251
 msgid "Note"
 msgstr "Note"
 
 #: admin/sip-meta.php:103
 #: inc/form-validation/create-sip-pdf.class.php:232
 #: inc/form-validation/create-sip.class.php:450
-#: template-parts/content-archival.php:115
-#: template-parts/content-sip-form.php:244
+#: template-parts/content-archival.php:117
+#: template-parts/content-sip-form.php:245
 msgid "Numbering"
 msgstr "Numérotation"
 
@@ -113,7 +113,7 @@ msgid "Meta Fields"
 msgstr "Champs méta"
 
 #: admin/sip-meta.php:112
-#: template-parts/content-sip-form.php:241
+#: template-parts/content-sip-form.php:242
 msgid "Archive information"
 msgstr "Informations sur les archives"
 
@@ -207,67 +207,67 @@ msgstr "Textes d'information"
 
 #: admin/admin-pages.php:72
 #: admin/admin-pages.php:106
-#: admin/sip-options.php:298
-#: admin/sip-options.php:301
+#: admin/sip-options.php:297
+#: admin/sip-options.php:300
 #: inc/form-validation/export-statistics.class.php:67
 msgid "Name"
 msgstr "Nom"
 
-#: admin/sip-options.php:307
+#: admin/sip-options.php:306
 msgid "Upload Purpose Options"
 msgstr "Options de téléchargement"
 
-#: admin/sip-options.php:311
+#: admin/sip-options.php:310
 msgid "Blocking Time Options"
 msgstr "Options de blocage du temps"
 
-#: admin/sip-options.php:315
+#: admin/sip-options.php:314
 msgid "Blocking Time Upload Purpose"
 msgstr "Objectif du téléchargement du temps de blocage"
 
-#: admin/sip-options.php:318
+#: admin/sip-options.php:317
 msgid "Blocking Time Calculate"
 msgstr "Calcul du temps de blocage"
 
-#: admin/sip-options.php:325
-#: admin/sip-options.php:327
-#: template-parts/content-sip-form.php:64
+#: admin/sip-options.php:324
+#: admin/sip-options.php:326
+#: template-parts/content-sip-form.php:65
 msgid "Title"
 msgstr "Titre"
 
-#: admin/sip-options.php:330
-#: admin/sip-options.php:336
+#: admin/sip-options.php:329
+#: admin/sip-options.php:335
 msgid "Type"
 msgstr "Taper"
 
-#: admin/sip-options.php:342
-#: admin/sip-options.php:352
+#: admin/sip-options.php:341
+#: admin/sip-options.php:351
 msgid "Custom Meta Data"
 msgstr "Métadonnées personnalisées"
 
-#: admin/sip-options.php:346
+#: admin/sip-options.php:345
 msgid "Form fields"
 msgstr "Champs de formulaire"
 
-#: admin/sip-options.php:348
+#: admin/sip-options.php:347
 #: inc/form-validation/export-statistics.class.php:94
 #: inc/form-validation/export-statistics.class.php:131
 msgid "Users"
 msgstr "Utilisateurs"
 
-#: admin/sip-options.php:350
+#: admin/sip-options.php:349
 msgid "Archival Users"
 msgstr "Utilisateurs d'archives"
 
-#: admin/sip-options.php:365
+#: admin/sip-options.php:364
 msgid "Term Options"
 msgstr "Options de terme"
 
-#: admin/sip-options.php:368
+#: admin/sip-options.php:367
 msgid "Institution Name abbreviation"
 msgstr "Abréviation du nom de l'institution"
 
-#: admin/sip-options.php:371
+#: admin/sip-options.php:370
 msgid "SIP Referenz"
 msgstr "Référence SIP"
 
@@ -502,7 +502,7 @@ msgstr "supprimé"
 msgid "all"
 msgstr "tous"
 
-#: template-parts/content-sip-form.php:169
+#: template-parts/content-sip-form.php:170
 #: template-parts/forms/filterform.php:93
 msgid "Upload purpose"
 msgstr "Objet du téléchargement"
@@ -512,8 +512,8 @@ msgid "Year"
 msgstr "Année"
 
 #: inc/form-validation/create-sip-pdf.class.php:219
-#: template-parts/content-archival.php:90
-#: template-parts/content-sip-form.php:94
+#: template-parts/content-archival.php:92
+#: template-parts/content-sip-form.php:95
 #: template-parts/forms/filterform.php:145
 msgid "Tags"
 msgstr "Tags"
@@ -553,9 +553,9 @@ msgstr "Brouillons"
 msgid "Personal account"
 msgstr "Données personnelles"
 
-#: template-parts/content-archival.php:154
-#: template-parts/content-archival.php:167
-#: template-parts/content-archival.php:186
+#: template-parts/content-archival.php:156
+#: template-parts/content-archival.php:169
+#: template-parts/content-archival.php:188
 #: template-parts/content-archivals-list.php:53
 #: template-parts/forms/profileform.php:134
 msgid "Edit"
@@ -613,7 +613,7 @@ msgstr "Code postal"
 msgid "City"
 msgstr "Ville"
 
-#: template-parts/content-sip-form.php:305
+#: template-parts/content-sip-form.php:306
 #: template-parts/forms/profileform.php:325
 msgid "Save"
 msgstr "Enregistrer"
@@ -672,25 +672,25 @@ msgid "publish"
 msgstr "publier"
 
 #: inc/form-validation/create-sip-pdf.class.php:201
-#: template-parts/content-archival.php:61
-#: template-parts/content-sip-form.php:147
+#: template-parts/content-archival.php:63
+#: template-parts/content-sip-form.php:148
 msgid "Location"
 msgstr "Emplacement"
 
 #: admin/admin-pages.php:358
 #: inc/form-validation/create-sip-pdf.class.php:92
 #: inc/form-validation/create-sip-pdf.class.php:93
-#: template-parts/content-archival.php:63
-#: template-parts/content-archival.php:71
+#: template-parts/content-archival.php:65
+#: template-parts/content-archival.php:73
 msgid "unknown"
 msgstr "ignoré"
 
 #: inc/form-validation/create-sip-pdf.class.php:236
-#: template-parts/content-archival.php:117
+#: template-parts/content-archival.php:119
 msgid "Annotation"
 msgstr "Note"
 
-#: template-parts/content-archival.php:173
+#: template-parts/content-archival.php:175
 msgid "Accept"
 msgstr "Accepter"
 
@@ -700,12 +700,12 @@ msgstr "Accepter"
 msgid "Decline"
 msgstr "Déclin"
 
-#: template-parts/content-archival.php:191
-#: template-parts/content-sip-form.php:300
+#: template-parts/content-archival.php:193
+#: template-parts/content-sip-form.php:301
 msgid "Submit"
 msgstr "Soumettre"
 
-#: admin/sip-options.php:256
+#: admin/sip-options.php:255
 #: template-parts/content-archivals-list.php:49
 msgid "Preview"
 msgstr "Aperçu"
@@ -714,51 +714,51 @@ msgstr "Aperçu"
 msgid "Reset map"
 msgstr "Réinitialiser la carte"
 
-#: template-parts/content-sip-form.php:66
+#: template-parts/content-sip-form.php:67
 msgid "Give your submission a descriptive title"
 msgstr "Donnez un titre descriptif à votre contribution"
 
-#: template-parts/content-sip-form.php:69
+#: template-parts/content-sip-form.php:70
 msgid "Maximum 100 characters."
 msgstr "Maximum 100 caractères."
 
-#: template-parts/content-sip-form.php:84
+#: template-parts/content-sip-form.php:85
 msgid "Description"
 msgstr "Description"
 
-#: template-parts/content-sip-form.php:86
+#: template-parts/content-sip-form.php:87
 msgid "You can describe your file in detail here (e.g.: Why is it important for the archive? What does the file show? In what context was the file created? Is there any additional information?)"
 msgstr "Vous pouvez décrire votre fichier en détail ici (ex. : Pourquoi est-il important pour les archives ? Que montre le fichier ? Dans quel contexte le fichier a-t-il été créé ? Y a-t-il des informations supplémentaires ?)"
 
-#: template-parts/content-sip-form.php:89
+#: template-parts/content-sip-form.php:90
 msgid "Maximum 5000 characters."
 msgstr "Maximum 5000 caractères."
 
-#: template-parts/content-sip-form.php:105
+#: template-parts/content-sip-form.php:106
 msgid "Date/time (for a precise time)"
 msgstr "Date/heure (pour une date précise)"
 
-#: template-parts/content-sip-form.php:112
+#: template-parts/content-sip-form.php:113
 msgid "Time period (for a longer period)"
 msgstr "Période (pour une période plus longue)"
 
-#: template-parts/content-sip-form.php:116
+#: template-parts/content-sip-form.php:117
 msgid "Hide timeline"
 msgstr "Masquer la chronologie"
 
-#: template-parts/content-sip-form.php:150
+#: template-parts/content-sip-form.php:151
 msgid "Hide map"
 msgstr "Masquer la carte"
 
-#: template-parts/content-sip-form.php:153
+#: template-parts/content-sip-form.php:154
 msgid "Map (select an exact location or area)"
 msgstr "Carte (sélectionnez un emplacement ou une zone exacte)"
 
-#: template-parts/content-sip-form.php:99
+#: template-parts/content-sip-form.php:100
 msgid "Minimum 1 | Maximum 10"
 msgstr "Minimum 1 | Maximum 10"
 
-#: template-parts/content-sip-form.php:188
+#: template-parts/content-sip-form.php:189
 msgid "Blocking time"
 msgstr "Durée de blocage"
 
@@ -785,15 +785,15 @@ msgstr "Complétez le téléchargement et insérez les métadonnées"
 msgid "Max SIP Size in Bytes"
 msgstr "Taille maximale du SIP en octets"
 
-#: admin/sip-options.php:370
+#: admin/sip-options.php:369
 msgid "Used to generate the SIP name."
 msgstr "Utilisé pour générer le nom du SIP."
 
-#: admin/sip-options.php:372
+#: admin/sip-options.php:371
 msgid "If empty - the originator's (user's) login will be used."
 msgstr "Si vide – l’identifiant de l’expéditeur (utilisateur) sera utilisé."
 
-#: admin/sip-options.php:373
+#: admin/sip-options.php:372
 msgid "Institution Logo"
 msgstr "Logo de l’institution"
 
@@ -853,7 +853,7 @@ msgid "No archival record found with SIP Post-ID: \"%d\""
 msgstr "Aucun document d’archive trouvé avec l’ID de publication SIP : %d"
 
 #: inc/form-validation/create-sip-pdf.class.php:229
-#: template-parts/content-archival.php:113
+#: template-parts/content-archival.php:115
 msgid "Archive Information"
 msgstr "Informations sur l’archive"
 
@@ -947,7 +947,7 @@ msgstr "Vos informations personnelles ont été mises à jour avec succès."
 msgid "You are not allowed to view this page!"
 msgstr "Vous n’êtes pas autorisé à consulter cette page !"
 
-#: template-parts/content-archival.php:161
+#: template-parts/content-archival.php:163
 msgid "PDF"
 msgstr "PDF"
 
@@ -979,7 +979,7 @@ msgstr "le SIP %1$s n’a pas été supprimé ! Message d’erreur : %2$s"
 msgid "Right Transfer"
 msgstr "Transfert à droite"
 
-#: admin/sip-options.php:321
+#: admin/sip-options.php:320
 msgid "Right Transfer Text"
 msgstr "Texte de transfert à droite"
 
@@ -1334,7 +1334,7 @@ msgstr "Erreur lors de la création du merge_tag pour le plugin de notification 
 msgid "Test User"
 msgstr "Utilisateur de test"
 
-#: template-parts/content-sip-form.php:295
+#: template-parts/content-sip-form.php:296
 msgid "Save as draft"
 msgstr "Enregistrer comme brouillon"
 
@@ -1407,13 +1407,13 @@ msgid "Archival delete cron not scheduled. see: %s"
 msgstr "La tâche cron de suppression d’archive n’est pas programmée. voir : %s"
 
 #. translators: %1$s: Post-ID. %2$d: SIP folder.
-#: sip.php:254
+#: sip.php:256
 #, php-format
 msgid "Post meta for post %1$d and SIP folder %2$s not deleted."
 msgstr "Les métadonnées du post pour le post %1$d et dossier SIP %2$s n’ont pas été supprimées."
 
 #. translators: %1$s: Post-ID. %2$d: SIP folder.
-#: sip.php:260
+#: sip.php:262
 #, php-format
 msgid "Post with ID %1$d and SIP folder %2$s not deleted."
 msgstr "Le post avec l’ID %1$d et le dossier SIP %2$s n’a pas été supprimé."
@@ -1458,67 +1458,67 @@ msgstr "Cette option active le système de notification intégré. Lorsqu'il est
 msgid "Username of the email address"
 msgstr "Nom d'utilisateur de l'adresse e-mail"
 
-#: admin/sip-options.php:225
+#: admin/sip-options.php:224
 msgid "This changes the username of the email address used to send the emails. Both the \"@\"-sign and the domain of your website are added automatically."
 msgstr "Cela modifie le nom d'utilisateur de l'adresse e-mail utilisée pour envoyer les e-mails. Le signe \"@\" et le domaine de votre site Web sont ajoutés automatiquement."
 
-#: admin/sip-options.php:227
+#: admin/sip-options.php:226
 msgid "Domain"
 msgstr "Domaine"
 
-#: admin/sip-options.php:233
+#: admin/sip-options.php:232
 msgid "This will be automatically added to the username of the email address."
 msgstr "Cela sera automatiquement ajouté au nom d'utilisateur de l'adresse e-mail."
 
-#: admin/sip-options.php:235
+#: admin/sip-options.php:234
 msgid "Email name"
 msgstr "Nom de l'e-mail"
 
-#: admin/sip-options.php:240
+#: admin/sip-options.php:239
 msgid "Reply email address"
 msgstr "Adresse e-mail de réponse"
 
-#: admin/sip-options.php:244
+#: admin/sip-options.php:243
 msgid "Add an email address for replies so that users can easily contact you at a specific address."
 msgstr "Ajoutez une adresse e-mail pour les réponses. De cette façon, un utilisateur peut facilement vous contacter à une adresse e-mail spécifique."
 
-#: admin/sip-options.php:246
+#: admin/sip-options.php:245
 msgid "Additional recipients to notify about user submissions"
 msgstr "Destinataires supplémentaires à notifier des soumissions des utilisateurs"
 
-#: admin/sip-options.php:251
+#: admin/sip-options.php:250
 msgid "Send emails as HTML"
 msgstr "Envoyer des e-mails en HTML"
 
-#: admin/sip-options.php:254
+#: admin/sip-options.php:253
 msgid "Sending emails as HTML allows for a more complex structure and design. This also wraps other WordPress emails (like registration confirmations or password resets) in the same design."
 msgstr "L'envoi d'e-mails en HTML permet une structure et un design plus complexes. Cela enveloppe également d'autres e-mails WordPress (comme la confirmation d'inscription ou la réinitialisation du mot de passe) dans le même design."
 
-#: admin/sip-options.php:258
+#: admin/sip-options.php:257
 msgid "This is a preview of the email design."
 msgstr "Ceci est un aperçu du design de l'e-mail."
 
-#: admin/sip-options.php:279
+#: admin/sip-options.php:278
 msgid "Enable debug logging"
 msgstr "Activer la journalisation de débogage"
 
-#: admin/sip-options.php:423
-#: inc/email-helper.php:165
+#: admin/sip-options.php:422
+#: inc/email-helper.php:156
 msgid "This is an automated notification email. Please do not reply directly."
 msgstr "Il s'agit d'un e-mail de notification automatisé. Veuillez ne pas répondre directement."
 
-#: inc/email-helper.php:84
+#: inc/email-helper.php:75
 msgid "Error trying to send an email."
 msgstr "Erreur lors de l'envoi d'un e-mail."
 
 #. translators: %s: Name of the website.
-#: inc/email-helper.php:119
+#: inc/email-helper.php:110
 #, php-format
 msgid "[%s] Notification"
 msgstr "[%s] Notification"
 
 #. translators: %s: Email address of support as hyperlink.
-#: inc/email-helper.php:170
+#: inc/email-helper.php:161
 #, php-format
 msgid "If you need assistance, contact us at %s."
 msgstr "Si vous avez besoin d'aide, contactez-nous à %s"
@@ -1758,7 +1758,7 @@ msgstr "[Erreur]"
 msgid "delete notification"
 msgstr "Supprimer la notification"
 
-#: template-parts/content-archival.php:198
+#: template-parts/content-archival.php:200
 msgid "This post has been deleted and is in the trash."
 msgstr "Cette publication a été supprimée et est dans la corbeille."
 
@@ -1778,7 +1778,7 @@ msgstr "Impossible d'initialiser la fonctionnalité de téléchargement."
 msgid "File upload error"
 msgstr "Erreur de téléchargement de fichier"
 
-#: admin/sip-options.php:238
+#: admin/sip-options.php:237
 msgid "This changes the name of the sent emails from \"WordPress\" to something of your choice."
 msgstr "Cela modifie le nom des e-mails envoyés de « WordPress » à un nom de votre choix."
 
@@ -1941,20 +1941,20 @@ msgstr[1] ""
 msgid "Email notification not active!"
 msgstr "Notification par e-mail inactive!"
 
-#: template-parts/content-archival.php:99
+#: template-parts/content-archival.php:101
 msgid "not available"
 msgstr "indisponible"
 
-#: template-parts/content-archival.php:105
+#: template-parts/content-archival.php:107
 msgid "Date of first submission"
 msgstr "Date de la première soumission"
 
-#: template-parts/content-archival.php:107
+#: template-parts/content-archival.php:109
 msgid "Uploading user"
 msgstr ""
 
 #. translators: %s: Link to the website.
-#: admin/sip-options.php:414
+#: admin/sip-options.php:413
 #, php-format
 msgctxt "Preview text for the email notifications"
 msgid ""
@@ -2147,35 +2147,35 @@ msgstr ""
 msgid "Defines the text displayed in the frontend along with a link to the privacy policy or terms of use page."
 msgstr ""
 
-#: admin/sip-options.php:249
+#: admin/sip-options.php:248
 msgid "Usually, only users with the \"editor\" role are notified about submissions. Use this field to select administrators who should also be notified."
 msgstr ""
 
-#: admin/sip-options.php:309
+#: admin/sip-options.php:308
 msgid ""
 "Defines the predefined reasons for which users can upload files.\n"
 "The entries configured here are available for selection in the upload form. Each entry represents a possible upload purpose (e.g. archiving, publication, private storage)."
 msgstr ""
 
-#: admin/sip-options.php:313
+#: admin/sip-options.php:312
 msgid ""
 "Defines the available blocking periods users can choose from during upload.\n"
 "The blocking time determines how long uploaded files remain inaccessible to the public. The configured values are presented to users as selectable options."
 msgstr ""
 
-#: admin/sip-options.php:316
+#: admin/sip-options.php:315
 msgid ""
 "Specifies which upload purposes allow a blocking time to be selected or applied.\n"
 "Only the upload purposes defined here will enable users to set a blocking time during upload. Make sure to use a comma separated list of one or more defined upload purposes from the previous selection."
 msgstr ""
 
-#: admin/sip-options.php:319
+#: admin/sip-options.php:318
 msgid ""
 "Defines how the blocking time is calculated by default.\n"
 "This setting allows you to specify a rule used to automatically determine the end of the blocking period, e.g. year of birth + 100 years."
 msgstr ""
 
-#: admin/sip-options.php:322
+#: admin/sip-options.php:321
 msgid ""
 "Defines the text displayed to users regarding the transfer of rights.\n"
 "The content should provide information about the donation agreement between the users and the website and clearly explain the legal terms of the transfer."
@@ -2187,38 +2187,52 @@ msgstr ""
 msgid "Trying to delete the uploads of post %s. But this post has no sip_folder post_meta."
 msgstr ""
 
-#: template-parts/content-sip-form.php:68
+#: template-parts/content-sip-form.php:69
 msgid "Enter a meaningful title for the post. The title is used for identification and is displayed in listings and on the post detail page."
 msgstr ""
 
-#: template-parts/content-sip-form.php:78
+#: template-parts/content-sip-form.php:79
 msgid "If you are not the originator (creator) of the uploaded file, please enter the name of the originator here. This may be a person, institution, or organization and is used for proper attribution of rights."
 msgstr ""
 
-#: template-parts/content-sip-form.php:88
+#: template-parts/content-sip-form.php:89
 msgid "Provide a detailed description of the post or the uploaded files. The description may include context, background information, or additional details and helps improve understanding and discoverability."
 msgstr ""
 
-#: template-parts/content-sip-form.php:98
+#: template-parts/content-sip-form.php:99
 msgid "Enter tags or keywords to categorize the post or uploaded files. Multiple keywords may be added to improve searchability and filtering."
 msgstr ""
 
-#: template-parts/content-sip-form.php:109
+#: template-parts/content-sip-form.php:110
 msgid "Enter the date and, if applicable, the time when the uploaded files were created. This refers to the creation time of the content, not the upload date."
 msgstr ""
 
-#: template-parts/content-sip-form.php:127
+#: template-parts/content-sip-form.php:128
 msgid "Enter the start period when the uploaded files might have been created. This refers to the creation time of the content, not the upload date."
 msgstr ""
 
-#: template-parts/content-sip-form.php:133
+#: template-parts/content-sip-form.php:134
 msgid "Enter the end period when the uploaded files might have been created. This refers to the creation time of the content, not the upload date."
 msgstr ""
 
-#: template-parts/content-sip-form.php:183
+#: template-parts/content-sip-form.php:184
 msgid "Select the purpose of the upload from the predefined list. The selected purpose helps categorize the content."
 msgstr ""
 
-#: template-parts/content-sip-form.php:208
+#: template-parts/content-sip-form.php:209
 msgid "Select a blocking time to define how long the files should remain inaccessible to the public. The available blocking periods are predefined and determine when the content becomes publicly accessible."
 msgstr ""
+
+#: inc/render-sip-content-folder.php:71
+msgid "Uploaded files:"
+msgstr "Fichiers téléchargés"
+
+#. translators: %s: Name of a folder.
+#: inc/render-sip-content-folder.php:87
+#, php-format
+msgid "Folder: %s"
+msgstr "Dossier : %s"
+
+#: inc/render-sip-content-folder.php:140
+msgid "Filenames"
+msgstr "Noms de fichiers"
