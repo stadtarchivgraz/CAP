@@ -5,7 +5,7 @@
 
 # Node artifact files
 node_modules/
-dist/
+# dist/
 
 # Compiled Java class files
 *.class
@@ -21,7 +21,12 @@ dist/
 
 # Maven
 target/
-dist/
+# dist/
+
+# dotenv environment variable files
+.env
+.env.*
+!.env.example
 
 # JetBrains IDE
 .idea/
