@@ -11,14 +11,14 @@ use Appwrite\ClamAV\Network;
  */
 class Starg_Admin_Notification {
 
-	public static function init() {
+	public static function init(): void {
 		add_action( 'admin_notices', array( 'Starg_Admin_Notification', 'starg_check_dependencies' ) );
 	}
 
 	/**
 	 * Display a warning or note in the WordPress Backend if some dependencies are not installed/active.
 	 */
-	public static function starg_check_dependencies() {
+	public static function starg_check_dependencies(): void {
 		if ( ! current_user_can( 'manage_options' ) ) { return; }
 
 		$error_sign   = '<strong>' . esc_attr__( 'Error:', 'sip' ) . '</strong>';
@@ -88,6 +88,8 @@ class Starg_Admin_Notification {
 
 	/**
 	 * Creates the output for the admin notifications.
+	 * @param array $notice_msg Each single warning for the backend is one element of the array.
+	 * @return void
 	 */
 	public static function starg_display_admin_notice( array $notice_msg = array() ) : void {
 		if ( ! $notice_msg ) { return; }

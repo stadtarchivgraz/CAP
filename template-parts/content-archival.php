@@ -37,7 +37,9 @@ $sip_archival_actions->process_sip_archival_actions();
 			// display the content of the SIP content folder.
 			include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-sip-folder.php' );
 
+			echo '<div class="mt-3 mb-4">';
 			the_content();
+			echo '</div>';
 
 			// only include the map if we have data to display.
 			$map_lat     = esc_attr( get_post_meta( $archival_id, '_archival_lat', true ) );

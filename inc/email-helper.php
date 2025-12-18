@@ -43,15 +43,13 @@ class Starg_Email_Helper {
 	 * @return string
 	 */
 	public static function set_notification_email_address( string $email ): string {
-		$domain        = parse_url( $email, PHP_URL_HOST );
+		$domain        = substr( strrchr( $email, '@' ), 1 );
 		$email_address = trim( carbon_get_theme_option( 'sip_notification_email_address' ) );
-		if ( $email_address && is_email( $email_address ) ) {
-			return sanitize_email( $email_address );
-		} elseif ( $email_address && is_email( $email_address . '@' . $domain ) ) {
+		if ( $email_address && is_email( $email_address . '@' . $domain ) ) {
 			return sanitize_email( $email_address . '@' . $domain );
 		}
 
-		return $email;
+		return sanitize_email( $email );
 	}
 
 	/**
@@ -59,7 +57,7 @@ class Starg_Email_Helper {
 	 */
 	public static function set_notification_email_name( $name ) : string {
 		if ( ! carbon_get_theme_option( 'sip_notification_email_name' ) ) {
-			return $name;
+			return esc_attr( $name );
 		}
 
 		$email_name = trim( carbon_get_theme_option( 'sip_notification_email_name' ) );

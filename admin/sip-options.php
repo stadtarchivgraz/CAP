@@ -218,7 +218,6 @@ function starg_get_email_setting_fields() : array {
 			->set_help_text( esc_html__( 'This option enables the integrated notification system. When enabled, the system automatically sends emails to the user and their editor for every submission. It also sends an email to the user if their submission is accepted.', 'sip' ) ),
 		Field::make( 'text', 'sip_notification_email_address', esc_html__( 'Username of the email address', 'sip' ) )
 			->set_attribute( 'type', 'text' )
-			// ->set_attribute( 'readOnly', true )
 			->set_attribute( 'placeholder', 'wordpress' )
 			->set_attribute( 'data-host', '@' . $domain )
 			->set_width(33.3331)
