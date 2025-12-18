@@ -1951,7 +1951,7 @@ msgstr "Datum der ersten Einreichung"
 
 #: template-parts/content-archival.php:109
 msgid "Uploading user"
-msgstr "Benutzerin"
+msgstr "Benutzer/in"
 
 #. translators: %s: Link to the website.
 #: admin/sip-options.php:413
