@@ -253,11 +253,11 @@ msgstr "Formularfelder"
 #: inc/form-validation/export-statistics.class.php:94
 #: inc/form-validation/export-statistics.class.php:131
 msgid "Users"
-msgstr "Benutzer"
+msgstr "Benutzer/in"
 
 #: admin/sip-options.php:349
 msgid "Archival Users"
-msgstr "Archivbenutzer"
+msgstr "Archivbenutzer/in"
 
 #: admin/sip-options.php:364
 msgid "Term Options"
@@ -487,7 +487,7 @@ msgstr "SIP-Ordner"
 #: inc/archival-cpt.php:309
 #: inc/form-validation/create-sip-pdf.class.php:249
 msgid "User"
-msgstr "Benutzer"
+msgstr "Benutzer/in"
 
 #: inc/archival-cpt.php:310
 msgid "Numeration"
@@ -1346,7 +1346,7 @@ msgstr "Archivbezogene Statistiken"
 #: admin/admin-pages.php:68
 #: admin/admin-pages.php:102
 msgid "Statistics by user"
-msgstr "Statistiken nach Benutzer"
+msgstr "Statistiken nach Benutzer/in"
 
 #. translators: %1$s: Filename. %2$s: Path to folder.
 #: inc/form-validation/sip-archival-upload.class.php:88
