@@ -29,14 +29,14 @@ msgstr "Campi personalizzati"
 #: sip.php
 #: admin/sip-meta.php:47
 #: admin/sip-meta.php:48
-#: template-parts/content-archival.php:160
+#: template-parts/content-archival.php:162
 #: template-parts/content-archivals-list.php:59
 msgid "SIP"
 msgstr "SIP"
 
 #: admin/sip-meta.php:50
 #: inc/form-validation/create-sip-pdf.class.php:209
-#: template-parts/content-archival.php:74
+#: template-parts/content-archival.php:76
 msgid "Date/Time"
 msgstr "Data/Ora"
 
@@ -53,7 +53,7 @@ msgid "Creation Place"
 msgstr "Luogo di creazione"
 
 #: admin/sip-meta.php:58
-#: template-parts/content-sip-form.php:158
+#: template-parts/content-sip-form.php:161
 #: template-parts/forms/profileform.php:287
 msgid "Address"
 msgstr "Indirizzo"
@@ -76,7 +76,7 @@ msgstr "Media"
 
 #: admin/sip-meta.php:69
 #: inc/form-validation/create-sip-pdf.class.php:205
-#: template-parts/content-archival.php:72
+#: template-parts/content-archival.php:74
 #: template-parts/content-sip-form.php:75
 msgid "Originator"
 msgstr "Autore"
@@ -84,27 +84,27 @@ msgstr "Autore"
 #: admin/sip-meta.php:71
 #: inc/archival-cpt.php:308
 #: inc/form-validation/create-sip-pdf.class.php:213
-#: template-parts/content-archival.php:76
+#: template-parts/content-archival.php:78
 msgid "Upload Purpose"
 msgstr "Scopo del caricamento"
 
 #: admin/sip-meta.php:75
 #: inc/form-validation/create-sip-pdf.class.php:101
-#: template-parts/content-archival.php:79
+#: template-parts/content-archival.php:81
 msgid "Blocking Time"
 msgstr "Tempo di blocco"
 
 #: admin/sip-meta.php:100
 #: inc/form-validation/create-sip.class.php:463
-#: template-parts/content-sip-form.php:251
+#: template-parts/content-sip-form.php:254
 msgid "Note"
 msgstr "Nota"
 
 #: admin/sip-meta.php:103
 #: inc/form-validation/create-sip-pdf.class.php:232
 #: inc/form-validation/create-sip.class.php:450
-#: template-parts/content-archival.php:117
-#: template-parts/content-sip-form.php:245
+#: template-parts/content-archival.php:119
+#: template-parts/content-sip-form.php:248
 msgid "Numbering"
 msgstr "Numerazione"
 
@@ -113,7 +113,7 @@ msgid "Meta Fields"
 msgstr "Campi Meta"
 
 #: admin/sip-meta.php:112
-#: template-parts/content-sip-form.php:242
+#: template-parts/content-sip-form.php:245
 msgid "Archive information"
 msgstr "Informazioni sull'archivio"
 
@@ -502,7 +502,7 @@ msgstr "cancellato"
 msgid "all"
 msgstr "tutto"
 
-#: template-parts/content-sip-form.php:170
+#: template-parts/content-sip-form.php:173
 #: template-parts/forms/filterform.php:93
 msgid "Upload purpose"
 msgstr "Scopo del caricamento"
@@ -512,7 +512,7 @@ msgid "Year"
 msgstr "Anno"
 
 #: inc/form-validation/create-sip-pdf.class.php:219
-#: template-parts/content-archival.php:92
+#: template-parts/content-archival.php:94
 #: template-parts/content-sip-form.php:95
 #: template-parts/forms/filterform.php:145
 msgid "Tags"
@@ -521,10 +521,6 @@ msgstr "Parole chiave"
 #: template-parts/forms/filterform.php:187
 msgid "Search"
 msgstr "Ricerca"
-
-#: inc/sip-notifications.php:37
-msgid "Archive Editors"
-msgstr "Redattori dell'archivio"
 
 #: inc/form-validation/update-user-password.class.php:41
 msgid "Enter your old password."
@@ -553,16 +549,16 @@ msgstr "Bozze"
 msgid "Personal account"
 msgstr "Dati personali"
 
-#: template-parts/content-archival.php:156
-#: template-parts/content-archival.php:169
-#: template-parts/content-archival.php:188
+#: template-parts/content-archival.php:158
+#: template-parts/content-archival.php:171
+#: template-parts/content-archival.php:190
 #: template-parts/content-archivals-list.php:53
 #: template-parts/forms/profileform.php:134
 msgid "Edit"
 msgstr "Modifica"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:529
-#: inc/form-validation/sip-archival-actions-form.class.php:541
+#: inc/form-validation/sip-archival-actions-form.class.php:535
+#: inc/form-validation/sip-archival-actions-form.class.php:547
 msgid "Delete"
 msgstr "Cancella"
 
@@ -613,7 +609,7 @@ msgstr "Cap"
 msgid "City"
 msgstr "Città"
 
-#: template-parts/content-sip-form.php:306
+#: template-parts/content-sip-form.php:309
 #: template-parts/forms/profileform.php:325
 msgid "Save"
 msgstr "Salva"
@@ -659,49 +655,49 @@ msgstr "SIP profili"
 msgid "SIP Archive"
 msgstr "SIP archivio"
 
-#: sip.php:81
+#: sip.php:75
 msgid "draft"
 msgstr "bozza"
 
-#: sip.php:82
+#: sip.php:76
 msgid "pending"
 msgstr "in sospeso"
 
-#: sip.php:83
+#: sip.php:77
 msgid "publish"
 msgstr "pubblico"
 
 #: inc/form-validation/create-sip-pdf.class.php:201
-#: template-parts/content-archival.php:63
-#: template-parts/content-sip-form.php:148
+#: template-parts/content-archival.php:65
+#: template-parts/content-sip-form.php:149
 msgid "Location"
 msgstr "Posizione"
 
 #: admin/admin-pages.php:358
 #: inc/form-validation/create-sip-pdf.class.php:92
 #: inc/form-validation/create-sip-pdf.class.php:93
-#: template-parts/content-archival.php:65
-#: template-parts/content-archival.php:73
+#: template-parts/content-archival.php:67
+#: template-parts/content-archival.php:75
 msgid "unknown"
 msgstr "ignoto"
 
 #: inc/form-validation/create-sip-pdf.class.php:236
-#: template-parts/content-archival.php:119
+#: template-parts/content-archival.php:121
 msgid "Annotation"
 msgstr "Nota"
 
-#: template-parts/content-archival.php:175
+#: template-parts/content-archival.php:177
 msgid "Accept"
 msgstr "Accettare"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:446
-#: inc/form-validation/sip-archival-actions-form.class.php:458
-#: inc/form-validation/sip-archival-actions-form.class.php:490
+#: inc/form-validation/sip-archival-actions-form.class.php:452
+#: inc/form-validation/sip-archival-actions-form.class.php:464
+#: inc/form-validation/sip-archival-actions-form.class.php:496
 msgid "Decline"
 msgstr "Declino"
 
-#: template-parts/content-archival.php:193
-#: template-parts/content-sip-form.php:301
+#: template-parts/content-archival.php:195
+#: template-parts/content-sip-form.php:304
 msgid "Submit"
 msgstr "Invia"
 
@@ -710,7 +706,7 @@ msgstr "Invia"
 msgid "Preview"
 msgstr "Anteprima"
 
-#: template-parts/content-map.php:51
+#: template-parts/content-map.php:50
 msgid "Reset map"
 msgstr "Reimposta mappa"
 
@@ -746,11 +742,11 @@ msgstr "Periodo di tempo (per un periodo più lungo)"
 msgid "Hide timeline"
 msgstr "Nascondi cronologia"
 
-#: template-parts/content-sip-form.php:151
+#: template-parts/content-sip-form.php:153
 msgid "Hide map"
 msgstr "Nascondi mappa"
 
-#: template-parts/content-sip-form.php:154
+#: template-parts/content-sip-form.php:156
 msgid "Map (select an exact location or area)"
 msgstr "Mappa (seleziona una posizione o un'area esatta)"
 
@@ -758,7 +754,7 @@ msgstr "Mappa (seleziona una posizione o un'area esatta)"
 msgid "Minimum 1 | Maximum 10"
 msgstr "Minimo 1 | Massimo 10"
 
-#: template-parts/content-sip-form.php:189
+#: template-parts/content-sip-form.php:192
 msgid "Blocking time"
 msgstr "Tempo di blocco"
 
@@ -853,7 +849,7 @@ msgid "No archival record found with SIP Post-ID: \"%d\""
 msgstr "Nessun documento d’archivio trovato con ID post SIP: %d"
 
 #: inc/form-validation/create-sip-pdf.class.php:229
-#: template-parts/content-archival.php:115
+#: template-parts/content-archival.php:117
 msgid "Archive Information"
 msgstr "Informazioni sull’archivio"
 
@@ -869,46 +865,46 @@ msgid "No archival record found with SIP-ID: \"%s\""
 msgstr "Nessun documento d’archivio trovato con ID SIP: %s"
 
 #. translators: %s: identifier for an archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:52
+#: inc/form-validation/sip-archival-actions-form.class.php:55
 #, php-format
 msgid "No archival record found for the provided SIP folder: %s. This entry cannot be deleted."
 msgstr "Nessun documento d’archivio trovato per la cartella SIP fornita: %s. Questa voce non può essere eliminata."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:67
+#: inc/form-validation/sip-archival-actions-form.class.php:70
 msgid "You are not allowed to perform this action."
 msgstr "Non sei autorizzato a eseguire questa azione."
 
 #. translators: %d: Post-ID of an archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:113
-#: inc/form-validation/sip-archival-actions-form.class.php:229
+#: inc/form-validation/sip-archival-actions-form.class.php:116
+#: inc/form-validation/sip-archival-actions-form.class.php:235
 #, php-format
 msgid "The post with the ID %d could not be updated."
 msgstr "Il post con ID %d non può essere aggiornato."
 
 #. translators: %d: Post-ID of an archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:120
-#: inc/form-validation/sip-archival-actions-form.class.php:122
+#: inc/form-validation/sip-archival-actions-form.class.php:123
+#: inc/form-validation/sip-archival-actions-form.class.php:125
 #, php-format
 msgid "Archivist user ID not set for archival record post: %d"
 msgstr "ID utente dell’archivista non impostato per il post del documento d’archivio: %d"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:128
+#: inc/form-validation/sip-archival-actions-form.class.php:131
 msgid "Archival record accepted."
 msgstr "Documento d’archivio accettato."
 
 #. translators: %d: Post-ID of the archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:151
-#: inc/form-validation/sip-archival-actions-form.class.php:204
+#: inc/form-validation/sip-archival-actions-form.class.php:154
+#: inc/form-validation/sip-archival-actions-form.class.php:210
 #, php-format
 msgid "Failed to delete the archival record with the ID %d."
 msgstr "Impossibile eliminare il documento d’archivio con ID %d."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:173
-#: inc/form-validation/sip-archival-actions-form.class.php:211
+#: inc/form-validation/sip-archival-actions-form.class.php:176
+#: inc/form-validation/sip-archival-actions-form.class.php:217
 msgid "Archival record deleted."
 msgstr "Documento d’archivio eliminato."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:236
+#: inc/form-validation/sip-archival-actions-form.class.php:242
 msgid "Archival record submitted."
 msgstr "Documento d’archivio inviato."
 
@@ -947,7 +943,7 @@ msgstr "Le tue informazioni personali sono state aggiornate con successo."
 msgid "You are not allowed to view this page!"
 msgstr "Non sei autorizzato a visualizzare questa pagina!"
 
-#: template-parts/content-archival.php:163
+#: template-parts/content-archival.php:165
 msgid "PDF"
 msgstr "PDF"
 
@@ -1018,12 +1014,6 @@ msgstr "%s L'impostazione PHP \"allow_url_fopen\" non è abilitata! Questa impos
 msgid "%s Ghostscript might not be installed or could not be found on the system! You need to install Ghostscript to create PDF files."
 msgstr "%s Ghostscript potrebbe non essere installato o non essere stato trovato nel sistema! È necessario installare Ghostscript per creare file PDF."
 
-#. translators: %1$s: Notification level like "Error", "Warning", "Note". %2$s: Link to the Plugin in the WordPress repository.
-#: admin/admin-notification.php:58
-#, php-format
-msgid "%1$s We recommend using the plugin %2$s if you want to translate the site."
-msgstr "%1$s Si consiglia di utilizzare il plugin %2$s se si desidera tradurre il sito."
-
 #. translators: %s: Notification level like "Error", "Warning", "Note".
 #: admin/admin-notification.php:64
 #, php-format
@@ -1066,15 +1056,15 @@ msgstr "%1$s %2$s"
 msgid "Will be generated from your name"
 msgstr "Verrà generato dal tuo nome"
 
-#: template-parts/content-map.php:83
+#: template-parts/content-map.php:80
 msgid "Place/Address..."
 msgstr "Luogo/Indirizzo..."
 
-#: template-parts/content-map.php:84
+#: template-parts/content-map.php:81
 msgid "Nothing found."
 msgstr "Nessun risultato trovato."
 
-#: template-parts/content-map.php:157
+#: template-parts/content-map.php:154
 msgid "My position"
 msgstr "La mia posizione"
 
@@ -1304,7 +1294,7 @@ msgid "Data successfully exported."
 msgstr "Dati esportati con successo."
 
 #. translators: %s: identifier for an archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:54
+#: inc/form-validation/sip-archival-actions-form.class.php:57
 #, php-format
 msgid "Problems removing an archival record. Please check the SIP folder %s."
 msgstr "Problemi durante la rimozione di un record d'archivio. Controlla la cartella SIP %s."
@@ -1316,25 +1306,11 @@ msgstr "Problemi durante la rimozione di un record d'archivio. Controlla la cart
 msgid "Problems creating thumbnail for file %s."
 msgstr "Problemi nella creazione della miniatura per il file %s."
 
-#: inc/sip-notifications.php:30
-msgid "Can not create merge_tag for the notification plugin. Notification plugin might not be installed."
-msgstr "Impossibile creare il merge_tag per il plugin di notifica. Il plugin potrebbe non essere installato."
-
-#: inc/sip-notifications.php:43
-msgid "Error creating merge_tag for notification plugin. No archives found."
-msgstr "Errore nella creazione del merge_tag per il plugin di notifica. Nessun archivio trovato."
-
-#. translators: %s: Error message.
-#: inc/sip-notifications.php:66
-#, php-format
-msgid "Error creating merge_tag for notification plugin: %s."
-msgstr "Errore nella creazione del merge_tag per il plugin di notifica: %s."
-
 #: inc/user-helper.php:98
 msgid "Test User"
 msgstr "Utente di prova"
 
-#: template-parts/content-sip-form.php:296
+#: template-parts/content-sip-form.php:299
 msgid "Save as draft"
 msgstr "Salva come bozza"
 
@@ -1401,19 +1377,19 @@ msgid "No SIP data found for post %1$s for SIP folder %2$s requested by %3$d."
 msgstr "Nessun dato SIP trovato per il post %1$s per la cartella SIP %2$s richiesto da %3$d."
 
 #. translators: %s: Errormessage.
-#: sip.php:193
+#: sip.php:187
 #, php-format
 msgid "Archival delete cron not scheduled. see: %s"
 msgstr "Il cron per la cancellazione archivio non è pianificato. vedi: %s"
 
 #. translators: %1$s: Post-ID. %2$d: SIP folder.
-#: sip.php:256
+#: sip.php:250
 #, php-format
 msgid "Post meta for post %1$d and SIP folder %2$s not deleted."
 msgstr "I metadati del post per il post %1$d e la cartella SIP %2$s non sono stati cancellati."
 
 #. translators: %1$s: Post-ID. %2$d: SIP folder.
-#: sip.php:262
+#: sip.php:256
 #, php-format
 msgid "Post with ID %1$d and SIP folder %2$s not deleted."
 msgstr "Il post con ID %1$d e cartella SIP %2$s non è stato cancellato."
@@ -1542,7 +1518,7 @@ msgid "Missing inputs. Please check %s."
 msgstr "Input mancanti. Controlla %s"
 
 #. translators: %1$s: Name of the user. %2$s: Title of the submission. %3$s: Name of the originator. %4$s: Link to the post.
-#: inc/form-validation/sip-archival-actions-form.class.php:273
+#: inc/form-validation/sip-archival-actions-form.class.php:279
 #, php-format
 msgid ""
 "Dear %1$s,\n"
@@ -1570,7 +1546,7 @@ msgstr ""
 "Grazie per il tuo contributo."
 
 #. translators: %s: Name of the institution.
-#: inc/form-validation/sip-archival-actions-form.class.php:285
+#: inc/form-validation/sip-archival-actions-form.class.php:291
 #, php-format
 msgid "Your submission to %s"
 msgstr "La tua invio a %s"
@@ -1600,14 +1576,14 @@ msgid "The user with the id %d has not selected an archive!"
 msgstr "L'utente con ID %d non ha selezionato un archivio!"
 
 #. translators: %s: Name of the institution.
-#: inc/form-validation/sip-archival-actions-form.class.php:404
+#: inc/form-validation/sip-archival-actions-form.class.php:410
 #: inc/form-validation/sip-upload-form-validation.class.php:239
 #, php-format
 msgid "New archival record submitted to %s."
 msgstr "Nuovo record di archiviazione inviato a %s."
 
 #. translators: %s: Name of the user.
-#: inc/form-validation/sip-archival-actions-form.class.php:419
+#: inc/form-validation/sip-archival-actions-form.class.php:425
 #: inc/form-validation/sip-upload-form-validation.class.php:254
 #, php-format
 msgid ""
@@ -1628,7 +1604,7 @@ msgstr ""
 "Grazie per il tuo contributo."
 
 #. translators: %s: Name of the institution.
-#: inc/form-validation/sip-archival-actions-form.class.php:427
+#: inc/form-validation/sip-archival-actions-form.class.php:433
 #: inc/form-validation/sip-upload-form-validation.class.php:262
 #, php-format
 msgid "Your submission to the archive %s has been received."
@@ -1667,52 +1643,52 @@ msgstr "Annulla"
 msgid "close"
 msgstr "chiudere"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:309
+#: inc/form-validation/sip-archival-actions-form.class.php:315
 msgid "Your submission was rejected"
 msgstr "La tua sottomissione è stata rifiutata"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:449
-#: inc/form-validation/sip-archival-actions-form.class.php:482
+#: inc/form-validation/sip-archival-actions-form.class.php:455
+#: inc/form-validation/sip-archival-actions-form.class.php:488
 msgid "Confirm rejection"
 msgstr "Conferma il rifiuto"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:450
-#: inc/form-validation/sip-archival-actions-form.class.php:483
-#: inc/form-validation/sip-archival-actions-form.class.php:533
+#: inc/form-validation/sip-archival-actions-form.class.php:456
+#: inc/form-validation/sip-archival-actions-form.class.php:489
+#: inc/form-validation/sip-archival-actions-form.class.php:539
 msgid "this entry"
 msgstr "questa voce"
 
 #. translators: %s: Title of the post.
-#: inc/form-validation/sip-archival-actions-form.class.php:452
-#: inc/form-validation/sip-archival-actions-form.class.php:484
+#: inc/form-validation/sip-archival-actions-form.class.php:458
+#: inc/form-validation/sip-archival-actions-form.class.php:490
 #, php-format
 msgid "Are you sure to decline %s? All files will be deleted."
 msgstr "Sei sicuro di voler rifiutare %s? Tutti i file verranno eliminati."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:479
+#: inc/form-validation/sip-archival-actions-form.class.php:485
 msgid "Decline with response"
 msgstr "Rifiuta con risposta"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:496
+#: inc/form-validation/sip-archival-actions-form.class.php:502
 msgid "Reason for the rejection:"
 msgstr "Motivo del rifiuto:"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:501
+#: inc/form-validation/sip-archival-actions-form.class.php:507
 msgid "Please use this text area if you want to add a reason for the rejection in the email notification."
 msgstr "Usa questa area di testo se desideri aggiungere un motivo per il rifiuto nella notifica via email."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:532
+#: inc/form-validation/sip-archival-actions-form.class.php:538
 msgid "Confirm deletion"
 msgstr "Conferma eliminazione"
 
 #. translators: %s: Title of the post.
-#: inc/form-validation/sip-archival-actions-form.class.php:535
+#: inc/form-validation/sip-archival-actions-form.class.php:541
 #, php-format
 msgid "Are you sure you want to delete %s? All files will be deleted."
 msgstr "Sei sicuro di voler eliminare %s? Tutti i file verranno eliminati."
 
 #. translators: %1$s: Title of the submission. %2$s: Name of the user. %3$s: Name of the institution. %4$s: Link to the post.
-#: inc/form-validation/sip-archival-actions-form.class.php:394
+#: inc/form-validation/sip-archival-actions-form.class.php:400
 #: inc/form-validation/sip-upload-form-validation.class.php:229
 #, php-format
 msgid ""
@@ -1752,7 +1728,7 @@ msgstr "[Errore]"
 msgid "delete notification"
 msgstr "Elimina notifica"
 
-#: template-parts/content-archival.php:200
+#: template-parts/content-archival.php:202
 msgid "This post has been deleted and is in the trash."
 msgstr "Questo post è stato eliminato ed è nel cestino."
 
@@ -1803,11 +1779,11 @@ msgstr "Classe CSS"
 msgid "One or more classes for the element separated by whitespace."
 msgstr "Una o più classi per l'elemento separate da spazi bianchi."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:504
+#: inc/form-validation/sip-archival-actions-form.class.php:510
 msgid "Add the name and email address of the responsible archivist (you) in the notification email."
 msgstr "Aggiungi il nome e l'indirizzo e-mail dell'archivista responsabile (tu) nell'e-mail di notifica."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:510
+#: inc/form-validation/sip-archival-actions-form.class.php:516
 msgid "This might be useful if a contributor wants to directly contact you."
 msgstr "Questo potrebbe essere utile se un collaboratore desidera contattarti direttamente."
 
@@ -1941,15 +1917,15 @@ msgstr[1] ""
 msgid "Email notification not active!"
 msgstr "Notifica via e-mail non attiva!"
 
-#: template-parts/content-archival.php:101
+#: template-parts/content-archival.php:103
 msgid "not available"
 msgstr "non disponibile"
 
-#: template-parts/content-archival.php:107
+#: template-parts/content-archival.php:109
 msgid "Date of first submission"
 msgstr "Data della prima presentazione"
 
-#: template-parts/content-archival.php:109
+#: template-parts/content-archival.php:111
 msgid "Uploading user"
 msgstr ""
 
@@ -1971,7 +1947,7 @@ msgstr ""
 "Grazie per il tuo contributo."
 
 #. translators: %1$s: Name of the user. %2$s: Name of the Website.
-#: inc/form-validation/sip-archival-actions-form.class.php:311
+#: inc/form-validation/sip-archival-actions-form.class.php:317
 #, php-format
 msgid ""
 "Dear %1$s,\n"
@@ -1983,13 +1959,13 @@ msgstr ""
 "grazie per aver inviato il tuo contributo a %2$s! Purtroppo non possiamo accettare il tuo contributo nell'archivio e siamo costretti a rifiutarlo."
 
 #. translators: %s: Reason for the rejection.
-#: inc/form-validation/sip-archival-actions-form.class.php:317
+#: inc/form-validation/sip-archival-actions-form.class.php:323
 #, php-format
 msgid "Reason for the rejection: %s"
 msgstr "Motivo del rifiuto: %s"
 
 #. translators: %1$s: Name of the responsible archivist. %2$s: Email Link.
-#: inc/form-validation/sip-archival-actions-form.class.php:328
+#: inc/form-validation/sip-archival-actions-form.class.php:334
 #, php-format
 msgid "If you have any questions regarding the rejection, please contact %1$s at %2$s."
 msgstr "Per qualsiasi domanda relativa al rifiuto, contattare %1$s all'indirizzo %2$s."
@@ -2217,11 +2193,11 @@ msgstr ""
 msgid "Enter the end period when the uploaded files might have been created. This refers to the creation time of the content, not the upload date."
 msgstr ""
 
-#: template-parts/content-sip-form.php:184
+#: template-parts/content-sip-form.php:187
 msgid "Select the purpose of the upload from the predefined list. The selected purpose helps categorize the content."
 msgstr ""
 
-#: template-parts/content-sip-form.php:209
+#: template-parts/content-sip-form.php:212
 msgid "Select a blocking time to define how long the files should remain inaccessible to the public. The available blocking periods are predefined and determine when the content becomes publicly accessible."
 msgstr ""
 
@@ -2238,3 +2214,14 @@ msgstr "Cartella: %s"
 #: inc/render-sip-content-folder.php:140
 msgid "Filenames"
 msgstr "Nomi dei file"
+
+#. translators: %s: ID/Name of the folder where the archival record (sip) is stored.
+#: inc/form-validation/sip-archival-actions-form.class.php:194
+#: inc/form-validation/sip-archival-actions-form.class.php:196
+#, php-format
+msgid "Failed to delete the folder for archival record %s."
+msgstr ""
+
+#: inc/form-validation/sip-archival-actions-form.class.php:200
+msgid "Uploaded files deleted."
+msgstr ""
