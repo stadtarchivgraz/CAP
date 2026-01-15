@@ -37,16 +37,19 @@ class Sip_Archival_Actions extends Form_Validation {
 			return false;// todo: maybe change to $this->user_input to be able to fill in the validated data for the user.
 		}
 
-		$sip_folder = $this->user_input[ 'sipFolder' ];
-		// we check for the $sip_folder with the method user_input_required. So this check should be deprecated.
-		// if ( ! $sip_folder ) {
-		// 	$this->set_error_message( esc_html__( 'No SIP folder provided.', 'sip' ) );
-		// 	$this->display_notification();
-		// 	return false;
-		// }
+		$actual_user_id = get_current_user_id();
+		$sip_folder     = $this->user_input[ 'sipFolder' ];
+		$archival_id    = DB_Query_Helper::starg_get_archival_id_by_sip_folder( $sip_folder );
 
-		// todo: we have a problem here! a successful upload creates the upload folder but not the post! the post gets created on meta-data input!
-		$archival_id     = DB_Query_Helper::starg_get_archival_id_by_sip_folder( $sip_folder );
+		// The user deletes their uploaded files, for which we have not created a post yet.
+		$users_sip_folder_path = starg_get_archival_upload_path() . $actual_user_id . '/';
+		if ( ! $archival_id && is_dir( $users_sip_folder_path . $sip_folder ) && 'delete' === $this->user_input[ 'delete_archival' ] ) {
+			$action_result = $this->_process_action_delete( $sip_folder, 0, $actual_user_id );
+			$this->display_notification();
+			return $action_result;
+		}
+
+		// An action was triggered, which is not a simple removal of uploaded files from the actual user and has no post!
 		if ( ! $archival_id ) {
 			// translators: %s: identifier for an archival record.
 			$this->set_error_message( sprintf( esc_html__( 'No archival record found for the provided SIP folder: %s. This entry cannot be deleted.', 'sip' ), $sip_folder ) );
@@ -58,7 +61,7 @@ class Sip_Archival_Actions extends Form_Validation {
 
 		$archival_status         = get_post_status($archival_id);
 		$archival_author_id      = get_post_field( 'post_author', $archival_id );
-		$is_users_archival_post  = ( (int) $archival_author_id === get_current_user_id() ); // the author of the archival record post is allowed to remove it.
+		$is_users_archival_post  = ( (int) $archival_author_id === $actual_user_id ); // the author of the archival record post is allowed to remove it.
 		$user_can_accept_decline = ( current_user_can( 'edit_others_archival_records' ) && $archival_status !== 'publish' );
 		$user_can_submit         = ( current_user_can( 'read_archival', $archival_id ) && $archival_status !== 'publish' );
 
@@ -81,7 +84,7 @@ class Sip_Archival_Actions extends Form_Validation {
 
 		// todo: check if it is better to use the expected value for the user_input here.
 		if ( ( $user_can_accept_decline || $is_users_archival_post ) && 'delete' === $this->user_input[ 'delete_archival' ] ) {
-			$action_result = $this->_process_action_delete( $sip_folder, $archival_id );
+			$action_result = $this->_process_action_delete( $sip_folder, $archival_id, $archival_author_id );
 		}
 
 		if ( $is_users_archival_post && $user_can_submit && 'submit' === $this->user_input[ 'submit_archival' ] ) {
@@ -178,22 +181,25 @@ class Sip_Archival_Actions extends Form_Validation {
 	 * Delete an archival record. This deletes both! The uploaded items and the archival post!
 	 * @param string $sip_folder
 	 * @param int $archival_post_id
+	 * @param int $author_id
 	 * @return bool
 	 */
-	private function _process_action_delete( string $sip_folder, int $archival_post_id ) : bool {
-		// todo: reactivate the removal of uploaded Files. At the moment we only remove uploaded files if the corresponding post is deleted in the backend.
-		// $author_id  = get_post_field('post_author', $archival_post_id);
-		// $sip_folder = starg_get_archival_upload_path() . $author_id . '/' . $sip_folder . '/';
-		// if (is_dir($sip_folder)) {
-		// 	$sip_deleted = starg_remove_SIP($sip_folder);
-		// 	if ( ! $sip_deleted ) {
-		// 		// translators: %s: ID/Name of the folder where the archival record (sip) is stored.
-		// 		$this->set_error_log_message( sprintf( esc_attr__( 'Failed to delete the folder for archival record %s.', 'sip' ), $sip_folder ) );
-		// 		// translators: %s: ID/Name of the folder where the archival record (sip) is stored.
-		// 		$this->set_error_message( sprintf( esc_attr__( 'Failed to delete the folder for archival record %s.', 'sip' ), $sip_folder ) );
-		// 		return false;
-		// 	}
-		// }
+	private function _process_action_delete( string $sip_folder, int $archival_post_id = 0, int $author_id = 0 ) : bool {
+		// todo: reactivate the removal of uploaded Files, when a post exists. At the moment we only remove uploaded files if the corresponding post is deleted in the backend!
+		$sip_folder = starg_get_archival_upload_path() . $author_id . '/' . $sip_folder . '/';
+		if ( ! $archival_post_id && is_dir( $sip_folder ) ) {
+			$sip_deleted = starg_remove_SIP($sip_folder);
+			if ( ! $sip_deleted ) {
+				// translators: %s: ID/Name of the folder where the archival record (sip) is stored.
+				$this->set_error_log_message( sprintf( esc_attr__( 'Failed to delete the folder for archival record %s.', 'sip' ), $sip_folder ) );
+				// translators: %s: ID/Name of the folder where the archival record (sip) is stored.
+				$this->set_error_message( sprintf( esc_attr__( 'Failed to delete the folder for archival record %s.', 'sip' ), $sip_folder ) );
+				return false;
+			}
+
+			$this->set_success_message( esc_attr__( 'Uploaded files deleted.', 'sip' ) );
+			return true;
+		}
 
 		// todo: do not delete posts yet. Reactivate later.
 		// $post_deleted_id = wp_delete_post($archival_post_id, true);
