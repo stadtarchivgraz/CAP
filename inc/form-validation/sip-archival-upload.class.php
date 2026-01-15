@@ -122,7 +122,14 @@ class Sip_Archival_Upload extends Form_Validation {
 		}
 
 		$file_scan_result = $this->scan_file( $upload_file_path );
-		if ( true !== $file_scan_result ) {
+		if ( true === $file_scan_result ) {
+			$file_size                = filesize($upload_file_path);
+			$sip_size                 = $sip_size + $file_size;
+			$_COOKIE['sip_file_size'] = $sip_size;
+			$json_data['sip_size']    = $sip_size;
+
+			setcookie("sip_file_size", $sip_size, 0, '/');
+		} else {
 			// removal of the uploaded file happens during scan_file here.
 			$json_data['success']  = false;
 			$json_data['infected'] = $sanitize_filename;
@@ -130,13 +137,6 @@ class Sip_Archival_Upload extends Form_Validation {
 				$json_data['reason'] = $file_scan_result['reason'];
 			}
 		}
-
-		$file_size                = filesize($upload_file_path);
-		$sip_size                 = $sip_size + $file_size;
-		$_COOKIE['sip_file_size'] = $sip_size;
-		$json_data['sip_size']    = $sip_size;
-
-		setcookie("sip_file_size", $sip_size, 0, '/');
 
 		header('Content-Type: application/json; charset=utf-8');
 		echo json_encode($json_data);

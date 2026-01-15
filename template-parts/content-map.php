@@ -8,10 +8,10 @@ $area      = '';
 $count     = 0;
 $map_posts = array();
 
-$key          = esc_attr(carbon_get_theme_option('sip_map_default_google_api_key'));
-$default_lng  = esc_attr(carbon_get_theme_option('sip_map_default_lng'));
-$default_lat  = esc_attr(carbon_get_theme_option('sip_map_default_lat'));
-$default_zoom = esc_attr(carbon_get_theme_option('sip_map_default_zoom'));
+$google_api_key = esc_attr(carbon_get_theme_option('sip_map_google_api_key'));
+$default_lng    = esc_attr(carbon_get_theme_option('sip_map_default_lng'));
+$default_lat    = esc_attr(carbon_get_theme_option('sip_map_default_lat'));
+$default_zoom   = esc_attr(carbon_get_theme_option('sip_map_default_zoom'));
 
 if (is_singular('archival') || is_page_template('sip-archival.php')) {
 	global $post;
@@ -26,8 +26,8 @@ $search_position        = ( $is_sip_upload_template ) ? 'topright' : 'topleft';
 $search_collapsed       = ( $is_sip_upload_template ) ? 'false'    : 'true';
 
 // todo: refactor! create a function in /inc/sip-functions.php
-foreach ($map_posts as $key => $map_post) :
-	$markers[ $key ] = starg_get_map_coordinates_by_post_id( $map_post->ID );
+foreach ($map_posts as $map_post_key => $map_post) :
+	$markers[ $map_post_key ] = starg_get_map_coordinates_by_post_id( $map_post->ID );
 
 	// todo: maybe escape. should be json.
 	$area = get_post_meta( $map_post->ID, '_archival_area', true );
@@ -35,13 +35,12 @@ foreach ($map_posts as $key => $map_post) :
 endforeach; // End of the loop.
 wp_reset_postdata(); // todo: should not be needed here. we're not in a custom loop!
 
-if ( isset( $markers[0] ) && isset( $markers[0]['lat'] ) && isset( $markers[0]['lng'] ) ) {
+if ( isset( $markers[0] ) && ! empty( $markers[0]['lat'] ) && ! empty( $markers[0]['lng'] ) ) {
 	$default_lat = $markers[0]['lat'];
 	$default_lng = $markers[0]['lng'];
 }
 
-// todo: remove and invalidate key on going live!
-$maptiler_api_key = '4iSHuzysTSEXKZ9TxnfO';
+$maptiler_api_key = '';
 if ( carbon_get_theme_option( 'sip_map_maptiler_api_key' ) ) {
 	$maptiler_api_key = esc_attr( carbon_get_theme_option( 'sip_map_maptiler_api_key' ) );
 }
@@ -73,16 +72,14 @@ if ( carbon_get_theme_option( 'sip_map_maptiler_api_key' ) ) {
 
 		let inputMarker, clickMarker;
 
-		<?php
-		if ($key) echo 'const MapGeoCoderProvider = L.Control.Geocoder.google(\'' . $key . '\');';
-		?>
+		<?php if ($google_api_key) { echo 'const MapGeoCoderProvider = L.Control.Geocoder.google(\'' . $google_api_key . '\');'; } ?>
 
 		const MapGeoCoder = L.Control.geocoder({
 				position: '<?php echo $search_position; ?>',
 				collapsed: <?php echo $search_collapsed; ?>,
 				placeholder: '<?php esc_html_e( "Place/Address...", "sip" ); ?>',
 				errorMessage: '<?php esc_html_e( "Nothing found.", "sip" ); ?>',
-				<?php if ($key) echo 'geocoder: MapGeoCoderProvider,'; ?>
+				<?php if ($google_api_key) echo 'geocoder: MapGeoCoderProvider,'; ?>
 				defaultMarkGeocode: false
 			})
 			.on('markgeocode', function(e) {
@@ -304,7 +301,7 @@ if ( carbon_get_theme_option( 'sip_map_maptiler_api_key' ) ) {
 
 		<?php
 		foreach ($markers as $marker) {
-			if ( isset( $marker['lat'] ) && isset( $marker['lng'] ) ) {
+			if ( ! empty( $marker['lat'] ) && ! empty( $marker['lng'] ) ) {
 
 				echo "const dsaIcon = L.divIcon({
 					className: 'dsa-custom-pin',

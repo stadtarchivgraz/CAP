@@ -105,7 +105,7 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 				<div class="field">
 					<label for="archival-single-date" class="label"><?php esc_html_e('Date/time (for a precise time)', 'sip'); ?></label>
 					<p class="control">
-						<input id="archival-single-date" name="archival_single_date" type="datetime-local" value="<?php echo ($archival_from && !$archival_to) ? $archival_from : ''; ?>" aria-describedby="archival-single-date-help-text">
+						<input id="archival-single-date" name="archival_single_date" type="datetime-local" value="<?php echo ($archival_from && !$archival_to) ? $archival_from : ''; ?>" aria-describedby="archival-single-date-help-text" class="input">
 					</p>
 					<p id="archival-single-date-help-text" class="help"><?php esc_html_e( 'Enter the date and, if applicable, the time when the uploaded files were created. This refers to the creation time of the content, not the upload date.', 'sip' ); ?></p>
 				</div>
@@ -123,13 +123,13 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 					<div class="columns">
 						<div class="column">
 							<p class="control">
-								<input id="archival-date-range-start" name="archival_date_range[]" type="number" max="<?php echo date('Y'); ?>" min="1850" step="1" maxlength="4" aria-describedby="archival-date-range-start-help-text">
+								<input id="archival-date-range-start" name="archival_date_range[]" type="number" max="<?php echo date('Y'); ?>" min="1850" step="1" maxlength="4" aria-describedby="archival-date-range-start-help-text" class="input">
 							</p>
 							<p id="archival-date-range-start-help-text" class="help"><?php esc_html_e( 'Enter the start period when the uploaded files might have been created. This refers to the creation time of the content, not the upload date.', 'sip' ); ?></p>
 						</div>
 						<div class="column">
 							<p class="control">
-								<input id="archival-date-range-end" name="archival_date_range[]" type="number" max="<?php echo date('Y'); ?>" min="1850" step="1" maxlength="4"aria-describedby="archival-date-range-end-help-text">
+								<input id="archival-date-range-end" name="archival_date_range[]" type="number" max="<?php echo date('Y'); ?>" min="1850" step="1" maxlength="4" aria-describedby="archival-date-range-end-help-text" class="input">
 							</p>
 							<p id="archival-date-range-end-help-text" class="help"><?php esc_html_e( 'Enter the end period when the uploaded files might have been created. This refers to the creation time of the content, not the upload date.', 'sip' ); ?></p>
 						</div>
@@ -139,21 +139,24 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 				<?php // Map ?>
 				<div class="field">
 					<?php
-					$map_lat     = esc_attr( $sip_upload_form->get_form_value( 'archival_lat' ) );
-					$map_lng     = esc_attr( $sip_upload_form->get_form_value( 'archival_lng' ) );
-					$map_area    = esc_attr( $sip_upload_form->get_form_value( 'archival_area' ) );
-					$address     = esc_attr( $sip_upload_form->get_form_value( 'archival_address' ) );
-					$display_map = ( $address && ( ! $map_lat && ! $map_area ) ) ? false : true;
+					$map_lat         = esc_attr( $sip_upload_form->get_form_value( 'archival_lat' ) );
+					$map_lng         = esc_attr( $sip_upload_form->get_form_value( 'archival_lng' ) );
+					$map_area        = esc_attr( $sip_upload_form->get_form_value( 'archival_area' ) );
+					$address         = esc_attr( $sip_upload_form->get_form_value( 'archival_address' ) );
+					$missing_api_key = empty( trim( carbon_get_theme_option( 'sip_map_maptiler_api_key' ) ) );
+					$display_map     = ( $missing_api_key || $address && ( ! $map_lat && ! $map_area ) ) ? false : true;
 					?>
 					<p class="label"><?php esc_html_e('Location', 'sip'); ?></p>
-					<label class="checkbox">
-						<input type="checkbox" name="archival_hide_map" onclick="toggleField('archival-map','archival-address-wrap');" <?php checked( ! $display_map ); ?>>
-						<?php esc_html_e('Hide map', 'sip'); ?>
-					</label>
-					<div id="archival-map" <?php echo ( $display_map ) ? '': 'style="display:none;"'; ?>>
-						<p><?php esc_html_e('Map (select an exact location or area)', 'sip'); ?></p>
-						<?php include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-map.php' ); ?>
-					</div>
+					<?php if ( ! $missing_api_key ) : ?>
+						<label class="checkbox">
+							<input type="checkbox" name="archival_hide_map" onclick="toggleField('archival-map','archival-address-wrap');" <?php checked( ! $display_map ); ?>>
+							<?php esc_html_e('Hide map', 'sip'); ?>
+						</label>
+						<div id="archival-map" <?php echo ( $display_map ) ? '': 'style="display:none;"'; ?>>
+							<p><?php esc_html_e('Map (select an exact location or area)', 'sip'); ?></p>
+							<?php include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-map.php' ); ?>
+						</div>
+					<?php endif; ?>
 					<div id="archival-address-wrap" <?php echo ( $display_map ) ? 'style="display:none;"': ''; ?>>
 						<label for="archival-address" class="label"><?php esc_html_e('Address', 'sip'); ?></label>
 						<input id="archival-address" name="archival_address" type="text" class="input" value="<?php echo $address; ?>">

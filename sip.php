@@ -3,7 +3,7 @@
  Plugin Name: SIP
  Description: Plugin for creating Submission Information Packages (SIPs) from archival records. The archival records are provided by users. The archivist can choose whether to create a SIP or reject it.
  Author: Stadtarchiv Graz, Guido Handrick
- Version: 3.4.6
+ Version: 3.4.7
  Author URI: https://www.grazmuseum.at/stadtarchiv/
  Text Domain: sip
  Domain Path: /languages/
@@ -14,7 +14,7 @@
 
 if (! defined('WPINC')) { die; }
 
-define( 'STARG_SIP_PLUGIN_VERSION', '3.4.6' );
+define( 'STARG_SIP_PLUGIN_VERSION', '3.4.7' );
 define( 'STARG_SIP_PLUGIN_NAME',    'SIP' );
 define( 'STARG_SIP_PLUGIN_BASE_DIR', trailingslashit( dirname( __FILE__ ) ) );
 define( 'STARG_SIP_PLUGIN_BASE_URL', plugin_dir_url( __FILE__ ) );
@@ -118,7 +118,7 @@ class Starg_Sip_Plugin {
 			wp_enqueue_script( 'bigger_picture', STARG_SIP_PLUGIN_BASE_URL . 'assets/js/bigger-picture.min.js', array(), $bigger_picture_version, $script_strategy );
 		}
 
-		if ( is_singular( array( 'archival', ) ) || is_page_template( array( 'sip-archival.php', 'sip-upload.php', ) ) ) {
+		if ( ! empty( carbon_get_theme_option( 'sip_map_maptiler_api_key' ) ) && ( is_singular( array( 'archival', ) ) || is_page_template( array( 'sip-archival.php', 'sip-upload.php', ) ) ) ) {
 			wp_enqueue_style( 'leaflet_main', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/leaflet.css', array(), $leaflet_version );
 			// wp_enqueue_style( 'leaflet_markers', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/leaflet.awesome-markers.css', array(), $leaflet_markers_version );
 			wp_enqueue_style( 'geocoder', STARG_SIP_PLUGIN_BASE_URL . 'assets/css/Control.Geocoder.css', array(), $geocoder_version );

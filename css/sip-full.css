@@ -9927,6 +9927,7 @@ html.is-clipped,
 .sip .leaflet-touch input[type=button].leaflet-control {
   width: 34px !important;
   height: 34px !important;
+  padding: 0;
   border: 2px solid rgba(0, 0, 0, 0.2) !important;
   background-clip: padding-box !important;
   box-shadow: none !important;

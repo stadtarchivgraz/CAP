@@ -52,11 +52,11 @@ class Starg_Admin_Notification {
 		}
 
 		// todo: add option to disable weak notices. We don't want to nag people into using a specific plugin such as polylang.
-		if ( ! is_plugin_active( 'polylang/polylang.php' ) ) {
-			$link_to_polylang = '<a href="https://wordpress.org/plugins/polylang/">Polylang</a>';
-			// translators: %1$s: Notification level like "Error", "Warning", "Note". %2$s: Link to the Plugin in the WordPress repository.
-			$notification_message[] = sprintf( esc_attr__( '%1$s We recommend using the plugin %2$s if you want to translate the site.', 'sip' ), $note_sign, $link_to_polylang );
-		}
+		// if ( ! is_plugin_active( 'polylang/polylang.php' ) ) {
+		// 	$link_to_polylang = '<a href="https://wordpress.org/plugins/polylang/">Polylang</a>';
+		// 	// translators: %1$s: Notification level like "Error", "Warning", "Note". %2$s: Link to the Plugin in the WordPress repository.
+		// 	$notification_message[] = sprintf( esc_attr__( '%1$s We recommend using the plugin %2$s if you want to translate the site.', 'sip' ), $note_sign, $link_to_polylang );
+		// }
 
 		if ( carbon_get_theme_option( 'sip_clamav' ) ) {
 			if ( ! function_exists( 'socket_create' ) ) {

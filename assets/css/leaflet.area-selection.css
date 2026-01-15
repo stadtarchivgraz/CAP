@@ -21,7 +21,7 @@
   The whole JS bundling ecosystem is cursed. No (simple) way to just generate a CSS with an image that works (at least: not using microbundle)
   background-image: url('area-icon.png');
   */
-  background-image: url('https://unpkg.com/@bopen/leaflet-area-selection@0.3.0/dist/area-icon.png');
+  background-image: url('images/area-icon.png');
   background-size: cover;
 }
 

@@ -321,7 +321,7 @@ function starg_get_map_coordinates_by_post_id( int $archival_post_id ) : array {
 		return $markers;
 	}
 
-	$google_api_key = esc_attr( carbon_get_theme_option('sip_map_default_google_api_key') );
+	$google_api_key = esc_attr( carbon_get_theme_option('sip_map_google_api_key') );
 	if ( ! empty( $google_api_key ) ) {
 		$json = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode( str_replace(' ', '+', $markers['place_address']) ) . '&key=' . $google_api_key);
 		$obj  = json_decode($json);

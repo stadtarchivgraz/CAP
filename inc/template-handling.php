@@ -66,6 +66,7 @@ class Starg_Template_Handling {
 	/**
 	 * Maybe create rewrite rules for the archival page-templates where the user can view their entry.
 	 * This function is tied to the Polylang plugin.
+	 * todo: refactor. loop through every single page in $pages if necessary. merge duplicate code for add_rewrite_rule.
 	 */
 	public static function starg_check_for_polylang_pages() {
 		// check if the polylang plugin is installed and active.
@@ -84,26 +85,27 @@ class Starg_Template_Handling {
 		foreach ($languages as $lang) {
 			$translated_page_slug = get_page_uri(pll_get_post($pages[0]->ID, $lang)); // Translated Slug
 			if ( ! $translated_page_slug) { continue; }
+			$slug = preg_quote( $translated_page_slug, '#' );
 
 			add_rewrite_rule(
-				"^$lang/$translated_page_slug/?$", // Translated Slug with language.
-				"index.php?pagename=$translated_page_slug&lang=$lang",
+				"^$lang/$slug/?$", // Translated Slug with language.
+				"index.php?pagename=$slug&lang=$lang",
 				'top'
 			);
 			add_rewrite_rule(
-				"^$lang/$translated_page_slug/([^/]*)/?$", // Translated Slug with language.
-				"index.php?pagename=$translated_page_slug&archival_name=\$matches[1]&lang=$lang",
+				"^$lang/$slug/([^/]*)/?$", // Translated Slug with language.
+				"index.php?pagename=$slug&archival_name=\$matches[1]&lang=$lang",
 				'top'
 			);
 			if ($lang == $default_language) {
 				add_rewrite_rule(
-					"^$translated_page_slug/?$", // only translated Slug.
-					"index.php?pagename=$translated_page_slug&lang=$lang",
+					"^$slug/?$", // only translated Slug.
+					"index.php?pagename=$slug&lang=$lang",
 					'top'
 				);
 				add_rewrite_rule(
-					"^$translated_page_slug/([^/]*)/?$", // only translated Slug.
-					"index.php?pagename=$translated_page_slug&archival_name=\$matches[1]&lang=$lang",
+					"^$slug/([^/]*)/?$", // only translated Slug.
+					"index.php?pagename=$slug&archival_name=\$matches[1]&lang=$lang",
 					'top'
 				);
 			}
