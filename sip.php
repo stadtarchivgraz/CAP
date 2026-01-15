@@ -40,12 +40,6 @@ class Starg_Sip_Plugin {
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/email-helper.php" );
 		add_action( 'init', array( 'Starg_Email_Helper', 'init' ) );
 
-		// load the notification plugin instead.
-		// todo: remove notification plugin after testing.
-		// require_once( STARG_SIP_PLUGIN_BASE_DIR . "assets/notification/load.php" );
-		// require_once( STARG_SIP_PLUGIN_BASE_DIR . "inc/sip-notifications.php" );
-
-
 		require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/template-handling.php' );
 		Starg_Template_Handling::init();
 
