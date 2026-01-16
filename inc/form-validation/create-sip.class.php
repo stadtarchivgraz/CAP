@@ -313,7 +313,7 @@ class Create_Sip extends Form_Validation {
 							$writer->endElement(); // ead:eadheader
 							$writer->startElement('ead:archdesc');
 								$writer->startAttribute('level');
-									$writer->text('item');
+									$writer->text('file');
 								$writer->endAttribute();
 								$writer->startElement('ead:did');
 									$writer->startElement('ead:unittitle');

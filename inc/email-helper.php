@@ -131,7 +131,7 @@ class Starg_Email_Helper {
 						<?php // Inner container ?>
 						<table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;font-family:sans-serif;">
 							<tr><?php // Header / Logo ?>
-								<td align="center" style="padding:16px 0 24px 0;">
+								<td align="center" style="padding:16px 0 24px 0;max-height:100px;">
 									<?php if ( has_custom_logo() ) : ?>
 										<?php the_custom_logo(); ?>
 									<?php else : ?>

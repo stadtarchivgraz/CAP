@@ -392,7 +392,7 @@ function starg_get_preview_notification_email(): string {
 
 						<?php // Header / Logo ?>
 						<tr>
-							<td align="center" style="padding:16px 0 24px 0;">
+							<td align="center" style="padding:16px 0 24px 0;max-height:100px;">
 								<?php
 								if ( has_custom_logo() ) :
 									the_custom_logo();

@@ -12,8 +12,8 @@ if ( ! $sip_archival_upload instanceof Sip_Archival_Upload || ! $sip_archival_re
 	return;
 }
 
-// todo: the timestamp might not be unique enough if we have many users! we changed it to the php function uniqid. Check if this works correctly!
-$sip_folder_id = time();
+// todo: for multisites we might want to add a prefix to the $sip_folder_id.
+$sip_folder_id = uniqid();
 $sip_max_size  = (carbon_get_theme_option('sip_max_size')) ? (int) esc_attr(carbon_get_theme_option('sip_max_size')) : 50000000;
 
 $sip_archival_upload->process_archival_upload();
