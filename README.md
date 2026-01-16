@@ -27,7 +27,7 @@ The plugin uses page templates and therefore does not work with block template t
 
 ## Plugin Installation ##
 
-1. Download SIP.zip
+1. Download the zip file from the latest release at https://github.com/stadtarchivgraz/CAP/releases
 2. Go to Plugins -> Add Plugin and Upload the Plugin
 3. Activate the SIP Plugin
 
