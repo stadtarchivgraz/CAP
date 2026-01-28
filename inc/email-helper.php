@@ -137,7 +137,7 @@ class Starg_Email_Helper {
 									<?php else : ?>
 										<h1>
 											<a href="<?php echo sanitize_url( get_home_url() ); ?>">
-												<?php echo esc_html( get_bloginfo() ); ?>
+												<?php echo esc_html( get_option( 'blogname' ) ); ?>
 											</a>
 										</h1>
 									<?php endif; ?>

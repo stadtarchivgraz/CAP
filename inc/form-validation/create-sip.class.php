@@ -329,14 +329,21 @@ class Create_Sip extends Form_Validation {
 											$writer->endElement(); // ead:persname
 										$writer->endElement(); // ead:origination
 									}
-									foreach ($file_mimes as $mime => $number) {
-										$mime_numbers[] = $mime . ', ' . $number;
+									if ( $file_mimes ) {
+										$writer->startElement('ead:physdesc');
+											$file_counter = 0;
+											$max_files    = is_countable( $file_mimes ) ? count( $file_mimes ) : 1;
+											$delimiter    = ', ';
+											foreach ($file_mimes as $mime => $number) {
+												$file_counter++;
+												// translators: Text in the physical description (ead:physdesc) of the XML. %1$s: MIME type. %2$s: Number of files for the MIME type.
+												$writer->text( sprintf( _n( '%1$s %2$s', '%1$ss %2$s', $number, 'sip' ), $mime, $number ) );
+												if ( $file_counter < $max_files ) {
+													$writer->text( $delimiter );
+												}
+											}
+										$writer->endElement(); // ead:physdesc
 									}
-									$writer->startElement('ead:physdesc');
-										$writer->startElement('ead:extent');
-											$writer->text(implode('; ', $mime_numbers));
-										$writer->endElement(); // ead:extent
-									$writer->endElement(); // ead:physdesc
 									if($this->archival->post_content) {
 										$writer->startElement('ead:abstract');
 											$writer->startCdata();

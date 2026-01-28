@@ -175,9 +175,12 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 	 * @param int $current_user_id
 	 * @param int $orig_author_id
 	 * @param int $user_archive_id
+	 * @param int $post_id
 	 * @return void
 	 */
 	private function notify_user( int $current_user_id, int $orig_author_id, int $user_archive_id, int $post_id = 0 ): void {
+		if ( ! carbon_get_theme_option( 'sip_notifications_enabled' ) ) { return; }
+
 		$user_archive      = '';
 		$user_archive_term = get_term( $user_archive_id, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG );
 		if ( $user_archive_term ) {

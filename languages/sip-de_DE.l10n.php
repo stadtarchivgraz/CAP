@@ -27,7 +27,7 @@ You will be separately informed via email about the acceptance or rejection of y
 
 Thank you for your contribution.'=>'Guten Tag %s,
 
-herzliche Gratulation, Ihre Abgabe auf der Citizen Archive Platform ist erfolgreich eingegangen!
+herzliche Gratulation, Ihre Abgabe ist erfolgreich eingegangen!
 
 Über die Annahme bzw. Ablehnung Ihrer Abgabe durch das Archiv werden Sie gesondert per E-Mail informiert. Die Überprüfung einer Abgabe dauert ca. 10 Werktage.
 

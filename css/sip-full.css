@@ -4310,6 +4310,7 @@ fieldset[disabled] .sip .file-name, fieldset[disabled] .sip .select select, fiel
   flex-grow: 1;
   flex-shrink: 0;
   font-size: 1.5em;
+  margin: 0;
   line-height: 1;
 }
 .sip .modal-card-foot {

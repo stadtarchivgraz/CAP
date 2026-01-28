@@ -8,7 +8,6 @@ if (! defined('WPINC')) { die; }
  * Additionally, a simple error/success message will be created and can be used to inform the user about the operation.
  *
  * @since: 3.0.0
- * @author: Hannes Z.
  */
 abstract class Form_Validation {
 	protected string $request_method = 'post';
