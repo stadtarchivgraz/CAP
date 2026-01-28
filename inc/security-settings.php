@@ -64,7 +64,7 @@ Class Starg_Security_Settings {
 		// open the rest api for logged in users.
 		if ( is_user_logged_in() ) { return $results; }
 
-		$request_uri = $_SERVER[ 'REQUEST_URI' ] ?? '';
+		$request_uri = esc_url( $_SERVER[ 'REQUEST_URI' ] ) ?? '';
 
 		// whitelisted routes.
 		$allowed_routes = array(

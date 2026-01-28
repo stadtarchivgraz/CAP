@@ -26,7 +26,7 @@ add_filter( 'login_form_top', 'starg_archival_loginform_top', 10, 2 );
 function starg_load_archival_template( $template ) {
 	global $post;
 
-	if ( 'archival' !== $post->post_type ) {
+	if ( Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG !== $post->post_type ) {
 		return $template;
 	}
 
@@ -100,7 +100,7 @@ function starg_sip_admin_archivals( WP_Query $query ) {
 		return $query;
 	}
 
-	if ( 'archival' !== $query->query_vars[ 'post_type' ] ) {
+	if ( Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG !== $query->query_vars[ 'post_type' ] ) {
 		return $query;
 	}
 
@@ -113,7 +113,7 @@ function starg_sip_admin_archivals( WP_Query $query ) {
 		$user_archive = get_user_meta( $user_id, 'user_archive', true );
 		$tax_query = array(
 			array(
-				'taxonomy' => 'archive',
+				'taxonomy' => Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG,
 				'field'    => 'term_id',
 				'terms'    => $user_archive
 			)

@@ -303,7 +303,7 @@ class DB_Query_Helper {
 	}
 
 	/**
-	 * Retrieve all email addresses of all editors.
+	 * Retrieve all email addresses of all administrators.
 	 * @param int $user_archive_id [Optional] if set, we only receive the email addresses for a specific archive_id.
 	 * @return array
 	 */
@@ -312,12 +312,41 @@ class DB_Query_Helper {
 	}
 
 	/**
-	 * Retrieve all email addresses of all administrators.
+	 * Retrieve all email addresses of all editors.
 	 * @param int $user_archive_id [Optional] if set, we only receive the email addresses for a specific archive_id.
 	 * @return array
 	 */
 	public static function get_all_editor_email_addresses( int $user_archive_id = 0 ): array {
 		return DB_Query_Helper::get_all_users_email_addresses( 'editor', $user_archive_id );
+	}
+
+	/**
+	 * Checks if the plugin was set up correctly by adding at least one institution as archive in the custom taxonomy Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG.
+	 *
+	 * @return int|false|null
+	 *    If the website has only one institution to upload files to, we return their term_id.
+	 *    If the website has more than one institution, we return false.
+	 *    If the website does not have set any institution, we return null and set an Error.
+	 */
+	public static function maybe_get_single_archive_id() {
+		// do we have more than one entires in Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG?
+		$min_registered_archives = get_terms( array( 'taxonomy' => Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG, 'fields' => 'ids', 'number' => 2, 'orderby' => 'term_id', 'hide_empty' => false, ));
+		if ( ! $min_registered_archives || is_wp_error( $min_registered_archives ) ) {
+			$logging = apply_filters( 'starg/logging', null );
+			if ( $logging instanceof Starg_Logging && $logging->error_logging_enabled ) {
+				// translators: %s: Name of the custom taxonomy.
+				$logging->create_log_entry( sprintf( esc_attr__( 'No institution set as %s.', 'sip' ), Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG ), Log_Severity::Error );
+			}
+			// translators: %s: Name of the custom taxonomy.
+			_doing_it_wrong( __FUNCTION__, sprintf( esc_attr__( 'No institution set as %s.', 'sip' ), Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG ), '3.4.8' );
+			return null;
+		}
+
+		if ( 1 === count( $min_registered_archives ) ) {
+			return (int) $min_registered_archives[0];
+		}
+
+		return false;
 	}
 
 }

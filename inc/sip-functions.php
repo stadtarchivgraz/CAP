@@ -40,7 +40,7 @@ function starg_create_thumbnail($file_path, $thumbnail_folder) {
 
 	$new_thumbnail = array();
 	if( wp_get_image_mime($file_path) === 'image/tiff' ) {
-		$new_file_name = $thumbnail_folder.str_replace(array('.tiff', '.tif'), '.jpg', basename($file_path));
+		$new_file_name = $thumbnail_folder . str_replace(array('.tiff', '.tif'), '.jpg', basename($file_path));
 		$image = new Imagick($file_path);
 		$image->setImageFormat('jpg');
 		$image->writeImage($new_file_name);
@@ -71,7 +71,7 @@ function starg_create_thumbnail($file_path, $thumbnail_folder) {
 		}
 
 		$image->resize( 300, 300, true );
-		$new_thumbnail = $image->save( $thumbnail_folder.basename( $file_path ) );
+		$new_thumbnail = $image->save( $thumbnail_folder . basename( $file_path ) );
 	}
 
 	return $new_thumbnail;
