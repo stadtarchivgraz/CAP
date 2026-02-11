@@ -77,18 +77,38 @@ add_action( 'edit_user_profile', 'starg_add_sip_user_archive_field' );
 add_action( "user_new_form", "starg_add_sip_user_archive_field" );
 
 /**
- * Save the users archive option as user meta.
- * @deprecated this is solved by @see Starg_Update_User_Profile::maybe_process_update_user_profile
+ * If a user is added in the backend, we save the user's archive option as user meta.
+ * @param int $user_id
+ * @param array $userdata
+ * @return void
  */
-function starg_save_sip_user_archive_field( $user_id ) {
-	if ( ! current_user_can( 'manage_options' ) || ! isset( $_POST[ 'user_archive' ] ) ) {
-		return false;
+function starg_save_user_archive_on_register( int $user_id, array $userdata ): void {
+	if ( ! is_admin() || ! current_user_can( 'manage_options' ) || ! isset( $_POST[ 'user_archive' ] ) ) {
+		return;
 	}
 
-	update_user_meta( $user_id, 'user_archive', sanitize_text_field( $_POST[ 'user_archive' ] ) );
+	update_user_meta( $user_id, 'user_archive', (int) sanitize_text_field( $_POST[ 'user_archive' ] ) );
+	update_user_meta( $user_id, 'user_archive_profile', 1 );
 }
-//add_action( 'user_register', 'starg_save_sip_user_archive_field' );
-//add_action( 'profile_update', 'starg_save_sip_user_archive_field' );
+add_action( 'user_register', 'starg_save_user_archive_on_register', 10, 2 );
+
+/**
+ * If a user is updated in the backend, we save the user's archive option as user meta.
+ * @param int $user_id
+ * @param WP_User $old_user_data
+ * @param array $userdata
+ * @return void
+ */
+function starg_save_user_archive_on_update( $user_id, $old_user_data, array $userdata ): void {
+	if ( ! is_admin() || ! current_user_can( 'manage_options' ) || ! isset( $_POST[ 'user_archive' ] ) ) {
+		wp_die('false');
+		return;
+	}
+
+	update_user_meta( $user_id, 'user_archive', (int) sanitize_text_field( $_POST[ 'user_archive' ] ) );
+	update_user_meta( $user_id, 'user_archive_profile', 1 );
+}
+add_action( 'profile_update', 'starg_save_user_archive_on_update', 10, 3 );
 
 /**
  * Change the main query based on the current user.
@@ -180,33 +200,7 @@ function starg_remove_uploads_on_backend_removal( int $post_id, WP_Post $post ):
 		return;
 	}
 
-	$upload_path = starg_get_archival_upload_path() . $post->post_author . '/' . $sip_folder_id;
+	$upload_path = starg_get_archival_upload_path() . $post->post_author . '/' . esc_attr( $sip_folder_id );
 	starg_remove_SIP( $upload_path );
 }
 add_action( 'before_delete_post', 'starg_remove_uploads_on_backend_removal', 20, 2 );
-
-/*
-add_action('pre_get_posts', function($query) {
-	print_r($query);
-	if (!is_admin() && $query->is_main_query() && is_singular('archival')) {
-		print_r($query->query_vars);
-		$post_id = get_queried_object_id();
-		$current_language = pll_current_language();
-
-		// Fallback auf Originalsprache, wenn keine Übersetzung existiert
-		if (!pll_get_post($post_id, $current_language)) {
-			$default_language = pll_default_language();
-			$fallback_post_id = pll_get_post($post_id, $default_language);
-
-			if ($fallback_post_id) {
-				// Setze den Beitrag für die Anfrage
-				$query->set('p', $fallback_post_id);
-				$query->set('lang', $current_language);
-			} else {
-				// Keine Übersetzung oder Fallback vorhanden - verhindere 404
-				$query->set_404(false);
-			}
-		}
-	}
-});
-*/

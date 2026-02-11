@@ -855,7 +855,7 @@ msgstr "Archivinformation"
 
 #: inc/form-validation/create-sip-pdf.class.php:261
 msgid "Archivist"
-msgstr "Archivar"
+msgstr "Archivar/in"
 
 #. translators: %s: ID/Name of the folder where the sip is stored.
 #: inc/form-validation/create-sip.class.php:59

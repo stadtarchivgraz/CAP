@@ -98,14 +98,14 @@ class Create_Sip_Pdf extends Form_Validation {
 		$archival_upload_purpose    = get_post_meta($archival_id, '_archival_upload_purpose', true);
 		$archival_blocking_time_row = '';
 		if ($archival_blocking_time = get_post_meta($archival_id, '_archival_blocking_time', true)) {
-			$archival_blocking_time_row = '<tr><th>' . esc_html__('Blocking Time', 'sip') . '</th><td>' . esc_html( $archival_blocking_time ) . '</td></tr>';
+			$archival_blocking_time_row = '<tr><th>' . esc_html__('Blocking Time', 'sip') . '</th><td style="width:100%;">' . esc_html( $archival_blocking_time ) . '</td></tr>';
 		}
 		$archival_custom_meta_row = '';
 		if ($sip_custom_meta = carbon_get_theme_option('sip_custom_meta')) {
 			foreach ($sip_custom_meta as $custom_meta) {
 				$meta_name = sanitize_title($custom_meta['sip_custom_meta_key']);
 				if ($meta_value = get_post_meta($archival_id, '_archival_' . $meta_name, true)) {
-					$archival_custom_meta_row .= '<tr><th>' . esc_html( $custom_meta['sip_custom_meta_title_' . $current_locale] ) . '</th><td>' . esc_html( $meta_value ) . '</td></tr>';
+					$archival_custom_meta_row .= '<tr><th>' . esc_html( $custom_meta['sip_custom_meta_title_' . $current_locale] ) . '</th><td style="width:100%;">' . esc_html( $meta_value ) . '</td></tr>';
 				}
 			}
 		}
@@ -115,7 +115,7 @@ class Create_Sip_Pdf extends Form_Validation {
 			foreach ($sip_custom_archival_user_meta as $custom_archival_user_meta) {
 				$meta_name = sanitize_title($custom_archival_user_meta['sip_custom_archival_user_meta_key']);
 				if ($meta_value = get_post_meta($archival_id, '_archival_' . $meta_name, true)) {
-					$archival_user_custom_meta_row .= '<tr><th>' . $custom_archival_user_meta['sip_custom_archival_user_meta_title_' . $current_locale] . '</th><td>' . $meta_value . '</td></tr>';
+					$archival_user_custom_meta_row .= '<tr><th>' . $custom_archival_user_meta['sip_custom_archival_user_meta_title_' . $current_locale] . '</th><td style="width:100%;">' . $meta_value . '</td></tr>';
 				}
 			}
 		}
@@ -145,7 +145,7 @@ class Create_Sip_Pdf extends Form_Validation {
 		);
 
 		try {
-			$html2pdf = new Html2Pdf('P', 'A4', substr($current_locale,0,2));
+			$html2pdf = new Html2Pdf( 'P', 'A4', substr( $current_locale, 0, 2 ), true, 'UTF-8', array(5,5,5,8), true );
 			$html2pdf->writeHTML( $htmlContent );
 			$html2pdf->output();
 			exit;
@@ -196,27 +196,27 @@ class Create_Sip_Pdf extends Form_Validation {
 	}
 
 	private static function render_archival_meta($archival_id, $archival_address, $archival_originator, $archival_date_time, $archival_upload_purpose, $archival_blocking_time_row, $archival_custom_meta_row) {
-		return '<table border="0" cellpadding="0" cellspacing="5" width="100%">
+		return '<table border="0" cellpadding="0" cellspacing="5" width="595">
 				<tr>
 					<th>' . esc_html__('Location', 'sip') . '</th>
-					<td>' . wpautop( sanitize_textarea_field( $archival_address ) ) . '</td>
+					<td style="width:100%;">' . sanitize_textarea_field( $archival_address ) . '</td>
 				</tr>
 				<tr>
 					<th>' . esc_html__('Originator', 'sip') . '</th>
-					<td>' . esc_html( $archival_originator ) . '</td>
+					<td style="width:100%;">' . esc_html( $archival_originator ) . '</td>
 				</tr>
 				<tr>
 					<th>' . esc_html__('Date/Time', 'sip') . '</th>
-					<td>' . esc_html( $archival_date_time ) . '</td>
+					<td style="width:100%;">' . esc_html( $archival_date_time ) . '</td>
 				</tr>
 				<tr>
 					<th>' . esc_html__('Upload Purpose', 'sip') . '</th>
-					<td>' . esc_html( $archival_upload_purpose ) . '</td>
+					<td style="width:100%;">' . esc_html( $archival_upload_purpose ) . '</td>
 				</tr>
 				' . $archival_blocking_time_row . '
 				' . $archival_custom_meta_row . '
 				<tr>
-					' . strip_tags( get_the_term_list( $archival_id, 'archival_tag', '<th>' . esc_html__('Tags', 'sip') . '</th><td>', ' | ', '</td>' ), '<th><td>' ) . '
+					' . strip_tags( get_the_term_list( $archival_id, 'archival_tag', '<th>' . esc_html__('Tags', 'sip') . '</th><td style="width:100%;">', ' | ', '</td>' ), '<th><td>' ) . '
 				</tr>
 			</table>';
 	}
@@ -227,14 +227,14 @@ class Create_Sip_Pdf extends Form_Validation {
 		}
 
 		return '<h4>' . esc_html__('Archive Information', 'sip') . '</h4>
-			<table border="0" cellpadding="0" cellspacing="5" width="100%">
+			<table border="0" cellpadding="0" cellspacing="5" width="595">
 				<tr>
 					<th>' . esc_html__('Numbering', 'sip') . '</th>
-					<td>' . esc_html( get_post_meta($archival_id, '_archival_numeration', true) ) . '</td>
+					<td style="width:100%;">' . esc_html( get_post_meta($archival_id, '_archival_numeration', true) ) . '</td>
 				</tr>
 				<tr>
 					<th>' . esc_html__('Annotation', 'sip') . '</th>
-					<td>' . esc_html( get_post_meta($archival_id, '_archival_annotation', true) ) . '</td>
+					<td style="width:100%;">' . esc_html( get_post_meta($archival_id, '_archival_annotation', true) ) . '</td>
 				</tr>
 				' . $archival_user_custom_meta_row . '
 			</table>';
@@ -243,9 +243,9 @@ class Create_Sip_Pdf extends Form_Validation {
 	private static function render_user_block($archival_user, $archivist, $date_format) {
 		$user_address = get_user_meta($archival_user->ID, 'user_address', true);
 
-		return '<table border="0" cellpadding="0" cellspacing="0" width="100%">
+		return '<table border="0" cellpadding="0" cellspacing="5" width="595">
 				<tr>
-					<td style="width: 50%; text-align: left;">
+					<td style="width: 50%;">
 						<h4>' . esc_html__('User', 'sip') . '</h4>
 						<p>
 							' . esc_html( $archival_user->display_name ) . '<br>
@@ -257,7 +257,7 @@ class Create_Sip_Pdf extends Form_Validation {
 							' . esc_html( $archival_user->user_email ) . '
 						</p>
 					</td>
-					<td style="width: 50%; text-align: left;">
+					<td style="width: 50%;">
 						<h4>' . esc_html__('Archivist', 'sip') . '</h4>
 						<p>' . esc_html( $archivist->display_name ) . '</p>
 						<p>' . esc_html( $archivist->user_email ) . '</p>
@@ -273,6 +273,7 @@ class Create_Sip_Pdf extends Form_Validation {
 				.sip div { width: 50%; margin-bottom: 5mm; }
 				table { page-break-inside: auto; }
 				tr, td { page-break-inside: avoid; }
+				th, td {vertical-align:top;}
 				img { max-width: 100%; width: auto; height: auto; }
 			</style>
 
@@ -280,7 +281,7 @@ class Create_Sip_Pdf extends Form_Validation {
 				' . Create_Sip_Pdf::render_header($sip_institution_logo, $archive) . '
 				' . Create_Sip_Pdf::render_footer($date_time_format) . '
 				' . Create_Sip_Pdf::render_title_block($archival, $date_time_format) . '
-				' . wp_kses_post( $archival->post_content ) . '
+				' . wpautop( wp_kses_post( $archival->post_content ) ) . '
 				' . Create_Sip_Pdf::render_archival_meta($archival_id, $archival_address, $archival_originator, $archival_date_time, $archival_upload_purpose, $archival_blocking_time_row, $archival_custom_meta_row) . '
 				' . Create_Sip_Pdf::render_admin_meta($archival_id, $archival_user_custom_meta_row) . '
 				' . Create_Sip_Pdf::render_user_block($archival_user, $archivist, $date_format) . '
