@@ -57,32 +57,98 @@ class DB_Query_Helper {
 	 * Retrieves the post count of all archival posts from all users for an specific upload purpose.
 	 *
 	 * @param string $upload_purpose_option
-	 * @param bool $only_published_posts [Optional] Adds an additional filter to the database call to filter by post_status.
-	 *                                    Default: false = includes posts with all post_status values.
+	 * @param array{archive: string, tag: string, purpose: string, year: string, search: string, post_status: string} $args
 	 * @return int The number of posts found. 0 if no post was found
 	 */
-	public static function starg_get_upload_purpose_post_count(string $upload_purpose_option, bool $only_published_posts = false): int {
+	public static function starg_get_upload_purpose_post_count(string $upload_purpose_option, array $args): int {
 		if (! $upload_purpose_option) {
 			return 0;
 		}
 
-		$post_status_filter = 'AND p.post_status != "trash"';
-		if ($only_published_posts) {
-			$post_status_filter = "AND p.post_status = 'publish'";
+		global $wpdb;
+		$defaults = array(
+			'archive'     => '',
+			'tag'         => '',
+			'purpose'     => '',
+			'year'        => '',
+			'search'      => '',
+			'post_status' => 'draft, pending, publish',
+			'post_type'   => Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG,
+		);
+		$args = wp_parse_args( $args, $defaults );
+
+		$where   = array();
+		$prepare = array();
+
+		// we don't want to filter the purpose.
+		$where[]   = "pm.meta_key = '_archival_upload_purpose'";
+		$where[]   = "pm.meta_value = %s";
+		$prepare[] = $upload_purpose_option;
+
+		$where[]   = "p.post_type = %s";
+		$prepare[] = $args['post_type'];
+		$where[]   = "p.post_status NOT IN ('trash', 'auto-draft', 'inherit')";
+
+		if (! empty($args['post_status'])) {
+			$where[]   = "p.post_status = %s";
+			$prepare[] = $args['post_status'];
 		}
 
-		// todo: we should change the way we store the upload purposes! Currently, we're saving the translated string from the plugin options.
+		$year_join = '';
+		if (! empty($args['year'])) {
+			$year_join = "INNER JOIN $wpdb->postmeta pm_year
+				ON p.ID = pm_year.post_id
+				AND pm_year.meta_key = '_archival_from'";
+
+			$where[]   = "pm_year.meta_value = %d";
+			$prepare[] = (int) $args['year'];
+		}
+
+		if (! empty($args['search'])) {
+			$where[]   = "p.post_title LIKE %s";
+			$prepare[] = '%' . $wpdb->esc_like($args['search']) . '%';
+		}
+
+		$tag_join = '';
+		if ( ! empty( $args['tag'] ) ) {
+			$tag_join = "
+				INNER JOIN $wpdb->term_relationships tr ON p.ID = tr.object_id
+				INNER JOIN $wpdb->term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+				INNER JOIN $wpdb->terms t ON tt.term_id = t.term_id
+			";
+
+			$where[]   = "tt.taxonomy = %s";
+			$where[]   = "t.slug = %s";
+			$prepare[] = Archival_Custom_Posts::ARCHIVAL_TAG_CUSTOM_TAX_SLUG;
+			$prepare[] = $args['tag'];
+		}
+
+		$archive_join = '';
+		if ( ! empty( $args['archive'] ) ) {
+			$archive_join = "
+				INNER JOIN $wpdb->term_relationships atr ON p.ID = atr.object_id
+				INNER JOIN $wpdb->term_taxonomy att ON atr.term_taxonomy_id = att.term_taxonomy_id
+				INNER JOIN $wpdb->terms at ON att.term_id = at.term_id
+			";
+
+			$where[]   = "att.taxonomy = %s";
+			$where[]   = "at.slug = %s";
+			$prepare[] = Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG;
+			$prepare[] = $args['archive'];
+		}
+
+		// todo: we should change the way we store the upload purposes! Currently, we're saving the aanslated string from the plugin options.
 		// This means we get different values for different user! This means we can't filter ALL entries based on this metadata - we can only filter all german ones, all english ones and so on!
 		// maybe bypass this problem by looping through every translation?
-		global $wpdb;
-		$upload_purpose_sql = "SELECT count(pm.post_id)
-		FROM $wpdb->postmeta pm
+		$upload_purpose_sql = "SELECT COUNT(DISTINCT pm.post_id)
+			FROM $wpdb->postmeta pm
 			LEFT JOIN $wpdb->posts p ON pm.post_id = p.ID
-		WHERE pm.meta_key = '_archival_upload_purpose'
-			AND pm.meta_value = %s
-			AND p.post_type = %s
-			$post_status_filter";
-		$result = $wpdb->get_var($wpdb->prepare($upload_purpose_sql, $upload_purpose_option, Archival_Custom_Posts::ARCHIVAL_POST_TYPE_SLUG));
+			$year_join
+			$tag_join
+			$archive_join
+			WHERE " . implode( ' AND ', $where );
+
+		$result = (int) $wpdb->get_var( $wpdb->prepare( $upload_purpose_sql, $prepare ) );
 
 		return (int) $result ?: 0;
 	}
@@ -94,6 +160,7 @@ class DB_Query_Helper {
 	 * @param string $upload_purpose_option
 	 * @param bool $only_published_posts [Optional] Adds an additional filter to the database call to filter by post_status.
 	 *                                    Default: false = includes posts with all post_status values.
+	 * @deprecated use @see DB_Query_Helper::starg_get_upload_purpose_post_count instead!
 	 * @return int The number of posts found. 0 if no post was found
 	 */
 	public static function starg_get_upload_purpose_post_count_for_user(int $user_archive, string $upload_purpose_option, bool $only_published_posts = false): int {

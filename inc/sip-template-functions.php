@@ -101,7 +101,6 @@ add_action( 'user_register', 'starg_save_user_archive_on_register', 10, 2 );
  */
 function starg_save_user_archive_on_update( $user_id, $old_user_data, array $userdata ): void {
 	if ( ! is_admin() || ! current_user_can( 'manage_options' ) || ! isset( $_POST[ 'user_archive' ] ) ) {
-		wp_die('false');
 		return;
 	}
 

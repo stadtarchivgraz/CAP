@@ -24,6 +24,14 @@ $single_archive_id = DB_Query_Helper::maybe_get_single_archive_id();
 		$year        = esc_attr( $filter_input['filter-year'] );
 		$search      = esc_attr( $filter_input['filter-search'] );
 		$post_status = esc_attr( $filter_input['filter-post-status'] );
+		$filter_args = array(
+			'archive'     => $archive,
+			'tag'         => $tag,
+			'purpose'     => $purpose,
+			'year'        => $year,
+			'search'      => $search,
+			'post_status' => $post_status,
+		);
 
 		$archive_id   = $user_archive_id;
 		$archive_term = get_term_by( 'slug', $archive, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG );
@@ -56,7 +64,7 @@ $single_archive_id = DB_Query_Helper::maybe_get_single_archive_id();
 								// We use the "none"-Option here instead of "all" as we can not easily set the option for "show_option_all" other than 0 but we can set "show_option_none" alongside "option_none_value"!
 								wp_dropdown_categories(array(
 									'show_option_none'  => esc_attr__('all', 'sip'),
-									'option_none_value' => 'all',
+									'option_none_value' => '0',
 									'taxonomy'          => Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG,
 									'name'              => 'filter-archive',
 									'orderby'           => 'name',
@@ -96,11 +104,7 @@ $single_archive_id = DB_Query_Helper::maybe_get_single_archive_id();
 
 			foreach ( $upload_purpose_options as $single_upload_purpose_option ) {
 				$single_upload_purpose_option = esc_attr( $single_upload_purpose_option );
-				if ( ! $archive ) {
-					$upload_purpose[$single_upload_purpose_option] = DB_Query_Helper::starg_get_upload_purpose_post_count( $single_upload_purpose_option );
-				} else {
-					$upload_purpose[$single_upload_purpose_option] = DB_Query_Helper::starg_get_upload_purpose_post_count_for_user( $archive_id, $single_upload_purpose_option );
-				}
+				$upload_purpose[$single_upload_purpose_option] = DB_Query_Helper::starg_get_upload_purpose_post_count( $single_upload_purpose_option, $filter_args );
 			}
 			?>
 			<div class="field">
