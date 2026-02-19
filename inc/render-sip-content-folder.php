@@ -71,22 +71,25 @@ class Render_Sip_Content_Folder {
 			echo '<tr><td colspan="5" style="font-size:16px;font-weight:bold;padding-bottom:12px;">' . esc_attr__( 'Uploaded files:', 'sip' ) . '</td></tr>';
 			echo '<tr>';
 		} else {
-			echo '<ol class="sip-listing" id="sip-files" type="">';
+			echo '<ol class="sip-listing" id="sip-files">';
 		}
+
 		$element_counter = 0; // to add a new tr if needed. We display 5 images in one row.
 		$file_name_list  = array(); // save all filenames for the ordered list we render after the thumbnails.
+		$close_ol        = false; // make sure each ol is closed.
 		foreach ($it as $path) {
 			$path       = trim($path);
 			$path_clean = substr($path, strpos($path, '/'));
 
-			// todo: something wrong with the <ol>?
 			if (is_dir($path_clean)) {
 				if ( $is_pdf ) {
 					// for PDFs we create a new table row for the name of the folder.
 					// translators: %s: Name of a folder.
 					echo '</tr><tr><td colspan="5" style="font-size:14px;font-weight:bold;">' . sprintf( esc_attr__( 'Folder: %s', 'sip' ), basename($path) ) . '</td></tr><tr>';
 				} else {
-					echo '<li class="subfolder">' . basename($path) . '</li><ol style="list-style:none;">';
+					if ( $close_ol ) { echo '</ol>'; $close_ol = false; }
+					echo '<li class="subfolder">' . basename($path) . '</li><ol>';
+					$close_ol = true;
 				}
 				continue;
 			}
