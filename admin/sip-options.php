@@ -3,6 +3,7 @@ if (! defined('WPINC')) { die; }
 
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
+use Appwrite\ClamAV\Network;
 
 /**
  * Returns an URL to the options page of the plugin.
@@ -52,6 +53,23 @@ video/mp4';
 	$maptiler_api_link    = '<a href="https://cloud.maptiler.com/account/keys/" target="_blank">https://cloud.maptiler.com/account/keys/</a>';
 	$google_maps_api_link = '<a href="hhttps://developers.google.com/maps/third-party-platforms/wordpress/generate-api-key" target="_blank">hhttps://developers.google.com/maps/third-party-platforms/wordpress/generate-api-key</a>';
 
+	// Check if ClamAV is up to date.
+	$clamav_date = '';
+	if ( get_option('_sip_clamav_host') && get_option('_sip_clamav_port') ) {
+		try {
+			$clamav              = new Network(esc_attr(get_option('_sip_clamav_host')), (int) esc_attr(get_option('_sip_clamav_port')));
+			$clamav_version      = esc_attr( $clamav->version() );
+			$version_date_st     = substr(strrchr($clamav_version, '/'), 1);
+			$clamav_version_date = DateTime::createFromFormat('D M d H:i:s Y', $version_date_st);
+			$clamav_date         = date_i18n( 'd. F Y', $clamav_version_date->getTimestamp() );
+		} catch (Exception $exception) {
+			$logging = apply_filters( 'starg/logging', null );
+			if ( $logging instanceof Starg_Logging ) {
+				$logging->create_log_entry( $exception->getMessage() );
+			}
+		}
+	}
+
 	return array(
 		Field::make('separator', 'sip_archive', esc_html__( 'Editorial Options', 'sip' ) ),
 		Field::make('select', 'sip_archive_role', esc_html__('User role for editorial members', 'sip'))
@@ -85,7 +103,7 @@ The value is specified as a list of MIME types (e.g. application/pdf, image/png)
 				)
 			))
 			->set_default_value('localhost')
-			->set_width(50)
+			->set_width(37.5)
 			->set_help_text( esc_html__( 'The IP address or hostname where the ClamAV service is reachable.
 This setting defines which server the application connects to in order to scan files for malware.', 'sip' ) ),
 		Field::make('text', 'sip_clamav_port', 'ClamAV Port')
@@ -96,9 +114,20 @@ This setting defines which server the application connects to in order to scan f
 				)
 			))
 			->set_default_value('3310')
-			->set_width(50)
+			->set_width(37.5)
 			->set_help_text( esc_html__( 'The network port on which the ClamAV service is listening on the specified host.
 Ensure that the port is correctly configured and reachable from the application.', 'sip' ) ),
+		Field::make( 'text', 'sip_clamav_version', esc_attr__( 'ClamAV signature date', 'sip' ) )
+			->set_conditional_logic(array(
+				array(
+					'field' => 'sip_clamav',
+					'value' => true,
+				)
+			))
+			->set_default_value( esc_attr( $clamav_date ) )
+			->set_attribute( 'readOnly', 'readonly' )
+			->set_width(25)
+			->set_help_text( esc_html__( 'The ClamAV signature date. If the date is over a week old, please contact your administrator.', 'sip' ) ),
 		Field::make('separator', 'sip_housekeeping', esc_html__( 'Housekeeping', 'sip' ) ),
 		Field::make('checkbox', 'sip_cron_delete', esc_html__('Automatically delete uploaded files', 'sip'))
 			->set_help_text( esc_html__( 'Enables the automatic deletion of uploaded files.
