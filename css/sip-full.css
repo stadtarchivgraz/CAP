@@ -9966,7 +9966,7 @@ html.is-clipped,
   margin-left: 0 !important;
   margin-bottom: 2em;
   font-size: 80%;
-  list-style: none;
+  list-style: none !important;
   display: flex;
   flex-wrap: wrap;
 }
@@ -10026,6 +10026,8 @@ html.is-clipped,
   width: 33.333333%;
   min-width: 75px;
   margin-bottom: 1em;
+  margin-left: auto;
+  margin-right: auto;
 }
 .sip .content dl {
   display: flex;

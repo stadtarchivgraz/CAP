@@ -137,7 +137,7 @@ class DB_Query_Helper {
 			$prepare[] = $args['archive'];
 		}
 
-		// todo: we should change the way we store the upload purposes! Currently, we're saving the aanslated string from the plugin options.
+		// todo: we should change the way we store the upload purposes! Currently, we're saving the translated string from the plugin options.
 		// This means we get different values for different user! This means we can't filter ALL entries based on this metadata - we can only filter all german ones, all english ones and so on!
 		// maybe bypass this problem by looping through every translation?
 		$upload_purpose_sql = "SELECT COUNT(DISTINCT pm.post_id)
