@@ -53,6 +53,8 @@ video/mp4';
 	$maptiler_api_link    = '<a href="https://cloud.maptiler.com/account/keys/" target="_blank">https://cloud.maptiler.com/account/keys/</a>';
 	$google_maps_api_link = '<a href="hhttps://developers.google.com/maps/third-party-platforms/wordpress/generate-api-key" target="_blank">hhttps://developers.google.com/maps/third-party-platforms/wordpress/generate-api-key</a>';
 
+	$max_file_size = starg_parse_filesize( ini_get( 'upload_max_filesize' ) );
+
 	// Check if ClamAV is up to date.
 	$clamav_date = '';
 	if ( get_option('_sip_clamav_host') && get_option('_sip_clamav_port') ) {
@@ -84,6 +86,11 @@ video/mp4';
 			->set_default_value('50000000')
 			->set_width(20)
 			->set_help_text( esc_html__( 'This is the maximum size of files a user is allowed to upload for one submission.', 'sip' ) ),
+		Field::make('text', 'sip_max_filesize', esc_html__('Maximum filesize set by the system', 'sip'))
+			->set_default_value( starg_format_bytes( $max_file_size ) )
+			->set_width(20)
+			->set_attribute( 'readOnly', 'readonly' )
+			->set_help_text( esc_html__( 'This is the maximum size of a single file. Please contact your administrator if you want to change this setting.', 'sip' ) ),
 		Field::make('textarea', 'sip_mime_types', esc_html__('Supported file MIME Types', 'sip'))
 			->set_default_value($default_mime_types)
 			->set_width(20)

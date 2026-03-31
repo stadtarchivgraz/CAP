@@ -115,9 +115,29 @@ function starg_format_bytes($size, $precision = 2) {
 	$base = log($size, 1024);
 	$suffixes = array('B', 'KB', 'MB', 'GB', 'TB');
 
-	return round(pow(1024, $base - floor($base)), $precision) . ' ' . $suffixes[floor($base)];
+	return esc_attr( round(pow(1024, $base - floor($base)), $precision) . ' ' . $suffixes[floor($base)] );
 }
 
+/**
+ * Parse the value of a size format to get it in bytes.
+ * Used in situations where you are not sure if the value is a string like "2M" or an int like "2" (like when reading the upload_max_filesize setting).
+ *
+ * @param string|int $size
+ * @return int
+ */
+function starg_parse_filesize($size): int {
+	$size  = trim( $size );
+	$unit  = strtolower(substr($size, -1));
+	$value = (int)$size;
+
+	switch ($unit) {
+		case 'g': $value *= 1024;
+		case 'm': $value *= 1024;
+		case 'k': $value *= 1024;
+	}
+
+	return esc_attr( $value );
+}
 
 
 /**
