@@ -349,8 +349,8 @@ Thank you for your contribution.', 'sip' ), $author_name );
 			'archival_address'        => 'sanitize_text_field',
 			'archival_lat'            => 'sanitize_text_field',
 			'archival_lng'            => 'sanitize_text_field',
-			'archival_area'           => 'starg_sanitize_json',
-			'archival_tags'           => 'trim',// todo: this is an array/json! We might change "trim" to "starg_sanitize_json"
+			'archival_area'           => 'starg_sanitize_geo_json',
+			'archival_tags'           => 'starg_sanitize_tags',
 			'archival_upload_purpose' => 'sanitize_text_field',
 			'archival_blocking_time'  => 'sanitize_text_field',
 			'archival_right_transfer' => 'sanitize_text_field',
