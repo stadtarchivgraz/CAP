@@ -271,22 +271,22 @@ if ( carbon_get_theme_option( 'sip_map_maptiler_api_key' ) ) {
 		map.addControl(areaSelection);
 
 		<?php
-		if ( json_decode($area) ) :
+		if ( $decoded_area = json_decode( $area, true ) ) :
 			if ( is_singular( 'archival' ) ) :
 				?>
-				L.geoJSON(<?php echo $area; ?>).addTo(map);
+				L.geoJSON(<?php echo wp_json_encode( $decoded_area ); ?>).addTo(map);
 			<?php
 			else:
-				$coordinates = json_decode($area)->geometry->coordinates[0];
+				$coordinates = $decoded_area['geometry']['coordinates'][0];
 				?>
 				const brect = map.getContainer().getBoundingClientRect();
-				console.log(brect);
+				// console.log(brect);
 				<?php foreach ($coordinates as $i => $coordinate) : ?>
-					let point_<?php echo $i + 1; ?> = map.latLngToContainerPoint([<?php echo $coordinate[1]; ?>, <?php echo $coordinate[0]; ?>]);
+					let point_<?php echo esc_attr( $i ) + 1; ?> = map.latLngToContainerPoint([<?php echo esc_attr( $coordinate[1] ); ?>, <?php echo esc_attr( $coordinate[0] ); ?>]);
 					map.fire("as:point-add",
 						new MouseEvent("click", {
-							clientX: point_<?php echo $i + 1; ?>.x + brect.left,
-							clientY: point_<?php echo $i + 1; ?>.y + +brect.top
+							clientX: point_<?php echo esc_attr( $i ) + 1; ?>.x + brect.left,
+							clientY: point_<?php echo esc_attr( $i ) + 1; ?>.y + +brect.top
 						})
 					);
 				<?php endforeach; ?>

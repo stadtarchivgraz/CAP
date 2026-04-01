@@ -78,11 +78,16 @@ class Filter_Archival_Query extends Form_Validation {
 		$this->user_input = $this->user_input_sanitization();
 		if ( ! $this->user_input ) { return $args; }
 
-		$archive = $this->user_input['filter-archive'];
-		$tag     = $this->user_input['filter-tag'];
-		$purpose = $this->user_input['filter-purpose'];
-		$year    = $this->user_input['filter-year'];
-		$search  = $this->user_input['filter-search'];
+		$archive     = $this->user_input['filter-archive'];
+		$tag         = $this->user_input['filter-tag'];
+		$purpose     = $this->user_input['filter-purpose'];
+		$year        = $this->user_input['filter-year'];
+		$search      = $this->user_input['filter-search'];
+		$post_status = $this->user_input['filter-post-status'];
+
+		if ( $post_status ) {
+			$args['post_status'] = $post_status;
+		}
 
 		if ( $archive ) {
 			if ( 'all' === $archive ) {
@@ -159,11 +164,12 @@ class Filter_Archival_Query extends Form_Validation {
 	 */
 	function get_valid_input_names(): array {
 		return array(
-			'filter-archive' => 'sanitize_text_field',
-			'filter-tag'     => 'sanitize_text_field',
-			'filter-purpose' => 'sanitize_text_field',
-			'filter-year'    => 'sanitize_text_field',
-			'filter-search'  => 'sanitize_text_field',
+			'filter-archive'     => 'sanitize_text_field',
+			'filter-tag'         => 'sanitize_text_field',
+			'filter-purpose'     => 'sanitize_text_field',
+			'filter-year'        => 'sanitize_text_field',
+			'filter-search'      => 'sanitize_text_field',
+			'filter-post-status' => 'sanitize_text_field',
 		);
 	}
 	

@@ -64,7 +64,7 @@ Class Starg_Security_Settings {
 		// open the rest api for logged in users.
 		if ( is_user_logged_in() ) { return $results; }
 
-		$request_uri = $_SERVER[ 'REQUEST_URI' ] ?? '';
+		$request_uri = esc_url( $_SERVER[ 'REQUEST_URI' ] ) ?? '';
 
 		// whitelisted routes.
 		$allowed_routes = array(
@@ -208,8 +208,12 @@ function starg_sanitize_json(string $json_string = ''): string {
 		return '';
 	}
 
+	if (json_last_error() !== JSON_ERROR_NONE) {
+		return ''; // invalid json.
+	}
+
 	$sanitized_data = starg_sanitize_json_array($data);
-	return ($sanitized_data) ? json_encode($sanitized_data) : '';
+	return ($sanitized_data) ? wp_json_encode($sanitized_data) : '';
 }
 
 /**
@@ -220,11 +224,116 @@ function starg_sanitize_json_array($data = array()) {
 	$sanitized_data = array();
 	if (is_array($data)) {
 		foreach ($data as $key => $value) {
-			$sanitized_data[htmlspecialchars($key, ENT_QUOTES, 'UTF-8')] = starg_sanitize_json_array($value);
+			$sanitized_data[sanitize_text_field($key)] = starg_sanitize_json_array($value);
 		}
 	} else {
-		$sanitized_data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+		$sanitized_data = sanitize_text_field($data);
 	}
 
 	return $sanitized_data;
+}
+
+/**
+ * Sanitize a GeoJSON object based on specific structure.
+ */
+function starg_sanitize_geo_json(string $json_string = ''): string {
+	if (! $json_string) { return ''; }
+
+	$data = json_decode(wp_unslash($json_string), true);
+	if (! $data || ! is_array($data)) { return ''; }
+
+	// validate json.
+	if (json_last_error() !== JSON_ERROR_NONE) { return ''; }
+
+	// validate structure.
+	if (
+		! isset($data['type']) ||
+		$data['type'] !== 'Feature' ||
+		! isset($data['geometry']['type']) ||
+		$data['geometry']['type'] !== 'Polygon' ||
+		! isset($data['geometry']['coordinates'])
+	) {
+		return '';
+	}
+
+	$new_coordinates = array();
+	foreach ($data['geometry']['coordinates'] as $polygon) {
+		if ( ! is_array( $polygon ) ) { continue; }
+
+		$new_polygon = array();
+		foreach ($polygon as $point) {
+			// coordinates must have 2 values.
+			if ( ! is_array($point) || count($point) !== 2 ) { continue; }
+
+			// Coordinates must be numeric (floats).
+			if ( ! is_numeric($point[0]) || !is_numeric($point[1])) { continue; }
+
+			$lng = (float) $point[0];
+			$lat = (float) $point[1];
+
+			// check possible values for latitude and longitude (Geo-Sanity)
+			if ($lng < -180 || $lng > 180 || $lat < -90 || $lat > 90) { continue; }
+
+			$new_polygon[] = array( $lng, $lat );
+		}
+
+		// Polygon must have 4 points as coordinates (GeoJSON rule)
+		if (count($new_polygon) < 4) { continue; }
+
+		// validate polygon closing.
+		if ($new_polygon[0] !== end($new_polygon)) {
+			$new_polygon[] = $new_polygon[0];
+		}
+
+		$new_coordinates[] = $new_polygon;
+	}
+
+	if ( ! $new_coordinates || ! isset( $new_coordinates[0] ) ) { return ''; }
+
+	// build the GeoJSON object.
+	$sanitized_geo_json = array(
+		'type'       => 'Feature',
+		'properties' => array(),
+		'geometry'   => array(
+			'type'        => 'Polygon',
+			'coordinates' => $new_coordinates,
+		),
+	);
+
+	// todo: maybe allow properties later?
+	// $allowed_properties = ['name'];
+	// $properties = array();
+	// if (isset($data['properties']) && is_array($data['properties'])) {
+	// 	foreach ($allowed_properties as $key) {
+	// 		if (isset($data['properties'][$key]) && is_string($data['properties'][$key])) {
+	// 			$properties[$key] = sanitize_text_field($data['properties'][$key]);
+	// 		}
+	// 	}
+	// }
+	// $sanitized_geo_json['properties'] = $properties;
+
+	return $sanitized_geo_json ? wp_json_encode( $sanitized_geo_json ) : '';
+}
+
+/**
+ * Sanitize a JSON object for tags.
+ */
+function starg_sanitize_tags( string $json_string = ''): string {
+	if ( ! $json_string ) { return ''; }
+
+	$data = json_decode( wp_unslash( $json_string ), true );
+	if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $data ) ) { return ''; }
+
+	$sanitized_data = array();
+	foreach ( $data as $single_data ) {
+		if ( ! isset( $single_data['value'] ) || ! is_string( $single_data['value'] ) ) {
+			continue;
+		}
+
+		$sanitized_data[] = array(
+			'value' => sanitize_text_field( $single_data['value'] )
+		);
+	}
+
+	return $sanitized_data ? wp_json_encode( $sanitized_data, JSON_UNESCAPED_UNICODE ) : '';
 }

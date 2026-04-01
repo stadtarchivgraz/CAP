@@ -185,41 +185,45 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 				</div>
 			</div>
 		</div>
-		<?php $user_archive = $update_user_profile->get_form_value( 'user_archive' ); ?>
-		<div class="field is-horizontal">
-			<div class="field-label is-normal">
-				<label for="archive" class="label">
-					<?php esc_html_e('Archive', 'sip'); ?>*
-				</label>
-			</div>
-			<div class="field-body">
-				<div class="field">
-					<div class="control">
-						<?php
-						if ( ! $user_archive) :
-							$args = array(
-								'name'              => 'user_archive',
-								'id'                => 'archive',
-								'class'             => 'postform',
-								'taxonomy'          => Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG,
-								'hide_empty'        => false,
-								'hide_if_empty'     => false,
-								'value_field'       => 'term_id',
-								'required'          => true,
-								'selected'          => $user_archive,
-							);
-							wp_dropdown_categories($args);
-						else :
-							$archive = get_term($user_archive, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG); ?>
-							<input id="archive" class="input is-static" name="static_user_archive" type="text" value="<?php echo $archive->name; ?>" aria-readonly="true" readonly>
+		<?php
+		if ( ! DB_Query_Helper::maybe_get_single_archive_id() ) :
+			$user_archive = $update_user_profile->get_form_value( 'user_archive' );
+			?>
+			<div class="field is-horizontal">
+				<div class="field-label is-normal">
+					<label for="archive" class="label">
+						<?php esc_html_e('Archive', 'sip'); ?>*
+					</label>
+				</div>
+				<div class="field-body">
+					<div class="field">
+						<div class="control">
+							<?php
+							if ( ! $user_archive) :
+								$args = array(
+									'name'              => 'user_archive',
+									'id'                => 'archive',
+									'class'             => 'postform',
+									'taxonomy'          => Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG,
+									'hide_empty'        => false,
+									'hide_if_empty'     => false,
+									'value_field'       => 'term_id',
+									'required'          => true,
+									'selected'          => $user_archive,
+								);
+								wp_dropdown_categories($args);
+							else :
+								$archive = get_term($user_archive, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG); ?>
+								<input id="archive" class="input is-static" name="static_user_archive" type="text" value="<?php echo $archive->name; ?>" aria-readonly="true" readonly>
+							<?php endif; ?>
+						</div>
+						<?php if ( ! $user_archive) : ?>
+							<p class="help"><?php esc_html_e('This selection cannot be changed', 'sip'); ?></p>
 						<?php endif; ?>
 					</div>
-					<?php if (!$user_archive) : ?>
-						<p class="help"><?php esc_html_e('This selection cannot be changed', 'sip'); ?></p>
-					<?php endif; ?>
 				</div>
 			</div>
-		</div>
+		<?php endif; ?>
 
 		<h3><?php esc_html_e('Personal account', 'sip'); ?></h3>
 		<?php

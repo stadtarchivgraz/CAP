@@ -45,9 +45,13 @@ class Starg_Update_User_Profile extends Form_Validation {
 			return false;
 		}
 
-		// todo: implement user_meta error handling!
-		if ( $this->user_input[ 'user_archive' ] ) {
-			update_user_meta( (int) $this->user_input['ID'], 'user_archive', $this->user_input['user_archive'] );
+		// if the website has only one institution registered, we set it by default.
+		$single_archive_id = DB_Query_Helper::maybe_get_single_archive_id();
+		if ( $single_archive_id ) {
+			update_user_meta( (int) $this->user_input['ID'], 'user_archive', (int) $single_archive_id );
+			update_user_meta( (int) $this->user_input['ID'], 'user_archive_profile', 1 );
+		} elseif ( $this->user_input[ 'user_archive' ] ) {
+			update_user_meta( (int) $this->user_input['ID'], 'user_archive', (int) $this->user_input['user_archive'] );
 			update_user_meta( (int) $this->user_input['ID'], 'user_archive_profile', 1 );
 		}
 

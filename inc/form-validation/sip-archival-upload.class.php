@@ -18,19 +18,44 @@ class Sip_Archival_Upload extends Form_Validation {
 		$is_form_valid = $this->form_validation();
 		if ( ! $is_form_valid || ! isset( $_REQUEST[ $this->url_endpoint ] ) ) { return; }
 
-		// save the uploaded binary file for later use. We can't sanitize a binary file with our sanitization functions.
 		$uploaded_file = $_FILES['file'];
 		$user_input = $this->user_input_sanitization();
 		if ( ! $user_input ) {
 			// translators: %d: Current user id.
-			$this->set_error_log_message( sprintf( esc_attr__( 'Wrong user input while uploading an archival record from user %d.', 'sip' ), get_current_user_id() ) );
+			$this->set_error_log_message( sprintf( esc_attr__( 'Wrong user input while uploading an archival record by user with ID "%d".', 'sip' ), get_current_user_id() ) );
 			header('Content-Type: application/json; charset=utf-8');
 			echo json_encode( array( 'archival_upload' => false, ) );
 			exit;
 		}
 
-		$supported_mime_types = explode("\r\n", carbon_get_theme_option( 'sip_mime_types') );
-		$sip_max_size = (carbon_get_theme_option( 'sip_max_size') ) ? (int) carbon_get_theme_option( 'sip_max_size') : 50000000;
+		$upload_check  = $this->check_uploaded_file( $uploaded_file );
+		if ( ! isset( $upload_check['success'] ) || true !== $upload_check['success'] ) {
+			$sanitize_filename    = sanitize_file_name( basename( $uploaded_file['name'] ) );
+			$file_deleted         = unlink($uploaded_file['tmp_name']);
+			$json_data['success'] = false;
+			$json_data['error']   = $upload_check['reason'];
+			// translators: %1$s: Filename. %2$s: User-ID.
+			$this->set_error_log_message( sprintf( esc_attr__( 'Error uploading the file %1$s by user with ID %2$s', 'sip' ), $sanitize_filename, $user_input['sipUserID'] ) );
+
+			header('Content-Type: application/json; charset=utf-8');
+			echo json_encode($json_data);
+			exit;
+		}
+
+		$file_scan_result = $this->scan_file( $uploaded_file['tmp_name'] );
+		if ( true !== $file_scan_result ) {
+			// removal of the uploaded file happens during scan_file here.
+			$json_data['success']  = false;
+			$json_data['infected'] = sanitize_file_name( basename( $uploaded_file['name'] ) );
+			if ( isset( $file_scan_result['reason'] ) ) {
+				$json_data['reason'] = $file_scan_result['reason'];
+			}
+
+			header('Content-Type: application/json; charset=utf-8');
+			echo json_encode($json_data);
+			exit;
+		}
+
 
 		$sip_folder       = starg_get_archival_upload_path() . $user_input['sipUserID'] . '/' . $user_input['sipFolder'] . '/';
 		$upload_folder    = $sip_folder . 'content/';
@@ -82,10 +107,12 @@ class Sip_Archival_Upload extends Form_Validation {
 		/** we can not use something like @see wp_upload_dir(), because we need to specify the upload directory only for archival data! */
 		$file_moved = move_uploaded_file( $uploaded_file['tmp_name'], $upload_file_path );
 		if ( ! $file_moved ) {
-			$file_deleted         = unlink($upload_file_path);
+			$file_deleted         = unlink($uploaded_file['tmp_name']);
 			$json_data['success'] = false;
 			// translators: %1$s: Filename. %2$s: Path to folder.
 			$this->set_error_log_message( sprintf( esc_attr__( 'Uploaded file %1$s not moved to uploads folder %2$s', 'sip' ), $sanitize_filename, $upload_file_path ) );
+			// translators: %1$s: Filename.
+			$json_data['error'] = sprintf( esc_attr__( 'An error occurred while moving the file %s to your uploads folder. Please try again.', 'sip' ), $sanitize_filename );
 
 			header('Content-Type: application/json; charset=utf-8');
 			echo json_encode($json_data);
@@ -99,7 +126,9 @@ class Sip_Archival_Upload extends Form_Validation {
 		}
 		$json_data['sip_size'] = $sip_size;
 
-		// check max sip size.
+		$max_post_size = starg_parse_filesize( ini_get( 'post_max_size' ) );
+		$sip_max_size  = (carbon_get_theme_option( 'sip_max_size') ) ? (int) carbon_get_theme_option( 'sip_max_size') : $max_post_size;
+		// check max size for all uploaded files.
 		if ( $sip_size > $sip_max_size ) {
 			$file_deleted          = unlink($upload_file_path);
 			$json_data['sip_full'] = $sanitize_filename;
@@ -110,7 +139,8 @@ class Sip_Archival_Upload extends Form_Validation {
 			exit;
 		}
 
-		// check if file type is supported
+		/** check if file type is supported. @deprecated as we check the mime-type during the method @see check_uploaded_file() */
+		$supported_mime_types = explode("\r\n", carbon_get_theme_option( 'sip_mime_types') );
 		if ( ! in_array( $file_type['type'], $supported_mime_types ) ) {
 			$file_deleted               = unlink($upload_file_path);
 			$json_data['success']       = false;
@@ -121,22 +151,12 @@ class Sip_Archival_Upload extends Form_Validation {
 			exit;
 		}
 
-		$file_scan_result = $this->scan_file( $upload_file_path );
-		if ( true === $file_scan_result ) {
-			$file_size                = filesize($upload_file_path);
-			$sip_size                 = $sip_size + $file_size;
-			$_COOKIE['sip_file_size'] = $sip_size;
-			$json_data['sip_size']    = $sip_size;
+		$file_size                = filesize( $uploaded_file['tmp_name'] );
+		$sip_size                 = $sip_size + $file_size;
+		$_COOKIE['sip_file_size'] = $sip_size;
+		$json_data['sip_size']    = $sip_size;
 
-			setcookie("sip_file_size", $sip_size, 0, '/');
-		} else {
-			// removal of the uploaded file happens during scan_file here.
-			$json_data['success']  = false;
-			$json_data['infected'] = $sanitize_filename;
-			if ( isset( $file_scan_result['reason'] ) ) {
-				$json_data['reason'] = $file_scan_result['reason'];
-			}
-		}
+		setcookie("sip_file_size", $sip_size, 0, '/');
 
 		header('Content-Type: application/json; charset=utf-8');
 		echo json_encode($json_data);
@@ -162,6 +182,60 @@ class Sip_Archival_Upload extends Form_Validation {
 	}
 
 	private function add_uploaded_file_to_csv() {}
+
+	/**
+	 * Check the uploaded file for errors like exceeding max file size, wrong MIME-Type or other errors.
+	 * @param array $uploaded_file
+	 * @return array{success: bool, reason: string}
+	 */
+	private function check_uploaded_file( array $uploaded_file ): array {
+		$user_id = (int) sanitize_key( $_REQUEST['sipUserID'] );
+		if ( ! $uploaded_file || ! isset( $uploaded_file['error'] ) ) {
+			// translators: %s: User-ID.
+			$this->set_error_log_message( sprintf( esc_attr__( 'May be a file corruption attack from user %s', 'sip' ), $user_id ) );
+			return array( 'success' => false, 'reason' => esc_attr__( 'File not valid.', 'sip' ), );
+		}
+
+		switch ( $uploaded_file['error'] ) {
+			case UPLOAD_ERR_OK: // file upload is okay.
+				break;
+			case UPLOAD_ERR_NO_FILE:
+				// translators: %s: User-ID.
+				$this->set_error_log_message( sprintf( esc_attr__( 'No file sent. User-ID: %s', 'sip' ), $user_id ) );
+				return array( 'success' => false, 'reason' => esc_attr__( 'No file sent.', 'sip' ), );
+			case UPLOAD_ERR_INI_SIZE:
+			case UPLOAD_ERR_FORM_SIZE:
+				// translators: %s: User-ID.
+				$this->set_error_log_message( sprintf( esc_attr__( 'Exceeded filesize limit. User-ID: %s', 'sip' ), $user_id ) );
+				return array( 'success' => false, 'reason' => esc_attr__( 'Exceeded filesize limit.', 'sip' ), );
+			default:
+				// translators: %s: User-ID.
+				$this->set_error_log_message( sprintf( esc_attr__( 'Unknown error. User-ID: %s', 'sip' ), $user_id ) );
+				return array( 'success' => false, 'reason' => esc_attr__( 'Unknown error. File not uploaded.', 'sip' ), );
+		}
+
+		$file_max_size = starg_parse_filesize( ini_get( 'upload_max_filesize' ) );
+		if ( $uploaded_file['size'] > $file_max_size ) {
+			// translators: %s: User-ID.
+			$this->set_error_log_message( sprintf( esc_attr__( 'Exceeded filesize limit. User-ID: %s', 'sip' ), $user_id ) );
+			return array( 'success' => false, 'reason' => esc_attr__( 'Exceeded filesize limit.', 'sip' ), );
+		}
+
+		$supported_mime_types = explode("\r\n", carbon_get_theme_option( 'sip_mime_types') );
+		$file_info            = new finfo(FILEINFO_MIME_TYPE);
+		$file_extension       = array_search(
+			$file_info->file($uploaded_file['tmp_name']),
+			$supported_mime_types,
+			true
+		);
+		if ( false === $file_extension ) {
+			// translators: %s: User-ID.
+			$this->set_error_log_message( sprintf( esc_attr__( 'Invalid file format. User-ID: %s', 'sip' ), $user_id ) );
+			return array( 'success' => false, 'reason' => esc_attr__( 'Invalid file format.', 'sip' ), );
+		}
+
+		return array( 'success' => true, 'reason' => '', );
+	}
 
 	/**
 	 * Perform scans for malware on the uploaded file.
@@ -240,7 +314,6 @@ class Sip_Archival_Upload extends Form_Validation {
 		);
 	}
 
-	
 	protected function get_required_input_names() : array {
 		return array();
 	}

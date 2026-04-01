@@ -140,6 +140,11 @@ $sip_archival_remove_nonce_key    = $sip_archival_remove->nonce_key;
 						submitButton.disabled = true;
 					}
 
+					if ( response.error ) {
+						errorMessage = response.error;
+						sipDropzone.removeFile(file);// only removes the file from the dropzone area.
+					}
+
 					if ( errorMessage ) {
 						archivalUploadErrorModal.querySelector('.modal-card-body').innerHTML = errorMessage;
 						archivalUploadErrorModal.classList.add( 'is-active' );

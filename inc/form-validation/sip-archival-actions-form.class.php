@@ -299,6 +299,8 @@ Thank you for your contribution.', 'sip' ), $author_name, $post_title, $originat
 	 * @return void
 	 */
 	private function notify_user_decline( int $author_id, int $archivist_id = 0 ): void {
+		if ( ! carbon_get_theme_option( 'sip_notifications_enabled' ) ) { return; }
+
 		// the editor who handles the submission.
 		if ( ! $archivist_id || $archivist_id !== get_current_user_id() ) {
 			$archivist_id = get_current_user_id();
