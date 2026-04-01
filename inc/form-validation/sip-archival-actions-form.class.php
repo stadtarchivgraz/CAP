@@ -117,7 +117,11 @@ class Sip_Archival_Actions extends Form_Validation {
 			return false;
 		}
 
-		$archivist_user_set = update_post_meta($maybe_new_archival_post_id, '_archival_archivar_user_id', get_current_user_id());
+		$archivist_id       = get_post_meta( $archival_post_id, '_archival_archivar_user_id', true );
+		$archivist_user_set = $archivist_id ? true : false;
+		if ( ! $archivist_id || get_current_user_id() !== (int) $archivist_id ) {
+			$archivist_user_set = update_post_meta( $maybe_new_archival_post_id, '_archival_archivar_user_id', get_current_user_id() );
+		}
 		if ( ! $archivist_user_set ) {
 			// translators: %d: Post-ID of an archival record.
 			$this->set_error_log_message( sprintf( esc_attr__( 'Archivist user ID not set for archival record post: %d', 'sip' ), $maybe_new_archival_post_id ) );
@@ -144,7 +148,11 @@ class Sip_Archival_Actions extends Form_Validation {
 		if ( ! $sip_folder && ! $archival_post_id ) { return false; }
 
 		$author_id    = get_post_field( 'post_author', $archival_post_id );
-		$archivist_id = (int) get_post_meta( $archival_post_id, '_archival_archivar_user_id', true );
+		$archivist_id = get_post_meta( $archival_post_id, '_archival_archivar_user_id', true );
+		if ( ! $archivist_id ) {
+			$archivist_id = get_current_user_id();
+			update_post_meta( $archival_post_id, '_archival_archivar_user_id', $archivist_id );
+		}
 
 		// todo: do not delete posts yet. Reactivate later.
 		// $post_deleted_id = wp_delete_post($archival_post_id, true);
@@ -170,7 +178,7 @@ class Sip_Archival_Actions extends Form_Validation {
 
 		// maybe notify the user about the rejection of a submission.
 		if ( 'decline_with_response' === $this->user_input['decline_archival'] ) {
-			$this->notify_user_decline( $author_id, $archivist_id );
+			$this->notify_user_decline( $author_id, (int) $archivist_id );
 		}
 
 		$this->set_success_message( esc_attr__( 'Archival record deleted.', 'sip' ) );
