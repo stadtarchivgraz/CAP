@@ -9,6 +9,9 @@ class Create_Sip extends Form_Validation {
 	protected string $content_dir;
 	protected string $header_dir;
 	protected $archival;
+	protected string $author_nickname = '';
+	protected string $author_last_name = '';
+	protected string $author_first_name = '';
 
 	/**
 	 * Perform main validation for the form in question.
@@ -28,6 +31,7 @@ class Create_Sip extends Form_Validation {
 	 * This also triggers the download of the created ZIP file with the content.
 	 * 
 	 * @todo add settings for the name of the created ZIP file.
+	 * @todo add user language output in XML.
 	 *
 	 * @return false|void
 	 */
@@ -65,9 +69,14 @@ class Create_Sip extends Form_Validation {
 		// 	$sip_referenz    = esc_attr( carbon_get_term_meta( $archive[0]->term_id, 'sip_referenz' ) );
 		// }
 
-		$this->archival = get_post( $archival_id );
-		// $archival_user  = get_user_by('id', $this->archival->post_author);
-		// $sip_referenz   = ($sip_referenz) ? strtoupper($sip_referenz) : strtoupper($archival_user->user_login);
+		$this->archival          = get_post( $archival_id );
+		$this->author_nickname   = esc_attr( trim( get_user_meta( $this->archival->post_author, 'nickname', true ) ) );
+		$this->author_last_name  = esc_attr( trim( get_user_meta( $this->archival->post_author, 'last_name', true ) ) );
+		$this->author_first_name = esc_attr( trim( get_user_meta( $this->archival->post_author, 'first_name', true ) ) );
+		$author_name             = $this->author_nickname;
+		if ( $this->author_last_name && $this->author_first_name ) {
+			$author_name = $this->author_last_name . '_' . $this->author_first_name;
+		}
 
 		$this->sip_folder  = starg_get_archival_upload_path() . $this->archival->post_author . '/' . $sip_user_folder_id . '/';
 		$this->content_dir = $this->sip_folder . 'content/';
@@ -99,7 +108,7 @@ class Create_Sip extends Form_Validation {
 
 			$zip->close();
 			//header('Content-disposition: attachment; filename=SIP_' . $this->archival->ID . '_' . $sip_institution . '_' . $sip_referenz . '.zip');
-			header('Content-disposition: attachment; filename=' . $this->archival->ID . '.zip');
+			header('Content-disposition: attachment; filename=' . $author_name . '_' . $this->archival->ID . '.zip');
 			header('Content-type: application/zip');
 			header('Content-Length: ' . filesize( $tmp_file ) );
 			readfile($tmp_file);
@@ -131,10 +140,9 @@ class Create_Sip extends Form_Validation {
 			fclose($names_file);
 		}
 
-		$author_id         = $this->archival->post_author;
-		$author_last_name  = esc_attr( trim( get_user_meta( $author_id, 'last_name', true ) ) );
-		$author_first_name = esc_attr( trim( get_user_meta( $author_id, 'first_name', true ) ) );
-		$author_name       = ( $author_last_name && $author_first_name ) ? $author_last_name . ', ' . $author_first_name : get_userdata( $author_id )->data->display_name;
+		$author_name = ( $this->author_last_name && $this->author_first_name )
+			? $this->author_last_name . ', ' . $this->author_first_name
+			: $this->author_nickname;
 
 		// todo: subject to change. We should save the editor who accepts the submission as the original archivist!
 		$archivist_id         = get_current_user_id();
