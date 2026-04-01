@@ -42,21 +42,6 @@ class Sip_Archival_Upload extends Form_Validation {
 			exit;
 		}
 
-		$file_scan_result = $this->scan_file( $uploaded_file['tmp_name'] );
-		if ( true !== $file_scan_result ) {
-			// removal of the uploaded file happens during scan_file here.
-			$json_data['success']  = false;
-			$json_data['infected'] = sanitize_file_name( basename( $uploaded_file['name'] ) );
-			if ( isset( $file_scan_result['reason'] ) ) {
-				$json_data['reason'] = $file_scan_result['reason'];
-			}
-
-			header('Content-Type: application/json; charset=utf-8');
-			echo json_encode($json_data);
-			exit;
-		}
-
-
 		$sip_folder       = starg_get_archival_upload_path() . $user_input['sipUserID'] . '/' . $user_input['sipFolder'] . '/';
 		$upload_folder    = $sip_folder . 'content/';
 		$upload_dir       = '';
@@ -150,6 +135,23 @@ class Sip_Archival_Upload extends Form_Validation {
 			echo json_encode($json_data);
 			exit;
 		}
+
+
+		// There is a chance AV can't access the tmp folder on the server. Therefore we need to scan it after we moved it to the uploads folder!
+		$file_scan_result = $this->scan_file( $upload_file_path );
+		if ( true !== $file_scan_result ) {
+			// removal of the uploaded file happens during scan_file here.
+			$json_data['success']  = false;
+			$json_data['infected'] = $sanitize_filename;
+			if ( isset( $file_scan_result['reason'] ) ) {
+				$json_data['reason'] = $file_scan_result['reason'];
+			}
+
+			header('Content-Type: application/json; charset=utf-8');
+			echo json_encode($json_data);
+			exit;
+		}
+
 
 		$file_size                = filesize( $uploaded_file['tmp_name'] );
 		$sip_size                 = $sip_size + $file_size;

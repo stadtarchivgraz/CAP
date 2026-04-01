@@ -271,6 +271,9 @@ class Sip_Archival_Actions extends Form_Validation {
 		$author       = get_user_by( 'ID', $author_id );
 		if ( $author ) {
 			$author_name       = $author->display_name;
+			if ( $author->first_name && $author->last_name ) {
+				$author_name = $author->first_name . ' ' . $author->last_name;
+			}
 			$author_mail       = $author->user_email;
 			$user_archive_id   = (int) get_user_meta( $author_id, 'user_archive', true );
 			$user_archive_term = get_term( $user_archive_id, Archival_Custom_Posts::ARCHIVE_CUSTOM_TAX_SLUG );
@@ -318,7 +321,10 @@ Thank you for your contribution.', 'sip' ), $author_name, $post_title, $originat
 		$author_email = '';
 		$author       = get_user_by( 'ID', $author_id );
 		if ( $author ) {
-			$author_name  = $author->display_name;
+			$author_name       = $author->display_name;
+			if ( $author->first_name && $author->last_name ) {
+				$author_name = $author->first_name . ' ' . $author->last_name;
+			}
 			$author_email = sanitize_email( $author->user_email );
 		}
 
@@ -338,6 +344,9 @@ thank you very much for your submission to %2$s! Unfortunately, we cannot accept
 			$archivist = get_user_by( 'ID', $archivist_id );
 			if ( $archivist ) {
 				$archivist_name   = $archivist->display_name;
+				if ( $archivist->first_name && $archivist->last_name ) {
+					$archivist_name = $archivist->first_name . ' ' . $archivist->last_name;
+				}
 				$archivist_email  = sanitize_email( $archivist->user_email );
 				$archivist_mailto = '<a href="mailto:' . $archivist_email . '">' . $archivist_email . '</a>';
 				// translators: %1$s: Name of the responsible archivist. %2$s: Email Link.
@@ -369,7 +378,11 @@ thank you very much for your submission to %2$s! Unfortunately, we cannot accept
 		} else {
 			$author = get_user_by( 'ID', $current_user_id );
 		}
-		$author_name  = $author->display_name;
+
+		$author_name = $author->display_name;
+		if ( $author->first_name && $author->last_name ) {
+			$author_name = $author->first_name . ' ' . $author->last_name;
+		}
 		$author_email = $author->user_email;
 		$editor_email = DB_Query_Helper::get_all_editor_email_addresses( $user_archive_id );
 		if ( carbon_get_theme_option( 'sip_notification_additional_recipients' ) ) {
@@ -385,10 +398,12 @@ thank you very much for your submission to %2$s! Unfortunately, we cannot accept
 			$editor_email = array_merge( $editor_email, $other_email );
 		}
 
+		$post_title = '';
 		$link_to_archival = get_home_url();
 		if ( $post_id ) {
+			$post_title = get_the_title( $post_id );
 			// todo: maybe use the permalink instead of the title as text?
-			$link_to_archival = '<a href="' . get_permalink( $post_id ) . '">' . $this->user_input[ 'archival_title' ] . '</a>';
+			$link_to_archival = '<a href="' . get_permalink( $post_id ) . '">' . $post_title . '</a>';
 		}
 
 		// linebreaks for better reading.
@@ -396,7 +411,7 @@ thank you very much for your submission to %2$s! Unfortunately, we cannot accept
 
 		// send a notification to the editors.
 		// translators: %s: Title of the submission.
-		// $message = sprintf( esc_html__( 'Title: %1$s', 'sip' ), $this->user_input[ 'archival_title' ] );
+		// $message = sprintf( esc_html__( 'Title: %1$s', 'sip' ), $post_title );
 		// $message .= $break;
 		// // translators: %s: Name of the user.
 		// $message .= sprintf( esc_html__( 'Author: %s', 'sip' ), $author_name );
@@ -415,7 +430,7 @@ New files have been uploaded to the following archive: %3$s
 
 Please log in to the archive for review and approval.
 
-%4$s', 'sip' ), $this->user_input[ 'archival_title' ], $author_name, $user_archive, $link_to_archival );
+%4$s', 'sip' ), $post_title, $author_name, $user_archive, $link_to_archival );
 		// translators: %s: Name of the institution.
 		$subject = sprintf( esc_attr__( 'New archival record submitted to %s.', 'sip' ), $user_archive );
 		$this->send_email_notification( $message_to_editors, $subject, $editor_email );

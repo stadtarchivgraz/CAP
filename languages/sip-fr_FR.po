@@ -495,7 +495,7 @@ msgid "Numeration"
 msgstr "Numérotation"
 
 #: inc/archival-cpt.php:331
-#: inc/form-validation/sip-archival-upload.class.php:255
+#: inc/form-validation/sip-archival-upload.class.php:257
 msgid "deleted"
 msgstr "supprimé"
 
@@ -558,8 +558,8 @@ msgstr "Données personnelles"
 msgid "Edit"
 msgstr "Modifier"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:537
-#: inc/form-validation/sip-archival-actions-form.class.php:549
+#: inc/form-validation/sip-archival-actions-form.class.php:560
+#: inc/form-validation/sip-archival-actions-form.class.php:572
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -691,9 +691,9 @@ msgstr "Note"
 msgid "Accept"
 msgstr "Accepter"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:454
-#: inc/form-validation/sip-archival-actions-form.class.php:466
-#: inc/form-validation/sip-archival-actions-form.class.php:498
+#: inc/form-validation/sip-archival-actions-form.class.php:477
+#: inc/form-validation/sip-archival-actions-form.class.php:489
+#: inc/form-validation/sip-archival-actions-form.class.php:521
 msgid "Decline"
 msgstr "Déclin"
 
@@ -877,35 +877,35 @@ msgstr "Vous n’êtes pas autorisé à effectuer cette action."
 
 #. translators: %d: Post-ID of an archival record.
 #: inc/form-validation/sip-archival-actions-form.class.php:116
-#: inc/form-validation/sip-archival-actions-form.class.php:235
+#: inc/form-validation/sip-archival-actions-form.class.php:243
 #, php-format
 msgid "The post with the ID %d could not be updated."
 msgstr "La publication avec l’ID %d n’a pas pu être mise à jour."
 
 #. translators: %d: Post-ID of an archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:123
-#: inc/form-validation/sip-archival-actions-form.class.php:125
+#: inc/form-validation/sip-archival-actions-form.class.php:127
+#: inc/form-validation/sip-archival-actions-form.class.php:129
 #, php-format
 msgid "Archivist user ID not set for archival record post: %d"
 msgstr "L’ID utilisateur de l’archiviste n’est pas défini pour la publication du document d’archive : %d"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:131
+#: inc/form-validation/sip-archival-actions-form.class.php:135
 msgid "Archival record accepted."
 msgstr "Document d’archive accepté."
 
 #. translators: %d: Post-ID of the archival record.
-#: inc/form-validation/sip-archival-actions-form.class.php:154
-#: inc/form-validation/sip-archival-actions-form.class.php:210
+#: inc/form-validation/sip-archival-actions-form.class.php:162
+#: inc/form-validation/sip-archival-actions-form.class.php:218
 #, php-format
 msgid "Failed to delete the archival record with the ID %d."
 msgstr "Échec de la suppression du document d’archive avec l’ID %d."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:176
-#: inc/form-validation/sip-archival-actions-form.class.php:217
+#: inc/form-validation/sip-archival-actions-form.class.php:184
+#: inc/form-validation/sip-archival-actions-form.class.php:225
 msgid "Archival record deleted."
 msgstr "Document d’archive supprimé."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:242
+#: inc/form-validation/sip-archival-actions-form.class.php:250
 msgid "Archival record submitted."
 msgstr "Document d’archive soumis."
 
@@ -1131,12 +1131,12 @@ msgstr "Tentative de suppression d’un fichier qui n’existe pas."
 msgid "File %s not deleted"
 msgstr "Le fichier %s n’a pas été supprimé"
 
-#: inc/form-validation/sip-archival-upload.class.php:255
+#: inc/form-validation/sip-archival-upload.class.php:257
 msgid "not deleted"
 msgstr "non supprimé"
 
 #. translators: %1$s: File path. %2$d: User ID.
-#: inc/form-validation/sip-archival-upload.class.php:297
+#: inc/form-validation/sip-archival-upload.class.php:299
 #, php-format
 msgid "Uploaded File %1$s from user id %2$d is infected"
 msgstr "Le fichier téléversé %1$s par l’utilisateur ID %2$d est infecté"
@@ -1322,44 +1322,44 @@ msgid "Statistics by user"
 msgstr "Statistiques par utilisateur"
 
 #. translators: %1$s: Filename. %2$s: Path to folder.
-#: inc/form-validation/sip-archival-upload.class.php:113
+#: inc/form-validation/sip-archival-upload.class.php:98
 #, php-format
 msgid "Uploaded file %1$s not moved to uploads folder %2$s"
 msgstr "Fichier téléchargé %1$s non déplacé vers le dossier uploads %2$s"
 
 #. translators: %1$d: Filename. %2$s: User Id. %3$s: either "deleted" or "not deleted". %4$s: Virus scan result.
-#: inc/form-validation/sip-archival-upload.class.php:258
+#: inc/form-validation/sip-archival-upload.class.php:260
 #, php-format
 msgid "Problem with file %1$s from user %2$d. File %3$s. Virus scan result: %4$s"
 msgstr "Problème avec le fichier %1$s de l’utilisateur %2$d. Fichier %3$s. Résultat du scan antivirus : %4$s"
 
-#: inc/form-validation/sip-archival-upload.class.php:279
+#: inc/form-validation/sip-archival-upload.class.php:281
 msgid "ClamAV: not responding"
 msgstr "ClamAV : pas de réponse"
 
-#: inc/form-validation/sip-archival-upload.class.php:284
+#: inc/form-validation/sip-archival-upload.class.php:286
 msgid "ClamAV is not ready/responding"
 msgstr "ClamAV n’est pas prêt / ne répond pas"
 
-#: inc/form-validation/sip-archival-upload.class.php:285
+#: inc/form-validation/sip-archival-upload.class.php:287
 msgid "ClamAV: not ready"
 msgstr "ClamAV : pas prêt"
 
 #. translators: %1$s: path to the file. %2$s: user id.
-#: inc/form-validation/sip-archival-upload.class.php:290
+#: inc/form-validation/sip-archival-upload.class.php:292
 #, php-format
 msgid "Uploaded File %1$s from user id %2$d was not scanned. File not found"
 msgstr "Fichier téléchargé %1$s de l’utilisateur id %2$d non scanné. Fichier non trouvé"
 
-#: inc/form-validation/sip-archival-upload.class.php:291
+#: inc/form-validation/sip-archival-upload.class.php:293
 msgid "ClamAV: file not found"
 msgstr "ClamAV : fichier non trouvé"
 
-#: inc/form-validation/sip-archival-upload.class.php:298
+#: inc/form-validation/sip-archival-upload.class.php:300
 msgid "ClamAV: virus detected"
 msgstr "ClamAV : virus détecté"
 
-#: inc/form-validation/sip-archival-upload.class.php:301
+#: inc/form-validation/sip-archival-upload.class.php:303
 msgid "ClamAV: file is safe"
 msgstr "ClamAV : fichier sain"
 
@@ -1521,7 +1521,7 @@ msgid "Missing inputs. Please check %s."
 msgstr "Entrées manquantes. Veuillez vérifier %s"
 
 #. translators: %1$s: Name of the user. %2$s: Title of the submission. %3$s: Name of the originator. %4$s: Link to the post.
-#: inc/form-validation/sip-archival-actions-form.class.php:279
+#: inc/form-validation/sip-archival-actions-form.class.php:290
 #, php-format
 msgid ""
 "Dear %1$s,\n"
@@ -1549,16 +1549,16 @@ msgstr ""
 "Merci pour votre contribution."
 
 #. translators: %s: Name of the institution.
-#: inc/form-validation/sip-archival-actions-form.class.php:291
+#: inc/form-validation/sip-archival-actions-form.class.php:302
 #, php-format
 msgid "Your submission to %s"
 msgstr "Votre soumission à %s"
 
-#: inc/form-validation/sip-archival-upload.class.php:248
+#: inc/form-validation/sip-archival-upload.class.php:250
 msgid "ClamAV: cannot connect because the module socket_create is missing."
 msgstr "ClamAV : impossible de se connecter car le module socket_create est manquant."
 
-#: inc/form-validation/sip-archival-upload.class.php:249
+#: inc/form-validation/sip-archival-upload.class.php:251
 msgid "ClamAV: file not scanned."
 msgstr "ClamAV : fichier non scanné."
 
@@ -1579,14 +1579,14 @@ msgid "The user with the id %d has not selected an archive!"
 msgstr "L'utilisateur avec l'ID %d n'a pas sélectionné d'archive !"
 
 #. translators: %s: Name of the institution.
-#: inc/form-validation/sip-archival-actions-form.class.php:412
+#: inc/form-validation/sip-archival-actions-form.class.php:435
 #: inc/form-validation/sip-upload-form-validation.class.php:242
 #, php-format
 msgid "New archival record submitted to %s."
 msgstr "Nouveau dossier d'archivage soumis à %s."
 
 #. translators: %s: Name of the user.
-#: inc/form-validation/sip-archival-actions-form.class.php:427
+#: inc/form-validation/sip-archival-actions-form.class.php:450
 #: inc/form-validation/sip-upload-form-validation.class.php:257
 #, php-format
 msgid ""
@@ -1607,7 +1607,7 @@ msgstr ""
 "Merci pour votre contribution."
 
 #. translators: %s: Name of the institution.
-#: inc/form-validation/sip-archival-actions-form.class.php:435
+#: inc/form-validation/sip-archival-actions-form.class.php:458
 #: inc/form-validation/sip-upload-form-validation.class.php:265
 #, php-format
 msgid "Your submission to the archive %s has been received."
@@ -1647,52 +1647,52 @@ msgstr "Annuler"
 msgid "close"
 msgstr "fermer"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:317
+#: inc/form-validation/sip-archival-actions-form.class.php:331
 msgid "Your submission was rejected"
 msgstr "Votre soumission a été rejetée"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:457
-#: inc/form-validation/sip-archival-actions-form.class.php:490
+#: inc/form-validation/sip-archival-actions-form.class.php:480
+#: inc/form-validation/sip-archival-actions-form.class.php:513
 msgid "Confirm rejection"
 msgstr "Confirmer le rejet"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:458
-#: inc/form-validation/sip-archival-actions-form.class.php:491
-#: inc/form-validation/sip-archival-actions-form.class.php:541
+#: inc/form-validation/sip-archival-actions-form.class.php:481
+#: inc/form-validation/sip-archival-actions-form.class.php:514
+#: inc/form-validation/sip-archival-actions-form.class.php:564
 msgid "this entry"
 msgstr "cette entrée"
 
 #. translators: %s: Title of the post.
-#: inc/form-validation/sip-archival-actions-form.class.php:460
-#: inc/form-validation/sip-archival-actions-form.class.php:492
+#: inc/form-validation/sip-archival-actions-form.class.php:483
+#: inc/form-validation/sip-archival-actions-form.class.php:515
 #, php-format
 msgid "Are you sure to decline %s? All files will be deleted."
 msgstr "Êtes-vous sûr de vouloir refuser %s ? Tous les fichiers seront supprimés."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:487
+#: inc/form-validation/sip-archival-actions-form.class.php:510
 msgid "Decline with response"
 msgstr "Refuser avec réponse"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:504
+#: inc/form-validation/sip-archival-actions-form.class.php:527
 msgid "Reason for the rejection:"
 msgstr "Raison du rejet :"
 
-#: inc/form-validation/sip-archival-actions-form.class.php:509
+#: inc/form-validation/sip-archival-actions-form.class.php:532
 msgid "Please use this text area if you want to add a reason for the rejection in the email notification."
 msgstr "Utilisez cette zone de texte si vous souhaitez ajouter une raison pour le rejet dans la notification par e-mail."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:540
+#: inc/form-validation/sip-archival-actions-form.class.php:563
 msgid "Confirm deletion"
 msgstr "Confirmer la suppression"
 
 #. translators: %s: Title of the post.
-#: inc/form-validation/sip-archival-actions-form.class.php:543
+#: inc/form-validation/sip-archival-actions-form.class.php:566
 #, php-format
 msgid "Are you sure you want to delete %s? All files will be deleted."
 msgstr "Êtes-vous sûr de vouloir supprimer %s ? Tous les fichiers seront supprimés."
 
 #. translators: %1$s: Title of the submission. %2$s: Name of the user. %3$s: Name of the institution. %4$s: Link to the post.
-#: inc/form-validation/sip-archival-actions-form.class.php:402
+#: inc/form-validation/sip-archival-actions-form.class.php:425
 #: inc/form-validation/sip-upload-form-validation.class.php:232
 #, php-format
 msgid ""
@@ -1777,11 +1777,11 @@ msgstr "Classe CSS"
 msgid "One or more classes for the element separated by whitespace."
 msgstr "Une ou plusieurs classes pour l'élément séparées par des espaces."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:512
+#: inc/form-validation/sip-archival-actions-form.class.php:535
 msgid "Add the name and email address of the responsible archivist (you) in the notification email."
 msgstr "Ajoutez le nom et l'adresse e-mail de l'archiviste responsable (vous) dans l'e-mail de notification."
 
-#: inc/form-validation/sip-archival-actions-form.class.php:518
+#: inc/form-validation/sip-archival-actions-form.class.php:541
 msgid "This might be useful if a contributor wants to directly contact you."
 msgstr "Cela peut être utile si un contributeur souhaite vous contacter directement."
 
@@ -1943,7 +1943,7 @@ msgstr ""
 "Merci pour votre contribution."
 
 #. translators: %1$s: Name of the user. %2$s: Name of the Website.
-#: inc/form-validation/sip-archival-actions-form.class.php:319
+#: inc/form-validation/sip-archival-actions-form.class.php:333
 #, php-format
 msgid ""
 "Dear %1$s,\n"
@@ -1955,13 +1955,13 @@ msgstr ""
 "Nous vous remercions sincèrement pour votre contribution à %2$s ! Malheureusement, nous ne pouvons pas accepter votre contribution dans nos archives et devons la refuser."
 
 #. translators: %s: Reason for the rejection.
-#: inc/form-validation/sip-archival-actions-form.class.php:325
+#: inc/form-validation/sip-archival-actions-form.class.php:339
 #, php-format
 msgid "Reason for the rejection: %s"
 msgstr "Motif du rejet: %s"
 
 #. translators: %1$s: Name of the responsible archivist. %2$s: Email Link.
-#: inc/form-validation/sip-archival-actions-form.class.php:336
+#: inc/form-validation/sip-archival-actions-form.class.php:353
 #, php-format
 msgid "If you have any questions regarding the rejection, please contact %1$s at %2$s."
 msgstr "Si vous avez des questions concernant le rejet, veuillez contacter %1$s à %2$s."
@@ -2212,13 +2212,13 @@ msgid "Filenames"
 msgstr "Noms de fichiers"
 
 #. translators: %s: ID/Name of the folder where the archival record (sip) is stored.
-#: inc/form-validation/sip-archival-actions-form.class.php:194
-#: inc/form-validation/sip-archival-actions-form.class.php:196
+#: inc/form-validation/sip-archival-actions-form.class.php:202
+#: inc/form-validation/sip-archival-actions-form.class.php:204
 #, php-format
 msgid "Failed to delete the folder for archival record %s."
 msgstr ""
 
-#: inc/form-validation/sip-archival-actions-form.class.php:200
+#: inc/form-validation/sip-archival-actions-form.class.php:208
 msgid "Uploaded files deleted."
 msgstr ""
 
@@ -2280,60 +2280,60 @@ msgid "Error uploading the file %1$s by user with ID %2$s"
 msgstr ""
 
 #. translators: %1$s: Filename.
-#: inc/form-validation/sip-archival-upload.class.php:115
+#: inc/form-validation/sip-archival-upload.class.php:100
 #, php-format
 msgid "An error occurred while moving the file %s to your uploads folder. Please try again."
 msgstr ""
 
 #. translators: %s: User-ID.
-#: inc/form-validation/sip-archival-upload.class.php:195
+#: inc/form-validation/sip-archival-upload.class.php:197
 #, php-format
 msgid "May be a file corruption attack from user %s"
 msgstr ""
 
-#: inc/form-validation/sip-archival-upload.class.php:196
+#: inc/form-validation/sip-archival-upload.class.php:198
 msgid "File not valid."
 msgstr ""
 
 #. translators: %s: User-ID.
-#: inc/form-validation/sip-archival-upload.class.php:204
+#: inc/form-validation/sip-archival-upload.class.php:206
 #, php-format
 msgid "No file sent. User-ID: %s"
 msgstr ""
 
-#: inc/form-validation/sip-archival-upload.class.php:205
+#: inc/form-validation/sip-archival-upload.class.php:207
 msgid "No file sent."
 msgstr ""
 
 #. translators: %s: User-ID.
-#: inc/form-validation/sip-archival-upload.class.php:209
-#: inc/form-validation/sip-archival-upload.class.php:220
+#: inc/form-validation/sip-archival-upload.class.php:211
+#: inc/form-validation/sip-archival-upload.class.php:222
 #, php-format
 msgid "Exceeded filesize limit. User-ID: %s"
 msgstr ""
 
-#: inc/form-validation/sip-archival-upload.class.php:210
-#: inc/form-validation/sip-archival-upload.class.php:221
+#: inc/form-validation/sip-archival-upload.class.php:212
+#: inc/form-validation/sip-archival-upload.class.php:223
 msgid "Exceeded filesize limit."
 msgstr ""
 
 #. translators: %s: User-ID.
-#: inc/form-validation/sip-archival-upload.class.php:213
+#: inc/form-validation/sip-archival-upload.class.php:215
 #, php-format
 msgid "Unknown error. User-ID: %s"
 msgstr ""
 
-#: inc/form-validation/sip-archival-upload.class.php:214
+#: inc/form-validation/sip-archival-upload.class.php:216
 msgid "Unknown error. File not uploaded."
 msgstr ""
 
 #. translators: %s: User-ID.
-#: inc/form-validation/sip-archival-upload.class.php:233
+#: inc/form-validation/sip-archival-upload.class.php:235
 #, php-format
 msgid "Invalid file format. User-ID: %s"
 msgstr ""
 
-#: inc/form-validation/sip-archival-upload.class.php:234
+#: inc/form-validation/sip-archival-upload.class.php:236
 msgid "Invalid file format."
 msgstr ""
 
