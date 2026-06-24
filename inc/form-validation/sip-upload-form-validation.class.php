@@ -72,7 +72,7 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 			// translators: %s: a Link to the users profile page.
 			$this->set_error_message( sprintf( esc_html__( 'We could not find an archive for your account. Please visit the %s, select an archive, and save your settings.', 'sip' ), $profile_page_link ) );
 			// translators: %d: The User-ID.
-			$this->set_error_log_message( sprintf( esc_html__( 'The user with the id %d has not selected an archive!', 'sip' ), $current_user_id ) );
+			$this->set_error_log_message( sprintf( esc_html__( 'The user with the id %d has not selected an archive!', 'sip' ), $current_user_id ), Log_Severity::Info );
 			return false;
 		}
 
@@ -146,7 +146,7 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 		$post_id = wp_insert_post( $post_data );
 		if ( ! $post_id || is_wp_error( $post_id ) ) {
 			$this->set_error_message( esc_html__( 'We encountered a problem creating/updating your entry.', 'sip' ) );
-			$this->set_error_log_message( __FUNCTION__ . ': ' . $post_id->get_error_message() );
+			$this->set_error_log_message( __FUNCTION__ . ': ' . $post_id->get_error_message(), Log_Severity::Error );
 			return false;
 		}
 

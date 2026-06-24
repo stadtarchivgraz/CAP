@@ -35,7 +35,17 @@ $sip_archival_remove_nonce_key    = $sip_archival_remove->nonce_key;
 		const archivalUploadErrorModal    = document.getElementById( '<?php echo $sip_archival_upload->modal_id; ?>' );
 		Dropzone.options.archivalUploadForm = { // The camelized version of the ID of the form element
 			dictDefaultMessage: "<?php esc_html_e('Drag and drop the files here to upload', 'sip'); ?>",
-			// The configuration we've talked about above
+			dictFallbackMessage: "<?php esc_html_e('Your browser does not support drag andn drop file uploads.', 'sip'); ?>",
+			dictFallbackText: "<?php esc_html_e('Please use the fallback form below to upload your files like in the olden days.', 'sip'); ?>",
+			// dictFileTooBig: "<?php // esc_html_e('File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.', 'sip'); ?>",
+			dictInvalidFileType: "<?php esc_html_e('You can not upload files of this type.', 'sip'); ?>",
+			// dictResponseError: "<?php // esc_html_e('Server responded with {{statusCode}} code.', 'sip'); ?>",
+			dictCancelUpload: "<?php esc_html_e('Cancel upload', 'sip'); ?>",
+			dictUploadCanceled: "<?php esc_html_e('Upload canceled.', 'sip'); ?>",
+			// dictCancelUploadConfirmation: "<?php // esc_html_e('Are you sure you want to cancel this upload?', 'sip'); ?>",
+			dictRemoveFile: "<?php esc_html_e('Remove file', 'sip'); ?>",
+			// dictRemoveFileConfirmation: <?php // esc_html_e('Are you sure you want to remove this upload?', 'sip'); ?>,
+			dictMaxFilesExceeded: "<?php esc_html_e('You can not upload any more files.', 'sip'); ?>",
 			//autoProcessQueue: false,
 			//uploadMultiple: true,
 			//parallelUploads: 100,

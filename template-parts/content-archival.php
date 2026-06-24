@@ -44,7 +44,7 @@ $sip_archival_actions->process_sip_archival_actions();
 			// only include the map if we have data to display.
 			$map_lat         = esc_attr( get_post_meta( $archival_id, '_archival_lat', true ) );
 			$map_lng         = esc_attr( get_post_meta( $archival_id, '_archival_lng', true ) );
-			$map_area        = get_post_meta( $archival_id, '_archival_area', true ); // todo: maybe escape it!
+			$map_area        = get_post_meta( $archival_id, '_archival_area', true );
 			$address         = esc_attr( get_post_meta( $archival_id, '_archival_address', true ) );
 			$missing_api_key = empty( trim( carbon_get_theme_option( 'sip_map_maptiler_api_key' ) ) );
 			// only show the map if we have something to display.

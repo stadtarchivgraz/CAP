@@ -86,21 +86,22 @@ class Starg_Logging {
 	public function create_log_entry( string $log_msg, Log_Severity $severity = Log_Severity::Info ) : bool {
 		if ( ! $this->error_logging_enabled || ! $log_msg ) { return false; }
 
-		$timestamp = time();
-		$user_id   = get_current_user_id();
-		$page      = sanitize_url( $_SERVER[ 'REQUEST_URI' ] );
-		$browser   = self::get_user_browser();
+		$timestamp     = time();
+		$user_id       = get_current_user_id();
+		$page          = sanitize_url( $_SERVER[ 'REQUEST_URI' ] );
+		$browser       = self::get_user_browser();
+		$severity_note = '';
 
 		switch ( $severity ) {
-			default :
 			case Log_Severity::Warning :
 				$severity_note = esc_attr__( '[Warning]', 'sip' );
 				break;
-			case Log_Severity::Info :
-				$severity_note = esc_attr__( '[Info]', 'sip' );
-				break;
 			case Log_Severity::Error :
 				$severity_note = esc_attr__( '[Error]', 'sip' );
+				break;
+			default :
+			case Log_Severity::Info :
+				$severity_note = esc_attr__( '[Info]', 'sip' );
 				break;
 		}
 
