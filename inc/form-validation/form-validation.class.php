@@ -242,6 +242,21 @@ abstract class Form_Validation {
 	}
 
 	/**
+	 * Create a notification about missing inputs in forms.
+	 * @param array $invalid_inputs
+	 * @return void
+	 */
+	protected function set_notification_for_invalid_inputs( array $invalid_inputs ) : void {
+		if ( ! $invalid_inputs ) { return; }
+		$invalid_input_links = '';
+		foreach( $invalid_inputs as $single_input_field ) {
+			$invalid_input_links .= '<a href="#' . esc_attr( $single_input_field ) . '">' . str_replace( '_', ' ', esc_html( $single_input_field ) ) . '</a> ';
+		}
+		// translators: %s: one or more hyperlinks to the invalid required inputs.
+		$this->set_error_message( sprintf( esc_html__( 'Invalid input. Please check %s.', 'sip' ), $invalid_input_links ) );
+	}
+
+	/**
 	 * Displays either an error or success message about an user interaction.
 	 * @return void
 	 */

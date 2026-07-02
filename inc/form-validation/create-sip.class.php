@@ -1,13 +1,17 @@
 <?php
 if (! defined('WPINC')) { die; }
 
+use Appwrite\ClamAV\Network;
+
 require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/form-validation/form-validation.class.php' );
 class Create_Sip extends Form_Validation {
 	protected string $request_method = 'get';
 	public string $url_endpoint      = 'create-sip';
+	protected string $sip_user_folder_id;
 	protected string $sip_folder;
 	protected string $content_dir;
 	protected string $header_dir;
+	protected string $archival_id;
 	protected $archival;
 	protected string $author_nickname = '';
 	protected string $author_last_name = '';
@@ -27,7 +31,7 @@ class Create_Sip extends Form_Validation {
 	}
 
 	/**
-	 * Creates all the needed files for a Submission Information Package ready to be ingested in an OAIS like archive.
+	 * Creates the Submission Information Package including all uploaded files, a XML with all metadata and if available, an importable CSV.
 	 * This also triggers the download of the created ZIP file with the content.
 	 * 
 	 * @todo add settings for the name of the created ZIP file.
@@ -42,7 +46,7 @@ class Create_Sip extends Form_Validation {
 		$user_input = $this->user_input_sanitization();
 		if ( ! $user_input ) {
 			$this->set_error_message( esc_attr__( 'User-Input not valid.', 'sip' ) );
-			$this->set_error_log_message( esc_attr__( 'User-Input not valid.', 'sip' ) );
+			$this->set_error_log_message( esc_attr__( 'User-Input not valid.', 'sip' ), Log_Severity::Warning );
 			return false;
 		}
 
@@ -608,7 +612,7 @@ class Create_Sip extends Form_Validation {
 
 	/**
 	 * Returns a converted date.
-	 * The format is ISO 8601 and looks like: 2004-02-12T15:19:21+00:00
+	 * The format is 2004,0130
 	 */
 	private static function date_to_Ymd($date) {
 		return date('Y,md', strtotime($date));
@@ -616,7 +620,7 @@ class Create_Sip extends Form_Validation {
 
 	/**
 	 * Returns a converted date.
-	 * The format is ISO 8601 and looks like: 2004-02-12T15:19:21+00:00
+	 * The format looks like: 30.01.2004
 	 */
 	private static function date_to_dmY($date) {
 		return date('d.m.Y', strtotime($date));
@@ -626,7 +630,7 @@ class Create_Sip extends Form_Validation {
 	 * Return the creation date for files.
 	 * @todo add other mime_types like ms-office files.
 	 */
-	protected static function get_file_creation_date( $path, $mime_type, $file_info = '' ) {
+	protected static function get_file_creation_date( $path, string $mime_type, string $file_info = '' ) {
 		if ( strpos($mime_type, 'image') === 0 ) {
 			$date = self::get_exif_date($path);
 			if ($date) {
@@ -740,7 +744,7 @@ class Create_Sip extends Form_Validation {
 	 * Fallback to get the information from the filesystem.
 	 * As this isn't the real creation date, this method is not in use atm.
 	 */
-	protected static function get_fallback_creation_date( $file_info ) {
+	protected static function get_fallback_creation_date( string $file_info ) {
 		$file  = new SplFileInfo( $file_info );
 		if ( ! $file->isFile() ) return null;
 

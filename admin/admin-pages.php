@@ -13,7 +13,7 @@ class Starg_Admin_Pages {
 	}
 
 	/**
-	 * Adds a page in the WordPress backend to display some statistics.
+	 * Adds a page in the WordPress backend to display statistics.
 	 */
 	public static function starg_add_statistics_page() {
 		add_submenu_page(
@@ -21,7 +21,7 @@ class Starg_Admin_Pages {
 			esc_html__( 'Statistics', 'sip' ),
 			esc_html__( 'Statistics', 'sip' ),
 			'edit_others_pages',
-			'starg-statisitcs',
+			'starg-statistics',
 			array( 'Starg_Admin_Pages', 'starg_render_statistics_page' ),
 		);
 	}

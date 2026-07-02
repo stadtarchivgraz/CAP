@@ -44,45 +44,31 @@ class Sip_Archival_Upload extends Form_Validation {
 
 		$sip_folder       = starg_get_archival_upload_path() . $user_input['sipUserID'] . '/' . $user_input['sipFolder'] . '/';
 		$upload_folder    = $sip_folder . 'content/';
-		$upload_dir       = '';
-		$upload_dir_array = explode( '/', $upload_folder );
-		foreach ( $upload_dir_array as $path ) {
-			$upload_dir = $upload_dir . $path . '/';
-			if ( ! file_exists( $upload_dir ) ) {
-				mkdir( $upload_dir, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS );
-			}
+		if ( ! file_exists( $upload_folder ) ) {
+			mkdir( $upload_folder, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS, true );
 		}
 
-		// todo: move to own function! $this->add_uploaded_file_to_csv()
-		// the names.csv contains all uploaded filenames.
-		$fp = fopen($sip_folder . 'names.csv', 'a');
-
+		// if the uploaded file is actually a folder, we need to create it and adjust the $upload_folder to put the files into it.
 		if ( $user_input['fullPath'] ) {
-			$full_path       = dirname( sanitize_text_field( $user_input['fullPath'] ) );
-			$full_path_array = explode( '/', $full_path );
+			$parent_dir      = dirname( sanitize_text_field( $user_input['fullPath'] ) );
+			$full_path_array = explode( '/', $parent_dir );
 			foreach ( $full_path_array as $path ) {
-				$sanitize_path = sanitize_file_name($path);
-				fputcsv( $fp, array( strtolower( $sanitize_path ), $path ) );
-				$upload_dir = $upload_dir . $sanitize_path . '/';
-				if ( ! file_exists( $upload_dir ) ) {
-					/** we could also use something like @see wp_mkdir_p(), but it creates permission with 0777. */
-					mkdir( $upload_dir, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS, true );
+				$sanitized_path = sanitize_file_name( $path );
+				$upload_folder  = $upload_folder . $sanitized_path . '/';
+				if ( ! file_exists( $upload_folder ) ) {
+					mkdir( $upload_folder, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS, true );
 				}
 			}
 		}
 
 		$sanitize_filename = sanitize_file_name( basename( $uploaded_file['name'] ) );
-		$upload_file_path  = trailingslashit( $upload_dir ) . $sanitize_filename; // todo: create checksum for each uploaded file and save it as post-meta!
+		$upload_file_path  = $upload_folder . $sanitize_filename; // todo: create checksum for each uploaded file and save it as post-meta!
 
 		// don't overwrite existing files.
 		if ( file_exists( $upload_file_path ) ) {
-			$sanitize_filename = $this->get_unique_filename( $upload_dir, $sanitize_filename );
-			$upload_file_path  = trailingslashit( $upload_dir ) . $sanitize_filename;
+			$sanitize_filename = $this->get_unique_filename( $upload_folder, $sanitize_filename );
+			$upload_file_path  = trailingslashit( $upload_folder ) . $sanitize_filename;
 		}
-
-		fputcsv( $fp, array( strtolower( $sanitize_filename ), $sanitize_filename ) );
-		fclose( $fp );
-		// End $this->add_uploaded_file_to_csv()
 
 		$json_data        = array(
 			'success' => true,
@@ -143,7 +129,6 @@ class Sip_Archival_Upload extends Form_Validation {
 			exit;
 		}
 
-
 		// There is a chance AV can't access the tmp folder on the server. Therefore we need to scan it after we moved it to the uploads folder!
 		$file_scan_result = $this->scan_file( $upload_file_path );
 		if ( true !== $file_scan_result ) {
@@ -159,8 +144,10 @@ class Sip_Archival_Upload extends Form_Validation {
 			exit;
 		}
 
+		// the names.csv contains all uploaded filenames.
+		$this->add_uploaded_file_to_names( $sip_folder, $sanitize_filename, $user_input['fullPath'] );
 
-		$file_size                = filesize( $uploaded_file['tmp_name'] );
+		$file_size                = filesize( $upload_file_path );
 		$sip_size                 = $sip_size + $file_size;
 		$_COOKIE['sip_file_size'] = $sip_size;
 		$json_data['sip_size']    = $sip_size;
@@ -190,7 +177,31 @@ class Sip_Archival_Upload extends Form_Validation {
 		return $new_filename;
 	}
 
-	private function add_uploaded_file_to_csv() {}
+	/**
+	 * Create a CSV with all names of all uploaded files.
+	 * This file is always called names.csv and is located in the users upload folder for a specific submission.
+	 *
+	 * @param string $sip_folder The path to the upload folder of the submission.
+	 * @param string $sanitized_filename The name of the uploaded file.
+	 *
+	 * @return void
+	 */
+	private function add_uploaded_file_to_names( string $sip_folder, string $sanitized_filename, string $full_path = '' ): void {
+		$fp = fopen($sip_folder . 'names.csv', 'a');
+
+		if ( $full_path ) {
+			$parent_dir      = dirname( sanitize_text_field( $full_path ) );
+			$full_path_array = explode( '/', $parent_dir );
+			foreach ( $full_path_array as $path ) {
+				$sanitize_path = sanitize_file_name($path);
+				fputcsv( $fp, array( strtolower( $sanitize_path ), $path ) );
+			}
+		}
+
+		// todo: check if we need to include this in a if????
+		fputcsv( $fp, array( strtolower( $sanitized_filename ), $sanitized_filename ) );
+		fclose( $fp );
+	}
 
 	/**
 	 * Check the uploaded file for errors like exceeding max file size, wrong MIME-Type or other errors.
