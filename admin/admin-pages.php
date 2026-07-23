@@ -10,6 +10,7 @@ class Starg_Admin_Pages {
 
 	public static function init() {
 		add_action( 'admin_menu', array( 'Starg_Admin_Pages', 'starg_add_statistics_page' ) );
+		add_action( 'admin_menu', array( 'Starg_Admin_Pages', 'starg_add_import_mapping_page' ) );
 	}
 
 	/**
@@ -23,6 +24,20 @@ class Starg_Admin_Pages {
 			'edit_others_pages',
 			'starg-statistics',
 			array( 'Starg_Admin_Pages', 'starg_render_statistics_page' ),
+		);
+	}
+
+	/**
+	 * Adds a page in the WordPress backend to display the mapping for import files.
+	 */
+	public static function starg_add_import_mapping_page() {
+		add_submenu_page(
+			'edit.php?post_type=archival',
+			esc_html__( 'Import mapping', 'sip' ),
+			esc_html__( 'Import mapping', 'sip' ),
+			'edit_others_pages',
+			'starg-create-import-mapping',
+			array( 'Starg_Admin_Pages', 'starg_render_import_mapping_page' ),
 		);
 	}
 
@@ -169,6 +184,304 @@ class Starg_Admin_Pages {
 	<?php
 	}
 
+	/**
+	 * Renders the form for the import mapping page in the WordPress backend.
+	 */
+	public static function starg_render_import_mapping_page(): void {
+		require_once( STARG_SIP_PLUGIN_BASE_DIR . 'admin/create-mapping-for-import.class.php' );
+		$mapping = new Create_Mapping_For_Import();
+		$mapping->init();
+		$mapping_schema  = $mapping->get_mapping_schema();
+		$user_archive_id = (int) get_user_meta( get_current_user_id(), 'user_archive', true );
+		$archive = get_term( $user_archive_id, 'archive' );
+		if ( ! $archive || is_wp_error( $archive ) ) {
+			$archive_name = '';
+		} else {
+			$archive_name = '<strong>' . $archive->name . '</strong>';
+		}
+		?>
+		<div class="wrap starg-mapping-page">
+			<h1 class="wp-heading-inline" style="margin-bottom:16px;"><?php esc_html_e( 'Create your own import file', 'sip' ); ?></h1>
+			<div class="description">
+				<?php // translators: %s: The name of the current archive/institution. ?>
+				<h3><?php printf( esc_attr__( 'This mapping is used for %s.', 'sip' ), $archive_name ); ?></h3>
+				<p>
+					<?php esc_attr_e( 'This functionality allows users to map collected data fields to their own database structure for seamless import. By defining a custom mapping, each data point can be assigned to a specific column name that matches the target schema. For example, a creation date field can be mapped to a designated column in the users\'s database.', 'sip' ); ?>
+				</p>
+				<p>
+					<?php esc_attr_e( 'The system then generates a CSV file based on this mapping. Each column in the exported file uses the user-defined column names, and the corresponding values are placed accordingly, ensuring compatibility with the intended database structure and simplifying the import process. Please use the "order" field in the form according your database schema. Otherwise the import may fail! Each number may only appear once.', 'sip' ); ?>
+				</p>
+			</div>
+			<hr class="wp-header-end">
+
+			<?php $mapping->display_notification(); ?>
+
+			<form method="<?php echo $mapping->get_request_method(); ?>" action>
+				<?php $mapping->the_form_name_field(); ?>
+				<?php $mapping->the_nonce_field(); ?>
+				<table class="wp-list-table widefat fixed striped">
+					<thead>
+						<tr>
+							<th class="col-id"><?php esc_html_e( 'Internal identifier', 'sip' ); ?></th>
+							<th><?php esc_html_e( 'Mapped version', 'sip' ); ?></th>
+							<th class="col-order"><?php esc_html_e( 'Order', 'sip' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+						foreach ( $mapping_schema['fields'] as $internal_key => $field_data ) :
+							$has_help_text = ( isset( $field_data['help_text'] ) && $field_data['help_text'] );
+							?>
+							<tr>
+								<td class="col-id"><?php $mapping->the_label( $internal_key, $field_data['label'] ); ?></td>
+								<td>
+									<?php $mapping->the_text_field( $internal_key, '', '', $has_help_text ); ?>
+									<?php if ( isset( $field_data['transform'] ) && $field_data['transform'] ) : ?>
+										<?php
+										$mapping->the_label( $internal_key . '_transform', esc_html__( 'Transform the date to a specific format', 'sip' ) );
+										$date_options = array( 0 => 'none', 'd.m.Y' => 'd.m.Y', );
+										$mapping->the_select_field( $internal_key . '_transform', $date_options );
+										?>
+									<?php endif; ?>
+									<?php if ( $has_help_text ) : ?>
+										<?php $mapping->the_help_text( $field_data['help_text'], $internal_key ); ?>
+									<?php endif; ?>
+								</td>
+								<td class="col-order">
+									<?php $mapping->the_label( $internal_key . '_order', esc_attr__( 'Order', 'sip' ) ); ?>
+									<?php $mapping->the_number_field( $internal_key . '_order' ); ?>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+
+				<div class="description" style="margin-top: 2rem;">
+					<div class="header">
+						<h3 style="margin-right: 1rem;"><?php esc_html_e( 'Set additional columns', 'sip' ); ?></h3>
+						<button type="button" id="add-static" class="button action">
+							+ <?php esc_attr_e( 'Add Input', 'sip' ); ?>
+						</button>
+					</div>
+					<p>
+						<?php esc_html_e( 'The input fields below are intended for defining custom column assignments. Users can specify a column name and assign a fixed value to it. These column-value pairs are applied consistently across all generated files, meaning each export will include these predefined values exactly as configured. This is particularly useful for adding static metadata or required fields that must be present in every import file. Please use the "order" field in the form according your database schema. Otherwise the import may fail! Each number may only appear once.', 'sip' ); ?>
+					</p>
+				</div>
+				<table class="wp-list-table widefat fixed striped">
+					<thead>
+						<tr>
+							<th><?php esc_attr_e( 'Column name', 'sip' ); ?></th>
+							<th><?php esc_attr_e( 'Column value', 'sip' ); ?></th>
+							<th class="col-order"><?php esc_attr_e( 'Order', 'sip' ); ?></th>
+							<th class="starg-actions"><?php esc_attr_e( 'Actions', 'sip' ); ?></th>
+						</tr>
+					</thead>
+					<tbody id="static-fields">
+					<?php
+					$saved_mapping = $mapping->get_mapping_by_inst( (int) get_user_meta( get_current_user_id(), 'user_archive', true ) );
+					if ( ! empty( $saved_mapping['static'] ) ) :
+						foreach ( $saved_mapping['static'] as $static_key => $static_values ) :
+							?>
+							<tr>
+								<?php foreach ( $static_values as $col_name => $col_val ) : ?>
+									<td <?php echo ( 'order' === $col_name ) ? ' class="col-order"' : ''; ?>>
+										<?php
+										$mapping->the_label( 'static[' . $static_key . '][' . $col_name . ']', $mapping->get_label_for_static_fields( $col_name ) );
+										if ( 'order' === $col_name ) {
+											$mapping->the_number_field( 'static[' . $static_key . '][' . $col_name . ']', '', true, false, esc_attr( $col_val ) );
+										} else {
+											$mapping->the_text_field( 'static[' . $static_key . '][' . $col_name . ']', '', false, false, esc_attr( $col_val ) );
+										}
+										?>
+									</td>
+								<?php endforeach; ?>
+								<td class="starg-actions">
+									<button type="button" class="button starg-delete-button" data-action="deleteMapping"><?php esc_html_e( 'Remove', 'sip' ) ; ?></button>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+					<?php else : ?>
+						<tr>
+							<td>
+								<?php $mapping->the_label( 'static[0][column_name]', esc_attr__( 'Column name', 'sip' ) ); ?>
+								<?php $mapping->the_text_field( 'static[0][column_name]', esc_attr__( 'Column name', 'sip' ) ); ?>
+							</td>
+							<td>
+								<?php $mapping->the_label( 'static[0][column_value]', esc_attr__( 'Column value', 'sip' ) ); ?>
+								<?php $mapping->the_text_field( 'static[0][column_value]', esc_attr__( 'Column value', 'sip' ) ); ?>
+							</td>
+							<td class="col-order">
+								<?php $mapping->the_label( 'static[0][order]', esc_attr__( 'Order', 'sip' ) ); ?>
+								<?php $mapping->the_number_field( 'static[0][order]', esc_attr__( 'Order', 'sip' ), true ); ?>
+							</td>
+							<td></td>
+						</tr>
+						<?php endif; ?>
+					</tbody>
+				</table>
+
+				<div class="description" style="margin-top: 2rem;">
+					<div class="header">
+						<h3><?php esc_html_e( 'Configuration', 'sip' ); ?></h3>
+					</div>
+					<p>
+						<?php esc_html_e( 'Use the input fields below to further configure your SIP files. This ensures, for example, that the CSV files created can be processed on your system.', 'sip' ); ?>
+					</p>
+				</div>
+				<table class="wp-list-table widefat fixed striped">
+					<tbody>
+						<tr>
+							<th><?php $mapping->the_label( 'target_os', esc_attr__( 'Target operating system', 'sip' ) ); ?></th>
+							<td>
+								<?php $mapping->the_select_field( 'target_os', array( 'windows' => 'Windows', 'unix' => 'Unix (MacOS/Linux)', ), true ); ?>
+								<p><?php $mapping->the_help_text( esc_html__( 'On which operating system will the downloaded data be processed?', 'sip' ), 'target_os' ); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<th><?php $mapping->the_label( 'csv_delimiter', esc_attr__( 'Delimiter for CSV files', 'sip' ) ); ?></th>
+							<td>
+								<?php $mapping->the_select_field( 'csv_delimiter', array( 'comma' => ',', 'semicolon' => ';', ), true ); ?>
+								<p><?php $mapping->the_help_text( esc_html__( 'This delimiter is used within the SIP in every CSV file.', 'sip' ), 'csv_delimiter' ); ?></p>
+							</td>
+						</tr>
+						<tr>
+							<th><?php $mapping->the_label( 'target_path', esc_attr__( 'Path where the files will be stored', 'sip' ) ); ?></th>
+							<td>
+								<?php $mapping->the_text_field( 'target_path', 'D:\\Shared\\SIPs' ); ?>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div style="margin-top: 1.5rem;">
+					<?php $mapping->the_submit_button(); ?>
+				</div>
+
+				<script>
+					document.addEventListener('DOMContentLoaded', () => {
+						const staticColumnsContainer = document.getElementById('static-fields');
+						const addRowBtn = document.getElementById('add-static');
+
+						const createInputCell = (labelText, type, name, placeholder) => {
+							const td = document.createElement('td');
+
+							const label = document.createElement('label');
+							label.htmlFor = name;
+							label.textContent = labelText;
+
+							const input = document.createElement('input');
+							input.id = name;
+							input.type = type;
+							input.name = name;
+							input.placeholder = placeholder;
+
+							td.appendChild(label);
+							td.appendChild(input);
+
+							return td;
+						};
+
+						const attachDeleteHandler = (button) => {
+							button.addEventListener('click', () => {
+								button.closest('tr').remove();
+							});
+						};
+
+						staticColumnsContainer.querySelectorAll('.starg-delete-button').forEach(attachDeleteHandler);
+
+						addRowBtn.addEventListener('click', () => {
+							const index = staticColumnsContainer.children.length +1;
+							const row = document.createElement('tr');
+
+							row.appendChild(
+								createInputCell(
+									'<?php esc_attr_e( "Column name", "sip" ); ?>',
+									'text',
+									`static[${index}][column_name]`,
+									'<?php esc_attr_e( "Column name", "sip" ); ?>'
+								)
+							);
+
+							row.appendChild(
+								createInputCell(
+									'<?php esc_attr_e( "Column value", "sip" ); ?>',
+									'text',
+									`static[${index}][column_value]`,
+									'<?php esc_attr_e( "Column value", "sip" ); ?>'
+								)
+							);
+
+							const orderCell = createInputCell(
+								'<?php esc_attr_e( "Order", "sip" ); ?>',
+								'number',
+								`static[${index}][order]`,
+								'<?php esc_attr_e( "Order", "sip" ); ?>'
+							);
+							orderCell.classList.add('col-order');
+							row.appendChild(orderCell);
+
+							const actionsTd = document.createElement('td');
+							actionsTd.classList.add('starg-actions');
+
+							const deleteBtn = document.createElement('button');
+							deleteBtn.type = 'button';
+							deleteBtn.className = 'button starg-delete-button';
+							deleteBtn.textContent = '<?php esc_attr_e( "Remove", "sip" ); ?>';
+
+							attachDeleteHandler(deleteBtn);
+
+							actionsTd.appendChild(deleteBtn);
+							row.appendChild(actionsTd);
+
+							staticColumnsContainer.appendChild(row);
+						});
+					});
+				</script>
+			</form>
+		</div>
+		<style>
+			.starg-mapping-page .description {
+				background-color: #fff;
+				padding: .25rem .75rem;
+				margin-bottom: 1.5rem;
+				border: 1px solid #c3c4c7;
+				box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+			}
+			.starg-mapping-page .description .header {
+				display: flex;
+				align-items:center;
+			}
+			.starg-mapping-page .description p {
+				font-size: 1rem;
+			}
+			.starg-mapping-page td span {
+				display: inline-block;
+				margin-top: .25rem;
+			}
+			.starg-mapping-page #static-fields label {
+				display: block;
+				font-weight: 600;
+				margin-bottom: .25rem;
+			}
+			.starg-mapping-page td {
+				vertical-align: middle;
+			}
+			.starg-mapping-page td input[type="text"] {
+				width: 100%;
+			}
+			.starg-mapping-page .widefat .starg-actions {
+				vertical-align: middle;
+				width: 20%;
+			}
+			.starg-mapping-page .col-id {
+				width: 25%;
+			}
+			.starg-mapping-page .col-order {
+				width: 20%;
+			}
+		</style>
+	<?php
+	}
 
 	/***************/
 	/* HTML Tables */
