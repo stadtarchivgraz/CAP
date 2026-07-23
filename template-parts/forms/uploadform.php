@@ -51,9 +51,10 @@ $sip_archival_remove_nonce_key    = $sip_archival_remove->nonce_key;
 			//parallelUploads: 100,
 			//maxFiles: 100,
 			// withCredentials: true,
+			maxFilesize: <?php echo starg_convert_size_to_mb( ini_get( 'upload_max_filesize' ) ); ?>,
 			ignoreHiddenFiles: true,
 			addRemoveLinks: true,
-			//acceptedFiles:  'application/pdf,application/xml,text/plain,text/xml,text/csv,image/jpeg,image/png,image/tiff,image/svg+xml,audio/wav,audio/flac,audio/mpeg,video/x-msvideo,video/avi,video/x-matroska',
+			acceptedFiles: '<?php echo starg_get_supported_mime_types(); ?>',
 			// The setting up of the dropzone
 			init: function() {
 				const sipDropzone = this;

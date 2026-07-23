@@ -288,6 +288,9 @@ class Starg_Sip_Plugin {
 
 		Starg_Template_Handling::starg_tab_rewrites();
 
+		require_once( STARG_SIP_PLUGIN_BASE_DIR . 'inc/db/import-mapping.php' );
+		Import_Mapping_DB_Table::create_db_table();
+
 		// Clear the permalinks after the post type has been registered.
 		flush_rewrite_rules();
 	}
