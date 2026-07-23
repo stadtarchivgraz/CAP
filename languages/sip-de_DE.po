@@ -29,14 +29,14 @@ msgstr "Benutzerdefinierte Felder"
 #: sip.php
 #: admin/sip-meta.php:47
 #: admin/sip-meta.php:48
-#: template-parts/content-archival.php:163
+#: template-parts/content-archival.php:162
 #: template-parts/content-archivals-list.php:59
 msgid "SIP"
 msgstr "SIP"
 
 #: admin/sip-meta.php:50
 #: inc/form-validation/create-sip-pdf.class.php:209
-#: template-parts/content-archival.php:77
+#: template-parts/content-archival.php:76
 msgid "Date/Time"
 msgstr "Datum/Uhrzeit"
 
@@ -74,9 +74,10 @@ msgstr "Bereich"
 msgid "Media"
 msgstr "Medien"
 
+#: admin/create-mapping-for-import.class.php:103
 #: admin/sip-meta.php:69
 #: inc/form-validation/create-sip-pdf.class.php:205
-#: template-parts/content-archival.php:75
+#: template-parts/content-archival.php:74
 #: template-parts/content-sip-form.php:75
 msgid "Originator"
 msgstr "Urheber/in"
@@ -84,26 +85,26 @@ msgstr "Urheber/in"
 #: admin/sip-meta.php:71
 #: inc/archival-cpt.php:308
 #: inc/form-validation/create-sip-pdf.class.php:213
-#: template-parts/content-archival.php:79
+#: template-parts/content-archival.php:78
 msgid "Upload Purpose"
 msgstr "Upload-Zweck"
 
 #: admin/sip-meta.php:75
 #: inc/form-validation/create-sip-pdf.class.php:101
-#: template-parts/content-archival.php:82
+#: template-parts/content-archival.php:81
 msgid "Blocking Time"
 msgstr "Sperrzeit"
 
 #: admin/sip-meta.php:100
-#: inc/form-validation/create-sip.class.php:407
+#: inc/form-validation/create-sip.class.php:707
 #: template-parts/content-sip-form.php:254
 msgid "Note"
 msgstr "Anmerkung"
 
 #: admin/sip-meta.php:103
 #: inc/form-validation/create-sip-pdf.class.php:232
-#: inc/form-validation/create-sip.class.php:400
-#: template-parts/content-archival.php:120
+#: inc/form-validation/create-sip.class.php:700
+#: template-parts/content-archival.php:119
 #: template-parts/content-sip-form.php:248
 msgid "Numbering"
 msgstr "Nummerierung"
@@ -121,10 +122,12 @@ msgstr "Archivinformationen"
 msgid "Administrator"
 msgstr "Administrator/in"
 
+#: admin/create-mapping-for-import.class.php:121
 #: admin/sip-options.php:39
 msgid "Editor"
-msgstr "Redakteuer"
+msgstr "Redakteur"
 
+#: admin/create-mapping-for-import.class.php:109
 #: admin/sip-options.php:40
 msgid "Author"
 msgstr "Autor/in"
@@ -205,8 +208,8 @@ msgstr "Benutzerdefiniertes CSS"
 msgid "Information Texts"
 msgstr "Informationstexte"
 
-#: admin/admin-pages.php:72
-#: admin/admin-pages.php:106
+#: admin/admin-pages.php:87
+#: admin/admin-pages.php:121
 #: admin/sip-options.php:333
 #: admin/sip-options.php:336
 #: inc/form-validation/export-statistics.class.php:67
@@ -229,6 +232,7 @@ msgstr "Sperrzeit - Upload Zweck"
 msgid "Blocking Time Calculate"
 msgstr "Sperrzeit Berechnung"
 
+#: admin/create-mapping-for-import.class.php:79
 #: admin/sip-options.php:360
 #: admin/sip-options.php:362
 #: template-parts/content-sip-form.php:65
@@ -391,10 +395,10 @@ msgstr "Liste filtern"
 msgid "archival"
 msgstr "archivalie"
 
-#: admin/admin-pages.php:59
 #: admin/admin-pages.php:74
-#: admin/admin-pages.php:93
+#: admin/admin-pages.php:89
 #: admin/admin-pages.php:108
+#: admin/admin-pages.php:123
 #: inc/archival-cpt.php:131
 #: inc/form-validation/export-statistics.class.php:69
 #: inc/form-validation/export-statistics.class.php:94
@@ -482,9 +486,9 @@ msgstr "Alle anzeigen"
 msgid "SIP-Folder"
 msgstr "SIP-Ordner"
 
-#: admin/admin-pages.php:60
-#: admin/admin-pages.php:83
-#: admin/admin-pages.php:94
+#: admin/admin-pages.php:75
+#: admin/admin-pages.php:98
+#: admin/admin-pages.php:109
 #: inc/archival-cpt.php:309
 #: inc/form-validation/create-sip-pdf.class.php:249
 msgid "User"
@@ -495,7 +499,7 @@ msgid "Numeration"
 msgstr "Nummerierung"
 
 #: inc/archival-cpt.php:331
-#: inc/form-validation/sip-archival-upload.class.php:257
+#: inc/form-validation/sip-archival-upload.class.php:275
 msgid "deleted"
 msgstr "gelöscht"
 
@@ -513,7 +517,7 @@ msgid "Year"
 msgstr "Jahr"
 
 #: inc/form-validation/create-sip-pdf.class.php:219
-#: template-parts/content-archival.php:95
+#: template-parts/content-archival.php:94
 #: template-parts/content-sip-form.php:95
 #: template-parts/forms/filterform.php:162
 msgid "Tags"
@@ -531,16 +535,16 @@ msgstr "Geben Sie Ihr altes Passwort ein."
 msgid "The old password is incorrect."
 msgstr "Das alte Passwort ist falsch."
 
-#: admin/admin-pages.php:61
-#: admin/admin-pages.php:75
-#: admin/admin-pages.php:95
-#: admin/admin-pages.php:109
+#: admin/admin-pages.php:76
+#: admin/admin-pages.php:90
+#: admin/admin-pages.php:110
+#: admin/admin-pages.php:124
 #: inc/form-validation/export-statistics.class.php:70
 #: template-parts/forms/profileform.php:28
 msgid "Submissions"
 msgstr "Abgaben"
 
-#: admin/admin-pages.php:120
+#: admin/admin-pages.php:135
 #: template-parts/forms/profileform.php:31
 msgid "Drafts"
 msgstr "Entwürfe"
@@ -550,9 +554,9 @@ msgstr "Entwürfe"
 msgid "Personal account"
 msgstr "Persönliche Daten"
 
-#: template-parts/content-archival.php:159
-#: template-parts/content-archival.php:172
-#: template-parts/content-archival.php:191
+#: template-parts/content-archival.php:158
+#: template-parts/content-archival.php:171
+#: template-parts/content-archival.php:190
 #: template-parts/content-archivals-list.php:53
 #: template-parts/forms/profileform.php:134
 msgid "Edit"
@@ -656,38 +660,40 @@ msgstr "SIP Profil"
 msgid "SIP Archive"
 msgstr "SIP Archiv"
 
-#: sip.php:75
+#: sip.php:77
 msgid "draft"
 msgstr "Entwurf"
 
-#: sip.php:76
+#: sip.php:78
 msgid "pending"
 msgstr "Ausstehend"
 
-#: sip.php:77
+#: sip.php:79
 msgid "publish"
 msgstr "Öffentlich"
 
+#: admin/create-mapping-for-import.class.php:133
 #: inc/form-validation/create-sip-pdf.class.php:201
-#: template-parts/content-archival.php:66
+#: template-parts/content-archival.php:65
 #: template-parts/content-sip-form.php:149
 msgid "Location"
 msgstr "Ort"
 
-#: admin/admin-pages.php:358
+#: admin/admin-pages.php:671
 #: inc/form-validation/create-sip-pdf.class.php:92
 #: inc/form-validation/create-sip-pdf.class.php:93
-#: template-parts/content-archival.php:68
-#: template-parts/content-archival.php:76
+#: template-parts/content-archival.php:67
+#: template-parts/content-archival.php:75
 msgid "unknown"
 msgstr "unbekannt"
 
+#: admin/create-mapping-for-import.class.php:115
 #: inc/form-validation/create-sip-pdf.class.php:236
-#: template-parts/content-archival.php:122
+#: template-parts/content-archival.php:121
 msgid "Annotation"
 msgstr "Anmerkung"
 
-#: template-parts/content-archival.php:178
+#: template-parts/content-archival.php:177
 msgid "Accept"
 msgstr "Akzeptieren"
 
@@ -697,7 +703,8 @@ msgstr "Akzeptieren"
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: template-parts/content-archival.php:196
+#: admin/backend-form-validation.class.php:155
+#: template-parts/content-archival.php:195
 #: template-parts/content-sip-form.php:304
 msgid "Submit"
 msgstr "Senden"
@@ -755,6 +762,7 @@ msgstr "Karte (Wählen Sie einen genauen Ort oder einen Bereich aus)"
 msgid "Minimum 1 | Maximum 10"
 msgstr "Mindestens 1 | Maximal 10"
 
+#: admin/create-mapping-for-import.class.php:94
 #: template-parts/content-sip-form.php:192
 msgid "Blocking time"
 msgstr "Sperrzeit"
@@ -764,17 +772,17 @@ msgid "Drag and drop the files here to upload"
 msgstr "Ziehen Sie die Dateien hier hin, um sie hochzuladen"
 
 #. translators: %s: Maximum supported filesize for uploads - for example: "42MB".
-#: template-parts/forms/uploadform.php:96
-#: template-parts/forms/uploadform.php:139
+#: template-parts/forms/uploadform.php:107
+#: template-parts/forms/uploadform.php:150
 #, php-format
 msgid "The maximum size of %s for the SIP has been exceeded. Files need to be removed."
 msgstr "Die maximale Größe von %s für das SIP wurde überschritten. Dateien müssen entfernt werden."
 
-#: template-parts/forms/uploadform.php:129
+#: template-parts/forms/uploadform.php:140
 msgid "Further uploads are not possible. Files must be deleted first."
 msgstr "Weitere Uploads sind nicht möglich. Dateien müssen vorher gelöscht werden."
 
-#: template-parts/forms/uploadform.php:185
+#: template-parts/forms/uploadform.php:196
 msgid "Complete upload and insert metadata"
 msgstr "Hochladen beenden und einfügen von Metadaten"
 
@@ -830,8 +838,8 @@ msgstr "Archiv‑Tag"
 
 #: inc/form-validation/create-sip-pdf.class.php:34
 #: inc/form-validation/create-sip-pdf.class.php:35
-#: inc/form-validation/create-sip.class.php:44
-#: inc/form-validation/create-sip.class.php:45
+#: inc/form-validation/create-sip.class.php:57
+#: inc/form-validation/create-sip.class.php:58
 #: inc/form-validation/export-statistics.class.php:43
 #: inc/form-validation/export-statistics.class.php:44
 msgid "User-Input not valid."
@@ -850,7 +858,7 @@ msgid "No archival record found with SIP Post-ID: \"%d\""
 msgstr "Kein Archivdatensatz mit der SIP‑Post‑ID: \"%d\" gefunden."
 
 #: inc/form-validation/create-sip-pdf.class.php:229
-#: template-parts/content-archival.php:118
+#: template-parts/content-archival.php:117
 msgid "Archive Information"
 msgstr "Archivinformation"
 
@@ -859,8 +867,8 @@ msgid "Archivist"
 msgstr "Archivar/in"
 
 #. translators: %s: ID/Name of the folder where the sip is stored.
-#: inc/form-validation/create-sip.class.php:59
-#: inc/form-validation/create-sip.class.php:60
+#: inc/form-validation/create-sip.class.php:72
+#: inc/form-validation/create-sip.class.php:73
 #, php-format
 msgid "No archival record found with SIP-ID: \"%s\""
 msgstr "Kein Archivdatensatz mit der SIP‑ID: \"%s\" gefunden."
@@ -944,7 +952,7 @@ msgstr "Ihre persönlichen Angaben wurden erfolgreich aktualisiert."
 msgid "You are not allowed to view this page!"
 msgstr "Sie dürfen diese Seite nicht ansehen!"
 
-#: template-parts/content-archival.php:166
+#: template-parts/content-archival.php:165
 msgid "PDF"
 msgstr "PDF"
 
@@ -958,16 +966,16 @@ msgstr "SIP erstellen"
 msgid "The folder \"%1$s\" for user \"%2$d\" is empty."
 msgstr "Der Ordner \"%1$s\" für Nutzer \"%2$d\" ist leer."
 
-#: template-parts/forms/uploadform.php:120
+#: template-parts/forms/uploadform.php:131
 msgid "Virus detected in:"
 msgstr "Virus erkannt in:"
 
-#: template-parts/forms/uploadform.php:125
+#: template-parts/forms/uploadform.php:136
 msgid "Unsupported file type:"
 msgstr "Nicht unterstützter Dateityp:"
 
 #. translators: %1$s: Directory of the archival record in question. %2$s: Error message.
-#: inc/sip-functions.php:169
+#: inc/sip-functions.php:187
 #, php-format
 msgid "SIP %1$s was not removed! Error message: %2$s"
 msgstr "SIP %1$s wurde nicht entfernt! Fehlermeldung: %2$s."
@@ -1095,8 +1103,8 @@ msgstr "Diese Rolle oder höher ist erforderlich, um eingereichte Archivdatensä
 msgid "Specify the folder where the digital archival records should be stored. By default, all files are saved in the /wp-content/uploads/archival/ directory."
 msgstr "Gib den Ordner an, in dem die digitalen Archivdatensätze gespeichert werden sollen. Standardmäßig werden alle Dateien im Verzeichnis /wp-content/uploads/archival/ gespeichert."
 
-#: admin/admin-pages.php:125
-#: admin/admin-pages.php:142
+#: admin/admin-pages.php:140
+#: admin/admin-pages.php:157
 #: admin/sip-options.php:164
 msgid "Uploads"
 msgstr "Uploads"
@@ -1131,12 +1139,13 @@ msgstr "Versuch, eine Datei zu löschen, die nicht existiert."
 msgid "File %s not deleted"
 msgstr "Datei %s wurde nicht gelöscht"
 
-#: inc/form-validation/sip-archival-upload.class.php:257
+#: inc/form-validation/sip-archival-upload.class.php:275
 msgid "not deleted"
 msgstr "nicht gelöscht"
 
 #. translators: %1$s: File path. %2$d: User ID.
-#: inc/form-validation/sip-archival-upload.class.php:299
+#: inc/form-validation/create-sip.class.php:1109
+#: inc/form-validation/sip-archival-upload.class.php:317
 #, php-format
 msgid "Uploaded File %1$s from user id %2$d is infected"
 msgstr "Die hochgeladene Datei %1$s von Benutzer-ID %2$d ist infiziert"
@@ -1155,7 +1164,7 @@ msgstr ".htaccess für das Log-Verzeichnis wurde nicht erstellt."
 msgid "Error log was not created."
 msgstr "Fehlerprotokoll wurde nicht erstellt."
 
-#: inc/logging.class.php:133
+#: inc/logging.class.php:134
 msgid "Unknown browser"
 msgstr "Unbekannter Browser"
 
@@ -1175,19 +1184,19 @@ msgstr "Imagick-Erweiterung ist nicht geladen."
 msgid "Error while creating a thumbnail for a PDF. See: %s"
 msgstr "Fehler beim Erstellen eines Thumbnails für eine PDF-Datei. Siehe: %s"
 
-#: inc/sip-functions.php:237
+#: inc/sip-functions.php:255
 msgid "No page associated with page-template sip-upload found."
 msgstr "Keine Seite mit dem Seiten-Template sip-upload gefunden."
 
-#: inc/sip-functions.php:263
+#: inc/sip-functions.php:281
 msgid "No page associated with page-template sip-archival found."
 msgstr "Keine Seite mit dem Seiten-Template sip-archival gefunden."
 
-#: inc/sip-functions.php:290
+#: inc/sip-functions.php:307
 msgid "No page associated with page-template sip-profile found."
 msgstr "Keine Seite mit dem Seiten-Template sip-profile gefunden."
 
-#: template-parts/forms/uploadform.php:107
+#: template-parts/forms/uploadform.php:118
 msgid "We encountered problems parsing the JSON response while attempting to delete an uploaded file."
 msgstr "Beim Versuch, eine hochgeladene Datei zu löschen, gab es Probleme beim Parsen der JSON-Antwort."
 
@@ -1198,56 +1207,56 @@ msgstr "Beim Versuch, eine hochgeladene Datei zu löschen, gab es Probleme beim 
 msgid "Problems updating the CSV for upload %1$s in SIP folder %2$s from user ID %3$d."
 msgstr "Probleme beim Aktualisieren der CSV-Datei für den Upload %1$s im SIP-Ordner %2$s vom Benutzer mit der ID %3$d."
 
-#: admin/admin-pages.php:21
 #: admin/admin-pages.php:22
-#: admin/admin-pages.php:39
+#: admin/admin-pages.php:23
+#: admin/admin-pages.php:54
 msgid "Statistics"
 msgstr "Statistiken"
 
-#: admin/admin-pages.php:47
-#: admin/admin-pages.php:189
-#: admin/admin-pages.php:236
+#: admin/admin-pages.php:62
+#: admin/admin-pages.php:502
+#: admin/admin-pages.php:549
 msgid "There are no elements to display."
 msgstr "Es sind keine Elemente zum Anzeigen vorhanden."
 
-#: admin/admin-pages.php:73
-#: admin/admin-pages.php:107
-#: admin/admin-pages.php:124
-#: admin/admin-pages.php:141
+#: admin/admin-pages.php:88
+#: admin/admin-pages.php:122
+#: admin/admin-pages.php:139
+#: admin/admin-pages.php:156
 #: inc/form-validation/export-statistics.class.php:68
 msgid "Username"
 msgstr "Benutzername"
 
-#: admin/admin-pages.php:62
-#: admin/admin-pages.php:76
-#: admin/admin-pages.php:96
-#: admin/admin-pages.php:110
+#: admin/admin-pages.php:77
+#: admin/admin-pages.php:91
+#: admin/admin-pages.php:111
+#: admin/admin-pages.php:125
 #: inc/form-validation/export-statistics.class.php:71
 msgid "Files submitted"
 msgstr "Eingereichte Dateien"
 
-#: admin/admin-pages.php:77
-#: admin/admin-pages.php:111
+#: admin/admin-pages.php:92
+#: admin/admin-pages.php:126
 #: inc/form-validation/export-statistics.class.php:72
 msgid "Extra*"
 msgstr "Extra*"
 
-#: admin/admin-pages.php:88
+#: admin/admin-pages.php:103
 #: inc/form-validation/export-statistics.class.php:116
 msgid "Data from administrators or test users"
 msgstr "Daten von Administratoren oder Testbenutzern"
 
-#: admin/admin-pages.php:164
+#: admin/admin-pages.php:179
 msgid "Export as CSV"
 msgstr "Als CSV exportieren"
 
-#: admin/admin-pages.php:213
-#: admin/admin-pages.php:321
+#: admin/admin-pages.php:526
+#: admin/admin-pages.php:634
 msgid "Total"
 msgstr "Gesamt"
 
 #. translators: %d: User-ID.
-#: admin/admin-pages.php:378
+#: admin/admin-pages.php:691
 #, php-format
 msgid "User with the ID %d has not selected an archive."
 msgstr "Benutzer mit der ID %d hat kein Archiv ausgewählt."
@@ -1311,55 +1320,62 @@ msgstr "Testbenutzer"
 msgid "Save as draft"
 msgstr "Als Entwurf speichern"
 
-#: admin/admin-pages.php:55
-#: admin/admin-pages.php:89
+#: admin/admin-pages.php:70
+#: admin/admin-pages.php:104
 msgid "Archive-related statistics"
 msgstr "Archivbezogene Statistiken"
 
-#: admin/admin-pages.php:68
-#: admin/admin-pages.php:102
+#: admin/admin-pages.php:83
+#: admin/admin-pages.php:117
 msgid "Statistics by user"
 msgstr "Statistiken nach Benutzer/in"
 
 #. translators: %1$s: Filename. %2$s: Path to folder.
-#: inc/form-validation/sip-archival-upload.class.php:98
+#: inc/form-validation/sip-archival-upload.class.php:84
 #, php-format
 msgid "Uploaded file %1$s not moved to uploads folder %2$s"
 msgstr "Die hochgeladene Datei %1$s wurde nicht in das Upload-Verzeichnis %2$s verschoben"
 
 #. translators: %1$d: Filename. %2$s: User Id. %3$s: either "deleted" or "not deleted". %4$s: Virus scan result.
-#: inc/form-validation/sip-archival-upload.class.php:260
+#: inc/form-validation/sip-archival-upload.class.php:278
 #, php-format
 msgid "Problem with file %1$s from user %2$d. File %3$s. Virus scan result: %4$s"
 msgstr "Problem mit Datei %1$s von Benutzer %2$d. Datei %3$s. Virus-Scannergebnis: %4$s"
 
-#: inc/form-validation/sip-archival-upload.class.php:281
+#: inc/form-validation/create-sip.class.php:1091
+#: inc/form-validation/sip-archival-upload.class.php:299
 msgid "ClamAV: not responding"
 msgstr "ClamAV: reagiert nicht"
 
-#: inc/form-validation/sip-archival-upload.class.php:286
+#: inc/form-validation/create-sip.class.php:1096
+#: inc/form-validation/sip-archival-upload.class.php:304
 msgid "ClamAV is not ready/responding"
 msgstr "ClamAV ist nicht bereit/reagiert nicht"
 
-#: inc/form-validation/sip-archival-upload.class.php:287
+#: inc/form-validation/create-sip.class.php:1097
+#: inc/form-validation/sip-archival-upload.class.php:305
 msgid "ClamAV: not ready"
 msgstr "ClamAV: nicht bereit"
 
 #. translators: %1$s: path to the file. %2$s: user id.
-#: inc/form-validation/sip-archival-upload.class.php:292
+#: inc/form-validation/create-sip.class.php:1102
+#: inc/form-validation/sip-archival-upload.class.php:310
 #, php-format
 msgid "Uploaded File %1$s from user id %2$d was not scanned. File not found"
 msgstr "Hochgeladene Datei %1$s von Benutzer mit der ID %2$d wurde nicht gescannt. Datei nicht gefunden"
 
-#: inc/form-validation/sip-archival-upload.class.php:293
+#: inc/form-validation/create-sip.class.php:1103
+#: inc/form-validation/sip-archival-upload.class.php:311
 msgid "ClamAV: file not found"
 msgstr "ClamAV: Datei nicht gefunden"
 
-#: inc/form-validation/sip-archival-upload.class.php:300
+#: inc/form-validation/create-sip.class.php:1110
+#: inc/form-validation/sip-archival-upload.class.php:318
 msgid "ClamAV: virus detected"
 msgstr "ClamAV: Virus erkannt"
 
-#: inc/form-validation/sip-archival-upload.class.php:303
+#: inc/form-validation/create-sip.class.php:1113
+#: inc/form-validation/sip-archival-upload.class.php:321
 msgid "ClamAV: file is safe"
 msgstr "ClamAV: Datei ist sicher"
 
@@ -1374,19 +1390,19 @@ msgid "No SIP data found for post %1$s for SIP folder %2$s requested by %3$d."
 msgstr "Keine SIP-Daten gefunden für Beitrag %1$s im SIP-Ordner %2$s angefragt von %3$d."
 
 #. translators: %s: Errormessage.
-#: sip.php:187
+#: sip.php:189
 #, php-format
 msgid "Archival delete cron not scheduled. see: %s"
 msgstr "Der Archivlösch-Cron ist nicht geplant. Siehe: %s"
 
 #. translators: %1$s: Post-ID. %2$d: SIP folder.
-#: sip.php:250
+#: sip.php:252
 #, php-format
 msgid "Post meta for post %1$d and SIP folder %2$s not deleted."
 msgstr "Post-Metadaten für Beitrag %1$d und SIP-Ordner %2$s wurden nicht gelöscht."
 
 #. translators: %1$s: Post-ID. %2$d: SIP folder.
-#: sip.php:256
+#: sip.php:258
 #, php-format
 msgid "Post with ID %1$d and SIP folder %2$s not deleted."
 msgstr "Beitrag mit ID %1$d und SIP-Ordner %2$s wurde nicht gelöscht."
@@ -1398,16 +1414,16 @@ msgid "%1$s In order to create thumbnails from PDF files, you might need to chan
 msgstr "%1$s Um Thumbnails aus PDF-Dateien zu erstellen, müssen Sie möglicherweise die Sicherheitsrichtlinie von ImageMagick ändern. Überprüfen Sie die Datei policy.xml im Installationsordner von ImageMagick. Ändern Sie die Zeile %2$s zu %3$s"
 
 #. translators: %s: formatted filesize.
-#: admin/admin-pages.php:218
+#: admin/admin-pages.php:531
 #, php-format
 msgid "Total filesize: %s"
 msgstr "Gesamte Dateigröße: %s"
 
-#: admin/admin-pages.php:303
+#: admin/admin-pages.php:616
 msgid "User role"
 msgstr "Benutzerrolle"
 
-#: admin/admin-pages.php:304
+#: admin/admin-pages.php:617
 msgid "Number of users"
 msgstr "Anzahl der Benutzer"
 
@@ -1497,25 +1513,25 @@ msgid "If you need assistance, contact us at %s."
 msgstr "Wenn Sie Hilfe benötigen, kontaktieren Sie uns unter %s"
 
 #. translators: %s: Title of the website.
-#: inc/form-validation/form-validation.class.php:132
+#: inc/form-validation/form-validation.class.php:135
 #, php-format
 msgid "Notification from %s"
 msgstr "Benachrichtigung von %s"
 
 #. translators: %s: The class which called the function.
-#: inc/form-validation/form-validation.class.php:138
+#: inc/form-validation/form-validation.class.php:141
 #, php-format
 msgid "Email notification for %s not sent. Missing recipient!"
 msgstr "E-Mail-Benachrichtigung für %s nicht gesendet. Empfänger fehlt!"
 
 #. translators: %1$s: The class which called the function. %2$s: Email address of the user to whom the email should have been sent.
-#: inc/form-validation/form-validation.class.php:162
+#: inc/form-validation/form-validation.class.php:165
 #, php-format
 msgid "Email notification for %1$s to %2$s not sent."
 msgstr "E-Mail-Benachrichtigung für %1$s an %2$s nicht gesendet."
 
 #. translators: %s: one or more hyperlinks to the missing required inputs.
-#: inc/form-validation/form-validation.class.php:237
+#: inc/form-validation/form-validation.class.php:241
 #, php-format
 msgid "Missing inputs. Please check %s."
 msgstr "Fehlende Eingaben. Bitte überprüfen Sie %s"
@@ -1554,11 +1570,11 @@ msgstr ""
 msgid "Your submission to %s"
 msgstr "Ihre Einreichung bei %s"
 
-#: inc/form-validation/sip-archival-upload.class.php:250
+#: inc/form-validation/sip-archival-upload.class.php:268
 msgid "ClamAV: cannot connect because the module socket_create is missing."
 msgstr "ClamAV: Verbindung kann nicht hergestellt werden, da das Modul socket_create fehlt."
 
-#: inc/form-validation/sip-archival-upload.class.php:251
+#: inc/form-validation/sip-archival-upload.class.php:269
 msgid "ClamAV: file not scanned."
 msgstr "ClamAV: Datei wurde nicht gescannt."
 
@@ -1639,11 +1655,11 @@ msgstr "Maptile API-Schlüssel"
 msgid "To create an API Key, you need to create an account at %s first. Then you can create the API-Key."
 msgstr "Um einen API-Schlüssel zu erstellen, müssen Sie zuerst ein Konto bei %s erstellen. Danach können Sie den API-Schlüssel erstellen."
 
-#: inc/form-validation/form-validation.class.php:310
+#: inc/form-validation/form-validation.class.php:329
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: inc/form-validation/form-validation.class.php:442
+#: inc/form-validation/form-validation.class.php:461
 msgid "close"
 msgstr "schließen"
 
@@ -1675,7 +1691,7 @@ msgstr "Ablehnen mit Antwort"
 
 #: inc/form-validation/sip-archival-actions-form.class.php:527
 msgid "Reason for the rejection:"
-msgstr "Grund für die Ablehnung:"
+msgstr "Grund der Ablehnung:"
 
 #: inc/form-validation/sip-archival-actions-form.class.php:532
 msgid "Please use this text area if you want to add a reason for the rejection in the email notification."
@@ -1720,19 +1736,19 @@ msgstr ""
 msgid "[Warning]"
 msgstr "[Warnung]"
 
-#: inc/logging.class.php:100
+#: inc/logging.class.php:104
 msgid "[Info]"
 msgstr "[Info]"
 
-#: inc/logging.class.php:103
+#: inc/logging.class.php:100
 msgid "[Error]"
 msgstr "[Fehler]"
 
-#: inc/sip-functions.php:313
+#: inc/sip-functions.php:330
 msgid "delete notification"
 msgstr "Benachrichtigung löschen"
 
-#: template-parts/content-archival.php:203
+#: template-parts/content-archival.php:202
 msgid "This post has been deleted and is in the trash."
 msgstr "Dieser Beitrag wurde gelöscht und befindet sich im Papierkorb."
 
@@ -1748,7 +1764,7 @@ msgstr "Das Hochladen von Dateien ist derzeit nicht möglich. Bitte versuchen Si
 msgid "Could not initialize upload functionality."
 msgstr "Die Upload-Funktionalität konnte nicht initialisiert werden."
 
-#: template-parts/forms/uploadform.php:165
+#: template-parts/forms/uploadform.php:176
 msgid "File upload error"
 msgstr "Fehler beim Dateiupload"
 
@@ -1756,6 +1772,7 @@ msgstr "Fehler beim Dateiupload"
 msgid "This changes the name of the sent emails from \"WordPress\" to something of your choice."
 msgstr "Dadurch wird der Name der gesendeten E-Mails von „WordPress“ in einen Namen Ihrer Wahl geändert."
 
+#: admin/create-mapping-for-import.class.php:112
 #: elementor-integration/Email_Shortcode_Widget.class.php:34
 #: elementor-integration/Email_Shortcode_Widget.class.php:42
 msgid "Content"
@@ -1790,102 +1807,102 @@ msgid "REST API not available"
 msgstr "REST-API nicht verfügbar"
 
 #. translators: %s: comma separated list of file extensions.
-#: inc/sip-functions.php:485
+#: inc/sip-functions.php:520
 #, php-format
 msgid "images (%s)"
 msgstr "Bilder (%s)"
 
 #. translators: %s: comma separated list of file extensions.
-#: inc/sip-functions.php:487
+#: inc/sip-functions.php:522
 #, php-format
 msgid "audio files (%s)"
 msgstr "Audiodateien (%s)"
 
 #. translators: %s: comma separated list of file extensions.
-#: inc/sip-functions.php:489
+#: inc/sip-functions.php:524
 #, php-format
 msgid "video files (%s)"
 msgstr "Videodateien (%s)"
 
-#: inc/sip-functions.php:504
+#: inc/sip-functions.php:539
 msgid "MS Word 97-2003 documents (.doc)"
 msgstr "MS Word 97-2003-Dokumente (.doc)"
 
-#: inc/sip-functions.php:505
+#: inc/sip-functions.php:540
 msgid "MS Word 2007+ documents (.docx)"
 msgstr "MS Word 2007+-Dokumente (.docx)"
 
-#: inc/sip-functions.php:506
+#: inc/sip-functions.php:541
 msgid "MS Excel 97-2003 Spreadsheets (.xls)"
 msgstr "MS Excel 97-2003-Tabellenkalkulationen (.xls)"
 
-#: inc/sip-functions.php:507
+#: inc/sip-functions.php:542
 msgid "MS Excel 2007+ Spreadsheets (.xlsx)"
 msgstr "MS Excel 2007+-Tabellenkalkulationen (.xlsx)"
 
-#: inc/sip-functions.php:508
+#: inc/sip-functions.php:543
 msgid "MS PowerPoint 97-2003 presentations (.ppt)"
 msgstr "MS PowerPoint 97-2003-Präsentationen (.ppt)"
 
-#: inc/sip-functions.php:509
+#: inc/sip-functions.php:544
 msgid "MS PowerPoint 2007+ presentations (.pptx)"
 msgstr "MS PowerPoint 2007+-Präsentationen (.pptx)"
 
-#: inc/sip-functions.php:512
+#: inc/sip-functions.php:547
 msgid "LibreOffice documents (.odt)"
 msgstr "LibreOffice-Dokumente (.odt)"
 
-#: inc/sip-functions.php:513
+#: inc/sip-functions.php:548
 msgid "LibreOffice Spreadsheets (.ods)"
 msgstr "LibreOffice-Tabellen (.ods)"
 
-#: inc/sip-functions.php:514
+#: inc/sip-functions.php:549
 msgid "LibreOffice presentations (.odp)"
 msgstr "LibreOffice-Präsentationen (.odp)"
 
-#: inc/sip-functions.php:516
+#: inc/sip-functions.php:551
 msgid "PDF documents (.pdf)"
 msgstr "PDF-Dokumente (.pdf)"
 
-#: inc/sip-functions.php:517
+#: inc/sip-functions.php:552
 msgid "Rich Text Format (.rtf)"
 msgstr "Rich Text Format (.rtf)"
 
-#: inc/sip-functions.php:520
+#: inc/sip-functions.php:555
 msgid "plain text files (.txt)"
 msgstr "Nur-Text-Dateien (.txt)"
 
-#: inc/sip-functions.php:521
+#: inc/sip-functions.php:556
 msgid "markdown (.md)"
 msgstr "Markdown (.md)"
 
-#: inc/sip-functions.php:522
+#: inc/sip-functions.php:557
 msgid "comma-separated values (.csv)"
 msgstr "Komma-getrennte Werte (.csv)"
 
-#: inc/sip-functions.php:523
+#: inc/sip-functions.php:558
 msgid "iCalendar format (.ics)"
 msgstr "iCalendar-Format (.ics)"
 
-#: inc/sip-functions.php:524
+#: inc/sip-functions.php:559
 msgid "Cascading Style Sheets (.css)"
 msgstr "Cascading Style Sheets (.css)"
 
-#: inc/sip-functions.php:525
+#: inc/sip-functions.php:560
 msgid "HyperText Markup Language (.htm, .html)"
 msgstr "HyperText Markup Language (.htm, .html)"
 
-#: inc/sip-functions.php:526
-#: inc/sip-functions.php:527
+#: inc/sip-functions.php:561
+#: inc/sip-functions.php:562
 msgid "eXtensible Markup Language (.xml)"
 msgstr "eXtensible Markup Language (.xml)"
 
-#: inc/sip-functions.php:528
+#: inc/sip-functions.php:563
 msgid "eXtensible Hypertext Markup Language (.xhtml)"
 msgstr "eXtensible Hypertext Markup Language (.xhtml)"
 
 #. translators: %s: Name of an unknown file format.
-#: inc/sip-functions.php:541
+#: inc/sip-functions.php:576
 #, php-format
 msgid "unknown file format %s"
 msgstr "unbekanntes Dateiformat %s"
@@ -1897,13 +1914,13 @@ msgid "For more information about how we store and use this data, please see our
 msgstr "Weitere Informationen darüber, wie wir diese Daten speichern und verwenden, finden Sie in unserer %s."
 
 #. translators: %s: Comma separated list of supported file types.
-#: template-parts/forms/uploadform.php:172
+#: template-parts/forms/uploadform.php:183
 #, php-format
 msgid "Supported file types are: %s"
 msgstr "Unterstützte Dateitypen sind: %s"
 
 #. translators: %1$s: Number of files. %2$s: Name of the folder.
-#: admin/admin-pages.php:282
+#: admin/admin-pages.php:595
 #, php-format
 msgid "There is %1$s file in folder %2$s."
 msgid_plural "There are %1$s files in folder %2$s."
@@ -1911,19 +1928,19 @@ msgstr[0] "Es gibt %1$s Dateie im Ordner %2$s."
 msgstr[1] "Es gibt %1$s Dateien im Ordner %2$s."
 
 #. translators: %s: The class which called the function.
-#: inc/form-validation/form-validation.class.php:125
+#: inc/form-validation/form-validation.class.php:128
 msgid "Email notification not active!"
 msgstr "E-Mail Benachrichtigungen sind nicht aktiv!"
 
-#: template-parts/content-archival.php:104
+#: template-parts/content-archival.php:103
 msgid "not available"
 msgstr "nicht verfügbar"
 
-#: template-parts/content-archival.php:110
+#: template-parts/content-archival.php:109
 msgid "Date of first submission"
 msgstr "Datum der ersten Einreichung"
 
-#: template-parts/content-archival.php:112
+#: template-parts/content-archival.php:111
 msgid "Uploading user"
 msgstr "Benutzer/in"
 
@@ -1960,7 +1977,7 @@ msgstr ""
 #: inc/form-validation/sip-archival-actions-form.class.php:339
 #, php-format
 msgid "Reason for the rejection: %s"
-msgstr "Grund für die Ablehnung: %s"
+msgstr "Grund der Ablehnung: %s"
 
 #. translators: %1$s: Name of the responsible archivist. %2$s: Email Link.
 #: inc/form-validation/sip-archival-actions-form.class.php:353
@@ -1968,7 +1985,7 @@ msgstr "Grund für die Ablehnung: %s"
 msgid "If you have any questions regarding the rejection, please contact %1$s at %2$s."
 msgstr "Wenn Sie Fragen zur Ablehnung haben, wenden Sie sich bitte an %1$s unter %2$s."
 
-#: admin/admin-pages.php:137
+#: admin/admin-pages.php:152
 msgid "Uploads without post or metadata"
 msgstr "Uploads ohne Beitrag oder Metadaten"
 
@@ -2241,6 +2258,7 @@ msgstr "Hochgeladene Dateien"
 msgid "Folder: %s"
 msgstr "Ordner: %s"
 
+#: inc/form-validation/create-sip.class.php:922
 #: inc/render-sip-content-folder.php:143
 msgid "Filenames"
 msgstr "Dateinamen"
@@ -2264,7 +2282,7 @@ msgid "No institution set as %s."
 msgstr ""
 
 #. translators: Text in the physical description (ead:physdesc) of the XML. %1$s: Number of files for the MIME type. %2$s: MIME type.
-#: inc/form-validation/create-sip.class.php:268
+#: inc/form-validation/create-sip.class.php:366
 #, php-format
 msgid "%1$s %2$s"
 msgid_plural "%1$ss %2$s"
@@ -2287,17 +2305,13 @@ msgstr "Datum der ClamAV-Signatur"
 msgid "The ClamAV signature date. If the date is over a week old, please contact your administrator."
 msgstr "Das Datum der ClamAV-Signatur. Sollte das Datum bereits mehr als eine Woche zurückliegen, wenden Sie sich bitte an Ihren Administrator."
 
-#: inc/form-validation/create-sip.class.php:185
-msgid "In Copyright"
-msgstr ""
-
 #. translators: Text in the physical description (ead:physdesc) of the XML. %s: Number of files in total.
-#: inc/form-validation/create-sip.class.php:275
+#: inc/form-validation/create-sip.class.php:373
 #, php-format
 msgid "%s total"
 msgstr "%s gesamt"
 
-#: inc/form-validation/create-sip.class.php:310
+#: inc/form-validation/create-sip.class.php:610
 msgid "Access Condition"
 msgstr ""
 
@@ -2314,63 +2328,379 @@ msgid "Error uploading the file %1$s by user with ID %2$s"
 msgstr "Fehler beim Hochladen der Datei %1$s durch den Benutzer mit der ID %2$s"
 
 #. translators: %1$s: Filename.
-#: inc/form-validation/sip-archival-upload.class.php:100
+#: inc/form-validation/sip-archival-upload.class.php:86
 #, php-format
 msgid "An error occurred while moving the file %s to your uploads folder. Please try again."
 msgstr "Beim Verschieben der Datei %s in Ihren Upload-Ordner ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
 
 #. translators: %s: User-ID.
-#: inc/form-validation/sip-archival-upload.class.php:197
+#: inc/form-validation/sip-archival-upload.class.php:215
 #, php-format
 msgid "May be a file corruption attack from user %s"
 msgstr "Möglicherweise handelt es sich um einen Angriff durch eine beschädigte Datei des Benutzers %s"
 
-#: inc/form-validation/sip-archival-upload.class.php:198
+#: inc/form-validation/sip-archival-upload.class.php:216
 msgid "File not valid."
 msgstr "Datei ungültig"
 
 #. translators: %s: User-ID.
-#: inc/form-validation/sip-archival-upload.class.php:206
+#: inc/form-validation/sip-archival-upload.class.php:224
 #, php-format
 msgid "No file sent. User-ID: %s"
 msgstr "Keine Datei empfangen. User-ID: %s"
 
-#: inc/form-validation/sip-archival-upload.class.php:207
+#: inc/form-validation/sip-archival-upload.class.php:225
 msgid "No file sent."
 msgstr "Keine Datei empfangen."
 
 #. translators: %s: User-ID.
-#: inc/form-validation/sip-archival-upload.class.php:211
-#: inc/form-validation/sip-archival-upload.class.php:222
+#: inc/form-validation/sip-archival-upload.class.php:229
+#: inc/form-validation/sip-archival-upload.class.php:240
 #, php-format
 msgid "Exceeded filesize limit. User-ID: %s"
 msgstr "Die maximale Dateigröße wurde überschritten. Benutzer-ID: %s"
 
-#: inc/form-validation/sip-archival-upload.class.php:212
-#: inc/form-validation/sip-archival-upload.class.php:223
+#: inc/form-validation/sip-archival-upload.class.php:230
+#: inc/form-validation/sip-archival-upload.class.php:241
 msgid "Exceeded filesize limit."
 msgstr "Die maximale Dateigröße wurde überschritten."
 
 #. translators: %s: User-ID.
-#: inc/form-validation/sip-archival-upload.class.php:215
+#: inc/form-validation/sip-archival-upload.class.php:233
 #, php-format
 msgid "Unknown error. User-ID: %s"
 msgstr "Unbekannter Fehler. User-ID: %s"
 
-#: inc/form-validation/sip-archival-upload.class.php:216
+#: inc/form-validation/sip-archival-upload.class.php:234
 msgid "Unknown error. File not uploaded."
 msgstr "Unbekannter Fehler. Datei wurde nicht hochgeladen."
 
 #. translators: %s: User-ID.
-#: inc/form-validation/sip-archival-upload.class.php:235
+#: inc/form-validation/sip-archival-upload.class.php:253
 #, php-format
 msgid "Invalid file format. User-ID: %s"
 msgstr "Ungültiges Dateiformat. User-ID: %s"
 
-#: inc/form-validation/sip-archival-upload.class.php:236
+#: inc/form-validation/sip-archival-upload.class.php:254
 msgid "Invalid file format."
 msgstr "Ungültiges Dateiformat."
 
 #: template-parts/forms/filterform.php:206
 msgid "Status"
 msgstr "Status"
+
+#: admin/admin-pages.php:36
+#: admin/admin-pages.php:37
+msgid "Import mapping"
+msgstr "Import-Zuordnung"
+
+#: admin/admin-pages.php:204
+msgid "Create your own import file"
+msgstr "Erstellen Sie Ihre eigene Importdatei"
+
+#. translators: %s: The name of the current archive/institution.
+#: admin/admin-pages.php:207
+#, php-format
+msgid "This mapping is used for %s."
+msgstr "Diese Zuordnung wird für %s verwendet."
+
+#: admin/admin-pages.php:209
+msgid "This functionality allows users to map collected data fields to their own database structure for seamless import. By defining a custom mapping, each data point can be assigned to a specific column name that matches the target schema. For example, a creation date field can be mapped to a designated column in the users's database."
+msgstr "Diese Funktion ermöglicht es Ihnen, erfasste Datenfelder Ihrer eigenen Datenbankstruktur für einen nahtlosen Import zuzuordnen. Durch die Definition einer benutzerdefinierten Zuordnung kann jeder Datenpunkt einem bestimmten Spaltennamen zugewiesen werden, der dem Zielschema entspricht. Beispielsweise kann ein Erstellungsdatum einer vorgesehenen Spalte in Ihrer Datenbank zugeordnet werden."
+
+#: admin/admin-pages.php:212
+msgid "The system then generates a CSV file based on this mapping. Each column in the exported file uses the user-defined column names, and the corresponding values are placed accordingly, ensuring compatibility with the intended database structure and simplifying the import process. Please use the \"order\" field in the form according your database schema. Otherwise the import may fail! Each number may only appear once."
+msgstr "Das System erzeugt anschließend auf Basis dieser Zuordnung eine CSV-Datei. Jede Spalte in der exportierten Datei verwendet die von Ihnen definierten Spaltennamen, und die entsprechenden Werte werden entsprechend zugewiesen. Dies gewährleistet die Kompatibilität mit der vorgesehenen Datenbankstruktur und vereinfacht den Importprozess. Bitte verwenden Sie das Feld „Reihenfolge“ im Formular entsprechend Ihrem Datenbankschema. Andernfalls kann der Import fehlschlagen! Jede Nummer darf nur einmal vergeben werden."
+
+#: admin/admin-pages.php:225
+msgid "Internal identifier"
+msgstr "Interne Kennung"
+
+#: admin/admin-pages.php:226
+msgid "Mapped version"
+msgstr "Zugeordnete Version"
+
+#: admin/admin-pages.php:227
+#: admin/admin-pages.php:251
+#: admin/admin-pages.php:275
+#: admin/admin-pages.php:314
+#: admin/admin-pages.php:315
+#: admin/admin-pages.php:415
+#: admin/admin-pages.php:418
+#: admin/create-mapping-for-import.class.php:578
+msgid "Order"
+msgstr "Reihenfolge"
+
+#: admin/admin-pages.php:241
+msgid "Transform the date to a specific format"
+msgstr "Datum in ein bestimmtes Format umwandeln"
+
+#: admin/admin-pages.php:261
+msgid "Set additional columns"
+msgstr "Zusätzliche Spalten festlegen"
+
+#: admin/admin-pages.php:263
+msgid "Add Input"
+msgstr "Eingabe hinzufügen"
+
+#: admin/admin-pages.php:267
+msgid "The input fields below are intended for defining custom column assignments. Users can specify a column name and assign a fixed value to it. These column-value pairs are applied consistently across all generated files, meaning each export will include these predefined values exactly as configured. This is particularly useful for adding static metadata or required fields that must be present in every import file. Please use the \"order\" field in the form according your database schema. Otherwise the import may fail! Each number may only appear once."
+msgstr "Die untenstehenden Eingabefelder dienen zur Definition benutzerdefinierter Spaltenzuweisungen. Sie können einen Spaltennamen festlegen und diesem einen festen Wert zuweisen. Diese Spalten-Wert-Paare werden konsistent auf alle generierten Dateien angewendet, sodass jeder Export diese vordefinierten Werte genau wie konfiguriert enthält. Dies ist besonders nützlich für das Hinzufügen statischer Metadaten oder erforderlicher Felder, die in jeder Importdatei vorhanden sein müssen. Bitte verwenden Sie das Feld „Reihenfolge“ im Formular entsprechend Ihrem Datenbankschema. Andernfalls kann der Import fehlschlagen! Jede Nummer darf nur einmal vergeben werden."
+
+#: admin/admin-pages.php:273
+#: admin/admin-pages.php:306
+#: admin/admin-pages.php:307
+#: admin/admin-pages.php:398
+#: admin/admin-pages.php:401
+#: admin/create-mapping-for-import.class.php:574
+msgid "Column name"
+msgstr "Spaltenname"
+
+#: admin/admin-pages.php:274
+#: admin/admin-pages.php:310
+#: admin/admin-pages.php:311
+#: admin/admin-pages.php:407
+#: admin/admin-pages.php:410
+#: admin/create-mapping-for-import.class.php:576
+msgid "Column value"
+msgstr "Spaltenwert"
+
+#: admin/admin-pages.php:276
+msgid "Actions"
+msgstr "Aktionen"
+
+#: admin/admin-pages.php:299
+#: admin/admin-pages.php:429
+msgid "Remove"
+msgstr "Entfernen"
+
+#. translators: %s: Name of an expected input filed name.
+#: admin/backend-form-validation.class.php:100
+#, php-format
+msgid "Invalid key for %s"
+msgstr "Ungültiger Schlüssel für %s"
+
+#: admin/create-mapping-for-import.class.php:43
+msgctxt "Error message if a form was not filled properly."
+msgid "There are inputs missing"
+msgstr "Es fehlen Eingaben"
+
+#: admin/create-mapping-for-import.class.php:50
+msgctxt "Error message if a form was not filled properly."
+msgid "There is a problem in the configuration. Please check the \"Order\" column and verify that there are no duplicate entries."
+msgstr "Es liegt ein Problem in der Konfiguration vor. Bitte überprüfen Sie die Spalte „Reihenfolge“ und stellen Sie sicher, dass keine doppelten Einträge vorhanden sind."
+
+#: admin/create-mapping-for-import.class.php:57
+msgctxt "Error message."
+msgid "Error saving the mapping data. Please try again."
+msgstr "Fehler beim Speichern der Zuordnungsdaten. Bitte versuchen Sie es erneut."
+
+#. translators: %s: ID of the current user.
+#: admin/create-mapping-for-import.class.php:59
+#, php-format
+msgid "Error saving the mapping data for %s"
+msgstr "Fehler beim Speichern der Zuordnungsdaten für %s"
+
+#: admin/create-mapping-for-import.class.php:63
+msgid "Your entries have been saved"
+msgstr "Ihre Eingaben wurden gespeichert"
+
+#: admin/create-mapping-for-import.class.php:76
+msgid "Identification"
+msgstr "Identifikation"
+
+#: admin/create-mapping-for-import.class.php:82
+msgid "Created at"
+msgstr "Erstellt am"
+
+#: admin/create-mapping-for-import.class.php:86
+msgid "Created until"
+msgstr "Erstellt bis"
+
+#: admin/create-mapping-for-import.class.php:90
+msgid "Created"
+msgstr "Erstellt"
+
+#: admin/create-mapping-for-import.class.php:97
+msgid "Blocked until"
+msgstr "Gesperrt bis"
+
+#: admin/create-mapping-for-import.class.php:100
+msgid "Scope"
+msgstr "Geltungsbereich"
+
+#: admin/create-mapping-for-import.class.php:106
+msgid "Collection history"
+msgstr "Sammlungshistorie"
+
+#: admin/create-mapping-for-import.class.php:118
+msgid "Language"
+msgstr "Sprache"
+
+#: admin/create-mapping-for-import.class.php:124
+msgid "Notes"
+msgstr "Notizen"
+
+#: admin/create-mapping-for-import.class.php:127
+msgid "Cataloguing date"
+msgstr "Katalogisierungsdatum"
+
+#: admin/create-mapping-for-import.class.php:130
+msgid "Coordinates"
+msgstr "Koordinaten"
+
+#: admin/create-mapping-for-import.class.php:136
+msgid "License URI"
+msgstr "Lizenz-URI"
+
+#: admin/create-mapping-for-import.class.php:139
+msgid "License"
+msgstr "Lizenz"
+
+#: admin/create-mapping-for-import.class.php:142
+msgid "Tag"
+msgstr "Tag"
+
+#. translators: %1$s: SIP-Folder-ID. %2$s: Path to file. %3$d: User-ID.
+#: inc/form-validation/create-sip.class.php:216
+#, php-format
+msgid "Error while packing the file %1$s into the SIP file for %2$s. User-ID: %3$d"
+msgstr "Fehler beim Verpacken der Datei %1$s in die SIP-Datei für %2$s. Benutzer-ID: %3$d"
+
+#. translators: %s: Path to an uploaded file.
+#: inc/form-validation/create-sip.class.php:219
+#, php-format
+msgid "File %s not added in SIP. File not readable."
+msgstr "Datei %s wurde nicht in das SIP aufgenommen. Datei ist nicht lesbar."
+
+#. translators: %1$s: Path to an uploaded file. %2$s: Reason why the file was not added.
+#: inc/form-validation/create-sip.class.php:227
+#, php-format
+msgid "File %1$s not added in SIP. Reason: %2$s"
+msgstr "Datei %1$s wurde nicht in das SIP aufgenommen. Grund: %2$s"
+
+#. translators: %1$s: SIP-Folder-ID. %2$d: User-ID. %3$d: Error message.
+#: inc/form-validation/create-sip.class.php:235
+#, php-format
+msgid "Error while creating the SIP file for %1$s. User-ID: %2$d. Error message: %3$d"
+msgstr "Fehler beim Erstellen der SIP-Datei für %1$s. Benutzer-ID: %2$d. Fehlermeldung: %3$d"
+
+#. translators: %s: Path to the file, which was not closed properly.
+#: inc/form-validation/create-sip.class.php:852
+#, php-format
+msgid "The file import.csv was not closed properly. Please check %s"
+msgstr "Die Datei import.csv wurde nicht korrekt geschlossen. Bitte überprüfen Sie %s"
+
+#: inc/form-validation/create-sip.class.php:1081
+msgid "No malware scan while SIP creation."
+msgstr "Kein Malware-Scan während der SIP-Erstellung."
+
+#. translators: %s: one or more hyperlinks to the invalid required inputs.
+#: inc/form-validation/form-validation.class.php:256
+#, php-format
+msgid "Invalid input. Please check %s."
+msgstr "Ungültige Eingabe. Bitte überprüfen Sie %s."
+
+#. translators: %s: Path to the file.
+#: inc/form-validation/sip-archival-upload.class.php:97
+#, php-format
+msgid "Permissions for the uploaded file %s were not set correctly."
+msgstr "Die Berechtigungen für die hochgeladene Datei %s wurden nicht korrekt gesetzt."
+
+#: template-parts/forms/uploadform.php:38
+msgid "Your browser does not support drag andn drop file uploads."
+msgstr "Ihr Browser unterstützt kein Drag-and-Drop für Datei-Uploads."
+
+#: template-parts/forms/uploadform.php:39
+msgid "Please use the fallback form below to upload your files like in the olden days."
+msgstr "Bitte verwenden Sie das untenstehende Ersatzformular, um Ihre Dateien wie früher hochzuladen."
+
+#: template-parts/forms/uploadform.php:41
+msgid "You can not upload files of this type."
+msgstr "Sie können keine Dateien dieses Typs hochladen."
+
+#: template-parts/forms/uploadform.php:43
+msgid "Cancel upload"
+msgstr "Upload abbrechen"
+
+#: template-parts/forms/uploadform.php:44
+msgid "Upload canceled."
+msgstr "Upload abgebrochen."
+
+#: template-parts/forms/uploadform.php:46
+msgid "Remove file"
+msgstr "Datei entfernen"
+
+#: template-parts/forms/uploadform.php:48
+msgid "You can not upload any more files."
+msgstr "Sie können keine weiteren Dateien hochladen."
+
+#: admin/admin-pages.php:325
+msgid "Configuration"
+msgstr "Konfiguration"
+
+#: admin/admin-pages.php:328
+msgid "Use the input fields below to further configure your SIP files. This ensures, for example, that the CSV files created can be processed on your system."
+msgstr "Verwenden Sie die untenstehenden Eingabefelder, um Ihre SIP-Dateien weiter zu konfigurieren. Dadurch wird beispielsweise sichergestellt, dass die erstellten CSV-Dateien auf Ihrem System verarbeitet werden können."
+
+#: admin/admin-pages.php:334
+msgid "Target operating system"
+msgstr "Zielbetriebssystem"
+
+#: admin/admin-pages.php:337
+msgid "On which operating system will the downloaded data be processed?"
+msgstr "Auf welchem Betriebssystem sollen die heruntergeladenen Daten verarbeitet werden?"
+
+#: admin/admin-pages.php:341
+msgid "Delimiter for CSV files"
+msgstr "Trennzeichen für CSV-Dateien"
+
+#: admin/admin-pages.php:344
+msgid "This delimiter is used within the SIP in every CSV file."
+msgstr "Dieses Trennzeichen wird innerhalb der SIPs in jeder CSV-Datei verwendet."
+
+#: admin/admin-pages.php:348
+msgid "Path where the files will be stored"
+msgstr "Pfad, in dem die Dateien gespeichert werden"
+
+#: admin/backend-form-validation.class.php:199
+msgid "none"
+msgstr "keines"
+
+#: inc/form-validation/create-sip.class.php:79
+msgid "No post found for the submitted ID."
+msgstr "Kein Beitrag für die übermittelte ID gefunden."
+
+#. translators: %d: Post-ID
+#: inc/form-validation/create-sip.class.php:81
+#, php-format
+msgid "No post found for the ID %d during the creation of the SIP."
+msgstr "Kein Beitrag für die ID %d während der Erstellung des SIPs gefunden."
+
+#: inc/form-validation/create-sip.class.php:102
+msgid "We are facing problems compressing the SIP folder for this submission. Please try again later."
+msgstr "Beim Komprimieren des SIP-Ordners für diese Übermittlung sind Probleme aufgetreten. Bitte versuchen Sie es später erneut."
+
+#. translators: %d: Post-ID
+#: inc/form-validation/create-sip.class.php:104
+#, php-format
+msgid "The SIP folder for ID %d was not created as zip."
+msgstr "Der SIP-Ordner für die ID %d wurde nicht als ZIP-Datei erstellt."
+
+#. translators: %s: Path to the file, which was not closed properly.
+#: inc/form-validation/create-sip.class.php:895
+#, php-format
+msgid "The file names.csv was not closed properly. Please check %s"
+msgstr "Die Datei names.csv wurde nicht ordnungsgemäß geschlossen. Bitte überprüfen Sie %s."
+
+#. translators: %s: Path to the file, which was not closed properly.
+#: inc/form-validation/create-sip.class.php:929
+#, php-format
+msgid "The file file_list.csv was not closed properly. Please check %s"
+msgstr "Die Datei file_list.csv wurde nicht ordnungsgemäß geschlossen. Bitte überprüfen Sie %s."
+
+#. translators: %1$s, %2$s: User ID.
+#: inc/form-validation/update-user-password.class.php:35
+#, php-format
+msgid "The user with the ID %1$s has tried to change the password for the user with the ID %2$s."
+msgstr "Der Benutzer mit der ID %1$s hat versucht, das Passwort des Benutzers mit der ID %2$s zu ändern."
