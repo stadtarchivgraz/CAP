@@ -92,9 +92,9 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 
 				<?php // Tags ?>
 				<div class="field">
-					<label for="archival-tags" class="label"><?php esc_html_e('Tags', 'sip'); ?>*</label>
+					<label id="archival-tags-label" for="archival-tags" class="label"><?php esc_html_e('Tags', 'sip'); ?>*</label>
 					<p class="control">
-						<textarea id="archival-tags" name="archival_tags" class="textarea" maxlength="10" required></textarea>
+						<input type="text" id="archival-tags" name="archival_tags" class="textarea is-flex" required></input>
 					</p>
 					<p id="archival-tags-help-text" class="help"><?php esc_html_e('Enter tags or keywords to categorize the post or uploaded files. Multiple keywords may be added to improve searchability and filtering.', 'sip'); ?></p>
 					<p class="help"><?php esc_html_e('Minimum 1 | Maximum 10', 'sip'); ?></p>
@@ -392,6 +392,7 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 						// the textarea for the tags.
 						let inputElm = document.querySelector('#archival-tags');
 						let tagify = new Tagify(inputElm, {
+							maxTags: 10,
 							whitelist: <?php echo json_encode($archival_tags_names); ?>,
 							dropdown: {
 								classname: "suggested-tags",
@@ -401,6 +402,7 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 								closeOnSelect: false, // keep the dropdown open after selecting a suggestion
 								highlightFirst: true,
 							},
+							delimiters: ",",
 							// placeholder: '',
 							// blacklist: [],
 							// enforceWhitelist: true, // don't allow new tags.
@@ -408,7 +410,7 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 
 						// link the label to the tagify input.
 						let tagifyInput = inputElm.parentNode.querySelector( '.tagify__input' );
-						tagifyInput.setAttribute('aria-labelledby', 'archival-tags');
+						tagifyInput.setAttribute('aria-labelledby', 'archival-tags-label');
 
 						tagify.addTags(<?php echo json_encode($archival_tags_list_names); ?>);
 
