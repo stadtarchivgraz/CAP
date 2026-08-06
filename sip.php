@@ -107,7 +107,7 @@ class Starg_Sip_Plugin {
 		$leaflet_mapbox_version         = '0.0.16';
 		$leaflet_markercluster_version  = '...';//todo.
 		$leaflet_area_selection_version = '...';//todo.
-		$tagify_version                 = '4.35.6';
+		$tagify_version                 = '4.37.1';
 		$nouislider_version             = '15.8.1';
 		$dropzone_version               = '5.9.3';
 
