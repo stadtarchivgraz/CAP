@@ -25,7 +25,7 @@ class Starg_Logging {
 			mkdir( $this->debug_log_destination, 0700, true );
 			$this->protect_log_files();
 		}
-		if ( ! is_writeable( $this->debug_log_destination ) ) {
+		if ( ! is_writable( $this->debug_log_destination ) ) {
 			// translators: %s: Path to the folder for the plugins log files.
 			error_log( STARG_SIP_PLUGIN_NAME . ': ' . sprintf( esc_attr__( 'Error log was not created: no write permission for log folder %s', 'sip' ), $this->debug_log_destination ) );
 			$this->error_logging_enabled = false;

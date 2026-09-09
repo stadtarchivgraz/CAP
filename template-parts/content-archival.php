@@ -54,11 +54,15 @@ $sip_archival_actions->process_sip_archival_actions();
 				include( STARG_SIP_PLUGIN_BASE_DIR . 'template-parts/content-map.php' );
 			}
 
-			$originator     = esc_html( get_post_meta($archival_id, '_archival_originator', true) );
-			$date_from      = esc_html( get_post_meta($archival_id, '_archival_from', true) );
-			$date_to        = esc_html( get_post_meta($archival_id, '_archival_to', true) );
-			$upload_purpose = esc_html( get_post_meta($archival_id, '_archival_upload_purpose', true) );
-			$blocking_time  = esc_html( get_post_meta($archival_id, '_archival_blocking_time', true ))
+			$originator           = esc_html( get_post_meta($archival_id, '_archival_originator', true) );
+			$originator_last_name = esc_html( get_post_meta($archival_id, '_archival_originator_last_name', true) );
+			if ( $originator_last_name ) {
+				$originator = $originator . ' ' . $originator_last_name;
+			}
+			$date_from            = esc_html( get_post_meta($archival_id, '_archival_from', true) );
+			$date_to              = esc_html( get_post_meta($archival_id, '_archival_to', true) );
+			$upload_purpose       = esc_html( get_post_meta($archival_id, '_archival_upload_purpose', true) );
+			$blocking_time        = esc_html( get_post_meta($archival_id, '_archival_blocking_time', true ))
 			?>
 
 			<dl>

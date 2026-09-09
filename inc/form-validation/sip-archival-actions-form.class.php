@@ -229,6 +229,7 @@ class Sip_Archival_Actions extends Form_Validation {
 	/**
 	 * Submits an archival record. The post status changes from draft to pending.
 	 * @param int $archival_post_id
+	 * @param int $archival_author_id
 	 * @return bool
 	 */
 	private function _process_action_submit( int $archival_post_id, $archival_author_id ): bool {
@@ -306,7 +307,7 @@ Thank you for your contribution.', 'sip' ), $author_name, $post_title, $originat
 	/**
 	 * Create the content of the notification if a submission was declined and trigger sending.
 	 * @param int $author_id
-	 * @param int $archival_post_id
+	 * @param int $archivist_id
 	 * @return void
 	 */
 	private function notify_user_decline( int $author_id, int $archivist_id = 0 ): void {

@@ -87,8 +87,14 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 		if ( $this->user_input[ 'archival_originator' ] ) {
 			$post_data['meta_input']['_archival_originator'] = $this->user_input[ 'archival_originator' ];
 		}
+		if ( $this->user_input[ 'archival_originator_last_name' ] ) {
+			$post_data['meta_input']['_archival_originator_last_name'] = $this->user_input[ 'archival_originator_last_name' ];
+		}
 		if ($this->user_input[ 'archival_single_date' ]) {
 			$post_data['meta_input']['_archival_from'] = $this->user_input[ 'archival_single_date' ];
+			if ( $this->user_input['archival_single_date_end']) {
+				$post_data['meta_input']['_archival_to'] = $this->user_input[ 'archival_single_date_end' ];
+			}
 		} else {
 			if ($this->user_input[ 'archival_date_range' ]) {
 				$post_data['meta_input']['_archival_from'] = $this->user_input[ 'archival_date_range' ][0] . '-01-01 00:00:00';
@@ -319,6 +325,9 @@ Thank you for your contribution.', 'sip' ), $author_name );
 					case ( 'archival_single_date' ) :
 						return get_post_meta( $this->archival_id, '_archival_from', true );
 
+					case ( 'archival_single_date_end' ) :
+						return get_post_meta( $this->archival_id, '_archival_to', true );
+
 					case ( 'archival_date_range' ) :
 						return array(
 							get_post_meta( $this->archival_id, '_archival_from', true ),
@@ -342,23 +351,25 @@ Thank you for your contribution.', 'sip' ), $author_name );
 	 */
 	protected function get_valid_input_names() : array {
 		return array(
-			'archival_ID'             => 'sanitize_key',
-			'archival_title'          => 'sanitize_text_field',
-			'archival_description'    => 'sanitize_textarea_field',
-			'archival_originator'     => 'sanitize_text_field',
-			'archival_address'        => 'sanitize_text_field',
-			'archival_lat'            => 'sanitize_text_field',
-			'archival_lng'            => 'sanitize_text_field',
-			'archival_area'           => 'starg_sanitize_geo_json',
-			'archival_tags'           => 'starg_sanitize_tags',
-			'archival_upload_purpose' => 'sanitize_text_field',
-			'archival_blocking_time'  => 'sanitize_text_field',
-			'archival_right_transfer' => 'sanitize_text_field',
-			'archival_numeration'     => 'sanitize_text_field',
-			'archival_annotation'     => 'sanitize_text_field',
-			'archival_single_date'    => 'sanitize_text_field',
-			'archival_date_range'     => 'starg_sanitize_array',
-			'save_sip'                => 'sanitize_text_field', // should be either save_draft, save_archival or submit_archival!
+			'archival_ID'                   => 'sanitize_key',
+			'archival_title'                => 'sanitize_text_field',
+			'archival_description'          => 'sanitize_textarea_field',
+			'archival_originator'           => 'sanitize_text_field',
+			'archival_originator_last_name' => 'sanitize_text_field',
+			'archival_address'              => 'sanitize_text_field',
+			'archival_lat'                  => 'sanitize_text_field',
+			'archival_lng'                  => 'sanitize_text_field',
+			'archival_area'                 => 'starg_sanitize_geo_json',
+			'archival_tags'                 => 'starg_sanitize_tags',
+			'archival_upload_purpose'       => 'sanitize_text_field',
+			'archival_blocking_time'        => 'sanitize_text_field',
+			'archival_right_transfer'       => 'sanitize_text_field',
+			'archival_numeration'           => 'sanitize_text_field',
+			'archival_annotation'           => 'sanitize_text_field',
+			'archival_single_date'          => 'sanitize_text_field',
+			'archival_single_date_end'      => 'sanitize_text_field',
+			'archival_date_range'           => 'starg_sanitize_array',
+			'save_sip'                      => 'sanitize_text_field', // should be either save_draft, save_archival or submit_archival!
 		);
 	}
 

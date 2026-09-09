@@ -90,11 +90,11 @@ class Create_Sip extends Form_Validation {
 
 		$archival_first_submission = get_post_meta($this->archival->ID, '_archival_first_submission', true);
 		$archival_submission_date  = ( $archival_first_submission ) ? esc_attr( $archival_first_submission ) : $this->archival->post_date;
-		$author                    = strtoupper( str_replace( ', ', '_', $this->sip_data['author_name'] ) );
+		$author                    = strtoupper( str_replace( '-', '_', sanitize_title( $this->sip_data['author_name'] ) ) );
 		$submission_date           = date( 'Ymd', strtotime( $archival_submission_date ) );
 		$zip_filename              = $submission_date . '_' . $this->archival->ID . '_' . $author;
 		if ( $this->sip_data['selected_institution'] ) {
-			$zip_filename = $submission_date . '_' . $this->archival->ID . '_' . $author . '_' . $this->sip_data['selected_institution'];
+			$zip_filename = $submission_date . '_' . $this->archival->ID . '_' . $author . '_' . strtoupper( $this->sip_data['selected_institution'] );
 		}
 
 		$sip_zip_created = $this->create_sip_zip( 'SIP_' . $zip_filename );
@@ -110,7 +110,10 @@ class Create_Sip extends Form_Validation {
 		if ($zip->open( $tmp_file, ZipArchive::CREATE ) ) {
 			// add the compressed sip folder to the downloadable zip file.
 			if ( file_exists( $this->sip_folder . 'SIP_' . $zip_filename . '.zip' ) ) {
-				$zip->addFile( $this->sip_folder . 'SIP_' . $zip_filename . '.zip', sanitize_file_name( 'SIP_' . $zip_filename ) . '.zip' );
+				$zip->addFile( $this->sip_folder . 'SIP_' . $zip_filename . '.zip', esc_attr( 'SIP_' . $zip_filename ) . '.zip' );
+			} else {
+				// translators: %1$s: Name of the file. %2$s: Name of the folder. %3$s: Name of the user.
+				$this->set_error_log_message( sprintf( esc_attr__( 'There is no file %1$s in the folder %2$s for user %3$s', 'sip' ), 'SIP_' . $zip_filename, $this->sip_folder, $this->sip_data['author_name'] ), Log_Severity::Warning );
 			}
 
 			if ( file_exists( $this->sip_folder . 'import.csv' ) ) {
@@ -198,7 +201,7 @@ class Create_Sip extends Form_Validation {
 		if ( ! isset( $this->upload_folder_info['structure'] ) ) { return false; }
 		$sips_folder = new ZipArchive;
 
-		$tmp_file = $this->sip_folder . sanitize_file_name( $zip_filename ) . '.zip';
+		$tmp_file = $this->sip_folder . esc_attr( $zip_filename ) . '.zip';
 		if ( $sips_folder->open($tmp_file, ZipArchive::CREATE)) {
 
 			$skipped_files = '';
@@ -283,9 +286,11 @@ class Create_Sip extends Form_Validation {
 		$archivist_first_name = esc_attr( trim( get_user_meta( $archivist_id, 'first_name', true ) ) );
 		$archivist_name       = ( $archivist_last_name && $archivist_first_name ) ? $archivist_last_name . ', ' . $archivist_first_name : get_userdata( $archivist_id )->data->display_name;
 
-		// todo: name of originator might be in wrong format. Should be "last name, first name".
-		$originator_name = esc_attr( get_post_meta($this->archival->ID, '_archival_originator', true) );
-		if ( ! trim( $originator_name ) ) {
+		$originator_name      = esc_attr( trim( get_post_meta($this->archival->ID, '_archival_originator', true) ) );
+		$originator_last_name = esc_attr( trim( get_post_meta($this->archival->ID, '_archival_originator_last_name', true) ) );
+		if ( $originator_name && $originator_last_name ) {
+			$originator_name = $originator_last_name . ', ' . $originator_name;
+		} else {
 			$originator_name = $author_name;
 		}
 
@@ -904,7 +909,10 @@ class Create_Sip extends Form_Validation {
 		$files = $this->sip_data['files'];
 		if ( ! $files ) { return false; }
 
-		$originator_name    = str_replace( ' ', '_', $this->sip_data['originator_name'] );
+		$author_name = str_replace( ' ', '_', $this->sip_data['author_name'] );
+		if ( str_contains( $author_name, ',' ) ) {
+			$author_name = str_replace( ',', '', $author_name );
+		}
 		$enriched_filenames = array();
 		foreach ( $files as $filepath ) {
 			// ATTENTION: Unix filepath uses "/" while Windows uses "\"!
@@ -914,7 +922,7 @@ class Create_Sip extends Form_Validation {
 				$single_file_path = str_replace( '/', '\\', esc_attr( $single_file_path ) );
 				$path_separator   = '\\';
 			}
-			$enriched_filenames[] = esc_attr( $this->target_path ) . $path_separator . $originator_name . $path_separator . $single_file_path;
+			$enriched_filenames[] = esc_attr( $this->target_path ) . $path_separator . $author_name . $path_separator . $single_file_path;
 		}
 
 		$import_file = fopen( $this->sip_folder . 'file_list.csv', 'w' );
