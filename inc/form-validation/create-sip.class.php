@@ -909,7 +909,7 @@ class Create_Sip extends Form_Validation {
 		$files = $this->sip_data['files'];
 		if ( ! $files ) { return false; }
 
-		$author_name = str_replace( ' ', '_', $this->sip_data['author_name'] );
+		$author_name = str_replace( '-', '_', sanitize_title( $this->sip_data['author_name'] ) );
 		if ( str_contains( $author_name, ',' ) ) {
 			$author_name = str_replace( ',', '', $author_name );
 		}

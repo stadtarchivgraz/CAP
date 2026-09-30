@@ -140,7 +140,7 @@ $edit_archival_url = starg_get_the_edit_archival_page_url();
 							<input type="hidden" name="sipFolder" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
 							<input type="hidden" name="starg_form_suffix" value="<?php echo $user_sip['sip']; ?>" aria-hidden="true" />
 							<?php wp_nonce_field( $sip_archival_actions->nonce_action, $sip_archival_actions->nonce_key . '_' . $user_sip['sip'], false ); ?>
-							<?php echo $sip_archival_actions->archival_delete_button( $user_sip['sip'], $user_sip['title'] ); ?>
+							<?php $sip_archival_actions->archival_delete_button( $user_sip['sip'], $user_sip['title'] ); ?>
 						</form>
 
 					</td>

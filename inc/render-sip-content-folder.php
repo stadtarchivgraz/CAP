@@ -15,10 +15,11 @@ class Render_Sip_Content_Folder {
 	 * @return void
 	 */
 	public static function render_sip_folder_content( bool $is_pdf = false ) : void {
-		$logging   = apply_filters( 'starg/logging', null );
-		$sip_id    = false;
-		$file_data = array();
-		$author_id = get_current_user_id();
+		$logging      = apply_filters( 'starg/logging', null );
+		$sip_id       = false;
+		$file_data    = array();
+		$author_id    = get_current_user_id();
+		$archival_id  = 0;
 		self::$is_pdf = $is_pdf;
 
 		if (isset($_GET['sipFolder']) && $_GET['sipFolder']) {

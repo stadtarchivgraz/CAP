@@ -244,7 +244,7 @@ class Sip_Archival_Actions extends Form_Validation {
 			$this->set_error_message( sprintf( esc_attr__( 'The post with the ID %d could not be updated.', 'sip' ), $archival_post_id ) );
 			return false;
 		}
-		$user_archive_id = (int) get_user_meta( $archival_author_id, 'user_archive', true );
+		$user_archive_id = (int) get_user_meta( (int) $archival_author_id, 'user_archive', true );
 
 		$this->notify_user_submit( get_current_user_id(), (int) $archival_author_id, $user_archive_id, $archival_post_id );
 
@@ -283,8 +283,12 @@ class Sip_Archival_Actions extends Form_Validation {
 			}
 		}
 
-		$post_title   = get_the_title( $archival_post_id );
-		$originator   = get_post_meta( $archival_post_id, '_archival_originator', true );
+		$post_title                = get_the_title( $archival_post_id );
+		$originator                = esc_attr( get_post_meta( $archival_post_id, '_archival_originator', true ) );
+		$originator_name_last_name = esc_attr( get_post_meta($archival_post_id, '_archival_originator_last_name', true) );
+		if ( $originator_name_last_name ) {
+			$originator = $originator . ' ' . $originator_name_last_name;
+		}
 		$link_to_post = '<a href="' . $permalink . '">' . $permalink . '</a>';
 
 		// translators: %1$s: Name of the user. %2$s: Title of the submission. %3$s: Name of the originator. %4$s: Link to the post.
