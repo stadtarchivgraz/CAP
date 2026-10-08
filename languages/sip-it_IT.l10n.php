@@ -19,7 +19,7 @@ Autore: %3$s
 
 è stato accettato e sarà inserito nell\'archivio.
 
-Grazie per il tuo contributo.','Your submission to %s'=>'La tua invio a %s','ClamAV: cannot connect because the module socket_create is missing.'=>'ClamAV: impossibile connettersi perché manca il modulo socket_create.','ClamAV: file not scanned.'=>'ClamAV: file non scansionato.','profile page'=>'Pagina del profilo','We could not find an archive for your account. Please visit the %s, select an archive, and save your settings.'=>'Non siamo riusciti a trovare un archivio per il tuo account. Visita %s, seleziona un archivio e salva le tue impostazioni.','The user with the id %d has not selected an archive!'=>'L\'utente con ID %d non ha selezionato un archivio!','New archival record submitted to %s.'=>'Nuovo record di archiviazione inviato a %s.','Dear %s,
+Grazie per il tuo contributo.','Your submission to %s'=>'La tua invio a %s','ClamAV: file not scanned.'=>'ClamAV: file non scansionato.','profile page'=>'Pagina del profilo','We could not find an archive for your account. Please visit the %s, select an archive, and save your settings.'=>'Non siamo riusciti a trovare un archivio per il tuo account. Visita %s, seleziona un archivio e salva le tue impostazioni.','The user with the id %d has not selected an archive!'=>'L\'utente con ID %d non ha selezionato un archivio!','New archival record submitted to %s.'=>'Nuovo record di archiviazione inviato a %s.','Dear %s,
 
 congratulations, your submission has been successfully received!
 
