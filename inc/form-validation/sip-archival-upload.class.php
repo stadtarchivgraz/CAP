@@ -21,6 +21,9 @@ class Sip_Archival_Upload extends Form_Validation {
 		$uploaded_file = $_FILES['file'];
 		$user_input = $this->user_input_sanitization();
 		if ( ! $user_input ) {
+			if ( isset( $uploaded_file['tmp_name'] ) && is_uploaded_file( $uploaded_file['tmp_name'] ) ) {
+				unlink( $uploaded_file['tmp_name'] );
+			}
 			// translators: %d: Current user id.
 			$this->set_error_log_message( sprintf( esc_attr__( 'Wrong user input while uploading an archival record by user with ID "%d".', 'sip' ), get_current_user_id() ), Log_Severity::Warning );
 			header('Content-Type: application/json; charset=utf-8');
@@ -265,7 +268,10 @@ class Sip_Archival_Upload extends Form_Validation {
 	private function scan_file( string $upload_file_path ) {
 		if ( ! (bool) carbon_get_theme_option( 'sip_clamav' ) ) { return NULL; }
 		if ( ! function_exists('socket_create') ) {
-			$this->set_error_log_message(esc_attr__('ClamAV: cannot connect because the module socket_create is missing.', 'sip'), Log_Severity::Error);
+			$file_deleted     = unlink($upload_file_path);
+			$file_deleted_msg = ( $file_deleted ) ? esc_attr__( 'deleted', 'sip' ) : esc_attr__( 'not deleted', 'sip' );
+			// translators: %s: Status of the uploaded file if it was "deleted" or "not deleted".
+			$this->set_error_log_message(sprintf( esc_attr__('ClamAV: cannot scan the file because the module socket_create is missing. File was %s.', 'sip'), $file_deleted_msg ), Log_Severity::Error);
 			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: file not scanned.', 'sip' ), );
 		}
 

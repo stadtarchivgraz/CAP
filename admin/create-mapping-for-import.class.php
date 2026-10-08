@@ -368,7 +368,7 @@ class Create_Mapping_For_Import extends Backend_Form_Validation {
 
 		// check for an existing mapping and update it if needed.
 		$existing_mapping = Import_Mapping_DB_Table::get_input_by_institution_id( $this->user_archive_id, $schema['version'] );
-		if ( $existing_mapping && (int) $schema['version'] === (int) $existing_mapping[ $col_version ] ) {
+		if ( $existing_mapping ) {
 			$updated = $wpdb->update(
 				$table_name,
 				$data,
