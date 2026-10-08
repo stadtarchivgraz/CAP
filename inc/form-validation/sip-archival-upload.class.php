@@ -21,8 +21,11 @@ class Sip_Archival_Upload extends Form_Validation {
 		$uploaded_file = $_FILES['file'];
 		$user_input = $this->user_input_sanitization();
 		if ( ! $user_input ) {
+			if ( isset( $uploaded_file['tmp_name'] ) && is_uploaded_file( $uploaded_file['tmp_name'] ) ) {
+				unlink( $uploaded_file['tmp_name'] );
+			}
 			// translators: %d: Current user id.
-			$this->set_error_log_message( sprintf( esc_attr__( 'Wrong user input while uploading an archival record by user with ID "%d".', 'sip' ), get_current_user_id() ) );
+			$this->set_error_log_message( sprintf( esc_attr__( 'Wrong user input while uploading an archival record by user with ID "%d".', 'sip' ), get_current_user_id() ), Log_Severity::Warning );
 			header('Content-Type: application/json; charset=utf-8');
 			echo json_encode( array( 'archival_upload' => false, ) );
 			exit;
@@ -35,7 +38,7 @@ class Sip_Archival_Upload extends Form_Validation {
 			$json_data['success'] = false;
 			$json_data['error']   = $upload_check['reason'];
 			// translators: %1$s: Filename. %2$s: User-ID.
-			$this->set_error_log_message( sprintf( esc_attr__( 'Error uploading the file %1$s by user with ID %2$s', 'sip' ), $sanitize_filename, $user_input['sipUserID'] ) );
+			$this->set_error_log_message( sprintf( esc_attr__( 'Error uploading the file %1$s by user with ID %2$s', 'sip' ), $sanitize_filename, $user_input['sipUserID'] ), Log_Severity::Error );
 
 			header('Content-Type: application/json; charset=utf-8');
 			echo json_encode($json_data);
@@ -44,45 +47,31 @@ class Sip_Archival_Upload extends Form_Validation {
 
 		$sip_folder       = starg_get_archival_upload_path() . $user_input['sipUserID'] . '/' . $user_input['sipFolder'] . '/';
 		$upload_folder    = $sip_folder . 'content/';
-		$upload_dir       = '';
-		$upload_dir_array = explode( '/', $upload_folder );
-		foreach ( $upload_dir_array as $path ) {
-			$upload_dir = $upload_dir . $path . '/';
-			if ( ! file_exists( $upload_dir ) ) {
-				mkdir( $upload_dir, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS );
-			}
+		if ( ! file_exists( $upload_folder ) ) {
+			mkdir( $upload_folder, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS, true );
 		}
 
-		// todo: move to own function! $this->add_uploaded_file_to_csv()
-		// the names.csv contains all uploaded filenames.
-		$fp = fopen($sip_folder . 'names.csv', 'a');
-
+		// if the uploaded file is actually a folder, we need to create it and adjust the $upload_folder to put the files into it.
 		if ( $user_input['fullPath'] ) {
-			$full_path       = dirname( sanitize_text_field( $user_input['fullPath'] ) );
-			$full_path_array = explode( '/', $full_path );
+			$parent_dir      = dirname( sanitize_text_field( $user_input['fullPath'] ) );
+			$full_path_array = explode( '/', $parent_dir );
 			foreach ( $full_path_array as $path ) {
-				$sanitize_path = sanitize_file_name($path);
-				fputcsv( $fp, array( strtolower( $sanitize_path ), $path ) );
-				$upload_dir = $upload_dir . $sanitize_path . '/';
-				if ( ! file_exists( $upload_dir ) ) {
-					/** we could also use something like @see wp_mkdir_p(), but it creates permission with 0777. */
-					mkdir( $upload_dir, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS, true );
+				$sanitized_path = sanitize_file_name( $path );
+				$upload_folder  = $upload_folder . $sanitized_path . '/';
+				if ( ! file_exists( $upload_folder ) ) {
+					mkdir( $upload_folder, Starg_Security_Settings::STARG_FOLDER_PERMISSIONS, true );
 				}
 			}
 		}
 
 		$sanitize_filename = sanitize_file_name( basename( $uploaded_file['name'] ) );
-		$upload_file_path  = trailingslashit( $upload_dir ) . $sanitize_filename; // todo: create checksum for each uploaded file and save it as post-meta!
+		$upload_file_path  = $upload_folder . $sanitize_filename; // todo: create checksum for each uploaded file and save it as post-meta!
 
 		// don't overwrite existing files.
 		if ( file_exists( $upload_file_path ) ) {
-			$sanitize_filename = $this->get_unique_filename( $upload_dir, $sanitize_filename );
-			$upload_file_path  = trailingslashit( $upload_dir ) . $sanitize_filename;
+			$sanitize_filename = $this->get_unique_filename( $upload_folder, $sanitize_filename );
+			$upload_file_path  = trailingslashit( $upload_folder ) . $sanitize_filename;
 		}
-
-		fputcsv( $fp, array( strtolower( $sanitize_filename ), $sanitize_filename ) );
-		fclose( $fp );
-		// End $this->add_uploaded_file_to_csv()
 
 		$json_data        = array(
 			'success' => true,
@@ -95,13 +84,20 @@ class Sip_Archival_Upload extends Form_Validation {
 			$file_deleted         = unlink($uploaded_file['tmp_name']);
 			$json_data['success'] = false;
 			// translators: %1$s: Filename. %2$s: Path to folder.
-			$this->set_error_log_message( sprintf( esc_attr__( 'Uploaded file %1$s not moved to uploads folder %2$s', 'sip' ), $sanitize_filename, $upload_file_path ) );
+			$this->set_error_log_message( sprintf( esc_attr__( 'Uploaded file %1$s not moved to uploads folder %2$s', 'sip' ), $sanitize_filename, $upload_file_path ), Log_Severity::Error );
 			// translators: %1$s: Filename.
 			$json_data['error'] = sprintf( esc_attr__( 'An error occurred while moving the file %s to your uploads folder. Please try again.', 'sip' ), $sanitize_filename );
 
 			header('Content-Type: application/json; charset=utf-8');
 			echo json_encode($json_data);
 			exit;
+		}
+
+		// Make sure the uploaded file is not executable and only readable.
+		$file_permission_set = chmod( $upload_file_path, 0444 );
+		if ( ! $file_permission_set ) {
+			// translators: %s: Path to the file.
+			$this->set_error_log_message( sprintf( esc_attr__( 'Permissions for the uploaded file %s were not set correctly.', 'sip' ), $upload_file_path ), Log_Severity::Warning );
 		}
 
 		$file_type = wp_check_filetype($upload_file_path);
@@ -136,7 +132,6 @@ class Sip_Archival_Upload extends Form_Validation {
 			exit;
 		}
 
-
 		// There is a chance AV can't access the tmp folder on the server. Therefore we need to scan it after we moved it to the uploads folder!
 		$file_scan_result = $this->scan_file( $upload_file_path );
 		if ( true !== $file_scan_result ) {
@@ -152,8 +147,10 @@ class Sip_Archival_Upload extends Form_Validation {
 			exit;
 		}
 
+		// the names.csv contains all uploaded filenames.
+		$this->add_uploaded_file_to_names( $sip_folder, $sanitize_filename, $user_input['fullPath'] );
 
-		$file_size                = filesize( $uploaded_file['tmp_name'] );
+		$file_size                = filesize( $upload_file_path );
 		$sip_size                 = $sip_size + $file_size;
 		$_COOKIE['sip_file_size'] = $sip_size;
 		$json_data['sip_size']    = $sip_size;
@@ -168,7 +165,7 @@ class Sip_Archival_Upload extends Form_Validation {
 	/**
 	 * Add a counter to a filename to prevent overwriting files with the same filename.
 	 */
-	private function get_unique_filename( $directory, $filename ) {
+	private function get_unique_filename( string $directory, string $filename ): string {
 		$fileinfo     = pathinfo($filename);
 		$basename     = sanitize_file_name($fileinfo['filename']);
 		$extension    = isset($fileinfo['extension']) ? '.' . $fileinfo['extension'] : '';
@@ -183,7 +180,31 @@ class Sip_Archival_Upload extends Form_Validation {
 		return $new_filename;
 	}
 
-	private function add_uploaded_file_to_csv() {}
+	/**
+	 * Create a CSV with all names of all uploaded files.
+	 * This file is always called names.csv and is located in the users upload folder for a specific submission.
+	 *
+	 * @param string $sip_folder The path to the upload folder of the submission.
+	 * @param string $sanitized_filename The name of the uploaded file.
+	 *
+	 * @return void
+	 */
+	private function add_uploaded_file_to_names( string $sip_folder, string $sanitized_filename, string $full_path = '' ): void {
+		$fp = fopen($sip_folder . 'names.csv', 'a');
+
+		if ( $full_path ) {
+			$parent_dir      = dirname( sanitize_text_field( $full_path ) );
+			$full_path_array = explode( '/', $parent_dir );
+			foreach ( $full_path_array as $path ) {
+				$sanitize_path = sanitize_file_name($path);
+				fputcsv( $fp, array( strtolower( $sanitize_path ), $path ) );
+			}
+		}
+
+		// todo: check if we need to include this in a if????
+		fputcsv( $fp, array( strtolower( $sanitized_filename ), $sanitized_filename ) );
+		fclose( $fp );
+	}
 
 	/**
 	 * Check the uploaded file for errors like exceeding max file size, wrong MIME-Type or other errors.
@@ -194,7 +215,7 @@ class Sip_Archival_Upload extends Form_Validation {
 		$user_id = (int) sanitize_key( $_REQUEST['sipUserID'] );
 		if ( ! $uploaded_file || ! isset( $uploaded_file['error'] ) ) {
 			// translators: %s: User-ID.
-			$this->set_error_log_message( sprintf( esc_attr__( 'May be a file corruption attack from user %s', 'sip' ), $user_id ) );
+			$this->set_error_log_message( sprintf( esc_attr__( 'May be a file corruption attack from user %s', 'sip' ), $user_id ), Log_Severity::Error );
 			return array( 'success' => false, 'reason' => esc_attr__( 'File not valid.', 'sip' ), );
 		}
 
@@ -203,23 +224,23 @@ class Sip_Archival_Upload extends Form_Validation {
 				break;
 			case UPLOAD_ERR_NO_FILE:
 				// translators: %s: User-ID.
-				$this->set_error_log_message( sprintf( esc_attr__( 'No file sent. User-ID: %s', 'sip' ), $user_id ) );
+				$this->set_error_log_message( sprintf( esc_attr__( 'No file sent. User-ID: %s', 'sip' ), $user_id ), Log_Severity::Error );
 				return array( 'success' => false, 'reason' => esc_attr__( 'No file sent.', 'sip' ), );
 			case UPLOAD_ERR_INI_SIZE:
 			case UPLOAD_ERR_FORM_SIZE:
 				// translators: %s: User-ID.
-				$this->set_error_log_message( sprintf( esc_attr__( 'Exceeded filesize limit. User-ID: %s', 'sip' ), $user_id ) );
+				$this->set_error_log_message( sprintf( esc_attr__( 'Exceeded filesize limit. User-ID: %s', 'sip' ), $user_id ), Log_Severity::Error );
 				return array( 'success' => false, 'reason' => esc_attr__( 'Exceeded filesize limit.', 'sip' ), );
 			default:
 				// translators: %s: User-ID.
-				$this->set_error_log_message( sprintf( esc_attr__( 'Unknown error. User-ID: %s', 'sip' ), $user_id ) );
+				$this->set_error_log_message( sprintf( esc_attr__( 'Unknown error. User-ID: %s', 'sip' ), $user_id ), Log_Severity::Error );
 				return array( 'success' => false, 'reason' => esc_attr__( 'Unknown error. File not uploaded.', 'sip' ), );
 		}
 
 		$file_max_size = starg_parse_filesize( ini_get( 'upload_max_filesize' ) );
 		if ( $uploaded_file['size'] > $file_max_size ) {
 			// translators: %s: User-ID.
-			$this->set_error_log_message( sprintf( esc_attr__( 'Exceeded filesize limit. User-ID: %s', 'sip' ), $user_id ) );
+			$this->set_error_log_message( sprintf( esc_attr__( 'Exceeded filesize limit. User-ID: %s', 'sip' ), $user_id ), Log_Severity::Error );
 			return array( 'success' => false, 'reason' => esc_attr__( 'Exceeded filesize limit.', 'sip' ), );
 		}
 
@@ -232,7 +253,7 @@ class Sip_Archival_Upload extends Form_Validation {
 		);
 		if ( false === $file_extension ) {
 			// translators: %s: User-ID.
-			$this->set_error_log_message( sprintf( esc_attr__( 'Invalid file format. User-ID: %s', 'sip' ), $user_id ) );
+			$this->set_error_log_message( sprintf( esc_attr__( 'Invalid file format. User-ID: %s', 'sip' ), $user_id ), Log_Severity::Error );
 			return array( 'success' => false, 'reason' => esc_attr__( 'Invalid file format.', 'sip' ), );
 		}
 
@@ -247,7 +268,10 @@ class Sip_Archival_Upload extends Form_Validation {
 	private function scan_file( string $upload_file_path ) {
 		if ( ! (bool) carbon_get_theme_option( 'sip_clamav' ) ) { return NULL; }
 		if ( ! function_exists('socket_create') ) {
-			$this->set_error_log_message(esc_attr__('ClamAV: cannot connect because the module socket_create is missing.', 'sip'));
+			$file_deleted     = unlink($upload_file_path);
+			$file_deleted_msg = ( $file_deleted ) ? esc_attr__( 'deleted', 'sip' ) : esc_attr__( 'not deleted', 'sip' );
+			// translators: %s: Status of the uploaded file if it was "deleted" or "not deleted".
+			$this->set_error_log_message(sprintf( esc_attr__('ClamAV: cannot scan the file because the module socket_create is missing. File was %s.', 'sip'), $file_deleted_msg ), Log_Severity::Error);
 			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: file not scanned.', 'sip' ), );
 		}
 
@@ -257,7 +281,7 @@ class Sip_Archival_Upload extends Form_Validation {
 			$file_deleted_msg = ( $file_deleted ) ? esc_attr__( 'deleted', 'sip' ) : esc_attr__( 'not deleted', 'sip' );
 
 			// translators: %1$d: Filename. %2$s: User Id. %3$s: either "deleted" or "not deleted". %4$s: Virus scan result.
-			$this->set_error_log_message( sprintf( esc_attr__('Problem with file %1$s from user %2$d. File %3$s. Virus scan result: %4$s', 'sip'), $upload_file_path, get_current_user_id(), $file_deleted_msg, $scan_result['reason'] ) );
+			$this->set_error_log_message( sprintf( esc_attr__('Problem with file %1$s from user %2$d. File %3$s. Virus scan result: %4$s', 'sip'), $upload_file_path, get_current_user_id(), $file_deleted_msg, $scan_result['reason'] ), Log_Severity::Warning );
 
 			return $scan_result;
 		}
@@ -277,26 +301,26 @@ class Sip_Archival_Upload extends Form_Validation {
 			$clam_rdy = $clam->ping();
 		} catch( Exception $exception ) {
 			// no connection to clamav!
-			$this->set_error_log_message( $exception->getMessage() );
+			$this->set_error_log_message( $exception->getMessage(), Log_Severity::Error );
 			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: not responding', 'sip' ), );
 		}
 
 		// maybe connected to clamav but clamav is not ready/responding.
 		if ( ! $clam_rdy ) {
-			$this->set_error_log_message( esc_attr__( 'ClamAV is not ready/responding', 'sip' ) );
+			$this->set_error_log_message( esc_attr__( 'ClamAV is not ready/responding', 'sip' ), Log_Severity::Error );
 			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: not ready', 'sip' ), );
 		}
 
 		if ( ! file_exists( $upload_file_path ) ) {
 			// translators: %1$s: path to the file. %2$s: user id.
-			$this->set_error_log_message(sprintf(esc_attr__('Uploaded File %1$s from user id %2$d was not scanned. File not found', 'sip'), $upload_file_path, get_current_user_id() ) );
+			$this->set_error_log_message(sprintf(esc_attr__('Uploaded File %1$s from user id %2$d was not scanned. File not found', 'sip'), $upload_file_path, get_current_user_id() ), Log_Severity::Error );
 			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: file not found', 'sip' ), );
 		}
 
 		$scan_result = $clam->fileScan($upload_file_path);
 		if ( ! $scan_result ) {
-		// translators: %1$s: File path. %2$d: User ID.
-			$this->set_error_log_message(sprintf(esc_attr__('Uploaded File %1$s from user id %2$d is infected', 'sip'), $upload_file_path, get_current_user_id() ) );
+			// translators: %1$s: File path. %2$d: User ID.
+			$this->set_error_log_message(sprintf(esc_attr__('Uploaded File %1$s from user id %2$d is infected', 'sip'), $upload_file_path, get_current_user_id() ), Log_Severity::Warning );
 			return array( 'success' => false, 'reason' => esc_attr__( 'ClamAV: virus detected', 'sip' ), );
 		}
 

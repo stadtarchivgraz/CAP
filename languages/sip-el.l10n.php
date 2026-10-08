@@ -19,7 +19,7 @@ Thank you for your contribution.'=>'Αγαπητέ %1$s,
 
 έχει γίνει αποδεκτό και θα ενσωματωθεί στο αρχείο.
 
-Σας ευχαριστούμε για τη συμβολή σας.','Your submission to %s'=>'Η υποβολή σας στο %s','ClamAV: cannot connect because the module socket_create is missing.'=>'ClamAV: Δεν είναι δυνατή η σύνδεση επειδή λείπει το module socket_create.','ClamAV: file not scanned.'=>'ClamAV: Το αρχείο δεν σκαναρίστηκε.','profile page'=>'Σελίδα προφίλ','We could not find an archive for your account. Please visit the %s, select an archive, and save your settings.'=>'Δεν μπορέσαμε να βρούμε αρχείο για τον λογαριασμό σας. Επισκεφτείτε το %s, επιλέξτε ένα αρχείο και αποθηκεύστε τις ρυθμίσεις σας.','The user with the id %d has not selected an archive!'=>'Ο χρήστης με ID %d δεν έχει επιλέξει αρχείο!','New archival record submitted to %s.'=>'Νέο αρχείο υποβολής στο %s.','Dear %s,
+Σας ευχαριστούμε για τη συμβολή σας.','Your submission to %s'=>'Η υποβολή σας στο %s','ClamAV: file not scanned.'=>'ClamAV: Το αρχείο δεν σκαναρίστηκε.','profile page'=>'Σελίδα προφίλ','We could not find an archive for your account. Please visit the %s, select an archive, and save your settings.'=>'Δεν μπορέσαμε να βρούμε αρχείο για τον λογαριασμό σας. Επισκεφτείτε το %s, επιλέξτε ένα αρχείο και αποθηκεύστε τις ρυθμίσεις σας.','The user with the id %d has not selected an archive!'=>'Ο χρήστης με ID %d δεν έχει επιλέξει αρχείο!','New archival record submitted to %s.'=>'Νέο αρχείο υποβολής στο %s.','Dear %s,
 
 congratulations, your submission has been successfully received!
 

@@ -124,15 +124,15 @@ This setting defines which server the application connects to in order to scan f
 			->set_width(37.5)
 			->set_help_text( esc_html__( 'The network port on which the ClamAV service is listening on the specified host.
 Ensure that the port is correctly configured and reachable from the application.', 'sip' ) ),
-		Field::make( 'text', 'sip_clamav_version', esc_attr__( 'ClamAV signature date', 'sip' ) )
+		Field::make( 'html', 'sip_clamav_version', esc_attr__( 'ClamAV signature date', 'sip' ) )
 			->set_conditional_logic(array(
 				array(
 					'field' => 'sip_clamav',
 					'value' => true,
 				)
 			))
-			->set_default_value( esc_attr( $clamav_date ) )
-			->set_attribute( 'readOnly', 'readonly' )
+			->set_html( '<h4 style="margin-top:0;margin-bottom:6.5px;">' . esc_attr__( 'ClamAV signature date', 'sip' ) . '</h4><output style="padding:0 12px;min-height:40px;display:flex;align-items:center;margin:0;box-shadow: 0 0 0 transparent;border-radius: 2px;border: 1px solid #949494;background-color: #fff;color: #1e1e1e;">' . esc_attr( $clamav_date ) . '</output>' )
+			// ->set_attribute( 'readOnly', 'readonly' )
 			->set_width(25)
 			->set_help_text( esc_html__( 'The ClamAV signature date. If the date is over a week old, please contact your administrator.', 'sip' ) ),
 		Field::make('separator', 'sip_housekeeping', esc_html__( 'Housekeeping', 'sip' ) ),

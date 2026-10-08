@@ -13,7 +13,13 @@ if ( ! $sip_upload_form instanceof Sip_Upload_Form_Validation ) {
 	return;
 }
 
-$user           = wp_get_current_user();
+$user            = wp_get_current_user();
+$user_first_name = $user->first_name;
+$user_last_name  = $user->last_name;
+if ( ! $user->first_name ) {
+	$user_first_name = $user->display_name;
+}
+
 $current_locale = strtolower(get_locale());
 $sip_folder     = $sip_upload_form->get_sip_folder_id();
 $archival_id    = $sip_upload_form->get_archival_id();
@@ -22,11 +28,12 @@ if ( $archival_id ) {
 	$archival = get_post( $archival_id );
 }
 
-$archival_title       = $sip_upload_form->get_form_value( 'archival_title' );
-$archival_originator  = $sip_upload_form->get_form_value( 'archival_originator' ) ?: $user->display_name;
-$archival_description = $sip_upload_form->get_form_value( 'archival_description' );
-$archival_from        = $sip_upload_form->get_form_value( 'archival_single_date' );
-$archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
+$archival_title                = $sip_upload_form->get_form_value( 'archival_title' );
+$archival_originator           = $sip_upload_form->get_form_value( 'archival_originator', $user_first_name );
+$archival_originator_last_name = $sip_upload_form->get_form_value( 'archival_originator_last_name', $user_last_name );
+$archival_description          = $sip_upload_form->get_form_value( 'archival_description' );
+$archival_from                 = $sip_upload_form->get_form_value( 'archival_single_date' );
+$archival_to                   = $sip_upload_form->get_form_value( 'archival_single_date_end', $sip_upload_form->get_form_value( 'archival_to' ) );
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class('sip'); ?>>
@@ -60,7 +67,7 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 				<?php wp_nonce_field( $sip_upload_form->nonce_action, $sip_upload_form->nonce_key, false ); ?>
 
 				<div class="columns">
-					<div class="column is-half">
+					<div class="column is-one-third">
 						<div class="field">
 							<label for="archival-title" class="label"><?php esc_html_e('Title', 'sip'); ?>*</label>
 							<p class="control">
@@ -70,13 +77,22 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 							<p id="archival-title_count" class="help"><span><?php echo strlen($archival_title); ?></span> | <?php esc_html_e('Maximum 100 characters.', 'sip'); ?></p>
 						</div>
 					</div>
-					<div class="column is-half">
+					<div class="column is-one-third">
 						<div class="field">
-							<label for="archival-originator" class="label"><?php esc_html_e('Originator', 'sip'); ?>*</label>
+							<label for="archival-originator" class="label"><?php esc_html_e('Originator first name', 'sip'); ?>*</label>
 							<p class="control">
 								<input id="archival-originator" name="archival_originator" class="input" type="text" value="<?php echo esc_html( $archival_originator ); ?>" required aria-describedby="archival-originator-help-text">
 							</p>
-							<p id="archival-originator-help-text" class="help"><?php esc_html_e('If you are not the originator (creator) of the uploaded file, please enter the name of the originator here. This may be a person, institution, or organization and is used for proper attribution of rights.', 'sip'); ?></p>
+							<p id="archival-originator-help-text" class="help"><?php esc_html_e('If you are not the originator (creator) of the uploaded file, please enter the first name of the originator here. This may be a person, institution, or organization and is used for proper attribution of rights.', 'sip'); ?></p>
+						</div>
+					</div>
+					<div class="column is-one-third">
+						<div class="field">
+							<label for="archival-originator-last-name" class="label"><?php esc_html_e('Originator last name', 'sip'); ?></label>
+							<p class="control">
+								<input id="archival-originator-last-name" name="archival_originator_last_name" class="input" type="text" value="<?php echo esc_html( $archival_originator_last_name ); ?>" aria-describedby="archival-originator-last-name-help-text">
+							</p>
+							<p id="archival-originator-last-name-help-text" class="help"><?php esc_html_e('If you are not the originator (creator) of the uploaded file, please enter the last name of the originator here. This may be a person, institution, or organization and is used for proper attribution of rights.', 'sip'); ?></p>
 						</div>
 					</div>
 				</div>
@@ -92,22 +108,35 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 
 				<?php // Tags ?>
 				<div class="field">
-					<label for="archival-tags" class="label"><?php esc_html_e('Tags', 'sip'); ?>*</label>
+					<label id="archival-tags-label" for="archival-tags" class="label"><?php esc_html_e('Tags', 'sip'); ?>*</label>
 					<p class="control">
-						<textarea id="archival-tags" name="archival_tags" class="textarea" maxlength="10" required></textarea>
+						<input type="text" id="archival-tags" name="archival_tags" class="textarea is-flex" required></input>
 					</p>
-					<p id="archival-tags-help-text" class="help"><?php esc_html_e('Enter tags or keywords to categorize the post or uploaded files. Multiple keywords may be added to improve searchability and filtering.', 'sip'); ?></p>
+					<p id="archival-tags-help-text" class="help"><?php esc_html_e('Enter tags or keywords to categorize the post or uploaded files. Multiple keywords may be added to improve searchability and filtering.', 'sip'); // Use a comma to separate multiple keywords. ?></p>
 					<p class="help"><?php esc_html_e('Minimum 1 | Maximum 10', 'sip'); ?></p>
 				</div>
 
 				<?php // Date/Time ?>
 				<?php // todo: if we select a single date, we should hide the longer period inputs and vice versa! ?>
-				<div class="field">
-					<label for="archival-single-date" class="label"><?php esc_html_e('Date/time (for a precise time)', 'sip'); ?></label>
-					<p class="control">
-						<input id="archival-single-date" name="archival_single_date" type="datetime-local" value="<?php echo ($archival_from && !$archival_to) ? $archival_from : ''; ?>" aria-describedby="archival-single-date-help-text" class="input">
-					</p>
-					<p id="archival-single-date-help-text" class="help"><?php esc_html_e( 'Enter the date and, if applicable, the time when the uploaded files were created. This refers to the creation time of the content, not the upload date.', 'sip' ); ?></p>
+				<div class="columns">
+					<div class="column is-half">
+						<div class="field">
+							<label for="archival-single-date" class="label"><?php esc_html_e('Date/time (for a precise time)', 'sip'); ?></label>
+							<p class="control">
+								<input id="archival-single-date" name="archival_single_date" type="datetime-local" value="<?php echo ($archival_from) ?: ''; ?>" aria-describedby="archival-single-date-help-text" class="input">
+							</p>
+							<p id="archival-single-date-help-text" class="help"><?php esc_html_e( 'Enter the date and, if applicable, the time when the uploaded files were created. This refers to the creation time of the content, not the upload date.', 'sip' ); ?></p>
+						</div>
+					</div>
+					<div class="column is-half">
+						<div class="field">
+							<label for="archival-single-date-end" class="label"><?php esc_html_e('End date/Time (for a precise time period)', 'sip'); ?></label>
+							<p class="control">
+								<input id="archival-single-date-end" name="archival_single_date_end" type="datetime-local" value="<?php echo ($archival_to) ?: ''; ?>" aria-describedby="archival-single-date-end-help-text" class="input">
+							</p>
+							<p id="archival-single-date-end-help-text" class="help"><?php esc_html_e( 'Enter the end date and, if applicable, the time when the uploaded files were created. This refers to the creation time of the content, not the upload date.', 'sip' ); ?></p>
+						</div>
+					</div>
 				</div>
 				<div class="field">
 					<span class="label"><?php esc_html_e('Time period (for a longer period)', 'sip'); ?></span>
@@ -392,6 +421,7 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 						// the textarea for the tags.
 						let inputElm = document.querySelector('#archival-tags');
 						let tagify = new Tagify(inputElm, {
+							maxTags: 10,
 							whitelist: <?php echo json_encode($archival_tags_names); ?>,
 							dropdown: {
 								classname: "suggested-tags",
@@ -401,6 +431,7 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 								closeOnSelect: false, // keep the dropdown open after selecting a suggestion
 								highlightFirst: true,
 							},
+							delimiters: ",",
 							// placeholder: '',
 							// blacklist: [],
 							// enforceWhitelist: true, // don't allow new tags.
@@ -408,23 +439,10 @@ $archival_to          = $sip_upload_form->get_form_value( 'archival_to' );
 
 						// link the label to the tagify input.
 						let tagifyInput = inputElm.parentNode.querySelector( '.tagify__input' );
-						tagifyInput.setAttribute('aria-labelledby', 'archival-tags');
+						tagifyInput.setAttribute('aria-labelledby', 'archival-tags-label');
 
 						tagify.addTags(<?php echo json_encode($archival_tags_list_names); ?>);
-
-						inputElm.addEventListener('change', onChangeTagify);
-
 					});
-
-					function onChangeTagify(e) {
-						// outputs a String
-						if (e.target.tagifyValue) {
-							let tags = JSON.parse(e.target.tagifyValue);
-							if (tags.length > e.target.attributes.maxlength.value) {
-								tagify.removeTag();
-							}
-						}
-					}
 
 					/**
 					 * changes the visibility of one or more fields.

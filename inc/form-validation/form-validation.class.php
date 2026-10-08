@@ -47,7 +47,10 @@ abstract class Form_Validation {
 		$request_method = ( 'post' === $this->request_method ) ? $_POST : $_GET;
 		$sanitized_user_input = array();
 		$valid_input_names    = $this->get_valid_input_names(); // we're only processing inputs from our form!
-		if ( empty( $valid_input_names ) || ! is_array( $valid_input_names ) ) { return $sanitized_user_input; }
+		if ( empty( $valid_input_names ) || ! is_array( $valid_input_names ) ) {
+			unset( $request_method );
+			return array();
+		}
 
 		foreach( $valid_input_names as $input_name => $sanitizing_function ) {
 			// the usual way to sanitize the users input.
@@ -206,20 +209,21 @@ abstract class Form_Validation {
 	/**
 	 * Creates an entry in the error log which gives a deeper insight in a failed operation on the website.
 	 * @param string $error_log_msg
+	 * @param Log_Severity $severity
 	 * @return void
 	 */
-	protected function set_error_log_message( string $error_log_msg = '' ) : void {
+	protected function set_error_log_message( string $error_log_msg = '', Log_Severity $severity = Log_Severity::Info ) : void {
 		$logging = apply_filters( 'starg/logging', null );
 		if ( ! $logging instanceof Starg_Logging || ! $logging->error_logging_enabled ) { return; }
 	
 		if ( $this->error_log_msg ) {
 			$this->error_log_msg .= ' | ' . $error_log_msg;
-			$logging->create_log_entry( $this->error_log_msg );
+			$logging->create_log_entry( $this->error_log_msg, $severity );
 			return;
 		}
 
 		$this->error_log_msg = $error_log_msg;
-		$logging->create_log_entry( $error_log_msg );
+		$logging->create_log_entry( $error_log_msg, $severity );
 	}
 
 	/**
@@ -235,6 +239,21 @@ abstract class Form_Validation {
 		}
 		// translators: %s: one or more hyperlinks to the missing required inputs.
 		$this->set_error_message( sprintf( esc_html__( 'Missing inputs. Please check %s.', 'sip' ), $missing_input_links ) );
+	}
+
+	/**
+	 * Create a notification about missing inputs in forms.
+	 * @param array $invalid_inputs
+	 * @return void
+	 */
+	protected function set_notification_for_invalid_inputs( array $invalid_inputs ) : void {
+		if ( ! $invalid_inputs ) { return; }
+		$invalid_input_links = '';
+		foreach( $invalid_inputs as $single_input_field ) {
+			$invalid_input_links .= '<a href="#' . esc_attr( $single_input_field ) . '">' . str_replace( '_', ' ', esc_html( $single_input_field ) ) . '</a> ';
+		}
+		// translators: %s: one or more hyperlinks to the invalid required inputs.
+		$this->set_error_message( sprintf( esc_html__( 'Invalid input. Please check %s.', 'sip' ), $invalid_input_links ) );
 	}
 
 	/**

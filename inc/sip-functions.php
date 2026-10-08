@@ -139,6 +139,24 @@ function starg_parse_filesize($size): int {
 	return esc_attr( $value );
 }
 
+/**
+ * Parse the value of a size format to get it in megabytes.
+ *
+ * @param string|int $size
+ * @param int $default
+ * @return int
+ */
+function starg_convert_size_to_mb( string $size, int $default = 2 ): int {
+	$unit = strtolower(substr($size, -1));
+	$value = (int) substr($size, 0, -1);
+
+	switch ($unit) {
+		case 'g': return $value * 1024;
+		case 'm': return $value;
+		case 'k': return $value / 1024;
+		default: return $default;
+	}
+}
 
 /**
  * Remove an existing SIP from the uploads-Folder.
@@ -274,7 +292,6 @@ function starg_get_the_archival_page_template_url( $archival_id = 0 ) : string {
 
 /**
  * Return the permalink for the users profile page.
- * @param int|string $archival_id
  * @return string
  */
 function starg_get_the_profile_page_template_url() : string {
@@ -450,6 +467,24 @@ function starg_get_supported_human_readable_mime_types(): string {
 	}
 
 	$output = array_unique( $output );
+
+	return implode( $delimiter, $output );
+}
+
+/**
+ * Returns a list of supported file formats.
+ * @return string
+ */
+function starg_get_supported_mime_types(): string {
+	$mime_types = explode("\r\n", carbon_get_theme_option( 'sip_mime_types' ) );
+	if ( ! $mime_types ) { return ''; }
+
+	$mime_types = array_map( 'sanitize_text_field', $mime_types );
+	$delimiter  = ',';
+	$output     = array();
+	foreach ( $mime_types as $single_mime_type ) {
+		$output[] = $single_mime_type;
+	}
 
 	return implode( $delimiter, $output );
 }

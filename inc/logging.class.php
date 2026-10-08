@@ -25,7 +25,7 @@ class Starg_Logging {
 			mkdir( $this->debug_log_destination, 0700, true );
 			$this->protect_log_files();
 		}
-		if ( ! is_writeable( $this->debug_log_destination ) ) {
+		if ( ! is_writable( $this->debug_log_destination ) ) {
 			// translators: %s: Path to the folder for the plugins log files.
 			error_log( STARG_SIP_PLUGIN_NAME . ': ' . sprintf( esc_attr__( 'Error log was not created: no write permission for log folder %s', 'sip' ), $this->debug_log_destination ) );
 			$this->error_logging_enabled = false;
@@ -86,21 +86,22 @@ class Starg_Logging {
 	public function create_log_entry( string $log_msg, Log_Severity $severity = Log_Severity::Info ) : bool {
 		if ( ! $this->error_logging_enabled || ! $log_msg ) { return false; }
 
-		$timestamp = time();
-		$user_id   = get_current_user_id();
-		$page      = sanitize_url( $_SERVER[ 'REQUEST_URI' ] );
-		$browser   = self::get_user_browser();
+		$timestamp     = time();
+		$user_id       = get_current_user_id();
+		$page          = sanitize_url( $_SERVER[ 'REQUEST_URI' ] );
+		$browser       = self::get_user_browser();
+		$severity_note = '';
 
 		switch ( $severity ) {
-			default :
 			case Log_Severity::Warning :
 				$severity_note = esc_attr__( '[Warning]', 'sip' );
 				break;
-			case Log_Severity::Info :
-				$severity_note = esc_attr__( '[Info]', 'sip' );
-				break;
 			case Log_Severity::Error :
 				$severity_note = esc_attr__( '[Error]', 'sip' );
+				break;
+			default :
+			case Log_Severity::Info :
+				$severity_note = esc_attr__( '[Info]', 'sip' );
 				break;
 		}
 

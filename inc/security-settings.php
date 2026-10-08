@@ -62,20 +62,18 @@ Class Starg_Security_Settings {
 		if ( ! empty( $results ) ) { return $results; }
 
 		// open the rest api for logged in users.
-		if ( is_user_logged_in() ) { return $results; }
+		if ( is_user_logged_in() && current_user_can( 'edit_others_pages' ) ) { return $results; }
 
-		$request_uri = esc_url( $_SERVER[ 'REQUEST_URI' ] ) ?? '';
+		// $request_uri = esc_url( $_SERVER[ 'REQUEST_URI' ] ) ?? '';
 
 		// whitelisted routes.
-		$allowed_routes = array(
-			'notification/v1/',
-		);
+		// $allowed_routes = array();
 
-		foreach ( $allowed_routes as $single_route ) {
-			if ( strpos( $request_uri, $single_route ) !== false ) {
-				return true;
-			}
-		}
+		// foreach ( $allowed_routes as $single_route ) {
+		// 	if ( strpos( $request_uri, $single_route ) !== false ) {
+		// 		return true;
+		// 	}
+		// }
 
 		// every guest or other route gets blocked.
 		return new WP_Error( 'REST_API_restricted', esc_attr__( 'REST API not available', 'sip' ), array( 'status' => rest_authorization_required_code(), ) );

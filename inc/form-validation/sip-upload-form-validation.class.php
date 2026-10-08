@@ -72,7 +72,7 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 			// translators: %s: a Link to the users profile page.
 			$this->set_error_message( sprintf( esc_html__( 'We could not find an archive for your account. Please visit the %s, select an archive, and save your settings.', 'sip' ), $profile_page_link ) );
 			// translators: %d: The User-ID.
-			$this->set_error_log_message( sprintf( esc_html__( 'The user with the id %d has not selected an archive!', 'sip' ), $current_user_id ) );
+			$this->set_error_log_message( sprintf( esc_html__( 'The user with the id %d has not selected an archive!', 'sip' ), $current_user_id ), Log_Severity::Info );
 			return false;
 		}
 
@@ -87,8 +87,14 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 		if ( $this->user_input[ 'archival_originator' ] ) {
 			$post_data['meta_input']['_archival_originator'] = $this->user_input[ 'archival_originator' ];
 		}
+		if ( $this->user_input[ 'archival_originator_last_name' ] ) {
+			$post_data['meta_input']['_archival_originator_last_name'] = $this->user_input[ 'archival_originator_last_name' ];
+		}
 		if ($this->user_input[ 'archival_single_date' ]) {
 			$post_data['meta_input']['_archival_from'] = $this->user_input[ 'archival_single_date' ];
+			if ( $this->user_input['archival_single_date_end']) {
+				$post_data['meta_input']['_archival_to'] = $this->user_input[ 'archival_single_date_end' ];
+			}
 		} else {
 			if ($this->user_input[ 'archival_date_range' ]) {
 				$post_data['meta_input']['_archival_from'] = $this->user_input[ 'archival_date_range' ][0] . '-01-01 00:00:00';
@@ -146,7 +152,7 @@ class Sip_Upload_Form_Validation extends Form_Validation {
 		$post_id = wp_insert_post( $post_data );
 		if ( ! $post_id || is_wp_error( $post_id ) ) {
 			$this->set_error_message( esc_html__( 'We encountered a problem creating/updating your entry.', 'sip' ) );
-			$this->set_error_log_message( __FUNCTION__ . ': ' . $post_id->get_error_message() );
+			$this->set_error_log_message( __FUNCTION__ . ': ' . $post_id->get_error_message(), Log_Severity::Error );
 			return false;
 		}
 
@@ -319,6 +325,9 @@ Thank you for your contribution.', 'sip' ), $author_name );
 					case ( 'archival_single_date' ) :
 						return get_post_meta( $this->archival_id, '_archival_from', true );
 
+					case ( 'archival_single_date_end' ) :
+						return get_post_meta( $this->archival_id, '_archival_to', true );
+
 					case ( 'archival_date_range' ) :
 						return array(
 							get_post_meta( $this->archival_id, '_archival_from', true ),
@@ -342,23 +351,25 @@ Thank you for your contribution.', 'sip' ), $author_name );
 	 */
 	protected function get_valid_input_names() : array {
 		return array(
-			'archival_ID'             => 'sanitize_key',
-			'archival_title'          => 'sanitize_text_field',
-			'archival_description'    => 'sanitize_textarea_field',
-			'archival_originator'     => 'sanitize_text_field',
-			'archival_address'        => 'sanitize_text_field',
-			'archival_lat'            => 'sanitize_text_field',
-			'archival_lng'            => 'sanitize_text_field',
-			'archival_area'           => 'starg_sanitize_geo_json',
-			'archival_tags'           => 'starg_sanitize_tags',
-			'archival_upload_purpose' => 'sanitize_text_field',
-			'archival_blocking_time'  => 'sanitize_text_field',
-			'archival_right_transfer' => 'sanitize_text_field',
-			'archival_numeration'     => 'sanitize_text_field',
-			'archival_annotation'     => 'sanitize_text_field',
-			'archival_single_date'    => 'sanitize_text_field',
-			'archival_date_range'     => 'starg_sanitize_array',
-			'save_sip'                => 'sanitize_text_field', // should be either save_draft, save_archival or submit_archival!
+			'archival_ID'                   => 'sanitize_key',
+			'archival_title'                => 'sanitize_text_field',
+			'archival_description'          => 'sanitize_textarea_field',
+			'archival_originator'           => 'sanitize_text_field',
+			'archival_originator_last_name' => 'sanitize_text_field',
+			'archival_address'              => 'sanitize_text_field',
+			'archival_lat'                  => 'sanitize_text_field',
+			'archival_lng'                  => 'sanitize_text_field',
+			'archival_area'                 => 'starg_sanitize_geo_json',
+			'archival_tags'                 => 'starg_sanitize_tags',
+			'archival_upload_purpose'       => 'sanitize_text_field',
+			'archival_blocking_time'        => 'sanitize_text_field',
+			'archival_right_transfer'       => 'sanitize_text_field',
+			'archival_numeration'           => 'sanitize_text_field',
+			'archival_annotation'           => 'sanitize_text_field',
+			'archival_single_date'          => 'sanitize_text_field',
+			'archival_single_date_end'      => 'sanitize_text_field',
+			'archival_date_range'           => 'starg_sanitize_array',
+			'save_sip'                      => 'sanitize_text_field', // should be either save_draft, save_archival or submit_archival!
 		);
 	}
 

@@ -32,7 +32,7 @@ class Starg_Update_User_Password extends Form_Validation {
 		if ( $user->ID !== (int) $user_input['ID'] ) {
 			$this->set_error_message( esc_attr__( 'We encountered a problem updating your password. Please try again.', 'sip' ) );
 			// translators: %1$s, %2$s: User ID.
-			$this->set_error_log_message( sprintf( esc_attr( 'The user with the ID %1$s has tried to change the password for the user with the ID %2$s.', 'sip' ), $user->ID, $user_input['ID'] ) );
+			$this->set_error_log_message( sprintf( esc_attr__( 'The user with the ID %1$s has tried to change the password for the user with the ID %2$s.', 'sip' ), $user->ID, $user_input['ID'] ) );
 			return false;
 		}
 

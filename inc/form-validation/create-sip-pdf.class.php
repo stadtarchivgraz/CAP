@@ -89,8 +89,12 @@ class Create_Sip_Pdf extends Form_Validation {
 		$archivist         = get_user_by('id',  $archivist_user_id);
 		$sip_folder        = starg_get_archival_upload_path() . $archival->post_author . '/' . $sip_folder . '/';
 
-		$archival_address    = (get_post_meta($archival_id, '_archival_address', true)) ?: esc_html__('unknown', 'sip');
-		$archival_originator = (get_post_meta($archival_id, '_archival_originator', true)) ?: esc_html__('unknown', 'sip');
+		$archival_address     = (get_post_meta($archival_id, '_archival_address', true)) ?: esc_html__('unknown', 'sip');
+		$archival_originator  = (get_post_meta($archival_id, '_archival_originator', true)) ?: esc_html__('unknown', 'sip');
+		$originator_last_name = get_post_meta($archival_id, '_archival_originator_last_name', true);
+		if ( $originator_last_name ) {
+			$archival_originator = $archival_originator . ' ' . $originator_last_name;
+		}
 		$archival_date_time  = get_post_meta($archival_id, '_archival_from', true);
 		if ($archival_to = get_post_meta($archival_id, '_archival_to', true)) {
 			$archival_date_time .= ' &mdash; ' . $archival_to;
